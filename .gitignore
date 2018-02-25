@@ -2,6 +2,8 @@
 .project
 *.iml
 
+bin
+.classpath
 .gradle
 build
 
