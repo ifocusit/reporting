@@ -3,11 +3,17 @@ import { NgModule } from '@angular/core';
 
 
 import { AppComponent } from './app.component';
+import { MonthComponent } from './page/month/month.component';
+import { MomentPipe } from './pipe/moment/moment.pipe';
+import { DurationPipe } from './pipe/moment/duration.pipe';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MonthComponent,
+    MomentPipe,
+    DurationPipe
   ],
   imports: [
     BrowserModule

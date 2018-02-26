@@ -1,0 +1,8 @@
+<h1>{{month | moment: 'MMMM YYYY'}}</h1>
+<ul id="report">
+    <li [ngClass]="{'weekend' : [6,0].includes(item.date.day())}" *ngFor="let item of items">
+        <span>{{ item.date | moment : 'dddd DD'}}</span>
+        <span></span>
+        <span>{{ item.duration | duration }}</span>
+    </li>
+</ul>
