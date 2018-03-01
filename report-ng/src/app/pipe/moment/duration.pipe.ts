@@ -6,8 +6,8 @@ import {Duration} from 'moment';
 })
 export class DurationPipe implements PipeTransform {
 
-  transform(value: Duration, args?: any): any {
-    return value ? `${('0' + value.hours()).slice(-2)}h${('0' + value.minutes()).slice(-2)}` : '';
+  transform(value: Duration): any {
+    return value ? `${('0' + value.hours()).slice(-2)}:${('0' + value.minutes()).slice(-2)}` : '';
   }
 
 }

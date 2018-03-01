@@ -1,8 +1,15 @@
 <h1>{{month | moment: 'MMMM YYYY'}}</h1>
 <ul id="report">
+    <li class="header">
+        <span>date</span>
+        <span>total journalier</span>
+    </li>
     <li [ngClass]="{'weekend' : [6,0].includes(item.date.day())}" *ngFor="let item of items">
         <span>{{ item.date | moment : 'dddd DD'}}</span>
         <span></span>
         <span>{{ item.duration | duration }}</span>
+        <span>{{(item.duration)?.asHours() | number: '2.2-2' }}</span>
     </li>
 </ul>
+<span id="workDays">{{ workDays }} jours ouvrés</span>
+<span id="total">total {{ total | number: '.2-2' }}</span>
