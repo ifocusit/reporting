@@ -10,11 +10,9 @@ import moment = require('moment');
 })
 export class HomeComponent {
 
-  constructor(private momentPipe: MomentPipe) {
-  }
+  public title = 'Report!ng';
 
-  public get title(): string {
-    return 'Report!ng';
+  constructor(private momentPipe: MomentPipe) {
   }
 
   public get today() {

@@ -8,6 +8,9 @@ import {MomentPipe} from './pipe/moment/moment.pipe';
 import {DurationPipe} from './pipe/moment/duration.pipe';
 import {RouterModule, Routes} from '@angular/router';
 import {HomeComponent} from './page/home/home.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatButtonModule, MatIconModule, MatInputModule, MatMenuModule, MatTableModule, MatToolbarModule} from '@angular/material';
+import {FormsModule} from '@angular/forms';
 
 const appRoutes: Routes = [
   {
@@ -27,8 +30,15 @@ const appRoutes: Routes = [
   ],
   imports: [
     BrowserModule,
-    RouterModule.forRoot(appRoutes, {enableTracing: false}
-    )
+    FormsModule,
+    RouterModule.forRoot(appRoutes, {enableTracing: false}),
+    MatButtonModule,
+    MatMenuModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatTableModule,
+    MatInputModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

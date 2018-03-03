@@ -1,15 +1,44 @@
-<h1>{{month | moment: 'MMMM YYYY'}}</h1>
-<ul id="report">
-    <li class="header">
-        <span>date</span>
-        <span>total journalier</span>
-    </li>
-    <li [ngClass]="{'weekend' : [6,0].includes(item.date.day())}" *ngFor="let item of items">
-        <span>{{ item.date | moment : 'dddd DD'}}</span>
-        <span></span>
-        <span>{{ item.duration | duration }}</span>
-        <span>{{(item.duration)?.asHours() | number: '2.2-2' }}</span>
-    </li>
-</ul>
-<span id="workDays">{{ workDays }} jours ouvrés</span>
-<span id="total">total {{ total | number: '.2-2' }}</span>
+<div class="mat-elevation-z8">
+  <mat-toolbar color="primary">
+    <span id="month">{{month | moment: 'MMMM YYYY'}}</span>
+    <button mat-icon-button [mat-menu-trigger-for]="menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <mat-menu x-position="before" #menu="matMenu">
+    <button mat-menu-item>Générer facture</button>
+  </mat-menu>
+
+  <mat-table id="times" [dataSource]="items">
+
+    <ng-container matColumnDef="date">
+      <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+      <mat-cell *matCellDef="let time">{{ time.date | moment : 'DD dddd' }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="duration">
+      <mat-header-cell *matHeaderCellDef>Total journalier</mat-header-cell>
+      <mat-cell *matCellDef="let time">
+        <!--{{ time.duration | duration }}-->
+        <mat-form-field class="example-form-field">
+          <input matInput type="text" [(ngModel)]="time.duration" size="5"/>
+          <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="decimal">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let time">{{ time.getDuration()?.asHours() | number: '2.2-2' }}</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="['date', 'duration', 'decimal']"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: ['date', 'duration', 'decimal'];"></mat-row>
+  </mat-table>
+
+  <span id="workDays">{{ workDays }} jours ouvrés</span>
+  <span id="total">total {{ total | number: '.2-2' }}</span>
+</div>

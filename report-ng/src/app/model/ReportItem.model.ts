@@ -3,10 +3,14 @@ import {Duration, Moment} from 'moment';
 
 export class ReportItem {
 
-  constructor(public date: Moment, public duration?: Duration) {
+  constructor(public date: Moment, public duration?: string) {
     if (!duration && !this.isWeekend()) {
-      this.duration = moment.duration(8, 'hours');
+      this.duration = 'PT8H';
     }
+  }
+
+  public getDuration(): Duration {
+    return this.duration ? moment.duration(this.duration) : null;
   }
 
   public isWeekend(): boolean {

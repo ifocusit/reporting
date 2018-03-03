@@ -1,37 +1,4 @@
-@column-size: 100px;
-@padding: 5px;
-@border-size: 1px;
 
-@column-size-total: @column-size+@padding+@border-size;
-
-li {
-  list-style: none;
-
-  span {
-    display: table-cell;
-    text-align: end;
-    width: @column-size;
-    border: solid @border-size;
-    padding: @padding;
-  }
-
-  &.weekend span {
-    background-color: lightgray;
-  }
-
-  &:nth-child(1) span {
-    width: @column-size-total*2;
-    font-weight: bolder;
-
-    &:nth-child(1) {
-      text-align: start;
-    }
-  }
-}
-
-#workDays, #total {
-  display: table-cell;
-  text-align: end;
-  width: (@column-size-total + @border-size*2)*2;
-  padding: @padding;
+mat-table {
+  max-width: 600px;
 }

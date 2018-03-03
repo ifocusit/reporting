@@ -1,5 +1,6 @@
 import {async, TestBed} from '@angular/core/testing';
 import {HomeComponent} from './home.component';
+import {MatButtonModule} from '@angular/material';
 
 describe('HomeComponent', () => {
   beforeEach(async(() => {
@@ -7,6 +8,9 @@ describe('HomeComponent', () => {
       declarations: [
         HomeComponent
       ],
+      imports: [
+        MatButtonModule
+      ]
     }).compileComponents();
   }));
   it('should create the app', async(() => {
