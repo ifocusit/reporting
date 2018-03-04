@@ -5,7 +5,15 @@ import {MonthComponent} from './month.component';
 import {MomentPipe} from '../../pipe/moment/moment.pipe';
 import {DurationPipe} from '../../pipe/moment/duration.pipe';
 import {ActivatedRoute, Params} from '@angular/router';
-import {MatButtonModule, MatIconModule, MatInputModule, MatMenuModule, MatTableModule, MatToolbarModule} from '@angular/material';
+import {
+  MatButtonModule,
+  MatCardModule,
+  MatIconModule,
+  MatInputModule,
+  MatMenuModule,
+  MatTableModule,
+  MatToolbarModule
+} from '@angular/material';
 import {FormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
@@ -26,7 +34,8 @@ describe('MonthComponent', () => {
         MatToolbarModule,
         MatIconModule,
         MatTableModule,
-        MatInputModule
+        MatInputModule,
+        MatCardModule
       ],
       providers: [
         {
@@ -92,8 +101,8 @@ describe('MonthComponent', () => {
 
   it('should should total of work durations', () => {
     expect(select(fixture, '#total').textContent).toEqual('total 176.00');
-    component.items[0].duration = moment.duration('PT10H');
-    component.items[1].duration = moment.duration('PT10H');
+    component.items[0].duration = 'PT10H';
+    component.items[1].duration = 'PT10H';
     fixture.detectChanges();
     expect(select(fixture, '#total').textContent).toEqual('total 180.00');
   });

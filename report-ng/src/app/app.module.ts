@@ -9,7 +9,10 @@ import {DurationPipe} from './pipe/moment/duration.pipe';
 import {RouterModule, Routes} from '@angular/router';
 import {HomeComponent} from './page/home/home.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatButtonModule, MatIconModule, MatInputModule, MatMenuModule, MatTableModule, MatToolbarModule} from '@angular/material';
+import {
+  MatButtonModule, MatCardModule, MatIconModule, MatInputModule, MatMenuModule, MatTableModule,
+  MatToolbarModule
+} from '@angular/material';
 import {FormsModule} from '@angular/forms';
 
 const appRoutes: Routes = [
@@ -38,6 +41,7 @@ const appRoutes: Routes = [
     MatIconModule,
     MatTableModule,
     MatInputModule,
+    MatCardModule,
     BrowserAnimationsModule
   ],
   providers: [],
