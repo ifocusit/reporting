@@ -1,0 +1,15 @@
+version: '2.1'
+services:
+  reporting-server:
+    build: reporting-server
+    image: reporting-server
+    depends_on:
+      - kotlin-mongo
+    environment:
+      JAVA_OPTS: -Dmongo.host=kotlin-mongo -agentlib:jdwp=transport=dt_socket,server=y,address=1044,suspend=n
+    ports:
+      - "${KOTLIN_USER_SERVICE_DEBUG_PORT:-1045}:1044"
+  kotlin-mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
