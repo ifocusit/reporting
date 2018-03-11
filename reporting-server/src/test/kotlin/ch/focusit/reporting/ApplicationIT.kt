@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(SpringRunner::class)
 @SpringBootTest(
-        classes = arrayOf(KotlinDemoApplication::class),
+//        classes = arrayOf(KotlinDemoApplication::class),
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ApplicationIT {
 
