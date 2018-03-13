@@ -11,9 +11,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(SpringRunner::class)
-@SpringBootTest(
-//        classes = arrayOf(KotlinDemoApplication::class),
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 class ApplicationIT {
 
     @Autowired
