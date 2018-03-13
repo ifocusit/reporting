@@ -1,6 +1,12 @@
 package ch.focusit.reporting.repository
 
-import ch.focusit.reporting.domain.Time
-import org.springframework.data.repository.CrudRepository
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-interface TimeRepository : CrudRepository<Time, String>
+import ch.focusit.reporting.domain.Time
+import org.springframework.data.repository.reactive.ReactiveCrudRepository
+
+interface TimeRepository : ReactiveCrudRepository<Time, String> {
+
+    fn findByDate() : Flux<Time>
+}
