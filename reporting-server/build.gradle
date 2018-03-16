@@ -71,5 +71,12 @@ dependencies {
     testCompile('org.springframework.security:spring-security-test')
     testCompile('org.assertj:assertj-core:3.9.0')
     testCompile('com.github.fakemongo:fongo:2.1.0')
+
+    testCompile("info.cukes:cucumber-jvm",
+            "info.cukes:cucumber-core",
+            "info.cukes:cucumber-java",
+            "info.cukes:cucumber-junit",
+            "info.cukes:cucumber-spring",
+            "commons-io:commons-io")
 }
 
