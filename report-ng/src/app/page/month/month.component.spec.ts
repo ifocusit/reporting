@@ -100,11 +100,11 @@ describe('MonthComponent', () => {
   });
 
   it('should should total of work durations', () => {
-    expect(select(fixture, '#total').textContent).toEqual('total 176.00');
+    expect(select(fixture, '#total').textContent).toEqual('176.00 heures');
     component.items[0].duration = 'PT10H';
     component.items[1].duration = 'PT10H';
     fixture.detectChanges();
-    expect(select(fixture, '#total').textContent).toEqual('total 180.00');
+    expect(select(fixture, '#total').textContent).toEqual('180.00 heures');
   });
 });
 
