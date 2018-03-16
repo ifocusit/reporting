@@ -7,6 +7,9 @@ bin
 build
 .idea
 
+data-db
+out
+
 # Ignore Gradle GUI config
 gradle-app.setting
 
