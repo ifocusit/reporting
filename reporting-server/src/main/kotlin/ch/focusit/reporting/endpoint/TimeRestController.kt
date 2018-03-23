@@ -9,23 +9,14 @@ import org.springframework.web.bind.annotation.RestController
 import java.util.concurrent.atomic.AtomicLong
 
 @RestController()
-class TimeController(var repository: TimeRepository) {
+class TimeRestController(var repository: TimeRepository) {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/")
     fun findAll() = repository.findAll()
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/hello")
-    fun hello(): Any {
-        return "Hello world !"
-    }
+    @GetMapping("/{id}")
+    fun findById(@RequestParam(value = "id") id: String) = repository.findById(id)
 
-    val counter = AtomicLong()
-
-    @GetMapping("/greeting")
-    fun greeting(@RequestParam(value = "name", defaultValue = "World") name: String) =
-            Greeting(counter.incrementAndGet(), "Hello, $name")
 }
-
-data class Greeting(val id: Long, val content: String)
