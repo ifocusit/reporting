@@ -3,6 +3,10 @@ package ch.focusit.reporting.domain
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import java.time.LocalDateTime
+import java.util.*
 
+/**
+ * Timbrage
+ */
 @Document(collection = "times")
-class Time(@Id val handle: String, var date: LocalDateTime)
+data class Time(@Id val id: String? = UUID.randomUUID().toString(), var date: LocalDateTime)

@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        kotlinVersion = '1.2.20'
+        kotlinVersion = '1.2.30'
         springBootVersion = '2.0.0.RELEASE'
     }
 
@@ -12,6 +12,7 @@ buildscript {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
         classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
+        classpath("org.jetbrains.kotlin:kotlin-noarg:${kotlinVersion}")
     }
 }
 
@@ -25,21 +26,13 @@ apply plugin: "idea"
 apply plugin: "org.springframework.boot"
 apply plugin: "io.spring.dependency-management"
 
+version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
 compileKotlin {
-    kotlinOptions {
-        freeCompilerArgs = ["-Xjsr305=strict"]
-        jvmTarget = "1.8"
-    }
+    kotlinOptions.jvmTarget = "1.8"
 }
-
 compileTestKotlin {
-    kotlinOptions {
-        freeCompilerArgs = ["-Xjsr305=strict"]
-        jvmTarget = "1.8"
-    }
+    kotlinOptions.jvmTarget = "1.8"
 }
 
 repositories {
@@ -47,36 +40,17 @@ repositories {
 }
 
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-actuator')
     compile('org.springframework.boot:spring-boot-starter-data-mongodb-reactive')
-    compile('org.springframework.boot:spring-boot-starter-data-rest')
-    compile('org.springframework.boot:spring-boot-starter-hateoas')
-//    compile('org.springframework.boot:spring-boot-starter-security')
-    compile('org.springframework.boot:spring-boot-starter-validation')
     compile('org.springframework.boot:spring-boot-starter-webflux')
     compile('com.fasterxml.jackson.module:jackson-module-kotlin')
     compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     compile("org.jetbrains.kotlin:kotlin-reflect")
 
-    runtime('org.springframework.boot:spring-boot-devtools')
-
-    compileOnly('org.projectlombok:lombok')
-
     testCompile('org.jetbrains.kotlin:kotlin-test')
     testCompile('org.jetbrains.kotlin:kotlin-test-junit')
+    testCompile('org.assertj:assertj-core:3.9.0')
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('de.flapdoodle.embed:de.flapdoodle.embed.mongo')
     testCompile('io.projectreactor:reactor-test')
-    testCompile('org.springframework.restdocs:spring-restdocs-mockmvc')
-    testCompile('org.springframework.security:spring-security-test')
-    testCompile('org.assertj:assertj-core:3.9.0')
-    testCompile('com.github.fakemongo:fongo:2.1.0')
-
-    testCompile("info.cukes:cucumber-jvm",
-            "info.cukes:cucumber-core",
-            "info.cukes:cucumber-java",
-            "info.cukes:cucumber-junit",
-            "info.cukes:cucumber-spring",
-            "commons-io:commons-io")
 }
 
