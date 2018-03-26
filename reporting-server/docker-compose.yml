@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+
+  mongodb:
+    container_name: reporting-mongo
+    image: mongo:3.6
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    volumes:
+      - ./data/db:/data/db
+    ports:
+        - 27017:27017
+    command: mongod --smallfiles --logpath=/dev/null # --quiet
+
+  rest-server:
+    restart: always
+    build: ./app
+    working_dir: /app
+    volumes:
+      - ./app:/app
+    ports:
+      - "8080:8080"
+    command: ./gradelw bootRun
+    depends_on:
+      - mongodb

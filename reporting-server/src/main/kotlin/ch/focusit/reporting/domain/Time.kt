@@ -9,4 +9,4 @@ import java.util.*
  * Timbrage
  */
 @Document(collection = "times")
-data class Time(@Id val id: String? = UUID.randomUUID().toString(), var date: LocalDateTime)
+data class Time(@Id val id: String? = UUID.randomUUID().toString(), var time: LocalDateTime)
