@@ -27,8 +27,8 @@ class TimeControllerIT {
     fun setUp() {
         webClient = WebTestClient.bindToController(TimeController(repository)).build()
 
-        repository.save(TEST_TIME_1).subscribe()
         repository.save(TEST_TIME_2).subscribe()
+        repository.save(TEST_TIME_1).subscribe()
     }
 
     @AfterEach
@@ -96,8 +96,24 @@ class TimeControllerIT {
                 .expectStatus().isOk
     }
 
+    @Test
+    fun `find by month`() {
+        repository.save(TEST_TIME_3).subscribe()
+        repository.save(TEST_TIME_4).subscribe()
+
+        webClient.get()
+                .uri("/times/month/{month}", "2018-02").accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk
+                .expectBody()
+                .jsonPath("$[0].id").isEqualTo(TEST_TIME_3.id)
+                .jsonPath("$[1].id").isEqualTo(TEST_TIME_4.id)
+    }
+
     companion object {
         val TEST_TIME_1 = Time("_1", LocalDateTime.parse("2018-03-01T10:30"))
         val TEST_TIME_2 = Time("_2", LocalDateTime.parse("2018-03-01T14:50"))
+        val TEST_TIME_3 = Time("_3", LocalDateTime.parse("2018-02-02T10:10"))
+        val TEST_TIME_4 = Time("_4", LocalDateTime.parse("2018-02-02T18:10"))
     }
 }
