@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Mono
+import java.time.YearMonth
 import javax.validation.Valid
 
 @RestController
@@ -14,7 +15,7 @@ import javax.validation.Valid
 class TimeController(val repository: TimeRepository) {
 
     @GetMapping
-    fun findAll() = repository.findAll()
+    fun findAll() = repository.findAllByOrderByTimeAsc()
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -41,4 +42,9 @@ class TimeController(val repository: TimeRepository) {
                                 .then(Mono.just(ResponseEntity.ok("Delete successfully !")))
                     }
                     .defaultIfEmpty(ResponseEntity(HttpStatus.NOT_FOUND))
+
+    @GetMapping("month/{month}")
+    fun getByMonth(@PathVariable(value = "month") month: YearMonth) =
+            repository.findAllByTimeBetweenOrderByTimeAsc(month.atDay(1).atStartOfDay(),
+                    month.atEndOfMonth().plusDays(1).atStartOfDay())
 }
