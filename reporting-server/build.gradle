@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        kotlinVersion = '1.2.30'
+        kotlinVersion = '1.2.31'
         springBootVersion = '2.0.0.RELEASE'
     }
 
@@ -47,10 +47,16 @@ dependencies {
     compile("org.jetbrains.kotlin:kotlin-reflect")
 
     testCompile('org.jetbrains.kotlin:kotlin-test')
-    testCompile('org.jetbrains.kotlin:kotlin-test-junit')
     testCompile('org.assertj:assertj-core:3.9.0')
-    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile("org.springframework.boot:spring-boot-starter-test") {
+        exclude module: "junit"
+    }
+    testCompile("org.junit.jupiter:junit-jupiter-api")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine")
     testCompile('de.flapdoodle.embed:de.flapdoodle.embed.mongo')
     testCompile('io.projectreactor:reactor-test')
 }
 
+task db(type: Exec) {
+    commandLine 'mongodb', '--dbpath', 'data-db'
+}
