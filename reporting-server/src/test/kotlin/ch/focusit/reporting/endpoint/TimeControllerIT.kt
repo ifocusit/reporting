@@ -110,10 +110,28 @@ class TimeControllerIT {
                 .jsonPath("$[1].id").isEqualTo(TEST_TIME_4.id)
     }
 
+    @Test
+    fun `find by day`() {
+        repository.save(TEST_TIME_3).subscribe()
+        repository.save(TEST_TIME_4).subscribe()
+        repository.save(TEST_TIME_5).subscribe()
+        repository.save(TEST_TIME_6).subscribe()
+
+        webClient.get()
+                .uri("/times/date/{date}", "2018-02-03").accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk
+                .expectBody()
+                .jsonPath("$[0].id").isEqualTo(TEST_TIME_5.id)
+                .jsonPath("$[1].id").isEqualTo(TEST_TIME_6.id)
+    }
+
     companion object {
         val TEST_TIME_1 = Time("_1", LocalDateTime.parse("2018-03-01T10:30"))
         val TEST_TIME_2 = Time("_2", LocalDateTime.parse("2018-03-01T14:50"))
         val TEST_TIME_3 = Time("_3", LocalDateTime.parse("2018-02-02T10:10"))
         val TEST_TIME_4 = Time("_4", LocalDateTime.parse("2018-02-02T18:10"))
+        val TEST_TIME_5 = Time("_3", LocalDateTime.parse("2018-02-03T07:25"))
+        val TEST_TIME_6 = Time("_4", LocalDateTime.parse("2018-02-03T15:55"))
     }
 }
