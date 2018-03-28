@@ -1,7 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {Duration, Moment} from 'moment';
+import {Moment} from 'moment';
 import {ReportItem} from '../../model/ReportItem.model';
 import {ActivatedRoute} from '@angular/router';
+import {ActivityClient} from "../../client/activity-client.service";
+import {Activity, ActivityType} from "../../model/Activity.model";
 import moment = require('moment');
 
 @Component({
@@ -14,7 +16,7 @@ export class MonthComponent implements OnInit {
   _month: Moment;
   items: Array<ReportItem>;
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, private activitiyClient: ActivityClient) {
   }
 
   ngOnInit() {
@@ -28,6 +30,13 @@ export class MonthComponent implements OnInit {
     for (let i = 1; i <= this._month.daysInMonth(); i++) {
       this.items.push(new ReportItem(this._month.clone().date(i)));
     }
+    this.activitiyClient.getActivities$(this._month.format('YYYY-MM'))
+      .subscribe(activities => activities.forEach((activity: Activity) => {
+        let item = this.items.find(item => item.isSameDate(activity.date));
+        if (item) {
+          item.duration = activity.duration;
+        }
+      }))
   }
 
   get month(): Moment {
@@ -50,5 +59,10 @@ export class MonthComponent implements OnInit {
       .filter(report => report.duration)
       .map(report => report.getDuration().asHours())
       .reduce((d1, d2) => d1 + d2);
+  }
+
+  save(date: Moment, duration: string) {
+    this.activitiyClient.saveActivity$(date.format('YYYY-MM-DD'), duration,
+      duration == null ? ActivityType.OFF : ActivityType.WORK).subscribe();
   }
 }

@@ -2,10 +2,12 @@ package ch.focusit.reporting.endpoint
 
 import ch.focusit.reporting.domain.Time
 import ch.focusit.reporting.repository.TimeRepository
+import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Mono
+import java.time.LocalDate
 import java.time.YearMonth
 import javax.validation.Valid
 
@@ -47,4 +49,9 @@ class TimeController(val repository: TimeRepository) {
     fun getByMonth(@PathVariable(value = "month") month: YearMonth) =
             repository.findAllByTimeBetweenOrderByTimeAsc(month.atDay(1).atStartOfDay(),
                     month.atEndOfMonth().plusDays(1).atStartOfDay())
+
+    @GetMapping("date/{date}")
+    fun getByMonth(@PathVariable(value = "date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) date: LocalDate) =
+            repository.findAllByTimeBetweenOrderByTimeAsc(date.withDayOfMonth(1).atStartOfDay(),
+                    date.withDayOfMonth(1).plusMonths(1).atStartOfDay())
 }

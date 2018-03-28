@@ -16,4 +16,8 @@ export class ReportItem {
   public isWeekend(): boolean {
     return [6, 0].indexOf(this.date.day()) > -1;
   }
+
+  public isSameDate(date: string): boolean {
+    return this.date.format('YYYY-MM-DD') === date;
+  }
 }

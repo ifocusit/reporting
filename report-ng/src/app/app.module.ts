@@ -10,10 +10,17 @@ import {RouterModule, Routes} from '@angular/router';
 import {HomeComponent} from './page/home/home.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
-  MatButtonModule, MatCardModule, MatIconModule, MatInputModule, MatMenuModule, MatTableModule,
+  MatButtonModule,
+  MatCardModule,
+  MatIconModule,
+  MatInputModule,
+  MatMenuModule,
+  MatTableModule,
   MatToolbarModule
 } from '@angular/material';
 import {FormsModule} from '@angular/forms';
+import {HttpClientModule} from "@angular/common/http";
+import {ActivityClient} from "./client/activity-client.service";
 
 const appRoutes: Routes = [
   {
@@ -42,9 +49,10 @@ const appRoutes: Routes = [
     MatTableModule,
     MatInputModule,
     MatCardModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [ActivityClient],
   bootstrap: [AppComponent]
 })
 export class AppModule {
