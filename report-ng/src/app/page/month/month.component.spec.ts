@@ -1,4 +1,4 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {async, ComponentFixture, inject, TestBed} from '@angular/core/testing';
 import * as moment from 'moment';
 
 import {MonthComponent} from './month.component';
@@ -16,6 +16,10 @@ import {
 } from '@angular/material';
 import {FormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {ActivityClient} from '../../client/activity-client.service';
+import {Observable} from "rxjs/Observable";
+import 'rxjs/add/observable/of';
+import {Activity, ActivityType} from "../../model/Activity.model";
 
 describe('MonthComponent', () => {
   let component: MonthComponent;
@@ -46,6 +50,13 @@ describe('MonthComponent', () => {
                 month: '2018-03'
               })
             }
+          }
+        },
+        {
+          provide: ActivityClient,
+          useValue: {
+            getActivities$: (month: string) => Observable.of([]),
+            saveActivity$: () => Observable.of('saved !')
           }
         }
       ]
@@ -90,6 +101,16 @@ describe('MonthComponent', () => {
     assertLine(select(fixture, '#times mat-row', 1), '01 jeudi', 'PT8H', '08.00');
   });
 
+  it('should update decimal duration', inject([ActivityClient], (activityClient: ActivityClient) => {
+    const inputElement: HTMLInputElement = fixture.nativeElement.querySelectorAll('#times mat-row input')[14];
+
+    inputElement.value = 'PT9H15M';
+    inputElement.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    assertLine(select(fixture, '#times mat-row', 15), '15 jeudi', 'PT9H15M', '09.25');
+  }));
+
   it('should hide weekend duration by default', () => {
     assertLine(select(fixture, '#times mat-row', 3), '03 samedi', null, null);
     assertLine(select(fixture, '#times mat-row', 4), '04 dimanche', null, null);
@@ -106,15 +127,58 @@ describe('MonthComponent', () => {
     fixture.detectChanges();
     expect(select(fixture, '#total').textContent).toEqual('180.00 heures');
   });
+
+  it('should load times from backend', inject([ActivityClient], (activityClient: ActivityClient) => {
+
+    // given
+    const client = spyOn(activityClient, 'getActivities$').and.returnValue(Observable
+      .of([
+        new Activity('2018-04-02', null, ActivityType.OFF),
+        new Activity('2018-04-03', 'PT9H', ActivityType.WORK),
+        new Activity('2018-04-04', null, ActivityType.OFF),
+        new Activity('2018-04-05', 'PT7H30M', ActivityType.WORK)
+      ]));
+
+    // when
+    component.month = moment('2018-04-01', 'YYYY-MM-DD');
+    fixture.detectChanges();
+
+    // then
+    expect(client).toHaveBeenCalledWith('2018-04');
+    assertLine(select(fixture, '#times mat-row', 1), '01 dimanche', null, null);
+    assertLine(select(fixture, '#times mat-row', 2), '02 lundi', null, null);
+    assertLine(select(fixture, '#times mat-row', 3), '03 mardi', 'PT9H', '09.00');
+    assertLine(select(fixture, '#times mat-row', 4), '04 mercredi', null, null);
+    assertLine(select(fixture, '#times mat-row', 5), '05 jeudi', 'PT7H30M', '07.50');
+    expect(select(fixture, '#total').textContent).toEqual('152.50 heures');
+
+  }));
+
+  it('should save time from input text to backend', inject([ActivityClient], (activityClient: ActivityClient) => {
+    // given
+    const client = spyOn(activityClient, 'saveActivity$').and.returnValue(Observable.of('saved'));
+    const inputElement: HTMLInputElement = fixture.nativeElement.querySelectorAll('#times mat-row input')[14];
+    inputElement.value = 'PT9H15M';
+    inputElement.dispatchEvent(new Event('input'));
+
+    // when
+    inputElement.dispatchEvent(new Event('focusout'));
+    fixture.detectChanges();
+
+    // then
+    assertLine(select(fixture, '#times mat-row', 15), '15 jeudi', 'PT9H15M', '09.25');
+    expect(client).toHaveBeenCalled();
+    expect(client).toHaveBeenCalledWith('2018-03-15', 'PT9H15M', ActivityType.WORK);
+  }));
 });
 
 // ************************************************************
 // HELPERS
 // ************************************************************
 
-function select(fixture: ComponentFixture<MonthComponent>, selectors: string, number = 1): HTMLElement {
+function select(fixture: ComponentFixture<MonthComponent>, selectors: string, index = 1): HTMLElement {
   const elements = fixture.debugElement.nativeElement.querySelectorAll(selectors);
-  return elements[--number];
+  return elements[--index];
 }
 
 function assertLine(line: HTMLElement, date: string, duration = 'PT8H', decimal = '08.00') {
