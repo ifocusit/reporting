@@ -16,7 +16,7 @@ export class MonthComponent implements OnInit {
   _month: Moment;
   items: Array<ReportItem>;
 
-  constructor(private route: ActivatedRoute, private activitiyClient: ActivityClient) {
+  constructor(private route: ActivatedRoute, private activityClient: ActivityClient) {
   }
 
   ngOnInit() {
@@ -30,7 +30,7 @@ export class MonthComponent implements OnInit {
     for (let i = 1; i <= this._month.daysInMonth(); i++) {
       this.items.push(new ReportItem(this._month.clone().date(i)));
     }
-    this.activitiyClient.getActivities$(this._month.format('YYYY-MM'))
+    this.activityClient.getActivities$(this._month.format('YYYY-MM'))
       .subscribe(activities => activities.forEach((activity: Activity) => {
         let item = this.items.find(item => item.isSameDate(activity.date));
         if (item) {
@@ -62,7 +62,7 @@ export class MonthComponent implements OnInit {
   }
 
   save(date: Moment, duration: string) {
-    this.activitiyClient.saveActivity$(date.format('YYYY-MM-DD'), duration,
+    this.activityClient.saveActivity$(date.format('YYYY-MM-DD'), duration,
       duration == null ? ActivityType.OFF : ActivityType.WORK).subscribe();
   }
 }
