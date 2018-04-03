@@ -13,6 +13,9 @@ import moment = require('moment');
 })
 export class MonthComponent implements OnInit {
 
+  public DEFAULT_DAY_DURATION: number = 8;
+  public WEEK_OVERTIME_MAJOR: number = 1.2;
+
   _month: Moment;
   items: Array<ReportItem>;
 
@@ -39,6 +42,11 @@ export class MonthComponent implements OnInit {
       }))
   }
 
+  save(date: Moment, duration: string) {
+    this.activityClient.saveActivity$(date.format('YYYY-MM-DD'), duration,
+      duration == null ? ActivityType.OFF : ActivityType.WORK).subscribe();
+  }
+
   get month(): Moment {
     return this._month;
   }
@@ -61,8 +69,11 @@ export class MonthComponent implements OnInit {
       .reduce((d1, d2) => d1 + d2);
   }
 
-  save(date: Moment, duration: string) {
-    this.activityClient.saveActivity$(date.format('YYYY-MM-DD'), duration,
-      duration == null ? ActivityType.OFF : ActivityType.WORK).subscribe();
+  get overtime(): number {
+    return this.total - this.DEFAULT_DAY_DURATION * this.workDays;
+  }
+
+  get finalTotal(): number {
+    return this.DEFAULT_DAY_DURATION * this.workDays + this.overtime * this.WEEK_OVERTIME_MAJOR;
   }
 }
