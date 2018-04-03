@@ -20,6 +20,7 @@ import {ActivityClient} from '../../client/activity-client.service';
 import {Observable} from "rxjs/Observable";
 import 'rxjs/add/observable/of';
 import {Activity, ActivityType} from "../../model/Activity.model";
+import {By} from "@angular/platform-browser";
 
 describe('MonthComponent', () => {
   let component: MonthComponent;
@@ -215,6 +216,16 @@ describe('MonthComponent', () => {
     expect(select(fixture, '#overtime').textContent).toContain('3.50')
     expect(select(fixture, '#finalTotal').textContent).toContain('164.20')
   }));
+
+  // it('should generate bill', () => {
+  //   // given
+  //   const billingBtn = fixture.debugElement.query(By.css("#billing")).nativeElement;
+  //
+  //   // when
+  //   billingBtn.click()
+  //
+  //   // then
+  // });
 });
 
 // ************************************************************
