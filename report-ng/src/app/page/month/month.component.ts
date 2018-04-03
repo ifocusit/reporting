@@ -76,4 +76,8 @@ export class MonthComponent implements OnInit {
   get finalTotal(): number {
     return this.DEFAULT_DAY_DURATION * this.workDays + this.overtime * this.WEEK_OVERTIME_MAJOR;
   }
+
+  public billing(): void {
+    console.log("billing");
+  }
 }
