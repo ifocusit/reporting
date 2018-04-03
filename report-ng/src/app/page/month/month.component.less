@@ -1,3 +1,6 @@
+div.mat-elevation-z8 {
+  margin-bottom: 1em;
+}
 
 mat-table {
   max-width: 360px;
@@ -26,6 +29,20 @@ mat-table {
   background-color: lightgray;
 }
 
-#workDays, #total {
-  padding: 0 10px;
+mat-card-content {
+  span {
+    display: table-cell;
+
+    &:nth-child(1) {
+      width: 200px;
+    }
+    &:nth-child(2) {
+      width: 50px;
+      text-align: end;
+      padding-right: 5px;
+    }
+    &:nth-child(3) {
+      width: 200px;
+    }
+  }
 }

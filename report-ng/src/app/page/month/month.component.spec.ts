@@ -117,15 +117,15 @@ describe('MonthComponent', () => {
   });
 
   it('should should number of work days', () => {
-    expect(select(fixture, '#workDays').textContent).toEqual('22 jours ouvrés');
+    expect(select(fixture, '#workDays').textContent).toContain('22');
   });
 
   it('should should total of work durations', () => {
-    expect(select(fixture, '#total').textContent).toEqual('176.00 heures');
+    expect(select(fixture, '#total').textContent).toContain('176.00');
     component.items[0].duration = 'PT10H';
     component.items[1].duration = 'PT10H';
     fixture.detectChanges();
-    expect(select(fixture, '#total').textContent).toEqual('180.00 heures');
+    expect(select(fixture, '#total').textContent).toContain('180.00');
   });
 
   it('should load times from backend', inject([ActivityClient], (activityClient: ActivityClient) => {
@@ -150,7 +150,7 @@ describe('MonthComponent', () => {
     assertLine(select(fixture, '#times mat-row', 3), '03 mardi', 'PT9H', '09.00');
     assertLine(select(fixture, '#times mat-row', 4), '04 mercredi', null, null);
     assertLine(select(fixture, '#times mat-row', 5), '05 jeudi', 'PT7H30M', '07.50');
-    expect(select(fixture, '#total').textContent).toEqual('152.50 heures');
+    expect(select(fixture, '#total').textContent).toContain('152.50');
 
   }));
 
@@ -169,6 +169,51 @@ describe('MonthComponent', () => {
     assertLine(select(fixture, '#times mat-row', 15), '15 jeudi', 'PT9H15M', '09.25');
     expect(client).toHaveBeenCalled();
     expect(client).toHaveBeenCalledWith('2018-03-15', 'PT9H15M', ActivityType.WORK);
+
+  }));
+
+  it('should show overtime', inject([ActivityClient], (activityClient: ActivityClient) => {
+    // given
+    spyOn(activityClient, 'getActivities$').and.returnValue(Observable.of(
+      [
+        {"date": "2018-04-02", "duration": null, "type": "OFF"},
+        {"date": "2018-04-03", "duration": "PT9H", "type": "WORK"},
+        {"date": "2018-04-04", "duration": "PT9H", "type": "WORK"},
+        {"date": "2018-04-05", "duration": "PT9H", "type": "WORK"},
+        {"date": "2018-04-06", "duration": "PT9H", "type": "WORK"},
+        {"date": "2018-04-09", "duration": "PT9H", "type": "WORK"}
+      ]
+    ));
+
+    // when
+    component.month = moment('2018-04-01', 'YYYY-MM-DD');
+    fixture.detectChanges();
+
+    // then
+    expect(select(fixture, '#overtime').textContent).toContain('5.00')
+  }));
+
+  it('should show final total with overtime majoration', inject([ActivityClient], (activityClient: ActivityClient) => {
+    // given
+    spyOn(activityClient, 'getActivities$').and.returnValue(Observable.of(
+      [
+        {"date": "2018-04-02", "duration": null, "type": "OFF"},
+        {"date": "2018-04-03", "duration": "PT7H30M", "type": "WORK"},
+        {"date": "2018-04-04", "duration": "PT8H30M", "type": "WORK"},
+        {"date": "2018-04-05", "duration": "PT9H", "type": "WORK"},
+        {"date": "2018-04-06", "duration": "PT9H30M", "type": "WORK"},
+        {"date": "2018-04-09", "duration": "PT9H", "type": "WORK"}
+      ]
+    ));
+
+    // when
+    component.month = moment('2018-04-01', 'YYYY-MM-DD');
+    fixture.detectChanges();
+
+    // then
+    expect(select(fixture, '#total').textContent).toContain('163.50')
+    expect(select(fixture, '#overtime').textContent).toContain('3.50')
+    expect(select(fixture, '#finalTotal').textContent).toContain('164.20')
   }));
 });
 

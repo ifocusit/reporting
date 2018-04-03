@@ -1,50 +1,64 @@
 <div class="mat-elevation-z8">
-  <mat-toolbar color="primary">
-    <span id="month">{{month | moment: 'MMMM YYYY'}}</span>
+    <mat-toolbar color="primary">
+        <span id="month">{{month | moment: 'MMMM YYYY'}}</span>
 
-    <button mat-icon-button [mat-menu-trigger-for]="menu">
-      <mat-icon>more_vert</mat-icon>
-    </button>
-  </mat-toolbar>
+        <button mat-icon-button [mat-menu-trigger-for]="menu">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+    </mat-toolbar>
 
-  <mat-menu x-position="before" #menu="matMenu">
-    <button mat-menu-item>Générer facture</button>
-  </mat-menu>
+    <mat-menu x-position="before" #menu="matMenu">
+        <button mat-menu-item>Générer facture</button>
+    </mat-menu>
 
-  <mat-table id="times" [dataSource]="items">
+    <mat-table id="times" [dataSource]="items">
 
-    <ng-container matColumnDef="date">
-      <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
-      <mat-cell *matCellDef="let time">{{ time.date | moment : 'DD dddd' }}</mat-cell>
-    </ng-container>
+        <ng-container matColumnDef="date">
+            <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+            <mat-cell *matCellDef="let time">{{ time.date | moment : 'DD dddd' }}</mat-cell>
+        </ng-container>
 
-    <ng-container matColumnDef="duration">
-      <mat-header-cell *matHeaderCellDef></mat-header-cell>
-      <mat-cell *matCellDef="let time">
-        <mat-form-field class="example-form-field">
-          <input matInput type="text" [(ngModel)]="time.duration" size="5" (focusout)="save(time.date, time.duration)"/>
-          <!--<button mat-button *ngIf="time.duration" matSuffix mat-icon-button aria-label="Clear" (click)="time.duration=''">
-            <mat-icon>close</mat-icon>
-          </button>-->
-        </mat-form-field>
-      </mat-cell>
-    </ng-container>
+        <ng-container matColumnDef="duration">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let time">
+                <mat-form-field class="example-form-field">
+                    <input matInput type="text" [(ngModel)]="time.duration" size="5"
+                           (focusout)="save(time.date, time.duration)"/>
+                    <!--<button mat-button *ngIf="time.duration" matSuffix mat-icon-button aria-label="Clear" (click)="time.duration=''">
+                      <mat-icon>close</mat-icon>
+                    </button>-->
+                </mat-form-field>
+            </mat-cell>
+        </ng-container>
 
-    <ng-container matColumnDef="decimal">
-      <mat-header-cell *matHeaderCellDef>Total journalier</mat-header-cell>
-      <mat-cell *matCellDef="let time">{{ time.getDuration()?.asHours() | number: '2.2-2' }}</mat-cell>
-    </ng-container>
+        <ng-container matColumnDef="decimal">
+            <mat-header-cell *matHeaderCellDef>Total journalier</mat-header-cell>
+            <mat-cell *matCellDef="let time">{{ time.getDuration()?.asHours() | number: '2.2-2' }}</mat-cell>
+        </ng-container>
 
-    <mat-header-row *matHeaderRowDef="['date', 'duration', 'decimal']"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: ['date', 'duration', 'decimal'];" [class.week]="!row.duration"></mat-row>
-  </mat-table>
-
-  <mat-card>
-    <mat-card-title>Totaux</mat-card-title>
-    <mat-card-content>
-      <span id="workDays">{{ workDays }} jours ouvrés</span>
-      <span id="total">{{ total | number: '.2-2' }} heures</span>
-    </mat-card-content>
-  </mat-card>
-
+        <mat-header-row *matHeaderRowDef="['date', 'duration', 'decimal']"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: ['date', 'duration', 'decimal'];" [class.week]="!row.duration"></mat-row>
+    </mat-table>
+</div>
+<div class="mat-elevation-z8">
+    <mat-card class="totals">
+        <mat-card-title>Totaux</mat-card-title>
+        <mat-card-content>
+            <div>
+                <span id="workDays">{{ workDays }} jours ouvrés</span>
+                <span id="total">{{ total | number: '.2-2' }}</span>
+                <span>heures</span>
+            </div>
+            <div>
+                <span></span>
+                <span id="overtime">{{ overtime | number: '.2-2' }}</span>
+                <span>heure(s) supplémentaire(s)</span>
+            </div>
+            <div>
+                <span></span>
+                <span id="finalTotal">{{ finalTotal | number: '.2-2' }}</span>
+                <span>heure(s) avec majoration</span>
+            </div>
+        </mat-card-content>
+    </mat-card>
 </div>
