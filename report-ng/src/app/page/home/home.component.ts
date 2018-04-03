@@ -5,7 +5,7 @@ import moment = require('moment');
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
+  styleUrls: ['./home.component.less'],
   providers: [MomentPipe]
 })
 export class HomeComponent {
