@@ -8,7 +8,7 @@
     </mat-toolbar>
 
     <mat-menu x-position="before" #menu="matMenu">
-        <button mat-menu-item>Générer facture</button>
+        <button mat-menu-item id="billing" (click)="billing()">Générer facture</button>
     </mat-menu>
 
     <mat-table id="times" [dataSource]="items">
