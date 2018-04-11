@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout (~{::body},'test')}">
+<head>
+    <title>Bill</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<div class="correspondant">
+    <div>
+        <div>Schweizerische Mobiliar</div>
+        <div>Lebensversicherungs-Gesellschaft AG</div>
+        <div>Postfach 250</div>
+        <div>8901 Urdorf</div>
+        <div>brigitte.baumgartner@mobi.ch</div>
+        <div>Ref Evidence 7926</div>
+    </div>
+</div>
+
+<h4 th:text="'Facture du mois de ' + ${month}"/>
+<h2 th:text="'Facture ' + ${id}"/>
+<div>n° TVA : CHE-149.764.027</div>
+
+<table>
+    <thead>
+    <tr>
+        <th></th>
+        <th class="amount">Total</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td th:text="${duration} + ' heures'"/>
+        <td th:text="${amount}" class="amount"/>
+    </tr>
+    <tr class="divider subtotal">
+        <td>Total Hors TVA</td>
+        <td th:text="${totalHT}" class="amount"/>
+    </tr>
+    <tr class="subtotal">
+        <td>TVA 7.70%</td>
+        <td th:text="${totalTVA}" class="amount"/>
+    </tr>
+    <tr class="total">
+        <td>Total</td>
+        <td th:text="${totalTTC}" class="amount"/>
+    </tr>
+    </tbody>
+</table>
+
+<div>Paiement net à 30 jours auprès de:</div>
+<div>Compte postal 65-188682-7 CHF / IBAN CH31 0900 0000 6518 8682 7</div>
+</body>
+</html>
