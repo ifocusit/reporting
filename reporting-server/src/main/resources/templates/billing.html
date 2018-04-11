@@ -8,18 +8,13 @@
 <body>
 <div class="correspondant">
     <div>
-        <div>Schweizerische Mobiliar</div>
-        <div>Lebensversicherungs-Gesellschaft AG</div>
-        <div>Postfach 250</div>
-        <div>8901 Urdorf</div>
-        <div>brigitte.baumgartner@mobi.ch</div>
-        <div>Ref Evidence 7926</div>
+        <div th:each="info : ${client}" th:text="${info}"/>
     </div>
 </div>
 
 <h4 th:text="'Facture du mois de ' + ${month}"/>
 <h2 th:text="'Facture ' + ${id}"/>
-<div>n° TVA : CHE-149.764.027</div>
+<div th:text="'n° TVA : ' + ${numeroTVA.value}"/>
 
 <table>
     <thead>
@@ -38,7 +33,7 @@
         <td th:text="${totalHT}" class="amount"/>
     </tr>
     <tr class="subtotal">
-        <td>TVA 7.70%</td>
+        <td th:text="'TVA ' + ${tva} + '%'" />
         <td th:text="${totalTVA}" class="amount"/>
     </tr>
     <tr class="total">
@@ -49,6 +44,6 @@
 </table>
 
 <div>Paiement net à 30 jours auprès de:</div>
-<div>Compte postal 65-188682-7 CHF / IBAN CH31 0900 0000 6518 8682 7</div>
+<div th:text="'Compte postal ' + ${compte.value} + ' CHF / IBAN ' + ${iban.value}"/>
 </body>
 </html>

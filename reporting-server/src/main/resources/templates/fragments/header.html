@@ -6,8 +6,7 @@
 <header th:fragment="header">
     <div class="society">
         <img th:src="@{/images/logo.png}"/>
-        <div>Av. de la gare, 45</div>
-        <div>1920 Martigny</div>
+        <div th:each="info : ${society}" th:text="${info}"/>
     </div>
 </header>
 </body>
