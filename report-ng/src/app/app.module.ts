@@ -21,6 +21,7 @@ import {
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from "@angular/common/http";
 import {ActivityClient} from "./client/activity-client.service";
+import {FlexLayoutModule} from "@angular/flex-layout";
 
 const appRoutes: Routes = [
   {
@@ -50,7 +51,8 @@ const appRoutes: Routes = [
     MatInputModule,
     MatCardModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+    FlexLayoutModule
   ],
   providers: [ActivityClient],
   bootstrap: [AppComponent]

@@ -17,7 +17,6 @@ import java.time.Duration
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 
-
 @Controller
 @CrossOrigin("*")
 @RequestMapping("billing")
