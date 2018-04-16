@@ -1,48 +1,24 @@
-div.mat-elevation-z8 {
-  margin-bottom: 1em;
-}
-
-mat-table {
-  max-width: 360px;
+mat-table.reports {
 
   mat-row {
     min-height: 0px;
     max-height: 22px;
+    font-size: 12px;
+  }
 
-    mat-cell {
-      font-size: 12px;
-      max-width: 80px;
-      margin-right: 10px;
-
-      &:first-child {
-        max-width: 160px;
-      }
-
-      &:last-child {
-        max-width: 40px;
-      }
-    }
+  .week {
+    background-color: lightgray;
   }
 }
 
-.week {
-  background-color: lightgray;
-}
+mat-card.totals {
+  div[fxflexalign=end] {
+    padding-right: 4px;
+    text-align: end;
+    font-weight: bold;
+  }
 
-mat-card-content {
-  span {
-    display: table-cell;
-
-    &:nth-child(1) {
-      width: 200px;
-    }
-    &:nth-child(2) {
-      width: 50px;
-      text-align: end;
-      padding-right: 5px;
-    }
-    &:nth-child(3) {
-      width: 200px;
-    }
+  div#finalTotal {
+    color: red;
   }
 }
