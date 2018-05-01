@@ -16,11 +16,10 @@ import {
 } from '@angular/material';
 import {FormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {ActivityClient} from '../../client/activity-client.service';
 import {Observable} from "rxjs/Observable";
 import 'rxjs/add/observable/of';
-import {Activity, ActivityType} from "../../model/Activity.model";
-import {By} from "@angular/platform-browser";
+import {TimeClient} from "../../client/time-client.service";
+import {Time} from "../../model/time.model";
 
 describe('MonthComponent', () => {
   let component: MonthComponent;
@@ -54,10 +53,10 @@ describe('MonthComponent', () => {
           }
         },
         {
-          provide: ActivityClient,
+          provide: TimeClient,
           useValue: {
-            getActivities$: (month: string) => Observable.of([]),
-            saveActivity$: () => Observable.of('saved !')
+            getTimes$: (month: string) => Observable.of([]),
+            saveTime$: () => Observable.of('saved !')
           }
         }
       ]
@@ -102,7 +101,7 @@ describe('MonthComponent', () => {
     assertLine(select(fixture, '#times mat-row', 1), '01 jeudi', 'PT8H', '08.00');
   });
 
-  it('should update decimal duration', inject([ActivityClient], (activityClient: ActivityClient) => {
+  it('should update decimal duration', inject([TimeClient], (timeClient: TimeClient) => {
     const inputElement: HTMLInputElement = fixture.nativeElement.querySelectorAll('#times mat-row input')[14];
 
     inputElement.value = 'PT9H15M';
@@ -129,15 +128,19 @@ describe('MonthComponent', () => {
     expect(select(fixture, '#total').textContent).toContain('180.00');
   });
 
-  it('should load times from backend', inject([ActivityClient], (activityClient: ActivityClient) => {
+  it('should load times from backend', inject([TimeClient], (timeClient: TimeClient) => {
 
     // given
-    const client = spyOn(activityClient, 'getActivities$').and.returnValue(Observable
+    const client = spyOn(timeClient, 'getTimes$').and.returnValue(Observable
       .of([
-        new Activity('2018-04-02', null, ActivityType.OFF),
-        new Activity('2018-04-03', 'PT9H', ActivityType.WORK),
-        new Activity('2018-04-04', null, ActivityType.OFF),
-        new Activity('2018-04-05', 'PT7H30M', ActivityType.WORK)
+        new Time('2018-04-03T08:00:00'),
+        new Time('2018-04-03T12:00:00'),
+        new Time('2018-04-03T13:00:00'),
+        new Time('2018-04-03T18:00:00'),
+        new Time('2018-04-05T08:00:00'),
+        new Time('2018-04-05T12:00:00'),
+        new Time('2018-04-05T13:00:00'),
+        new Time('2018-04-05T16:30:00')
       ]));
 
     // when
@@ -155,9 +158,9 @@ describe('MonthComponent', () => {
 
   }));
 
-  it('should save time from input text to backend', inject([ActivityClient], (activityClient: ActivityClient) => {
+  it('should save time from input text to backend', inject([TimeClient], (timeClient: TimeClient) => {
     // given
-    const client = spyOn(activityClient, 'saveActivity$').and.returnValue(Observable.of('saved'));
+    const client = spyOn(timeClient, 'saveTime$').and.returnValue(Observable.of('saved'));
     const inputElement: HTMLInputElement = fixture.nativeElement.querySelectorAll('#times mat-row input')[14];
     inputElement.value = 'PT9H15M';
     inputElement.dispatchEvent(new Event('input'));
@@ -168,14 +171,17 @@ describe('MonthComponent', () => {
 
     // then
     assertLine(select(fixture, '#times mat-row', 15), '15 jeudi', 'PT9H15M', '09.25');
-    expect(client).toHaveBeenCalled();
-    expect(client).toHaveBeenCalledWith('2018-03-15', 'PT9H15M', ActivityType.WORK);
+    expect(client).toHaveBeenCalledTimes(4);
+    expect(client).toHaveBeenCalledWith('2018-03-15T08:00:00');
+    expect(client).toHaveBeenCalledWith('2018-03-15T12:00:00');
+    expect(client).toHaveBeenCalledWith('2018-03-15T13:00:00');
+    expect(client).toHaveBeenCalledWith('2018-03-15T18:15:00');
 
   }));
 
-  it('should show overtime', inject([ActivityClient], (activityClient: ActivityClient) => {
+  it('should show overtime', inject([TimeClient], (timeClient: TimeClient) => {
     // given
-    spyOn(activityClient, 'getActivities$').and.returnValue(Observable.of(
+    spyOn(timeClient, 'getTimes$').and.returnValue(Observable.of(
       [
         {"date": "2018-04-02", "duration": null, "type": "OFF"},
         {"date": "2018-04-03", "duration": "PT9H", "type": "WORK"},
@@ -194,16 +200,30 @@ describe('MonthComponent', () => {
     expect(select(fixture, '#overtime').textContent).toContain('5.00')
   }));
 
-  it('should show final total with overtime majoration', inject([ActivityClient], (activityClient: ActivityClient) => {
+  it('should show final total with overtime majoration', inject([TimeClient], (timeClient: TimeClient) => {
     // given
-    spyOn(activityClient, 'getActivities$').and.returnValue(Observable.of(
+    spyOn(timeClient, 'getTimes$').and.returnValue(Observable.of(
       [
-        {"date": "2018-04-02", "duration": null, "type": "OFF"},
-        {"date": "2018-04-03", "duration": "PT7H30M", "type": "WORK"},
-        {"date": "2018-04-04", "duration": "PT8H30M", "type": "WORK"},
-        {"date": "2018-04-05", "duration": "PT9H", "type": "WORK"},
-        {"date": "2018-04-06", "duration": "PT9H30M", "type": "WORK"},
-        {"date": "2018-04-09", "duration": "PT9H", "type": "WORK"}
+        {"date": "2018-04-03T08:00:00"},
+        {"date": "2018-04-03T12:00:00"},
+        {"date": "2018-04-03T13:00:00"},
+        {"date": "2018-04-03T16:30:00"},
+        {"date": "2018-04-04T08:00:00"},
+        {"date": "2018-04-04T12:00:00"},
+        {"date": "2018-04-04T13:00:00"},
+        {"date": "2018-04-04T17:30:00"},
+        {"date": "2018-04-05T08:00:00"},
+        {"date": "2018-04-05T12:00:00"},
+        {"date": "2018-04-05T13:00:00"},
+        {"date": "2018-04-05T18:00:00"},
+        {"date": "2018-04-06T08:00:00"},
+        {"date": "2018-04-06T12:00:00"},
+        {"date": "2018-04-06T13:00:00"},
+        {"date": "2018-04-06T18:30:00"},
+        {"date": "2018-04-09T08:00:00"},
+        {"date": "2018-04-09T12:00:00"},
+        {"date": "2018-04-09T13:00:00"},
+        {"date": "2018-04-09T18:00:00"}
       ]
     ));
 

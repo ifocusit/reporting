@@ -1,9 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {Moment} from 'moment';
-import {ReportItem} from '../../model/ReportItem.model';
+import {ISO_DATE, WorkingDateReporting} from '../../model/working-date-reporting.model';
 import {ActivatedRoute} from '@angular/router';
-import {ActivityClient} from "../../client/activity-client.service";
-import {Activity, ActivityType} from "../../model/Activity.model";
+import {TimeClient} from "../../client/time-client.service";
+import {filter, groupBy, map, mergeMap, switchMap, tap, toArray} from "rxjs/operators";
+import {from} from "rxjs/observable/from";
+import {MatDialog} from "@angular/material";
+import {DailyReportComponent} from "./daily-report/daily-report.component";
+import {Time} from "../../model/time.model";
 import moment = require('moment');
 
 @Component({
@@ -17,9 +21,9 @@ export class MonthComponent implements OnInit {
   public WEEK_OVERTIME_MAJOR: number = 1.2;
 
   _month: Moment;
-  items: Array<ReportItem>;
+  items: Array<WorkingDateReporting>;
 
-  constructor(private route: ActivatedRoute, private activityClient: ActivityClient) {
+  constructor(private route: ActivatedRoute, private timeClient: TimeClient, public dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -31,20 +35,17 @@ export class MonthComponent implements OnInit {
   private initDays(): void {
     this.items = [];
     for (let i = 1; i <= this._month.daysInMonth(); i++) {
-      this.items.push(new ReportItem(this._month.clone().date(i)));
+      this.items.push(new WorkingDateReporting(this._month.clone().day(i)));
     }
-    this.activityClient.getActivities$(this._month.format('YYYY-MM'))
-      .subscribe(activities => activities.forEach((activity: Activity) => {
-        let item = this.items.find(item => item.isSameDate(activity.date));
-        if (item) {
-          item.duration = activity.duration;
-        }
-      }))
-  }
-
-  save(date: Moment, duration: string) {
-    this.activityClient.saveActivity$(date.format('YYYY-MM-DD'), duration,
-      duration == null ? ActivityType.OFF : ActivityType.WORK).subscribe();
+    this.timeClient.getTimes$(this._month.format('YYYY-MM'))
+      .pipe(
+        switchMap(times => from(times)),
+        groupBy(time => moment(time.time).format(ISO_DATE)),
+        mergeMap(group$ => group$.pipe(toArray())),
+        map(groupTimes => WorkingDateReporting.from(groupTimes)),
+        tap(reportItem => this.items.push(reportItem))
+      )
+      .subscribe();
   }
 
   get month(): Moment {
@@ -63,9 +64,13 @@ export class MonthComponent implements OnInit {
   }
 
   get total(): number {
-    return this.items
-      .filter(report => report.duration)
-      .map(report => report.getDuration().asHours())
+    const items = this.items
+      .filter(report => report.duration);
+
+    if (items.length == 0) {
+      return 0;
+    }
+    return items.map(report => report.getDuration().asHours())
       .reduce((d1, d2) => d1 + d2);
   }
 
@@ -79,5 +84,36 @@ export class MonthComponent implements OnInit {
 
   public billing(): void {
     console.log("billing");
+  }
+
+  edit(toEdit: WorkingDateReporting): void {
+    let dialogRef = this.dialog.open(DailyReportComponent, {
+      width: '300px',
+      data: {
+        date: toEdit.date,
+        times: !toEdit.times ? [] : toEdit.times.map((time) => time.clone())
+      }
+    });
+
+    const olds$ = from(toEdit.times);
+
+    dialogRef.afterClosed().pipe(
+      filter(validated => validated),
+      map(report => report.times),
+      switchMap(times => from(times)),
+      switchMap((time: Time) => {
+        return this.timeClient.create$(time.time);
+      }),
+      mergeMap((times) => {
+        return times;
+      })
+    )
+      .subscribe((newTimes) => olds$.pipe(
+        filter((time) => time.id),
+        switchMap((time) => {
+          return this.timeClient.delete$(time);
+        }),
+      )
+        .subscribe(() => toEdit.times = newTimes));
   }
 }

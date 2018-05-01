@@ -12,16 +12,22 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
   MatButtonModule,
   MatCardModule,
+  MatDatepickerModule,
+  MatDialogModule,
   MatIconModule,
   MatInputModule,
+  MatListModule,
   MatMenuModule,
+  MatNativeDateModule,
   MatTableModule,
-  MatToolbarModule
+  MatToolbarModule,
 } from '@angular/material';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from "@angular/common/http";
 import {ActivityClient} from "./client/activity-client.service";
 import {FlexLayoutModule} from "@angular/flex-layout";
+import {TimeClient} from "./client/time-client.service";
+import {DailyReportComponent} from './page/month/daily-report/daily-report.component';
 
 const appRoutes: Routes = [
   {
@@ -37,25 +43,31 @@ const appRoutes: Routes = [
     MonthComponent,
     MomentPipe,
     DurationPipe,
-    HomeComponent
+    HomeComponent,
+    DailyReportComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     RouterModule.forRoot(appRoutes, {enableTracing: false}),
     MatButtonModule,
-    MatMenuModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatTableModule,
-    MatInputModule,
     MatCardModule,
+    MatDatepickerModule,
+    MatDialogModule,
+    MatIconModule,
+    MatInputModule,
+    MatMenuModule,
+    MatNativeDateModule,
+    MatTableModule,
+    MatToolbarModule,
+    MatListModule,
     BrowserAnimationsModule,
     HttpClientModule,
     FlexLayoutModule
   ],
-  providers: [ActivityClient],
-  bootstrap: [AppComponent]
+  providers: [ActivityClient, TimeClient],
+  bootstrap: [AppComponent],
+  entryComponents: [DailyReportComponent]
 })
 export class AppModule {
 }
