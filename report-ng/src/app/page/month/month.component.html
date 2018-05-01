@@ -21,20 +21,15 @@
 
             <ng-container matColumnDef="duration">
                 <mat-header-cell *matHeaderCellDef></mat-header-cell>
-                <mat-cell *matCellDef="let time" fxFlex="100px">
-                    <mat-form-field class="example-form-field">
-                        <input matInput type="text" [(ngModel)]="time.duration" size="5"
-                               (focusout)="save(time.date, time.duration)"/>
-                        <!--<button mat-button *ngIf="time.duration" matSuffix mat-icon-button aria-label="Clear" (click)="time.duration=''">
-                          <mat-icon>close</mat-icon>
-                        </button>-->
-                    </mat-form-field>
+                <mat-cell *matCellDef="let time" fxFlex="100px" (click)="edit(time)" class="clickable">
+                    {{time.duration}}
                 </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="decimal">
                 <mat-header-cell *matHeaderCellDef>Total journalier</mat-header-cell>
-                <mat-cell *matCellDef="let time" fxFlex="100px">{{ time.getDuration()?.asHours() | number: '2.2-2' }}</mat-cell>
+                <mat-cell *matCellDef="let time" fxFlex="100px">{{ time.getDuration()?.asHours() | number: '2.2-2' }}
+                </mat-cell>
             </ng-container>
 
             <mat-header-row *matHeaderRowDef="['date', 'duration', 'decimal']"></mat-header-row>
