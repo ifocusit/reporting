@@ -28,7 +28,7 @@ describe('TimeClient', () => {
 
     httpMock.expectOne({
       method: 'GET',
-      url: 'http://monserveur.com/times/month/A-MONTH'
+      url: 'http://monserveur.com/_times/month/A-MONTH'
     }).flush(TIMES_TEST_DATA_MARS);
   }));
 
@@ -44,7 +44,7 @@ describe('TimeClient', () => {
 
     httpMock.expectOne({
       method: 'POST',
-      url: 'http://monserveur.com/times',
+      url: 'http://monserveur.com/_times',
       body: {time: 'a-time'}
     }).flush(saved);
 

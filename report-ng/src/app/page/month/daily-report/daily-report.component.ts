@@ -1,8 +1,8 @@
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 import {Moment} from "moment";
-import {DEFAULT_TIME, ISO_TIME} from "../../../model/working-date-reporting.model";
-import {Time} from "../../../model/time.model";
+import {DEFAULT_TIME} from "../../../model/working-date-reporting.model";
+import {ISO_DATE_TIME, Time} from "../../../model/time.model";
 
 @Component({
   selector: 'app-daily-report',
@@ -23,7 +23,8 @@ export class DailyReportComponent {
     const index = Math.min(this.reporting.times.length, 3);
     const defaultTime = DEFAULT_TIME.getDatetime(index);
     const time = this.reporting.date.clone().set({'hour': defaultTime.hour(), 'minute': defaultTime.minute()});
-    this.reporting.times.push(new Time(time.format(ISO_TIME)));
+    this.reporting.times.push(new Time(time.format(ISO_DATE_TIME)));
+    this.reporting.times.sort((a: Time, b: Time) => a.compareTo(b));
   }
 
   remove(time): void {
