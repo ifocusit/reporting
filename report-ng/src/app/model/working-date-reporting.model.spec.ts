@@ -6,11 +6,11 @@ import Matchers = jasmine.Matchers;
 const date = '2018-04-24';
 describe('WorkingDateReporting model', () => {
 
-  it('should initialize times with by default times', () => {
-    expect(new WorkingDateReporting(moment('2018-04-02')).withDefaultTimes().times)
+  it('should initialize _times with by default _times', () => {
+    expect(new WorkingDateReporting(moment('2018-04-02')).withDefaultTimes()._times)
       .toEqual(['2018-04-02T08:00', '2018-04-02T11:30', '2018-04-02T12:30', '2018-04-02T17:00']);
 
-    expect(new WorkingDateReporting(moment('2018-04-01')).times).toBeUndefined();
+    expect(new WorkingDateReporting(moment('2018-04-01'))._times).toBeUndefined();
   });
 
   it('should calculate duration', () => {
@@ -52,19 +52,19 @@ describe('WorkingDateReporting model', () => {
   it('should set time base on an requested duration', () => {
     const report = item('08:00', '12:30');
     report.duration = 'PT9H30M';
-    expect(report.times).toEqual(['2018-04-24T08:00', '2018-04-24T11:30', '2018-04-24T12:30', '2018-04-24T18:30']);
+    expect(report._times).toEqual(['2018-04-24T08:00', '2018-04-24T11:30', '2018-04-24T12:30', '2018-04-24T18:30']);
 
     report.duration = 'PT8H';
-    expect(report.times).toEqual(['2018-04-24T08:00', '2018-04-24T11:30', '2018-04-24T12:30', '2018-04-24T17:00']);
+    expect(report._times).toEqual(['2018-04-24T08:00', '2018-04-24T11:30', '2018-04-24T12:30', '2018-04-24T17:00']);
 
     report.duration = 'PT6H45M';
-    expect(report.times).toEqual(['2018-04-24T08:00', '2018-04-24T11:30', '2018-04-24T12:30', '2018-04-24T15:45']);
+    expect(report._times).toEqual(['2018-04-24T08:00', '2018-04-24T11:30', '2018-04-24T12:30', '2018-04-24T15:45']);
 
     report.duration = 'PT3H';
-    expect(report.times).toEqual(['2018-04-24T08:00', '2018-04-24T11:00']);
+    expect(report._times).toEqual(['2018-04-24T08:00', '2018-04-24T11:00']);
 
     report.duration = 'PT3H15M';
-    expect(report.times).toEqual(['2018-04-24T08:00', '2018-04-24T11:15']);
+    expect(report._times).toEqual(['2018-04-24T08:00', '2018-04-24T11:15']);
   });
 });
 

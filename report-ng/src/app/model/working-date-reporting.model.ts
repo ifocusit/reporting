@@ -1,22 +1,18 @@
 import {Duration, Moment} from 'moment';
-import {Time} from "./time.model";
+import {ISO_DATE, ISO_DATE_TIME, ISO_TIME, Time} from "./time.model";
 import moment = require('moment');
-
-export const ISO_DATE = 'YYYY-MM-DD';
-export const ISO_DATE_TIME = 'YYYY-MM-DDTHH:mm';
-export const ISO_TIME = 'HH:mm';
 
 export class WorkingDateReporting {
 
-  constructor(public date: Moment, public times?: Time[]) {
-    if (!times && !this.isWeekend()) {
+  constructor(public date: Moment, public _times?: Time[]) {
+    if (!_times && !this.isWeekend()) {
       this.withDefaultTimes();
     }
   }
 
   withDefaultTimes(): WorkingDateReporting {
     const date = this.date.clone();
-    this.times = [
+    this._times = [
       new Time(date.set({'hour': 8, 'minute': 0}).format(ISO_DATE_TIME)),
       new Time(date.set({'hour': 11, 'minute': 30}).format(ISO_DATE_TIME)),
       new Time(date.set({'hour': 12, 'minute': 30}).format(ISO_DATE_TIME)),
@@ -25,12 +21,25 @@ export class WorkingDateReporting {
     return this;
   }
 
+  public push(time: Time) {
+    this._times.push(time);
+    this._times.sort((a: Time, b: Time) => a.compareTo(b));
+  }
+
+  get times() {
+    return this._times;
+  }
+
+  set times(times: Time[]) {
+    this._times = times ? times.sort((a: Time, b: Time) => a.compareTo(b)) : times;
+  }
+
   getDatetime(index: number): Moment {
-    return moment(this.times[index]);
+    return this._times[index].getMoment();
   }
 
   getDuration(): Duration {
-    return CalculateDuration(this.times);
+    return CalculateDuration(this._times);
   }
 
   get duration(): string {
@@ -44,13 +53,13 @@ export class WorkingDateReporting {
     let diff = duration.asHours() - DEFAULT_TIME.getDuration().asHours();
     if (diff >= -DEFAULT_TIME.getMorningDuration().asHours()) {
       this.withDefaultTimes()
-        .times[3] = new Time(date.set(
+        ._times[3] = new Time(date.set(
         {'hour': DEFAULT_TIME.getDatetime(3).hour(), 'minute': DEFAULT_TIME.getDatetime(3).minute()})
         .add(diff, 'hours')
         .format(ISO_DATE_TIME))
     } else {
       diff = duration.asHours() - DEFAULT_TIME.getMorningDuration().asHours();
-      this.times = [
+      this._times = [
         new Time(date.set({'hour': DEFAULT_TIME.getDatetime(0).hour(), 'minute': DEFAULT_TIME.getDatetime(0).minute()})
           .format(ISO_DATE_TIME)),
         new Time(date.set({'hour': DEFAULT_TIME.getDatetime(1).hour(), 'minute': DEFAULT_TIME.getDatetime(1).minute()})
@@ -70,8 +79,8 @@ export class WorkingDateReporting {
 
   public getMorningDuration(): Duration {
     let duration = moment.duration();
-    this.times
-      .map(timestamp => moment(timestamp))
+    this._times
+      .map(timestamp => timestamp.getMoment())
       .filter(timestamp => timestamp.hour() < 13)
       .reduce((result, value, index, array) => {
         if (index % 2 === 0)
@@ -87,7 +96,7 @@ export class WorkingDateReporting {
   }
 
   public isEmpty(): boolean {
-    return !this.times || this.times.length == 0
+    return !this._times || this._times.length == 0
   }
 
   static from(times: Time[]) {
@@ -102,7 +111,7 @@ export class WorkingDateReporting {
 export function CalculateDuration(timbrages: Time[]): Duration {
 
   if (!timbrages || timbrages.length < 2) {
-    // no times
+    // no _times
     return null;
   }
 
