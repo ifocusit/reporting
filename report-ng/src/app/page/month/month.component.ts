@@ -1,13 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {Moment} from 'moment';
-import {ISO_DATE, WorkingDateReporting} from '../../model/working-date-reporting.model';
+import {WorkingDateReporting} from '../../model/working-date-reporting.model';
 import {ActivatedRoute} from '@angular/router';
 import {TimeClient} from "../../client/time-client.service";
-import {filter, groupBy, map, mergeMap, switchMap, tap, toArray} from "rxjs/operators";
+import {filter, groupBy, mergeMap, switchMap, tap, toArray} from "rxjs/operators";
 import {from} from "rxjs/observable/from";
 import {MatDialog} from "@angular/material";
 import {DailyReportComponent} from "./daily-report/daily-report.component";
 import {Time} from "../../model/time.model";
+import {of} from "rxjs/observable/of";
 import moment = require('moment');
 
 @Component({
@@ -35,15 +36,24 @@ export class MonthComponent implements OnInit {
   private initDays(): void {
     this.items = [];
     for (let i = 1; i <= this._month.daysInMonth(); i++) {
-      this.items.push(new WorkingDateReporting(this._month.clone().day(i)));
+      this.items.push(new WorkingDateReporting(this._month.clone().date(i)));
     }
     this.timeClient.getTimes$(this._month.format('YYYY-MM'))
       .pipe(
         switchMap(times => from(times)),
-        groupBy(time => moment(time.time).format(ISO_DATE)),
-        mergeMap(group$ => group$.pipe(toArray())),
-        map(groupTimes => WorkingDateReporting.from(groupTimes)),
-        tap(reportItem => this.items.push(reportItem))
+        groupBy((time: Time) => {
+          return time.getDate();
+        }),
+        mergeMap(group$ => {
+          return group$.pipe(toArray());
+        }),
+        tap((groupTimes: Time[]) => {
+          const date = groupTimes[0].getDate();
+          let item = this.items.find(day => day.isSameDate(date));
+          if (item) {
+            item.times = groupTimes.sort();
+          }
+        })
       )
       .subscribe();
   }
@@ -95,25 +105,25 @@ export class MonthComponent implements OnInit {
       }
     });
 
-    const olds$ = from(toEdit.times);
+    const deleteOlds$ = from(toEdit.times)
+      .pipe(
+        filter((time) => time.hasId()),
+        mergeMap((toDelete) => this.timeClient.delete$(toDelete))
+      );
+
+    const createNews$ = (times) => of(times).pipe(
+      switchMap(times => from(times)),
+      mergeMap((time: Time) => this.timeClient.create$(time.time)),
+      tap((time) => toEdit.push(time)),
+      toArray()
+    );
 
     dialogRef.afterClosed().pipe(
-      filter(validated => validated),
-      map(report => report.times),
-      switchMap(times => from(times)),
-      switchMap((time: Time) => {
-        return this.timeClient.create$(time.time);
-      }),
-      mergeMap((times) => {
-        return times;
-      })
+      filter(x => !!x),
+      switchMap((report) => createNews$(report.times)),
+      tap((times) => toEdit.times = times),
+      switchMap(() => deleteOlds$)
     )
-      .subscribe((newTimes) => olds$.pipe(
-        filter((time) => time.id),
-        switchMap((time) => {
-          return this.timeClient.delete$(time);
-        }),
-      )
-        .subscribe(() => toEdit.times = newTimes));
+      .subscribe();
   }
 }

@@ -84,36 +84,36 @@ describe('MonthComponent', () => {
 
   it('should show all day of the current month', () => {
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelectorAll('#times mat-row').length).toEqual(31);
+    expect(compiled.querySelectorAll('#_times mat-row').length).toEqual(31);
 
     component.month = moment('2018-02-10', 'YYYY-MM-DD');
     fixture.detectChanges();
-    expect(compiled.querySelectorAll('#times mat-row').length).toEqual(28);
+    expect(compiled.querySelectorAll('#_times mat-row').length).toEqual(28);
   });
 
   it('should show header columns', () => {
-    const header = select(fixture, '#times mat-header-row');
+    const header = select(fixture, '#_times mat-header-row');
     expect(header.children[0].textContent).toEqual('Date');
     expect(header.children[2].textContent).toEqual('Total journalier');
   });
 
   it('should show day work duration', () => {
-    assertLine(select(fixture, '#times mat-row', 1), '01 jeudi', 'PT8H', '08.00');
+    assertLine(select(fixture, '#_times mat-row', 1), '01 jeudi', 'PT8H', '08.00');
   });
 
   it('should update decimal duration', inject([TimeClient], (timeClient: TimeClient) => {
-    const inputElement: HTMLInputElement = fixture.nativeElement.querySelectorAll('#times mat-row input')[14];
+    const inputElement: HTMLInputElement = fixture.nativeElement.querySelectorAll('#_times mat-row input')[14];
 
     inputElement.value = 'PT9H15M';
     inputElement.dispatchEvent(new Event('input'));
     fixture.detectChanges();
 
-    assertLine(select(fixture, '#times mat-row', 15), '15 jeudi', 'PT9H15M', '09.25');
+    assertLine(select(fixture, '#_times mat-row', 15), '15 jeudi', 'PT9H15M', '09.25');
   }));
 
   it('should hide weekend duration by default', () => {
-    assertLine(select(fixture, '#times mat-row', 3), '03 samedi', null, null);
-    assertLine(select(fixture, '#times mat-row', 4), '04 dimanche', null, null);
+    assertLine(select(fixture, '#_times mat-row', 3), '03 samedi', null, null);
+    assertLine(select(fixture, '#_times mat-row', 4), '04 dimanche', null, null);
   });
 
   it('should should number of work days', () => {
@@ -128,7 +128,7 @@ describe('MonthComponent', () => {
     expect(select(fixture, '#total').textContent).toContain('180.00');
   });
 
-  it('should load times from backend', inject([TimeClient], (timeClient: TimeClient) => {
+  it('should load _times from backend', inject([TimeClient], (timeClient: TimeClient) => {
 
     // given
     const client = spyOn(timeClient, 'getTimes$').and.returnValue(Observable
@@ -149,11 +149,11 @@ describe('MonthComponent', () => {
 
     // then
     expect(client).toHaveBeenCalledWith('2018-04');
-    assertLine(select(fixture, '#times mat-row', 1), '01 dimanche', null, null);
-    assertLine(select(fixture, '#times mat-row', 2), '02 lundi', null, null);
-    assertLine(select(fixture, '#times mat-row', 3), '03 mardi', 'PT9H', '09.00');
-    assertLine(select(fixture, '#times mat-row', 4), '04 mercredi', null, null);
-    assertLine(select(fixture, '#times mat-row', 5), '05 jeudi', 'PT7H30M', '07.50');
+    assertLine(select(fixture, '#_times mat-row', 1), '01 dimanche', null, null);
+    assertLine(select(fixture, '#_times mat-row', 2), '02 lundi', null, null);
+    assertLine(select(fixture, '#_times mat-row', 3), '03 mardi', 'PT9H', '09.00');
+    assertLine(select(fixture, '#_times mat-row', 4), '04 mercredi', null, null);
+    assertLine(select(fixture, '#_times mat-row', 5), '05 jeudi', 'PT7H30M', '07.50');
     expect(select(fixture, '#total').textContent).toContain('152.50');
 
   }));
@@ -161,7 +161,7 @@ describe('MonthComponent', () => {
   it('should save time from input text to backend', inject([TimeClient], (timeClient: TimeClient) => {
     // given
     const client = spyOn(timeClient, 'saveTime$').and.returnValue(Observable.of('saved'));
-    const inputElement: HTMLInputElement = fixture.nativeElement.querySelectorAll('#times mat-row input')[14];
+    const inputElement: HTMLInputElement = fixture.nativeElement.querySelectorAll('#_times mat-row input')[14];
     inputElement.value = 'PT9H15M';
     inputElement.dispatchEvent(new Event('input'));
 
@@ -170,7 +170,7 @@ describe('MonthComponent', () => {
     fixture.detectChanges();
 
     // then
-    assertLine(select(fixture, '#times mat-row', 15), '15 jeudi', 'PT9H15M', '09.25');
+    assertLine(select(fixture, '#_times mat-row', 15), '15 jeudi', 'PT9H15M', '09.25');
     expect(client).toHaveBeenCalledTimes(4);
     expect(client).toHaveBeenCalledWith('2018-03-15T08:00:00');
     expect(client).toHaveBeenCalledWith('2018-03-15T12:00:00');
