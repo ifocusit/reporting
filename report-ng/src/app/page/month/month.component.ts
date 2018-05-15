@@ -105,7 +105,7 @@ export class MonthComponent implements OnInit {
       }
     });
 
-    const deleteOlds$ = from(toEdit.times)
+    const deleteOlds$ = from(Array.from(toEdit.times))
       .pipe(
         filter((time) => time.hasId()),
         mergeMap((toDelete) => this.timeClient.delete$(toDelete))
@@ -114,7 +114,6 @@ export class MonthComponent implements OnInit {
     const createNews$ = (times) => of(times).pipe(
       switchMap(times => from(times)),
       mergeMap((time: Time) => this.timeClient.create$(time.time)),
-      tap((time) => toEdit.push(time)),
       toArray()
     );
 
