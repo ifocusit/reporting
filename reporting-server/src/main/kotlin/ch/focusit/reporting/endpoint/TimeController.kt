@@ -41,7 +41,7 @@ class TimeController(val repository: TimeRepository) {
             repository.findById(id)
                     .flatMap { existingTime ->
                         repository.delete(existingTime)
-                                .then(Mono.just(ResponseEntity.ok("Delete successfully !")))
+                                .then(Mono.just(ResponseEntity.ok(null)))
                     }
                     .defaultIfEmpty(ResponseEntity(HttpStatus.NOT_FOUND))
 
