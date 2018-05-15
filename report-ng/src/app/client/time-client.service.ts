@@ -30,7 +30,7 @@ export class TimeClient {
       );
   }
 
-  delete$(time: Time): Observable<string> {
-    return this.http.delete<string>(`${this.url}/${time.id}`);
+  delete$(time: Time): Observable<any> {
+    return this.http.delete<any>(`${this.url}/${time.id}`);
   }
 }
