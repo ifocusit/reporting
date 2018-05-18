@@ -1,7 +1,7 @@
 package ch.focusit.reporting.endpoint
 
-import ch.focusit.reporting.domain.Activity
 import ch.focusit.reporting.domain.Setting
+import ch.focusit.reporting.domain.Time
 import ch.focusit.reporting.repository.SettingRepository
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -10,20 +10,24 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import reactor.core.publisher.Flux
+import reactor.core.publisher.GroupedFlux
 import reactor.core.publisher.Mono
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.time.Duration
+import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
+import java.util.concurrent.atomic.AtomicInteger
+import java.util.stream.Collectors
 
 @Controller
 @CrossOrigin("*")
 @RequestMapping("billing")
-class BillingController(val activityController: ActivityController, val settingRepository: SettingRepository) {
+class BillingController(val timeController: TimeController, val settingRepository: SettingRepository) {
 
     @GetMapping("/generate/{month}")
-    fun getByMonth(@PathVariable(value = "month") month: YearMonth, model: Model): String {
+    fun getByMonth(@PathVariable(value = "month") month: YearMonth, model: Model): Mono<String> {
         model.addAttribute("month", month.format(DateTimeFormatter.ofPattern("MMMM")))
         model.addAttribute("id", month.year.toString().replaceFirst("20", "2") +
                 month.format(DateTimeFormatter.ofPattern("MM")) + "1")
@@ -35,7 +39,7 @@ class BillingController(val activityController: ActivityController, val settingR
         symbols.decimalSeparator = '.'
         df.decimalFormatSymbols = symbols
 
-        val duration = duration(activityController.getByMonth(month))
+        val duration = duration(timeController.getByMonth(month))
         val amount = duration
                 .zipWith(settingRepository.findById("hoursRate"),
                         { d: Double, hoursRate: Setting -> d * hoursRate.value.toDouble() })
@@ -59,15 +63,32 @@ class BillingController(val activityController: ActivityController, val settingR
         model.addAttribute("iban", settingRepository.findById("iban"))
         model.addAttribute("compte", settingRepository.findById("compte"))
         model.addAttribute("numeroTVA", settingRepository.findById("numeroTVA"))
-        model.addAttribute("society", settingRepository.findById("societe.adresse")
-                .map { s -> s.value.split(',') })
+        model.addAttribute("society", settingRepository
+                .findById("societe.adresse").map { s -> s.value.split(',') })
 
-        return "billing"
+        return Mono.just("billing")
     }
 
-    fun duration(activities: Flux<Activity>): Mono<Double> = activities
-            .filter({ d -> d.duration != null })
-            .map { activity -> activity.duration!! }
+    fun duration(times: Flux<Time>): Mono<Double> = times
+            .groupBy { t: Time -> t.getDate() }
+            .switchMap { group: GroupedFlux<LocalDate, Time> -> group.collectList() }
+            .map { dayTimes: List<Time> -> getDuration(dayTimes) }
             .reduce { d1: Duration, d2: Duration -> d1.plus(d2) }
             .map { d -> d.toMinutes() / 60.0 }
+
+    private fun getDuration(times: List<Time>): Duration {
+        val totalDuration = Duration.ZERO
+        val counter = AtomicInteger(0)
+        times.stream().collect(
+                Collectors.groupingBy<Time, Int> { item ->
+                    val i = counter.getAndIncrement()
+                    if (i % 2 == 0) i else i - 1
+                })
+                .values
+                .filter { pair: MutableList<Time> -> pair.size > 1 }
+                .map { pair: MutableList<Time> -> Duration.between(pair[0].time, pair[1].time) }
+                .forEach { duration: Duration -> totalDuration.plus(duration) }
+
+        return totalDuration
+    }
 }
