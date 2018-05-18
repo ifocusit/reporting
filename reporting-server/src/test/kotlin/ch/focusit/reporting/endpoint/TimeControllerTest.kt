@@ -25,31 +25,30 @@ class TimeControllerTest {
 
     @BeforeEach
     fun setUp() {
-        repository.save(TEST_TIME_1).block()
         repository.save(TEST_TIME_2).block()
+        repository.save(TEST_TIME_1).block()
     }
 
     @Test
     fun testFindAll() {
         StepVerifier.create(endpoint.findAll())
-                .expectNextCount(2)
-                .expectNext(TEST_TIME_2)
                 .expectNext(TEST_TIME_1)
-                .expectComplete()
+                .expectNext(TEST_TIME_2)
+                .verifyComplete()
     }
 
     @Test
     fun testFindByIdShouldReturnFounded() {
         StepVerifier.create(endpoint.find(TEST_TIME_1.id.toString()))
-                .expectNext(ResponseEntity.ok(TEST_TIME_2))
-                .expectComplete()
+                .expectNext(ResponseEntity.ok(TEST_TIME_1))
+                .verifyComplete()
     }
 
     @Test
     fun testFindByIdShouldReturnNotFound() {
         StepVerifier.create(endpoint.find("unknown"))
                 .expectNext(ResponseEntity(HttpStatus.NOT_FOUND))
-                .expectComplete()
+                .verifyComplete()
     }
 
     companion object {

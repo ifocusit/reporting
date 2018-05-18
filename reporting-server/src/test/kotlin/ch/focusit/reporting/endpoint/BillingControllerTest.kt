@@ -1,54 +1,56 @@
 package ch.focusit.reporting.endpoint
 
-import ch.focusit.reporting.domain.Activity
-import ch.focusit.reporting.domain.ActivityType
-import ch.focusit.reporting.repository.ActivityRepository
-import ch.focusit.test.tools.MockitoExtension
+import ch.focusit.reporting.domain.Setting
+import ch.focusit.reporting.domain.Time
+import ch.focusit.reporting.repository.SettingRepository
+import ch.focusit.reporting.repository.TimeRepository
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.ArgumentCaptor
-import org.mockito.Captor
-import org.mockito.Mock
-import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.ui.ExtendedModelMap
 import org.springframework.ui.Model
-import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
 import java.time.Duration
-import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.YearMonth
 
-@ExtendWith(SpringExtension::class, MockitoExtension::class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ExtendWith(SpringExtension::class)
+@SpringBootTest
 class BillingControllerTest {
 
     @Autowired
-    lateinit var repository: ActivityRepository
+    lateinit var repository: TimeRepository
 
+    @Autowired
+    lateinit var settingRepository: SettingRepository
+
+    @Autowired
     lateinit var billingController: BillingController
 
-    @Mock
-    lateinit var model: Model
-
-    @Captor
-    lateinit var captorAttrNames: ArgumentCaptor<String>
-    @Captor
-    lateinit var captorAttrValues: ArgumentCaptor<Object>
+    var model: Model = ExtendedModelMap()
 
     @BeforeEach
     fun setUp() {
-        billingController = (BillingController(ActivityController(repository)))
-        repository.save(TEST_ACTIVITY_1).subscribe()
-        repository.save(TEST_ACTIVITY_2).subscribe()
-        repository.save(TEST_ACTIVITY_3).subscribe()
-        repository.save(TEST_ACTIVITY_4).subscribe()
-        repository.save(TEST_ACTIVITY_5).subscribe()
-        repository.save(TEST_ACTIVITY_6).subscribe()
+        settingRepository.save(Setting("hoursRate", "10")).subscribe()
+        settingRepository.save(Setting("tva", "0.01")).subscribe()
+        settingRepository.save(Setting("client", "Client Content,Av. de Beauregard 45,9876 Villa")).subscribe()
+        settingRepository.save(Setting("iban", "MON_IBAN")).subscribe()
+        settingRepository.save(Setting("compte", "MON_COMPTE")).subscribe()
+        settingRepository.save(Setting("numeroTVA", "1234567890")).subscribe()
+        settingRepository.save(Setting("societe.adresse", "Happy Company,Ch. du bonheur,1234 Les Nuages")).subscribe()
+
+        repository.save(Time("_1", LocalDateTime.parse("2018-03-01T10:20"))).subscribe()
+        repository.save(Time("_2", LocalDateTime.parse("2018-03-01T14:50"))).subscribe()
+        repository.save(Time("_3", LocalDateTime.parse("2018-03-01T17:00"))).subscribe()
+        repository.save(Time("_4", LocalDateTime.parse("2018-03-02T10:10"))).subscribe()
+        repository.save(Time("_5", LocalDateTime.parse("2018-03-02T18:10"))).subscribe()
+        repository.save(Time("_6", LocalDateTime.parse("2018-01-01T08:10"))).subscribe()
+        repository.save(Time("_7", LocalDateTime.parse("2018-01-01T18:10"))).subscribe()
     }
 
     @AfterEach
@@ -58,26 +60,32 @@ class BillingControllerTest {
 
     @Test
     fun getByMonth() {
-        val totalDurationExpected = TEST_ACTIVITY_1.duration?.plus(TEST_ACTIVITY_2.duration)
-        val month = YearMonth.parse("2018-03")
+        StepVerifier.create<Setting> { settingRepository.findById("tva") }
+                .expectNext(Setting("tva", "0.01"))
+                .expectComplete().verify(Duration.ofSeconds(5))
 
-        StepVerifier.create(billingController.getByMonth(month, model))
-                .expectNext("billing")
-                .expectComplete()
+        val response = billingController.getByMonth(YearMonth.parse("2018-03"), model)
 
-        Mockito.verify(model, Mockito.times(3)).addAttribute(captorAttrNames.capture(), captorAttrValues.capture())
+        Assertions.assertThat(response).isEqualTo("billing")
 
-        Assertions.assertThat(captorAttrValues.allValues.get(0)).isSameAs(month)
-        Assertions.assertThat(captorAttrValues.allValues.get(1)).isEqualTo("2018011")
-        Assertions.assertThat(captorAttrValues.allValues.get(2)).isEqualTo(Mono.just(totalDurationExpected))
-    }
+        val attributes = model.asMap()
 
-    companion object {
-        val TEST_ACTIVITY_1 = Activity(LocalDate.parse("2018-03-01"), Duration.ofHours(6L))
-        val TEST_ACTIVITY_2 = Activity(LocalDate.parse("2018-03-02"), Duration.ofHours(5L))
-        val TEST_ACTIVITY_3 = Activity(LocalDate.parse("2018-03-02"), null, ActivityType.OFF)
-        val TEST_ACTIVITY_4 = Activity(LocalDate.parse("2018-04-01"), Duration.ofHours(8L))
-        val TEST_ACTIVITY_5 = Activity(LocalDate.parse("2018-04-02"), Duration.ofHours(4L))
-        val TEST_ACTIVITY_6 = Activity(LocalDate.parse("2018-04-02"), null, ActivityType.OFF)
+        Assertions.assertThat(attributes["month"]).isEqualTo("mars")
+        Assertions.assertThat(attributes["id"]).isEqualTo("218031")
+//        StepVerifier.create<String> { attributes["duration"].toString() }.expectNext("10.50").verifyComplete()
+//        StepVerifier.create<String> { attributes["amount"].toString() }.expectNext("105.00").verifyComplete()
+//        StepVerifier.create<String> { attributes["totalHT"].toString() }.expectNext("105.00").verifyComplete()
+//        StepVerifier.create<String> { attributes["totalTVA"].toString() }.expectNext("1.05").verifyComplete()
+//        StepVerifier.create<String> { attributes["totalTTC"].toString() }.expectNext("106.05").verifyComplete()
+//        StepVerifier.create<String> { attributes["client"].toString() }
+//                .expectNext("Client Content").expectNext("Av. de Beauregard 45").expectNext("9876 Villa")
+//                .verifyComplete()
+//        StepVerifier.create<String> { attributes["tva"].toString() }.expectNext("1").expectComplete().verify(Duration.ofSeconds(5))
+//        StepVerifier.create<String> { attributes["iban"].toString() }.expectNext("MON_IBAN").verifyComplete()
+//        StepVerifier.create<String> { attributes["compte"].toString() }.expectNext("MON_COMPTE").verifyComplete()
+//        StepVerifier.create<String> { attributes["numeroTVA"].toString() }.expectNext("1234567890").verifyComplete()
+//        StepVerifier.create<String> { attributes["society"].toString() }
+//                .expectNext("Happy Company").expectNext("Ch. du bonheur").expectNext("1234 Les Nuages")
+//                .verifyComplete()
     }
 }

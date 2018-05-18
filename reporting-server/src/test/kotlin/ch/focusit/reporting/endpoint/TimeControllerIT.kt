@@ -43,8 +43,8 @@ class TimeControllerIT {
                 .exchange()
                 .expectStatus().isOk
                 .expectBody()
-                .jsonPath("$[0].id").isEqualTo(TEST_TIME_1.id)
-                .jsonPath("$[1].id").isEqualTo(TEST_TIME_2.id)
+                .jsonPath("$[0].id").isEqualTo(TEST_TIME_1.id!!)
+                .jsonPath("$[1].id").isEqualTo(TEST_TIME_2.id!!)
     }
 
     @Test
@@ -57,8 +57,8 @@ class TimeControllerIT {
                 .expectBody(Time::class.java)
                 .returnResult().responseBody
 
-        Assertions.assertThat(timeInserted.id).isNotBlank()
-        Assertions.assertThat(timeInserted.time).isEqualTo(newTime)
+        Assertions.assertThat(timeInserted?.id).isNotBlank()
+        Assertions.assertThat(timeInserted?.time).isEqualTo(newTime)
     }
 
     @Test
@@ -84,8 +84,8 @@ class TimeControllerIT {
                 .expectBody(Time::class.java)
                 .returnResult().responseBody
 
-        Assertions.assertThat(founded.id).isEqualTo(TEST_TIME_1.id)
-        Assertions.assertThat(founded.time).isEqualTo(newTime)
+        Assertions.assertThat(founded?.id).isEqualTo(TEST_TIME_1.id)
+        Assertions.assertThat(founded?.time).isEqualTo(newTime)
     }
 
     @Test
@@ -106,8 +106,8 @@ class TimeControllerIT {
                 .exchange()
                 .expectStatus().isOk
                 .expectBody()
-                .jsonPath("$[0].id").isEqualTo(TEST_TIME_3.id)
-                .jsonPath("$[1].id").isEqualTo(TEST_TIME_4.id)
+                .jsonPath("$[0].id").isEqualTo(TEST_TIME_3.id!!)
+                .jsonPath("$[1].id").isEqualTo(TEST_TIME_4.id!!)
     }
 
     @Test
@@ -122,8 +122,8 @@ class TimeControllerIT {
                 .exchange()
                 .expectStatus().isOk
                 .expectBody()
-                .jsonPath("$[0].id").isEqualTo(TEST_TIME_5.id)
-                .jsonPath("$[1].id").isEqualTo(TEST_TIME_6.id)
+                .jsonPath("$[0].id").isEqualTo(TEST_TIME_5.id!!)
+                .jsonPath("$[1].id").isEqualTo(TEST_TIME_6.id!!)
     }
 
     companion object {
