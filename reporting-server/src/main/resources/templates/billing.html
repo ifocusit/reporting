@@ -14,7 +14,7 @@
 
 <h4 th:text="'Facture du mois de ' + ${month}"/>
 <h2 th:text="'Facture ' + ${id}"/>
-<div th:text="'n° TVA : ' + ${numeroTVA.value}"/>
+<div th:text="'n° TVA : ' + ${numeroTVA}"/>
 
 <table>
     <thead>
@@ -44,6 +44,6 @@
 </table>
 
 <div>Paiement net à 30 jours auprès de:</div>
-<div th:text="'Compte postal ' + ${compte.value} + ' CHF / IBAN ' + ${iban.value}"/>
+<div th:text="'Compte postal ' + ${compte} + ' CHF / IBAN ' + ${iban}"/>
 </body>
 </html>
