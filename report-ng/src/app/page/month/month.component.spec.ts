@@ -16,7 +16,7 @@ import {
 } from '@angular/material';
 import {FormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs";
 import 'rxjs/add/observable/of';
 import {TimeClient} from "../../client/time-client.service";
 import {Time} from "../../model/time.model";

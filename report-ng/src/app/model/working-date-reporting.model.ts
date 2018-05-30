@@ -1,6 +1,6 @@
 import {Duration, Moment} from 'moment';
 import {ISO_DATE, ISO_DATE_TIME, ISO_TIME, Time} from "./time.model";
-import moment = require('moment');
+import moment from 'moment/src/moment';
 
 export class WorkingDateReporting {
 

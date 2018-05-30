@@ -1,4 +1,4 @@
-import moment = require('moment');
+import moment from 'moment/src/moment';
 
 export const ISO_DATE = 'YYYY-MM-DD';
 export const ISO_DATE_TIME = 'YYYY-MM-DDTHH:mm';

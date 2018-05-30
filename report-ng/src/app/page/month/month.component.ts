@@ -1,15 +1,14 @@
 import {Component, OnInit} from '@angular/core';
+import moment from 'moment/src/moment';
 import {Moment} from 'moment';
 import {WorkingDateReporting} from '../../model/working-date-reporting.model';
 import {ActivatedRoute} from '@angular/router';
 import {TimeClient} from "../../client/time-client.service";
 import {filter, groupBy, mergeMap, switchMap, tap, toArray} from "rxjs/operators";
-import {from} from "rxjs/observable/from";
+import {from, of} from "rxjs";
 import {MatDialog} from "@angular/material";
 import {DailyReportComponent} from "./daily-report/daily-report.component";
 import {Time} from "../../model/time.model";
-import {of} from "rxjs/observable/of";
-import moment = require('moment');
 
 @Component({
   selector: 'app-month',
@@ -119,8 +118,8 @@ export class MonthComponent implements OnInit {
 
     dialogRef.afterClosed().pipe(
       filter(x => !!x),
-      switchMap((report) => createNews$(report.times)),
-      tap((times) => toEdit.times = times),
+      switchMap((report: WorkingDateReporting) => createNews$(report.times)),
+      tap((times: Time[]) => toEdit.times = times),
       switchMap(() => deleteOlds$)
     )
       .subscribe();
