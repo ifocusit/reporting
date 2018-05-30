@@ -16,8 +16,7 @@ import {
 } from '@angular/material';
 import {FormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {Observable} from "rxjs";
-import 'rxjs/add/observable/of';
+import {Observable, of} from "rxjs";
 import {TimeClient} from "../../client/time-client.service";
 import {Time} from "../../model/time.model";
 
@@ -55,8 +54,8 @@ describe('MonthComponent', () => {
         {
           provide: TimeClient,
           useValue: {
-            getTimes$: (month: string) => Observable.of([]),
-            saveTime$: () => Observable.of('saved !')
+            getTimes$: (month: string) => of([]),
+            saveTime$: () => of('saved !')
           }
         }
       ]
@@ -160,7 +159,7 @@ describe('MonthComponent', () => {
 
   it('should save time from input text to backend', inject([TimeClient], (timeClient: TimeClient) => {
     // given
-    const client = spyOn(timeClient, 'saveTime$').and.returnValue(Observable.of('saved'));
+    const client = spyOn(timeClient, 'saveTime$').and.returnValue(of('saved'));
     const inputElement: HTMLInputElement = fixture.nativeElement.querySelectorAll('#_times mat-row input')[14];
     inputElement.value = 'PT9H15M';
     inputElement.dispatchEvent(new Event('input'));
@@ -181,7 +180,7 @@ describe('MonthComponent', () => {
 
   it('should show overtime', inject([TimeClient], (timeClient: TimeClient) => {
     // given
-    spyOn(timeClient, 'getTimes$').and.returnValue(Observable.of(
+    spyOn(timeClient, 'getTimes$').and.returnValue(of(
       [
         {"date": "2018-04-02", "duration": null, "type": "OFF"},
         {"date": "2018-04-03", "duration": "PT9H", "type": "WORK"},
@@ -202,7 +201,7 @@ describe('MonthComponent', () => {
 
   it('should show final total with overtime majoration', inject([TimeClient], (timeClient: TimeClient) => {
     // given
-    spyOn(timeClient, 'getTimes$').and.returnValue(Observable.of(
+    spyOn(timeClient, 'getTimes$').and.returnValue(of(
       [
         {"date": "2018-04-03T08:00:00"},
         {"date": "2018-04-03T12:00:00"},
