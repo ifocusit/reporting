@@ -11,7 +11,7 @@ import {GeolocationPosition} from "@capacitor/core/dist/esm/core-plugin-definiti
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'app';
+  title = 'Timbrage Application';
 
   coords = null;
 
