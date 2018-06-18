@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Timbrage-beta</string>
+    <string name="title_activity_main">Timbrage-beta</string>
+    <string name="package_name">ch.ifocusit.timbrage.beta</string>
+    <string name="fileprovider_authority">ch.ifocusit.timbrage.beta.fileprovider</string>
+    <string name="custom_url_scheme">ch.ifocusit.timbrage.beta</string>
+</resources>
