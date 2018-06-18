@@ -1,0 +1,7 @@
+{
+  "appId": "ch.ifocusit.timbrage.beta",
+  "appName": "Timbrage-beta",
+  "bundledWebRuntime": false,
+  "webDir": "www",
+  "windowsAndroidStudioPath": "C:/Users/julien/Documents/prog/tools/android-studio/bin/studio64.exe"
+}

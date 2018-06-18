@@ -1,13 +1,15 @@
 {
-  "name": "timbrages",
+  "name": "Timbrage",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --open",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "web": "npx cap copy web && npx cap serve",
+    "android": "npx cap copy android && npx cap open android"
   },
   "private": true,
   "dependencies": {
@@ -20,6 +22,9 @@
     "@angular/platform-browser": "^6.0.3",
     "@angular/platform-browser-dynamic": "^6.0.3",
     "@angular/router": "^6.0.3",
+    "@capacitor/android": "^1.0.0-alpha.39",
+    "@capacitor/cli": "^1.0.0-alpha.39",
+    "@capacitor/core": "^1.0.0-alpha.39",
     "core-js": "^2.5.4",
     "rxjs": "^6.0.0",
     "zone.js": "^0.8.26"
