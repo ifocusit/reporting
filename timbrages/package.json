@@ -9,7 +9,9 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "web": "npx cap copy web && npx cap serve",
-    "android": "npx cap copy android && npx cap open android"
+    "android": "npx cap copy android && npx cap open android",
+    "sync": "npx cap sync",
+    "presync": "ng build --prod"
   },
   "private": true,
   "dependencies": {
