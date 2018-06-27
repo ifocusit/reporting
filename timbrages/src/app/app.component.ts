@@ -17,6 +17,7 @@ export class AppComponent implements OnInit {
   coords = null;
   image: SafeResourceUrl;
   path: GetUriResult;
+  message: string;
 
   constructor(private sanitizer: DomSanitizer) {
 
@@ -42,8 +43,8 @@ export class AppComponent implements OnInit {
       url: this.path.uri,
       dialogTitle: 'Share with buddies'
     })
-      .then(() => console.log('Successful share'))
-      .catch((error) => console.log('Error sharing', error));
+      .then(() => this.message = "shared !")
+      .catch((err) => this.message = err);
   }
 
   grabPhoto() {
@@ -76,16 +77,16 @@ export class AppComponent implements OnInit {
                     .then((result) => {
                       this.path = result;
                     }, (err) => {
-                      console.log(err);
+                      this.message = err;
                     });
                 }, (err) => {
-                  console.log(err);
+                  this.message = err;
                 });
             }, (err) => {
-              console.log(err);
+              this.message = err;
             });
         }, (err) => {
-          console.log(err);
+          this.message = err;
         }
       );
   }
