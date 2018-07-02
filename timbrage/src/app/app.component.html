@@ -1,11 +1,31 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-    <h1>
-        Welcome to {{ title }}!
-    </h1>
-    <img width="300" alt="Timbrage Logo" src="../assets/icons/icon.png">
-    <div>
-        <div>Longitude: {{currentLong}}</div>
-        <div>Longitude: {{currentLat}}</div>
-    </div>
+<div class="container" [class.is-mobile]="mobileQuery.matches">
+    <mat-toolbar id="header" color="primary">
+        <button mat-icon-button (click)="sidenav.toggle()">
+            <mat-icon>menu</mat-icon>
+        </button>
+        <h1>Timbrage</h1>
+        <span class="spacer"></span>
+        <mat-icon>favorite</mat-icon>
+    </mat-toolbar>
+
+    <mat-sidenav-container [style.marginTop.px]="mobileQuery.matches ? 56 : 0" [style.marginBottom.px]="mobileQuery.matches ? 56 : 0">
+
+        <mat-sidenav #sidenav mode="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches"
+                     fixedTopGap="56">
+            Sidenav
+        </mat-sidenav>
+
+        <mat-sidenav-content>
+            <router-outlet></router-outlet>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+
+    <mat-toolbar id="footer">
+        <nav mat-tab-nav-bar>
+            <a mat-tab-link *ngFor="let link of navLinks"
+               [routerLink]="link.path" routerLinkActive #rla="routerLinkActive" [active]="rla.isActive">
+                {{link.label}}
+            </a>
+        </nav>
+    </mat-toolbar>
 </div>
