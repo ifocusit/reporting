@@ -40,7 +40,7 @@ mat-sidenav-container {
     flex: 1 0 auto;
 }
 
-mat-sidenav {
+mat-sidenav-container > mat-sidenav {
     display: flex;
     align-items: center;
     justify-content: center;
