@@ -1,28 +1,27 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy} from '@angular/core';
+import {MediaMatcher} from "@angular/cdk/layout";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
-  title = 'Timbrage';
+export class AppComponent implements OnDestroy {
+  mobileQuery: MediaQueryList;
 
-  currentLat: any;
-  currentLong: any;
+  navLinks = [
+    {path: 'timbrage', label: 'Timbrage'},
+    {path: 'calendar', label: 'Calendar'}
+  ];
+  private _mobileQueryListener: () => void;
 
-  ngOnInit(): void {
-    this.findMe();
+  constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher) {
+    this.mobileQuery = media.matchMedia('(max-width: 600px)');
+    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
+    this.mobileQuery.addListener(this._mobileQueryListener);
   }
 
-  findMe() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        this.currentLat = position.coords.latitude;
-        this.currentLong = position.coords.longitude;
-      });
-    } else {
-      alert("Geolocation is not supported by this browser.");
-    }
+  ngOnDestroy(): void {
+    this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 }
