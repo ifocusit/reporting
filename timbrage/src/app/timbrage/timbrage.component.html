@@ -1,5 +1,5 @@
-<mat-card>
-    <mat-card-header>
+<mat-card fxLayout="column">
+    <mat-card-header fxFlex="50">
         <div id="date">
             <span>{{ now | date: 'd' }}</span>
             <span>{{ now | date: 'EEEE' }}</span>
@@ -12,8 +12,15 @@
         <div id="now">
             {{ now | date: 'HH:mm:ss' }}
         </div>
+        <mat-card-actions>
+            <button id="add" mat-fab color="accent">
+                <mat-icon>add</mat-icon>
+            </button>
+        </mat-card-actions>
     </mat-card-header>
-    <mat-card-content>
+    <mat-card-content fxFlexFill>
+        Start
+
         Ipsam vero urbem Byzantiorum fuisse refertissimam atque ornatissimam signis quis ignorat? Quae illi, exhausti
         sumptibus bellisque maximis, cum omnis Mithridaticos impetus totumque Pontum armatum affervescentem in Asiam
         atque
@@ -138,10 +145,7 @@
         quod constat nobilissimas virgines se in puteos abiecisse et morte voluntaria necessariam turpitudinem
         depulisse.
         Nec haec idcirco omitto, quod non gravissima sint, sed quia nunc sine teste dico.
+
+        End
     </mat-card-content>
-    <mat-card-actions>
-        <button id="add" mat-fab color="accent">
-            <mat-icon>add</mat-icon>
-        </button>
-    </mat-card-actions>
 </mat-card>

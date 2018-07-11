@@ -18,6 +18,7 @@ import {TimbrageComponent} from './timbrage/timbrage.component';
 import {LayoutModule} from '@angular/cdk/layout';
 import {RouterModule, Routes} from "@angular/router";
 import {CalendarComponent} from './calendar/calendar.component';
+import {FlexLayoutModule} from "@angular/flex-layout";
 
 const appRoutes: Routes = [
   {path: 'timbrage', component: TimbrageComponent},
@@ -40,6 +41,7 @@ const appRoutes: Routes = [
     BrowserModule,
     RouterModule.forRoot(appRoutes),
     ServiceWorkerModule.register('/ngsw-worker.js', {enabled: environment.production}),
+    FlexLayoutModule,
     BrowserAnimationsModule,
     MatTabsModule,
     MatIconModule,

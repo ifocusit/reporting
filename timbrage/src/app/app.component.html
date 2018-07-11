@@ -1,26 +1,15 @@
-<div class="container" [class.is-mobile]="mobileQuery.matches">
-    <mat-toolbar id="header" color="primary" class="mat-elevation-z6">
-        <button mat-icon-button (click)="sidenav.toggle()">
-            <mat-icon>menu</mat-icon>
-        </button>
+<div fxLayout="column" fxLayoutAlign="start center" fxFlexFill>
+    <mat-toolbar id="header" color="primary" class="mat-elevation-z6" fxFlex="15">
         <h1>Timbrage</h1>
         <span class="spacer"></span>
         <mat-icon>favorite</mat-icon>
     </mat-toolbar>
 
-    <mat-sidenav-container [style.marginTop.px]="mobileQuery.matches ? 56 : 0" [style.marginBottom.px]="mobileQuery.matches ? 56 : 0">
+    <div class="conent" fxFlexFill>
+        <router-outlet></router-outlet>
+    </div>
 
-        <mat-sidenav #sidenav mode="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches"
-                     fixedTopGap="56">
-            Sidenav
-        </mat-sidenav>
-
-        <mat-sidenav-content>
-            <router-outlet></router-outlet>
-        </mat-sidenav-content>
-    </mat-sidenav-container>
-
-    <mat-toolbar id="footer">
+    <mat-toolbar id="footer" fxFlex="15">
         <nav mat-tab-nav-bar>
             <a mat-tab-link *ngFor="let link of navLinks"
                [routerLink]="link.path" routerLinkActive #rla="routerLinkActive" [active]="rla.isActive">
