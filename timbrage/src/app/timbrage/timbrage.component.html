@@ -1,5 +1,5 @@
-<mat-card fxLayout="column">
-    <mat-card-header fxFlex="50">
+<mat-card fxLayout="column" class="mat-elevation-z0">
+    <mat-card-header fxFlex="60" class="mat-elevation-z1">
         <div id="date">
             <span>{{ now | date: 'd' }}</span>
             <span>{{ now | date: 'EEEE' }}</span>
@@ -13,139 +13,12 @@
             {{ now | date: 'HH:mm:ss' }}
         </div>
         <mat-card-actions>
-            <button id="add" mat-fab color="accent">
+            <button id="add" (click)="addTimbrage()" mat-fab color="accent">
                 <mat-icon>add</mat-icon>
             </button>
         </mat-card-actions>
     </mat-card-header>
-    <mat-card-content fxFlexFill>
-        Start
-
-        Ipsam vero urbem Byzantiorum fuisse refertissimam atque ornatissimam signis quis ignorat? Quae illi, exhausti
-        sumptibus bellisque maximis, cum omnis Mithridaticos impetus totumque Pontum armatum affervescentem in Asiam
-        atque
-        erumpentem, ore repulsum et cervicibus interclusum suis sustinerent, tum, inquam, Byzantii et postea signa illa
-        et
-        reliqua urbis ornanemta sanctissime custodita tenuerunt.
-
-        Postremo ad id indignitatis est ventum, ut cum peregrini ob formidatam haut ita dudum alimentorum inopiam
-        pellerentur ab urbe praecipites, sectatoribus disciplinarum liberalium inpendio paucis sine respiratione ulla
-        extrusis, tenerentur minimarum adseclae veri, quique id simularunt ad tempus, et tria milia saltatricum ne
-        interpellata quidem cum choris totidemque remanerent magistris.
-
-        Quam ob rem ut ii qui superiores sunt submittere se debent in amicitia, sic quodam modo inferiores extollere.
-        Sunt
-        enim quidam qui molestas amicitias faciunt, cum ipsi se contemni putant; quod non fere contingit nisi iis qui
-        etiam
-        contemnendos se arbitrantur; qui hac opinione non modo verbis sed etiam opere levandi sunt.
-
-        Saraceni tamen nec amici nobis umquam nec hostes optandi, ultro citroque discursantes quicquid inveniri poterat
-        momento temporis parvi vastabant milvorum rapacium similes, qui si praedam dispexerint celsius, volatu rapiunt
-        celeri, aut nisi impetraverint, non inmorantur.
-
-        Et quoniam apud eos ut in capite mundi morborum acerbitates celsius dominantur, ad quos vel sedandos omnis
-        professio
-        medendi torpescit, excogitatum est adminiculum sospitale nequi amicum perferentem similia videat, additumque est
-        cautionibus paucis remedium aliud satis validum, ut famulos percontatum missos quem ad modum valeant noti hac
-        aegritudine colligati, non ante recipiant domum quam lavacro purgaverint corpus. ita etiam alienis oculis visa
-        metuitur labes.
-
-        Metuentes igitur idem latrones Lycaoniam magna parte campestrem cum se inpares nostris fore congressione
-        stataria
-        documentis frequentibus scirent, tramitibus deviis petivere Pamphyliam diu quidem intactam sed timore
-        populationum
-        et caedium, milite per omnia diffuso propinqua, magnis undique praesidiis conmunitam.
-
-        Orientis vero limes in longum protentus et rectum ab Euphratis fluminis ripis ad usque supercilia porrigitur
-        Nili,
-        laeva Saracenis conterminans gentibus, dextra pelagi fragoribus patens, quam plagam Nicator Seleucus occupatam
-        auxit
-        magnum in modum, cum post Alexandri Macedonis obitum successorio iure teneret regna Persidis, efficaciae
-        inpetrabilis rex, ut indicat cognomentum.
-
-        Isdem diebus Apollinaris Domitiani gener, paulo ante agens palatii Caesaris curam, ad Mesopotamiam missus a
-        socero
-        per militares numeros immodice scrutabatur, an quaedam altiora meditantis iam Galli secreta susceperint scripta,
-        qui
-        conpertis Antiochiae gestis per minorem Armeniam lapsus Constantinopolim petit exindeque per protectores
-        retractus
-        artissime tenebatur.
-
-        Quam ob rem circumspecta cautela observatum est deinceps et cum edita montium petere coeperint grassatores, loci
-        iniquitati milites cedunt. ubi autem in planitie potuerint reperiri, quod contingit adsidue, nec exsertare
-        lacertos
-        nec crispare permissi tela, quae vehunt bina vel terna, pecudum ritu inertium trucidantur.
-
-        Novitates autem si spem adferunt, ut tamquam in herbis non fallacibus fructus appareat, non sunt illae quidem
-        repudiandae, vetustas tamen suo loco conservanda; maxima est enim vis vetustatis et consuetudinis. Quin in ipso
-        equo, cuius modo feci mentionem, si nulla res impediat, nemo est, quin eo, quo consuevit, libentius utatur quam
-        intractato et novo. Nec vero in hoc quod est animal, sed in iis etiam quae sunt inanima, consuetudo valet, cum
-        locis
-        ipsis delectemur, montuosis etiam et silvestribus, in quibus diutius commorati sumus.
-
-        Quam ob rem cave Catoni anteponas ne istum quidem ipsum, quem Apollo, ut ais, sapientissimum iudicavit; huius
-        enim
-        facta, illius dicta laudantur. De me autem, ut iam cum utroque vestrum loquar, sic habetote.
-
-        Advenit post multos Scudilo Scutariorum tribunus velamento subagrestis ingenii persuasionis opifex callidus. qui
-        eum
-        adulabili sermone seriis admixto solus omnium proficisci pellexit vultu adsimulato saepius replicando quod
-        flagrantibus votis eum videre frater cuperet patruelis, siquid per inprudentiam gestum est remissurus ut mitis
-        et
-        clemens, participemque eum suae maiestatis adscisceret, futurum laborum quoque socium, quos Arctoae provinciae
-        diu
-        fessae poscebant.
-
-        Ibi victu recreati et quiete, postquam abierat timor, vicos opulentos adorti equestrium adventu cohortium, quae
-        casu
-        propinquabant, nec resistere planitie porrecta conati digressi sunt retroque concedentes omne iuventutis robur
-        relictum in sedibus acciverunt.
-
-        Utque aegrum corpus quassari etiam levibus solet offensis, ita animus eius angustus et tener, quicquid
-        increpuisset,
-        ad salutis suae dispendium existimans factum aut cogitatum, insontium caedibus fecit victoriam luctuosam.
-
-        Quae dum ita struuntur, indicatum est apud Tyrum indumentum regale textum occulte, incertum quo locante vel
-        cuius
-        usibus apparatum. ideoque rector provinciae tunc pater Apollinaris eiusdem nominis ut conscius ductus est
-        aliique
-        congregati sunt ex diversis civitatibus multi, qui atrocium criminum ponderibus urgebantur.
-
-        Restabat ut Caesar post haec properaret accitus et abstergendae causa suspicionis sororem suam, eius uxorem,
-        Constantius ad se tandem desideratam venire multis fictisque blanditiis hortabatur. quae licet ambigeret metuens
-        saepe cruentum, spe tamen quod eum lenire poterit ut germanum profecta, cum Bithyniam introisset, in statione
-        quae
-        Caenos Gallicanos appellatur, absumpta est vi febrium repentina. cuius post obitum maritus contemplans cecidisse
-        fiduciam qua se fultum existimabat, anxia cogitatione, quid moliretur haerebat.
-
-        Iam in altera philosophiae parte. quae est quaerendi ac disserendi, quae logikh dicitur, iste vester plane, ut
-        mihi
-        quidem videtur, inermis ac nudus est. tollit definitiones, nihil de dividendo ac partiendo docet, non quo modo
-        efficiatur concludaturque ratio tradit, non qua via captiosa solvantur ambigua distinguantur ostendit; iudicia
-        rerum
-        in sensibus ponit, quibus si semel aliquid falsi pro vero probatum sit, sublatum esse omne iudicium veri et
-        falsi
-        putat.
-
-        Hacque adfabilitate confisus cum eadem postridie feceris, ut incognitus haerebis et repentinus, hortatore illo
-        hesterno clientes numerando, qui sis vel unde venias diutius ambigente agnitus vero tandem et adscitus in
-        amicitiam
-        si te salutandi adsiduitati dederis triennio indiscretus et per tot dierum defueris tempus, reverteris ad paria
-        perferenda, nec ubi esses interrogatus et quo tandem miser discesseris, aetatem omnem frustra in stipite
-        conteres
-        summittendo.
-
-        Sed tamen haec cum ita tutius observentur, quidam vigore artuum inminuto rogati ad nuptias ubi aurum dextris
-        manibus
-        cavatis offertur, inpigre vel usque Spoletium pergunt. haec nobilium sunt instituta.
-
-        Omitto iuris dictionem in libera civitate contra leges senatusque consulta; caedes relinquo; libidines
-        praetereo,
-        quarum acerbissimum extat indicium et ad insignem memoriam turpitudinis et paene ad iustum odium imperii nostri,
-        quod constat nobilissimas virgines se in puteos abiecisse et morte voluntaria necessariam turpitudinem
-        depulisse.
-        Nec haec idcirco omitto, quod non gravissima sint, sed quia nunc sine teste dico.
-
-        End
+    <mat-card-content fxFlexFill fxLayout="column">
+        <app-time *ngFor="let time of times" [time]="time"></app-time>
     </mat-card-content>
 </mat-card>

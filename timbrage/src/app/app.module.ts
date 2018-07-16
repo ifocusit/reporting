@@ -8,8 +8,11 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
   MatButtonModule,
   MatCardModule,
+  MatFormFieldModule,
   MatIconModule,
   MatListModule,
+  MatOptionModule,
+  MatSelectModule,
   MatSidenavModule,
   MatTabsModule,
   MatToolbarModule
@@ -19,6 +22,8 @@ import {LayoutModule} from '@angular/cdk/layout';
 import {RouterModule, Routes} from "@angular/router";
 import {CalendarComponent} from './calendar/calendar.component';
 import {FlexLayoutModule} from "@angular/flex-layout";
+import {TimeComponent} from './time/time.component';
+import {ReactiveFormsModule} from "@angular/forms";
 
 const appRoutes: Routes = [
   {path: 'timbrage', component: TimbrageComponent},
@@ -35,7 +40,8 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     TimbrageComponent,
-    CalendarComponent
+    CalendarComponent,
+    TimeComponent
   ],
   imports: [
     BrowserModule,
@@ -51,6 +57,10 @@ const appRoutes: Routes = [
     MatSidenavModule,
     MatListModule,
     MatCardModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatOptionModule,
+    ReactiveFormsModule
   ],
   providers: [{provide: LOCALE_ID, useValue: 'fr'}],
   bootstrap: [AppComponent]

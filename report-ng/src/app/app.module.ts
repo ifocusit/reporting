@@ -14,11 +14,14 @@ import {
   MatCardModule,
   MatDatepickerModule,
   MatDialogModule,
+  MatFormFieldModule,
   MatIconModule,
   MatInputModule,
   MatListModule,
   MatMenuModule,
   MatNativeDateModule,
+  MatOptionModule,
+  MatSelectModule,
   MatTableModule,
   MatToolbarModule,
 } from '@angular/material';
@@ -63,7 +66,10 @@ const appRoutes: Routes = [
     MatListModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatOptionModule
   ],
   providers: [ActivityClient, TimeClient],
   bootstrap: [AppComponent],
