@@ -1,15 +1,15 @@
-<div fxLayout="column" fxLayoutAlign="start center" fxFlexFill>
-    <mat-toolbar id="header" color="primary" class="mat-elevation-z6" fxFlex="15">
+<div fxLayout="column" fxLayoutAlign="start stretch" fxFlexFill class="wrapper">
+    <mat-toolbar id="header" color="primary" class="mat-elevation-z6" fxFlex="5">
         <h1>Timbrage</h1>
         <span class="spacer"></span>
         <mat-icon>favorite</mat-icon>
     </mat-toolbar>
 
-    <div class="conent" fxFlexFill>
+    <div>
         <router-outlet></router-outlet>
     </div>
 
-    <mat-toolbar id="footer" fxFlex="15">
+    <mat-toolbar id="footer" fxFlex="5">
         <nav mat-tab-nav-bar>
             <a mat-tab-link *ngFor="let link of navLinks"
                [routerLink]="link.path" routerLinkActive #rla="routerLinkActive" [active]="rla.isActive">

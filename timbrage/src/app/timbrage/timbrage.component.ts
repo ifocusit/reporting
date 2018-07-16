@@ -1,4 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Time} from "../model/time.model";
 
 @Component({
   selector: 'app-timbrage',
@@ -8,6 +9,8 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 export class TimbrageComponent implements OnInit, OnDestroy {
   now = new Date();
   timerDay: any;
+
+  times: Time[] = [];
 
   constructor() { }
 
@@ -23,5 +26,9 @@ export class TimbrageComponent implements OnInit, OnDestroy {
 
   get sumDay() {
     return 0;
+  }
+
+  public addTimbrage() {
+    this.times.push(new Time());
   }
 }

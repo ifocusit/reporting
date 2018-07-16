@@ -1,22 +1,16 @@
 mat-card {
-  //padding: 0;
+  height: 100%;
+  width: 100%;
+  padding-left: 0;
+  padding-right: 0;
 
   mat-card-header {
-    //height: 9em;
-    //background-color: #6200EE;
-    //color: white;
-    //padding: 2em;
-    //position: fixed;
+    margin-bottom: 2em;
+    width: 100%;
   }
 
-  mat-card-content {
-    //padding-top: 16em;
-  }
-
-  mat-card-actions button {
-    //z-index: 1;
-    //right: 1em;
-    //position: fixed;
-    //top: 16.7em;
+  mat-card-actions {
+    position: absolute;
+    right: 1em;
   }
 }

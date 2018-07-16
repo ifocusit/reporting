@@ -1,0 +1,27 @@
+<div *ngIf="!editing;else edition" (click)="startEditing()">
+    {{time.date | date: 'HH:mm'}}
+</div>
+<ng-template #edition>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <mat-form-field>
+            <mat-select placeholder="hours" formControlName="hours">
+                <mat-option *ngFor="let hour of hours" [value]="hour">
+                    {{hour}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-select placeholder="minutes" formControlName="minutes">
+                <mat-option *ngFor="let minute of minutes" [value]="minute">
+                    {{minute}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <button type="submit" color="accent" mat-icon-button>
+            <mat-icon>save</mat-icon>
+        </button>
+        <button type="submit" (click)="revert()" mat-icon-button>
+            <mat-icon>cancel</mat-icon>
+        </button>
+    </form>
+</ng-template>
