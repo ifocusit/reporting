@@ -11,12 +11,12 @@ describe('MomentPipe', () => {
 
   it('call Moment format value with arg', () => {
     const date = moment('2018-03', 'YYYY-MM');
-    date.format = jasmine.createSpy('format() mock').and.callFake(() => 'formatted date');
-    expect(pipe.transform(date, 'MMMM YYYY')).toEqual('formatted date');
+    date.format = jasmine.createSpy('format() mock').and.callFake(() => 'formatted time');
+    expect(pipe.transform(date, 'MMMM YYYY')).toEqual('formatted time');
     expect(date.format).toHaveBeenCalledWith('MMMM YYYY');
   });
 
-  it('manage null date', () => {
+  it('manage null time', () => {
     expect(pipe.transform(null)).toEqual('');
   });
 });

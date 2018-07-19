@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Time} from "../model/time.model";
+import {Time} from "../../models/time.model";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 @Component({
