@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Time} from "./model/time.model";
+import {Time} from "../models/time.model";
 import * as moment from 'moment';
 import {Duration} from 'moment';
 import {SettingsService} from "./settings.service";
@@ -45,13 +45,13 @@ export class CalculationService {
         // the list of timbrages is not odd
         let missing = new Time();
         // if we must set missing report to end of the day (use in calendar view)
-        // only if it's not in the today date
+        // only if it's not in the today time
         // and the actual time is not before the parameterized end of day
         let isToday = moment().isSame(list[i].getDate(), "day");
         let isAfterParametizedEndOfDay = moment().isAfter(this.settings.getEndOfDay());
         if (endOfDay && (!isToday || isAfterParametizedEndOfDay)) {
           // set time to end of day
-          missing.date = this.settings.applyEndOfDay(moment(list[i].date)).startOf('minute').format();
+          missing.time = this.settings.applyEndOfDay(moment(list[i].time)).startOf('minute').format();
 
           // if (this.settings.get().saveMissings) {
           //   missing timbrage must be save to database

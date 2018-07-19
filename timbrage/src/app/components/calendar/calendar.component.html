@@ -1,0 +1,15 @@
+<p>
+    calendar works!
+</p>
+
+<div *ngIf="times$ | async as listState">
+
+    <ng-container *ngIf="listState.loading;else timeList">
+        <div>Loading</div>
+    </ng-container>
+    <ng-template #timeList>
+        <div *ngFor="let time of listState.times as time">
+            {{time.time}}
+        </div>
+    </ng-template>
+</div>

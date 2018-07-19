@@ -17,13 +17,18 @@ import {
   MatTabsModule,
   MatToolbarModule
 } from "@angular/material";
-import {TimbrageComponent} from './timbrage/timbrage.component';
+import {TimbrageComponent} from './components/timbrage/timbrage.component';
 import {LayoutModule} from '@angular/cdk/layout';
 import {RouterModule, Routes} from "@angular/router";
-import {CalendarComponent} from './calendar/calendar.component';
+import {CalendarComponent} from './components/calendar/calendar.component';
 import {FlexLayoutModule} from "@angular/flex-layout";
-import {TimeComponent} from './time/time.component';
+import {TimeComponent} from './components/time/time.component';
 import {ReactiveFormsModule} from "@angular/forms";
+import {StoreModule} from "@ngrx/store";
+import {EffectsModule} from "@ngrx/effects";
+import {TimeReducer} from "./store/time/time.reducer";
+import {TimeEffects} from "./store/time/time.effects";
+import {HttpClientModule} from "@angular/common/http";
 
 const appRoutes: Routes = [
   {path: 'timbrage', component: TimbrageComponent},
@@ -46,7 +51,11 @@ const appRoutes: Routes = [
   imports: [
     BrowserModule,
     RouterModule.forRoot(appRoutes),
+    HttpClientModule,
+    ReactiveFormsModule,
+    // pwa
     ServiceWorkerModule.register('/ngsw-worker.js', {enabled: environment.production}),
+    // material
     FlexLayoutModule,
     BrowserAnimationsModule,
     MatTabsModule,
@@ -60,7 +69,9 @@ const appRoutes: Routes = [
     MatFormFieldModule,
     MatSelectModule,
     MatOptionModule,
-    ReactiveFormsModule
+    // ngrx
+    StoreModule.forRoot({times: TimeReducer}),
+    EffectsModule.forRoot([TimeEffects])
   ],
   providers: [{provide: LOCALE_ID, useValue: 'fr'}],
   bootstrap: [AppComponent]

@@ -2,15 +2,18 @@ import * as moment from "moment";
 import {Moment} from "moment";
 
 export class Time {
-  constructor(public date: string = moment().startOf('minute').format()) {
+
+  id: string;
+
+  constructor(public time: string = moment().startOf('minute').format()) {
   }
 
   public getDate(): Date {
-    return new Date(this.date);
+    return new Date(this.time);
   }
 
   public getMoment(): Moment {
-    return moment(this.date);
+    return moment(this.time);
   }
 
   get hours(): number {
@@ -18,7 +21,7 @@ export class Time {
   }
 
   set hours(hour: number) {
-    this.date = this.getMoment().hours(hour).format();
+    this.time = this.getMoment().hours(hour).format();
   }
 
   get minutes(): number {
@@ -26,6 +29,6 @@ export class Time {
   }
 
   set minutes(minute: number) {
-    this.date = this.getMoment().minutes(minute).format();
+    this.time = this.getMoment().minutes(minute).format();
   }
 }
