@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Time} from "../model/time.model";
-import {CalculationService} from "../calculation.service";
+import {Time} from "../../models/time.model";
+import {CalculationService} from "../../services/calculation.service";
 import * as moment from "moment";
 import {Duration} from "moment";
 
