@@ -76,10 +76,8 @@ class TimeControllerIT {
     @Test
     fun `update time`() {
         val newTime = LocalDateTime.now()
-        val founded = webClient.put()
-                .uri("/times/{id}", TEST_TIME_1.id).accept(MediaType.APPLICATION_JSON)
-                .syncBody(Time(null, newTime))
-                .exchange()
+        val founded = webClient.put().uri("/times/{id}", TEST_TIME_1.id).accept(MediaType.APPLICATION_JSON)
+                .syncBody(Time(null, newTime)).exchange()
                 .expectStatus().isOk
                 .expectBody(Time::class.java)
                 .returnResult().responseBody
@@ -90,9 +88,7 @@ class TimeControllerIT {
 
     @Test
     fun `delete time`() {
-        webClient.delete()
-                .uri("/times/{id}", TEST_TIME_1.id).accept(MediaType.APPLICATION_JSON)
-                .exchange()
+        webClient.delete().uri("/times/{id}", TEST_TIME_1.id).accept(MediaType.APPLICATION_JSON).exchange()
                 .expectStatus().isOk
     }
 
@@ -101,11 +97,8 @@ class TimeControllerIT {
         repository.save(TEST_TIME_3).subscribe()
         repository.save(TEST_TIME_4).subscribe()
 
-        webClient.get()
-                .uri("/times/month/{month}", "2018-02").accept(MediaType.APPLICATION_JSON)
-                .exchange()
-                .expectStatus().isOk
-                .expectBody()
+        webClient.get().uri("/times/month/{month}", "2018-02").accept(MediaType.APPLICATION_JSON).exchange()
+                .expectStatus().isOk.expectBody()
                 .jsonPath("$[0].id").isEqualTo(TEST_TIME_3.id!!)
                 .jsonPath("$[1].id").isEqualTo(TEST_TIME_4.id!!)
     }
@@ -117,13 +110,46 @@ class TimeControllerIT {
         repository.save(TEST_TIME_5).subscribe()
         repository.save(TEST_TIME_6).subscribe()
 
-        webClient.get()
-                .uri("/times/date/{date}", "2018-02-03").accept(MediaType.APPLICATION_JSON)
-                .exchange()
-                .expectStatus().isOk
-                .expectBody()
+        webClient.get().uri("/times/day/{day}", "2018-02-03").accept(MediaType.APPLICATION_JSON).exchange()
+                .expectStatus().isOk.expectBody()
                 .jsonPath("$[0].id").isEqualTo(TEST_TIME_5.id!!)
                 .jsonPath("$[1].id").isEqualTo(TEST_TIME_6.id!!)
+    }
+
+    @Test
+    fun `find by date`() {
+        repository.save(TEST_TIME_3).subscribe()
+        repository.save(TEST_TIME_4).subscribe()
+        repository.save(TEST_TIME_5).subscribe()
+        repository.save(TEST_TIME_6).subscribe()
+        repository.save(TEST_TIME_7).subscribe()
+
+        webClient.get().uri("/times/date/{date}", "2018-02-03").accept(MediaType.APPLICATION_JSON).exchange()
+                .expectStatus().isOk.expectBody()
+                .jsonPath("$[0].id").isEqualTo(TEST_TIME_5.id!!)
+                .jsonPath("$[1].id").isEqualTo(TEST_TIME_6.id!!)
+
+        webClient.get().uri("/times/date/{date}", "2018-02").accept(MediaType.APPLICATION_JSON).exchange()
+                .expectStatus().isOk.expectBody()
+                .jsonPath("$[0].id").isEqualTo(TEST_TIME_3.id!!)
+                .jsonPath("$[1].id").isEqualTo(TEST_TIME_4.id!!)
+                .jsonPath("$[2].id").isEqualTo(TEST_TIME_5.id!!)
+                .jsonPath("$[3].id").isEqualTo(TEST_TIME_6.id!!)
+
+        webClient.get().uri("/times/date/{date}", "2018").accept(MediaType.APPLICATION_JSON).exchange()
+                .expectStatus().isOk.expectBody()
+                .jsonPath("$[0].id").isEqualTo(TEST_TIME_3.id!!)
+                .jsonPath("$[1].id").isEqualTo(TEST_TIME_4.id!!)
+                .jsonPath("$[2].id").isEqualTo(TEST_TIME_5.id!!)
+                .jsonPath("$[3].id").isEqualTo(TEST_TIME_6.id!!)
+                .jsonPath("$[4].id").isEqualTo(TEST_TIME_1.id!!)
+                .jsonPath("$[5].id").isEqualTo(TEST_TIME_2.id!!)
+
+
+        webClient.get().uri("/times/date/{date}", "2018-04").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isOk
+        webClient.get().uri("/times/date/{date}", "2018-02-10").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isOk
+        webClient.get().uri("/times/date/{date}", "2018-02-10T13:20").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isOk
+        webClient.get().uri("/times/date/{date}", "2018-02-10 13:20").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isOk
     }
 
     companion object {
@@ -131,7 +157,8 @@ class TimeControllerIT {
         val TEST_TIME_2 = Time("_2", LocalDateTime.parse("2018-03-01T14:50"))
         val TEST_TIME_3 = Time("_3", LocalDateTime.parse("2018-02-02T10:10"))
         val TEST_TIME_4 = Time("_4", LocalDateTime.parse("2018-02-02T18:10"))
-        val TEST_TIME_5 = Time("_3", LocalDateTime.parse("2018-02-03T07:25"))
-        val TEST_TIME_6 = Time("_4", LocalDateTime.parse("2018-02-03T15:55"))
+        val TEST_TIME_5 = Time("_5", LocalDateTime.parse("2018-02-03T07:25"))
+        val TEST_TIME_6 = Time("_6", LocalDateTime.parse("2018-02-03T15:55"))
+        val TEST_TIME_7 = Time("_7", LocalDateTime.parse("2017-02-03T15:55"))
     }
 }

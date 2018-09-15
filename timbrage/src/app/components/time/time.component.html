@@ -1,5 +1,5 @@
 <div *ngIf="!editing;else edition" (click)="startEditing()">
-    {{time.time | date: 'HH:mm'}}
+    {{time.toString() | date: 'HH:mm'}}
 </div>
 <ng-template #edition>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">

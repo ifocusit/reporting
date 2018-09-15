@@ -9,7 +9,12 @@
             </button>
         </mat-card-actions>
     </mat-card-header>
-    <mat-card-content fxFlexFill fxLayout="column">
-        <app-time *ngFor="let time of times" [time]="time"></app-time>
+    <mat-card-content fxFlexFill fxLayout="column" *ngIf="times$ | async as times">
+        <!--<ng-container *ngIf="listState.loading;else timeList">-->
+            <!--<div>Loading</div>-->
+        <!--</ng-container>-->
+        <!--<ng-template #timeList>-->
+            <app-time *ngFor="let time of times" [time]="time"></app-time>
+        <!--</ng-template>-->
     </mat-card-content>
 </mat-card>

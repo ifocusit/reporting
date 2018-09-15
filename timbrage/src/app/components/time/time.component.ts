@@ -1,55 +1,55 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Time} from "../../models/time.model";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Time} from "../../models/time.model";
 
 @Component({
-  selector: 'app-time',
-  templateUrl: './time.component.html',
-  styleUrls: ['./time.component.scss']
+    selector: 'app-time',
+    templateUrl: './time.component.html',
+    styleUrls: ['./time.component.scss']
 })
 export class TimeComponent implements OnInit {
 
-  @Input() public time: Time;
+    @Input() public time: Time;
 
-  public hours = [];
-  public minutes = [];
+    public hours = [];
+    public minutes = [];
 
-  public editing = false;
+    public form: FormGroup;
 
-  public form: FormGroup;
+    editing = false;
 
-  constructor(private fb: FormBuilder) {
-    for (let i = 0; i < 24; i++) {
-      this.hours.push(i);
+    constructor(private fb: FormBuilder) {
+        for (let i = 0; i < 24; i++) {
+            this.hours.push(i);
+        }
+        for (let i = 0; i < 60; i++) {
+            this.minutes.push(i);
+        }
+        this.createForm();
     }
-    for (let i = 0; i < 60; i++) {
-      this.minutes.push(i);
+
+    createForm() {
+        this.form = this.fb.group({
+            hours: ['', Validators.required],
+            minutes: ['', Validators.required]
+        });
     }
-    this.createForm();
-  }
 
-  createForm() {
-    this.form = this.fb.group({
-      hours: ['', Validators.required],
-      minutes: ['', Validators.required]
-    });
-  }
+    ngOnInit() {
+    }
 
-  ngOnInit() {
-  }
+    public startEditing() {
+        this.editing = true;
+        this.form.setValue({hours: this.time.hours, minutes: this.time.minutes});
+    }
 
-  public startEditing() {
-    this.editing = true;
-    this.form.setValue({hours: this.time.hours, minutes: this.time.minutes});
-  }
+    public onSubmit() {
+        this.time.hours = this.form.value.hours;
+        this.time.minutes = this.form.value.minutes;
+        this.editing = false;
+    }
 
-  public onSubmit() {
-    this.editing = false;
-    this.time.hours = this.form.value.hours;
-    this.time.minutes = this.form.value.minutes;
-  }
-
-  public revert() {
-    this.editing = false;
-  }
+    public revert() {
+        this.editing = false;
+    }
 }

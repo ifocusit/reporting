@@ -39,7 +39,7 @@ class BillingController(val timeController: TimeController, val settingRepositor
         symbols.decimalSeparator = '.'
         df.decimalFormatSymbols = symbols
 
-        val duration = duration(timeController.getByMonth(month))
+        val duration = duration(timeController.getByDate(month))
         val amount = duration
                 .zipWith(settingRepository.findById("hoursRate"),
                         { d: Double, hoursRate: Setting -> d * hoursRate.value.toDouble() })

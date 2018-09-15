@@ -1,24 +1,23 @@
 import {Component, OnInit} from '@angular/core';
 import {select, Store} from "@ngrx/store";
-import {TimeListState, TimeState} from "../../store/time/time.state";
 import {Observable} from "rxjs/internal/Observable";
-import * as TimeAction from "../../store/time/time.action";
+import {Time} from "../../models/time.model";
+import {selectCurrentMonthTimes} from "../../store/time/time.reducer";
+import {TimeState} from "../../store/time/time.state";
 
 @Component({
-  selector: 'app-calendar',
-  templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.css']
+    selector: 'app-calendar',
+    templateUrl: './calendar.component.html',
+    styleUrls: ['./calendar.component.css']
 })
 export class CalendarComponent implements OnInit {
 
-  times$: Observable<TimeState[]>;
+    times$: Observable<Time[]>;
 
-  constructor(private store: Store<TimeListState>) {
-  }
+    constructor(private store: Store<TimeState>) {
+    }
 
-  ngOnInit() {
-    this.times$ = this.store.pipe(select(state => state.times));
-    this.store.dispatch(new TimeAction.GetTimes());
-  }
-
+    ngOnInit() {
+        this.times$ = this.store.pipe(select(selectCurrentMonthTimes));
+    }
 }
