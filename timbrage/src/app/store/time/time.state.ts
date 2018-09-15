@@ -1,21 +1,10 @@
 import {Time} from "../../models/time.model";
+import {createEntityAdapter, EntityState} from '@ngrx/entity';
 
-export class TimeState extends Time {
+export const adapter = createEntityAdapter<Time>();
+
+export interface TimeState extends EntityState<Time> {
+    editing: boolean;
+    saving: boolean;
+    loaded: boolean;
 }
-
-export const initializeTimeState = function () {
-  return {}
-};
-
-export interface TimeListState {
-  times: TimeState[];
-  loading: boolean;
-  pending: number;
-}
-
-export const intializeTimeListState = function () {
-  return {
-    loading: false,
-    pending: 0,
-  }
-};
