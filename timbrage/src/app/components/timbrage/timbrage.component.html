@@ -1,8 +1,39 @@
 <mat-card fxLayout="column" class="mat-elevation-z0">
     <mat-card-header fxFlex="60" class="mat-elevation-z1">
-        <mat-card-title id="sumDay">Total journalier: {{ sumDay }}</mat-card-title>
-        <mat-card-subtitle id="date">{{ now | date: 'd EEEE MMMM yyyy' }}</mat-card-subtitle>
-        <mat-card-subtitle id="now">{{ now | date: 'HH:mm:ss' }}</mat-card-subtitle>
+        <div>
+            <span id="date">
+                <span>{{ now | date: 'd' }}</span>
+                <span>
+                    <span>{{ now | date: 'EEEE' }}</span>
+                    <span>{{ now | date: 'MMMM yyyy' }}</span>
+                </span>
+            </span>
+            <span id="sumDay">
+                <div>Total journalier:</div>
+                <div>{{ sumDay }}</div>
+            </span>
+            <div id="now">{{ now | date: 'HH:mm:ss' }}</div>
+        </div>
+        <!--<div id="date">
+            <span>{{ now | date: 'dd' }}</span>
+            <span>
+                <span>{{ now | date: 'EEEE' }}</span>
+                <span>{{ now | date: 'MMMM yyyy' }}</span>
+            </span>
+        </div>
+        <div id="sumDay">
+            <div>Total journalier:</div>
+            <div>{{ sumDay }}</div>
+        </div>
+        <div id="now">
+            {{ now | date: 'HH:mm:ss' }}
+        </div>
+        <div id="sumWeek">
+            total hebdomadaire : {{ sumWeek }}
+        </div>
+        <div id="sumMonth">
+            total mensuel : {{ sumMonth }}
+        </div>-->
         <mat-card-actions>
             <button id="add" (click)="addTimbrage()" mat-fab color="accent">
                 <mat-icon>add</mat-icon>
@@ -16,7 +47,7 @@
         <ng-template #timeList>
             <app-time *ngFor="let time of (times$ | async)" [time]="time"></app-time>
             <!--<div *ngFor="let time of (times$ | async)">-->
-                <!--{{time.time}}-->
+            <!--{{time.time}}-->
             <!--</div>-->
         </ng-template>
     </mat-card-content>
