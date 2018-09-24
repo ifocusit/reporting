@@ -1,9 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {select, Store} from "@ngrx/store";
 import {Observable} from "rxjs/internal/Observable";
-import {Time} from "../../models/time.model";
-import {selectCurrentMonthTimes} from "../../store/time/time.reducer";
-import {TimeState} from "../../store/time/time.state";
+import {Select, Store} from "@ngxs/store";
+import {TimesStateModel} from "../../store/time.store";
 
 @Component({
     selector: 'app-calendar',
@@ -12,12 +10,11 @@ import {TimeState} from "../../store/time/time.state";
 })
 export class CalendarComponent implements OnInit {
 
-    times$: Observable<Time[]>;
+    @Select() times$: Observable<TimesStateModel>;
 
-    constructor(private store: Store<TimeState>) {
+    constructor(private store: Store) {
     }
 
     ngOnInit() {
-        this.times$ = this.store.pipe(select(selectCurrentMonthTimes));
     }
 }

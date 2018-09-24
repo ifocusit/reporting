@@ -5,3 +5,11 @@ spring:
       host: localhost
       port: 27017
       database: report
+  jackson:
+    date-format: yyyy-MM-dd HH:mm
+logging:
+  level:
+    root: info
+server:
+  error:
+    include-stacktrace: always

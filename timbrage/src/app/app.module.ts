@@ -24,11 +24,9 @@ import {CalendarComponent} from './components/calendar/calendar.component';
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {TimeComponent} from './components/time/time.component';
 import {ReactiveFormsModule} from "@angular/forms";
-import {StoreModule} from "@ngrx/store";
-import {EffectsModule} from "@ngrx/effects";
-import {TimeEffects} from "./store/time/time.effects";
 import {HttpClientModule} from "@angular/common/http";
-import {timesReducer} from "./store/time/time.reducer";
+import {NgxsModule} from "@ngxs/store";
+import {TimesState} from "./store/time.store";
 
 const appRoutes: Routes = [
     {path: 'timbrage', component: TimbrageComponent},
@@ -69,11 +67,8 @@ const appRoutes: Routes = [
         MatFormFieldModule,
         MatSelectModule,
         MatOptionModule,
-        // ngrx
-        StoreModule.forRoot({}),
-        StoreModule.forFeature('times', timesReducer),
-        EffectsModule.forRoot([]),
-        EffectsModule.forFeature([TimeEffects])
+        // ngxs
+        NgxsModule.forRoot([TimesState])
     ],
     providers: [{provide: LOCALE_ID, useValue: 'fr'}],
     bootstrap: [AppComponent]
