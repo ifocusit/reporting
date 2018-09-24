@@ -1,12 +1,13 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from "@angular/core";
 import {CalculationService} from "../../services/calculation.service";
 import * as moment from "moment";
 import {Duration} from "moment";
 import {Observable} from "rxjs/internal/Observable";
-import {select, Store} from "@ngrx/store";
-import {TimeState} from "../../store/time/time.state";
 import {Time} from "../../models/time.model";
-import {selectTodayTimes} from "../../store/time/time.reducer";
+import {AddTime, ReadTimes, TimesState} from "../../store/time.store";
+import {Select, Store} from '@ngxs/store';
+import {withLatestFrom} from "rxjs/operators";
+
 
 @Component({
     selector: 'app-timbrage',
@@ -17,16 +18,17 @@ export class TimbrageComponent implements OnInit, OnDestroy {
     now = new Date();
     timerDay: any;
 
-    times$: Observable<Time[]>;
+    @Select(TimesState.times) times$: Observable<Time[]>;
+    @Select(TimesState.loading) loading$: Observable<boolean>;
 
     sumDay: Duration = moment.duration();
 
-    constructor(private calculationService: CalculationService, private store: Store<TimeState>) {
+    constructor(private calculationService: CalculationService, private store: Store) {
     }
 
     ngOnInit() {
-        this.times$ = this.store.pipe(select(selectTodayTimes));
         this.startTimers();
+        this.store.dispatch(new ReadTimes(moment().format("YYYY-MM-DD")));
     }
 
     private startTimers(): void {
@@ -60,6 +62,6 @@ export class TimbrageComponent implements OnInit, OnDestroy {
     }
 
     public addTimbrage() {
-        // this.times.push(new Time());
+        this.store.dispatch([new AddTime(new Time())]).pipe(withLatestFrom(this.times$));
     }
 }
