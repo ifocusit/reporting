@@ -1,16 +1,19 @@
-mat-card {
-  height: 100%;
-  width: 100%;
-  padding-left: 0;
-  padding-right: 0;
-
-  mat-card-header {
-    margin-bottom: 2em;
+:host {
+  mat-card {
+    padding: 0;
+    height: 100%;
     width: 100%;
-  }
+    background-color: transparent;
 
-  mat-card-actions {
-    position: absolute;
-    right: 1em;
+    mat-card-header {
+      padding-top: 20px;
+      margin-bottom: 2em;
+      width: 100%;
+    }
+
+    mat-card-actions {
+      position: absolute;
+      right: 1em;
+    }
   }
 }
