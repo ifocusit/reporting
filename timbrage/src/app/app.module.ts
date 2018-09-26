@@ -27,6 +27,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {NgxsModule} from "@ngxs/store";
 import {TimesState} from "./store/time.store";
+import {MomentPipe} from "./pipes/moment.pipe";
 
 const appRoutes: Routes = [
     {path: 'timbrage', component: TimbrageComponent},
@@ -44,7 +45,8 @@ const appRoutes: Routes = [
         AppComponent,
         TimbrageComponent,
         CalendarComponent,
-        TimeComponent
+        TimeComponent,
+        MomentPipe
     ],
     imports: [
         BrowserModule,

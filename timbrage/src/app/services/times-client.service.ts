@@ -24,7 +24,7 @@ export class TimesClientService {
         return this.http.put<Time>(`${environment.client.base_url}/times/${time.id}`, time);
     }
 
-    public delete(time: Time): Observable<Time> {
-        return this.http.delete<Time>(`${environment.client.base_url}/times/${time.id}`);
+    public delete(time: Time): Observable<any> {
+        return this.http.delete<any>(`${environment.client.base_url}/times/${time.id}`);
     }
 }

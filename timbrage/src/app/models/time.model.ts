@@ -2,14 +2,12 @@ import * as moment from "moment";
 import {Moment} from "moment";
 
 
-const DATETIME_ISO_FORMAT = "YYYY-MM-DDTHH:mm";
+export const DATETIME_ISO_FORMAT = "YYYY-MM-DDTHH:mm";
 const DATETIME_FORMAT = "YYYY-MM-DD HH:mm";
 
 export class Time {
 
-    public id: string;
-
-    public constructor(public time: string = moment().format(DATETIME_ISO_FORMAT)) {
+    public constructor(public time: string = moment().format(DATETIME_ISO_FORMAT), public id?: string) {
     }
 }
 

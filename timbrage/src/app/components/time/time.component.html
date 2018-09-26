@@ -1,27 +1,29 @@
-<div *ngIf="!editing;else edition" (click)="startEditing()">
-    {{adapter.toString() | date: 'HH:mm'}}
+<div class="readonly">
+    <span (click)="startEditing()">{{time | moment: 'HH:mm'}}</span>
+    <button mat-raised-button color="accent" mat-icon-button (click)="delete()">
+        <mat-icon>delete</mat-icon>
+    </button>
 </div>
-<ng-template #edition>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <mat-form-field>
-            <mat-select placeholder="hours" formControlName="hours">
-                <mat-option *ngFor="let hour of hours" [value]="hour">
-                    {{hour}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field>
-            <mat-select placeholder="minutes" formControlName="minutes">
-                <mat-option *ngFor="let minute of minutes" [value]="minute">
-                    {{minute}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-        <button type="submit" color="accent" mat-icon-button>
-            <mat-icon>save</mat-icon>
-        </button>
-        <button type="submit" (click)="revert()" mat-icon-button>
-            <mat-icon>cancel</mat-icon>
-        </button>
-    </form>
-</ng-template>
+<div class="backdrop" *ngIf="editing"></div>
+<div class="picker-wrapper" *ngIf="editing">
+    <div class="picker-toolbar">
+        <button mat-button color="accent" (click)="revert()">CANCEL</button>
+        <button mat-button color="accent" (click)="submit()">DONE</button>
+    </div>
+    <div class="picker-columns">
+        <div id="hours" class="picker-col">
+            <button mat-button *ngFor="let hour of hours"
+                    (click)="time.hours(hour)"
+                    [class.mat-accent]="time.hours() === +hour">
+                {{hour}}
+            </button>
+        </div>
+        <div id="minutes" class="picker-col">
+            <button mat-button *ngFor="let minute of minutes"
+                    (click)="time.minutes(minute)"
+                    [class.mat-accent]="time.minutes() === +minute">
+                {{minute}}
+            </button>
+        </div>
+    </div>
+</div>
