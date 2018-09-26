@@ -1,7 +1,7 @@
 import {Time} from "../models/time.model";
 import {Action, Selector, State, StateContext} from "@ngxs/store";
 import {TimesClientService} from "../services/times-client.service";
-import {map} from "rxjs/operators";
+import {map, tap} from "rxjs/operators";
 
 //**************************************************************************************/
 // STATE
@@ -27,6 +27,13 @@ export class AddTime {
 
 export class UpdateTime {
     static readonly type = '[Time] Update Time';
+
+    constructor(public time: Time) {
+    }
+}
+
+export class DeleteTime {
+    static readonly type = '[Time] Delete Time';
 
     constructor(public time: Time) {
     }
@@ -130,9 +137,28 @@ export class TimesState {
         });
         return this.timeClient.update(action.time).pipe(
             map((time: Time) => {
+                state.times.filter(value => value.id === time.id).map(value => value.time = time.time);
                 ctx.setState({
                     ...state,
                     loading: false
+                });
+            })
+        );
+    }
+
+    @Action(DeleteTime)
+    deleteTime(ctx: StateContext<TimesStateModel>, action: DeleteTime) {
+        const state = ctx.getState();
+        ctx.setState({
+            ...state,
+            loading: true
+        });
+        return this.timeClient.delete(action.time).pipe(
+            tap(() => {
+                ctx.setState({
+                    ...state,
+                    loading: false,
+                    times: state.times.filter(time => time.id === action.time.id)
                 });
             })
         );
