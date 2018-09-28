@@ -2,6 +2,7 @@ import {Time} from "../models/time.model";
 import {Action, Selector, State, StateContext} from "@ngxs/store";
 import {TimesClientService} from "../services/times-client.service";
 import {map, tap} from "rxjs/operators";
+import * as _ from 'lodash';
 
 //**************************************************************************************/
 // STATE
@@ -79,7 +80,7 @@ export class TimesState {
 
     @Selector()
     static times(state: TimesStateModel) {
-        return state.times;
+        return _.orderBy(state.times, ['time'], ['asc']);
     }
 
     // ACTIONS
@@ -158,7 +159,7 @@ export class TimesState {
                 ctx.setState({
                     ...state,
                     loading: false,
-                    times: state.times.filter(time => time.id === action.time.id)
+                    times: state.times.filter(time => time.id !== action.time.id)
                 });
             })
         );
