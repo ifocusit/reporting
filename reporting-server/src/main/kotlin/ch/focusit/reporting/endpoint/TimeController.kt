@@ -18,7 +18,6 @@ import java.util.regex.Pattern
 import javax.validation.Valid
 
 @RestController
-@CrossOrigin("*")
 @RequestMapping("times")
 class TimeController(val repository: TimeRepository) {
 

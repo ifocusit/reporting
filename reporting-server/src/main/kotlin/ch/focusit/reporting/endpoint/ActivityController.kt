@@ -12,7 +12,6 @@ import java.time.YearMonth
 import javax.validation.Valid
 
 @RestController
-@CrossOrigin(value = "*")
 @RequestMapping("activities")
 class ActivityController(val repository: ActivityRepository) {
 
