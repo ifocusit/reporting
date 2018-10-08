@@ -22,7 +22,6 @@ import java.util.concurrent.atomic.AtomicInteger
 import java.util.stream.Collectors
 
 @Controller
-@CrossOrigin("*")
 @RequestMapping("billing")
 class BillingController(val timeController: TimeController, val settingRepository: SettingRepository) {
 
