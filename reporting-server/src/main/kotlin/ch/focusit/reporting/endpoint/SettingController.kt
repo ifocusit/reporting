@@ -9,7 +9,6 @@ import reactor.core.publisher.Mono
 import javax.validation.Valid
 
 @RestController
-@CrossOrigin(value = "*")
 @RequestMapping("settings")
 class SettingController(val repository: SettingRepository) {
 

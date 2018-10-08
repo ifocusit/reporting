@@ -9,3 +9,4 @@ class ReportingApplication
 fun main(args: Array<String>) {
     runApplication<ReportingApplication>(*args)
 }
+

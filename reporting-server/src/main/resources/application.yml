@@ -7,9 +7,18 @@ spring:
       database: report
   jackson:
     date-format: yyyy-MM-dd HH:mm
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 836360158078-tddf925rblamtjr37f9msfhfmtse89pd.apps.googleusercontent.com
+            client-secret: G6j8Eeg6ZQe_X85ILEM77gY1
+            scope: profile
 logging:
   level:
     root: info
+    org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener: ERROR
 server:
   error:
     include-stacktrace: always
