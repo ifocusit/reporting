@@ -46,9 +46,6 @@
         </ng-container>
         <ng-template #timeList>
             <app-time *ngFor="let time of (times$ | async)" [model]="time"></app-time>
-            <!--<div *ngFor="let time of (times$ | async)">-->
-            <!--{{time.time}}-->
-            <!--</div>-->
         </ng-template>
     </mat-card-content>
 </mat-card>

@@ -137,8 +137,8 @@ export class TimesState {
             loading: true
         });
         return this.timeClient.update(action.time).pipe(
-            map((time: Time) => {
-                state.times.filter(value => value.id === time.id).map(value => value.time = time.time);
+            tap((time: Time) => {
+                state.times.filter(value => value.id === time.id).forEach(value => value.time = time.time);
                 ctx.setState({
                     ...state,
                     loading: false
