@@ -28,6 +28,8 @@ import {HttpClientModule} from "@angular/common/http";
 import {NgxsModule} from "@ngxs/store";
 import {TimesState} from "./store/time.store";
 import {MomentPipe} from "./pipes/moment.pipe";
+import {TimesClientService} from "./services/times-client.service";
+import {TimesLocalClientService} from "./services/times-local-client.service";
 
 const appRoutes: Routes = [
     {path: 'timbrage', component: TimbrageComponent},
@@ -72,7 +74,10 @@ const appRoutes: Routes = [
         // ngxs
         NgxsModule.forRoot([TimesState])
     ],
-    providers: [{provide: LOCALE_ID, useValue: 'fr'}],
+    providers: [
+        {provide: LOCALE_ID, useValue: 'fr'},
+        {provide: TimesClientService, useClass: environment.client.in_memory ? TimesLocalClientService : TimesClientService}
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {
