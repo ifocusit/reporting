@@ -31,7 +31,7 @@ export class TimesLocalClientService {
     private readDay(day: string): Observable<Time[]> {
         return of(localStorage.getItem(day))
             .pipe(
-                tap(store => console.log(store)),
+                // tap(store => console.log(store)),
                 map(store => store || '[]'),
                 map(json => JSON.parse(json)),
                 switchMap(array => from(array)),
@@ -78,7 +78,7 @@ export class TimesLocalClientService {
     private save = (key: string) => (source: Observable<Time[]>) =>
         source.pipe(
             map(values => JSON.stringify(values)),
-            tap(json => console.log(json)),
+            // tap(json => console.log(json)),
             tap(json => localStorage.setItem(key, json))
         );
 
