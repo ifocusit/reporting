@@ -1,8 +1,8 @@
 import * as moment from "moment";
 import {Moment} from "moment";
 
-
 export const DATETIME_ISO_FORMAT = "YYYY-MM-DDTHH:mm";
+export const DATE_ISO_FORMAT = "YYYY-MM-DD";
 const DATETIME_FORMAT = "YYYY-MM-DD HH:mm";
 
 export class Time {

@@ -2,6 +2,7 @@ import {DATETIME_ISO_FORMAT, Time, TimeAdapter} from "../../models/time.model";
 import {Store} from '@ngxs/store';
 import {Component, ElementRef, Input, OnInit} from "@angular/core";
 import {DeleteTime, UpdateTime} from "../../store/time.store";
+import * as moment from "moment";
 import {Moment} from "moment";
 
 @Component({
@@ -54,6 +55,7 @@ export class TimeComponent implements OnInit {
     public submit() {
         this.editing = false;
         this.store.dispatch(new UpdateTime(new Time(this.time.format(DATETIME_ISO_FORMAT), this._model.id)));
+        this.time = moment(this.time);
     }
 
     public delete() {
