@@ -12,23 +12,21 @@ export class CalculationService {
     constructor(private settings: SettingsService) {
     }
 
-    public calculate(timbrages: Array<Time>): Promise<Duration> {
-        return Promise.resolve().then(() => {
-            let duration = moment.duration();
+    public calculate(timbrages: Array<Time>): Duration {
+        let duration = moment.duration();
 
-            if (!timbrages || timbrages.length == 0) {
-                // no times
-                return duration;
-            }
-
-            // calculate duration by pairs of Timbrage
-            this.splitPairs(timbrages).forEach(pair => {
-                duration = duration.add(this.diff(pair[1], pair[0]));
-            });
-
-            // return moment.duration(timbrages);
+        if (!timbrages || timbrages.length == 0) {
+            // no times
             return duration;
+        }
+
+        // calculate duration by pairs of Timbrage
+        this.splitPairs(timbrages).forEach(pair => {
+            duration = duration.add(this.diff(pair[1], pair[0]));
         });
+
+        // return moment.duration(timbrages);
+        return duration;
     }
 
     public diff(t1: Time, t0: Time): Duration {

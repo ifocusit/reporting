@@ -1,7 +1,3 @@
-<p>
-    calendar works!
-</p>
-
 <div *ngIf="times$ | async as state">
 
     <ng-container *ngIf="state.loading;else timeList">
