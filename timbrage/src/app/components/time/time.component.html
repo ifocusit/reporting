@@ -1,5 +1,5 @@
-<div class="readonly">
-    <span (click)="startEditing()">{{time | moment: 'HH:mm'}}</span>
+<div class="readonly" (click)="startEditing()">
+    <span>{{time | moment: 'HH:mm'}}</span>
     <button mat-raised-button color="accent" mat-icon-button (click)="delete()">
         <mat-icon>delete</mat-icon>
     </button>

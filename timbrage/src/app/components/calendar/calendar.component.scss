@@ -1,0 +1,76 @@
+:host {
+  mat-card {
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    background-color: transparent;
+
+    mat-card-header {
+
+      /* Month header */
+      .month {
+        background: #1abc9c;
+        color: white;
+        font-size: 20px;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+
+        .year {
+          padding-left: 10px;
+        }
+      }
+
+      /* Weekdays (Mon-Sun) */
+      .weekdays {
+        background-color: #ddd;
+      }
+
+      .weekdays > * {
+        color: #666;
+        padding: 5px;
+      }
+
+      /* Days (1-31) */
+      .days {
+        background: #eee;
+      }
+
+      .days span {
+        margin-bottom: 5px;
+        font-size: 12px;
+        color: gray;
+        padding: 5px;
+      }
+
+      /* Highlight the "current" day */
+      .days .active {
+        background: #1abc9c;
+        color: white !important
+      }
+
+      .days .inactive {
+        color: lightgray;
+      }
+    }
+  }
+
+  mat-card-content {
+    #sumDay {
+      min-height: 2em;
+      font-weight: 700;
+      font-size: 2em;
+      padding: 10px;
+      border-bottom: 1px solid #dedede;
+    }
+
+    mat-card-actions {
+      position: fixed;
+      right: 20px;
+      top: 218px;
+    }
+  }
+}
+
+::ng-deep mat-card mat-card-header div.mat-card-header-text {
+  margin: 0;
+}

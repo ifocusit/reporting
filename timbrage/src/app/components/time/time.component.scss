@@ -53,8 +53,17 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #dedede;
 
   & > span:first-child {
     cursor: pointer;
+  }
+
+  button {
+    width: 30px;
+    height: 30px;
+    border-radius: 15%;
+    line-height: 32px;
   }
 }
