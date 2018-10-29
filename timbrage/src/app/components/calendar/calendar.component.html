@@ -1,6 +1,11 @@
 <mat-card fxLayout="column" class="mat-elevation-z0">
-    <mat-card-header fxFlex="60" class="mat-elevation-z1">
+    <mat-card-header fxFlex="60" class="mat-elevation-z1" *ngIf="selected$ | async as selected">
         <div>
+            <!--<div fxLayout="row" fxLayoutAlign="end center">
+                <button mat-button color="primary" (click)="exportMonth()">Export</button>
+                <a #export style="display: none">hidden link</a>
+            </div>-->
+
             <div class="month" fxLayout="row" fxLayoutAlign="space-around center">
                 <div class="prev" (click)="changeMonth(-1)" fxFlex="0 1 20px">&#10094;</div>
                 <div>{{selected.format('MMMM')}}<span class="year" fxFlex="4 1 auto">{{selected.format('YYYY')}}</span></div>
@@ -12,7 +17,7 @@
             </div>
 
             <div class="days" fxLayout="row wrap" fxLayoutAlign="space-around center">
-                <div *ngFor="let day of days" fxFlex="13.6" fxLayoutAlign="center">
+                <div *ngFor="let day of days$ | async" fxFlex="13.6" fxLayoutAlign="center">
                     <span *ngIf="selected.month() === day.month(); else readOnly"
                           [class.active]="selected.format('YYYYMMDD') === day.format('YYYYMMDD')"
                           (click)="select(day)">{{day.date()}}</span>
@@ -20,6 +25,11 @@
                 </div>
             </div>
         </div>
+        <mat-card-actions>
+            <button id="add" (click)="addTimbrage()" mat-fab color="accent">
+                <mat-icon>add</mat-icon>
+            </button>
+        </mat-card-actions>
     </mat-card-header>
 
     <mat-card-content fxFlexFill fxLayout="column">
@@ -32,10 +42,5 @@
             </div>
             <app-time *ngFor="let time of (times$ | async)" [model]="time"></app-time>
         </ng-template>
-        <mat-card-actions>
-            <button id="add" (click)="addTimbrage()" mat-fab color="accent">
-                <mat-icon>add</mat-icon>
-            </button>
-        </mat-card-actions>
     </mat-card-content>
 </mat-card>
