@@ -3,6 +3,8 @@ import {Action, Selector, State, StateContext} from "@ngxs/store";
 import {TimesClientService} from "../services/times-client.service";
 import {map, tap} from "rxjs/operators";
 import * as _ from 'lodash';
+import * as moment from "moment";
+import {Moment} from "moment";
 
 //**************************************************************************************/
 // STATE
@@ -11,7 +13,8 @@ import * as _ from 'lodash';
 // description de l'état
 export interface TimesStateModel {
     loading: boolean;
-    times: Time[]
+    date: string;
+    times: Time[];
 }
 
 //**************************************************************************************/
@@ -62,6 +65,7 @@ export class ReadedTimes {
 @State<TimesStateModel>({
     name: 'times',
     defaults: {
+        date: moment().format("YYYY-MM-DD"),
         loading: false,
         times: []
     }
@@ -79,8 +83,13 @@ export class TimesState {
     }
 
     @Selector()
-    static times(state: TimesStateModel) {
+    public static times(state: TimesStateModel) {
         return _.orderBy(state.times, ['time'], ['asc']);
+    }
+
+    @Selector()
+    public static date(state: TimesStateModel): Moment {
+        return moment(state.date);
     }
 
     // ACTIONS
@@ -90,6 +99,7 @@ export class TimesState {
         ctx.setState({
             ...ctx.getState(),
             loading: true,
+            date: action.date,
             times: []
         });
 

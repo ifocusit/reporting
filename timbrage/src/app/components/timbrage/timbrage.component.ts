@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from "@angular/core";
 import {CalculationService} from "../../services/calculation.service";
 import * as moment from "moment";
 import {Observable} from "rxjs/internal/Observable";
-import {Time} from "../../models/time.model";
+import {DATE_ISO_FORMAT, Time} from "../../models/time.model";
 import {AddTime, ReadTimes, TimesState} from "../../store/time.store";
 import {Select, Store} from '@ngxs/store';
 import {map, withLatestFrom} from "rxjs/operators";
@@ -27,7 +27,7 @@ export class TimbrageComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.startTimers();
-        this.store.dispatch(new ReadTimes(moment().format("YYYY-MM-DD")));
+        this.store.dispatch(new ReadTimes(moment().format(DATE_ISO_FORMAT)));
 
         this.sumDay$ = this.times$.pipe(
             map(times => this.calculationService.calculate(times)),

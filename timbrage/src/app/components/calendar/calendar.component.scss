@@ -7,6 +7,10 @@
 
     mat-card-header {
 
+      & > div {
+        width: 100%;
+      }
+
       /* Month header */
       .month {
         background: #1abc9c;
@@ -52,6 +56,12 @@
         color: lightgray;
       }
     }
+
+    mat-card-actions {
+      position: fixed;
+      right: 20px;
+      top: 218px;
+    }
   }
 
   mat-card-content {
@@ -61,12 +71,6 @@
       font-size: 2em;
       padding: 10px;
       border-bottom: 1px solid #dedede;
-    }
-
-    mat-card-actions {
-      position: fixed;
-      right: 20px;
-      top: 218px;
     }
   }
 }
