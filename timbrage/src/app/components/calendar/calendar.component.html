@@ -1,11 +1,6 @@
 <mat-card fxLayout="column" class="mat-elevation-z0">
     <mat-card-header fxFlex="60" class="mat-elevation-z1" *ngIf="selected$ | async as selected">
         <div>
-            <!--<div fxLayout="row" fxLayoutAlign="end center">
-                <button mat-button color="primary" (click)="exportMonth()">Export</button>
-                <a #export style="display: none">hidden link</a>
-            </div>-->
-
             <div class="month" fxLayout="row" fxLayoutAlign="space-around center">
                 <div class="prev" (click)="changeMonth(-1)" fxFlex="0 1 20px">&#10094;</div>
                 <div>{{selected.format('MMMM')}}<span class="year" fxFlex="4 1 auto">{{selected.format('YYYY')}}</span></div>
