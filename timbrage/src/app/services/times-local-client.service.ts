@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Observable} from "rxjs/internal/Observable";
-import {DATE_ISO_FORMAT, Time, TimeAdapter} from "../models/time.model";
-import {filter, map, mergeMap, switchMap, tap, toArray} from "rxjs/operators";
+import {DATE_ISO_FORMAT, MONTH_ISO_FORMAT, Time, TimeAdapter} from "../models/time.model";
+import {filter, map, switchMap, tap, toArray} from "rxjs/operators";
 import {v4 as uuid} from 'uuid';
 import {from, of} from 'rxjs';
 
@@ -14,7 +14,7 @@ export class TimesLocalClientService {
     }
 
     public read(date: string): Observable<Time[]> {
-        if (date.length > 7) {
+        if (date.length > MONTH_ISO_FORMAT.length) {
             return this.readDay(date);
         }
         const keys = [];
@@ -24,7 +24,7 @@ export class TimesLocalClientService {
         return from(keys)
             .pipe(
                 filter((key: string) => key.startsWith(date)),
-                mergeMap((day: string) => this.readDay(day))
+                switchMap((day: string) => this.readDay(day))
             );
     }
 

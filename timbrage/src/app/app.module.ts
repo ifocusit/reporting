@@ -30,6 +30,7 @@ import {TimesState} from "./store/time.store";
 import {MomentPipe} from "./pipes/moment.pipe";
 import {TimesClientService} from "./services/times-client.service";
 import {TimesLocalClientService} from "./services/times-local-client.service";
+import {CalendarState} from "./store/calendar.store";
 
 const appRoutes: Routes = [
     {path: 'timbrage', component: TimbrageComponent},
@@ -72,7 +73,7 @@ const appRoutes: Routes = [
         MatSelectModule,
         MatOptionModule,
         // ngxs
-        NgxsModule.forRoot([TimesState])
+        NgxsModule.forRoot([TimesState, CalendarState])
     ],
     providers: [
         {provide: LOCALE_ID, useValue: 'fr'},
