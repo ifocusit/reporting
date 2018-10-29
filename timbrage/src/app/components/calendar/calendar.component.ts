@@ -20,11 +20,10 @@ export class CalendarComponent implements OnInit {
 
     @Select(TimesState.times) times$: Observable<Time[]>;
     @Select(TimesState.date) selected$: Observable<Moment>;
+    @Select(TimesState.loading) loading$: Observable<Moment>;
     @Select(CalendarState.days) days$: Observable<Moment[]>;
 
     sumDay$: Observable<string>;
-
-    @ViewChild('export') private exportLink: ElementRef;
 
     constructor(private store: Store, private calculationService: CalculationService) {
     }
@@ -50,21 +49,5 @@ export class CalendarComponent implements OnInit {
         const selected = this.store.selectSnapshot(TimesState.date);
         const time = moment().date(selected.date()).month(selected.month()).year(selected.year());
         this.store.dispatch([new AddTime(new Time(time.format(DATETIME_ISO_FORMAT)))]);
-    }
-
-    exportMonth() {
-        /*const month = this.selected.format('YYYY-MM');
-        this.timeClient.read(month).subscribe(times => {
-            let csvContent = '';
-            times.forEach(time => csvContent += `${time.time}\r\n`);
-
-            let blob = new Blob([csvContent], {type: 'text/csv;charset=utf-8;'});
-            const url = URL.createObjectURL(blob);
-            const link = this.exportLink.nativeElement;
-            link.href = url;
-            link.download = `${month}.csv`;
-            link.click();
-            window.URL.revokeObjectURL(url);
-        });*/
     }
 }
