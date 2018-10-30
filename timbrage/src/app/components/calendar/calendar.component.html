@@ -13,14 +13,15 @@
 
             <div class="days" fxLayout="row wrap" fxLayoutAlign="space-around center">
                 <ng-container *ngFor="let day of days$ | async">
-                    <div *ngIf="selected.month() === day.month(); else readOnly"
-                         [class.active]="selected.format('YYYYMMDD') === day.format('YYYYMMDD')"
-                         (click)="select(day)" fxFlex="13.6" fxLayoutAlign="center"
+                    <div *ngIf="selected.month() === day.date.month(); else readOnly"
+                         [class.active]="selected.format('YYYYMMDD') === day.date.format('YYYYMMDD')"
+                         [class.with-times]="day.hasTimes"
+                         (click)="select(day.date)" fxFlex="13.6" fxLayoutAlign="center"
                     >
-                        {{day.date()}}
+                        {{day.date.date()}}
                     </div>
                     <ng-template #readOnly>
-                        <div class="inactive" fxFlex="13.6" fxLayoutAlign="center">{{day.date()}}</div>
+                        <div class="inactive" fxFlex="13.6" fxLayoutAlign="center">{{day.date.date()}}</div>
                     </ng-template>
                 </ng-container>
             </div>
