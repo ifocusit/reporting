@@ -13,7 +13,7 @@
 
       /* Month header */
       .month {
-        background: #1abc9c;
+        background-color: #606fc7;
         color: white;
         font-size: 20px;
         text-transform: uppercase;
@@ -39,28 +39,34 @@
         background: #eee;
       }
 
-      .days span {
-        margin-bottom: 5px;
-        font-size: 12px;
-        color: gray;
-        padding: 5px;
-      }
+      .days {
+        & > div {
+          margin-bottom: 5px;
+          font-size: 12px;
+          color: gray;
+          padding: 5px;
 
-      /* Highlight the "current" day */
-      .days .active {
-        background: #1abc9c;
-        color: white !important
-      }
+          &.active {
+            background: #606fc7;
+            color: white;
+          }
 
-      .days .inactive {
-        color: lightgray;
+          &.with-times {
+            background-color: #E1BEE7;
+            color: white;
+          }
+
+          &.inactive {
+            color: lightgray;
+          }
+        }
       }
     }
 
     mat-card-actions {
       position: fixed;
       right: 20px;
-      top: 218px;
+      top: 258px;
     }
   }
 
@@ -71,6 +77,10 @@
       font-size: 2em;
       padding: 10px;
       border-bottom: 1px solid #dedede;
+    }
+
+    app-time {
+      margin: 0 15px;
     }
   }
 }

@@ -6,6 +6,7 @@ import localeFrExtra from '@angular/common/locales/extra/fr';
 import {ExportService} from "./services/export.service";
 import {TimesState} from "./store/time.store";
 import {Store} from "@ngxs/store";
+import {ActivatedRouteSnapshot} from "@angular/router";
 
 @Component({
     selector: 'app-root',
@@ -43,6 +44,6 @@ export class AppComponent implements OnDestroy {
     }
 
     public showExport() {
-        return true;
+        return window.location.pathname.match('.*calendar.*');
     }
 }

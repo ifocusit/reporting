@@ -1,70 +1,71 @@
 :host {
   max-height: 220px;
   overflow: hidden;
-}
 
-.picker-wrapper {
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  background: white;
-  z-index: 1;
-
-  .picker-toolbar {
+  .picker-wrapper {
     display: flex;
-    justify-content: flex-end;
-    height: 40px;
-  }
+    width: 100%;
+    flex-direction: column;
 
-  .picker-columns {
-    display: flex;
-    justify-content: flex-end;
-    height: 180px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background: white;
+    z-index: 1;
 
-    .picker-col {
-      overflow: auto;
+    .picker-toolbar {
+      display: flex;
+      justify-content: flex-end;
+      height: 40px;
+    }
 
-      button {
-        display: flex;
-        justify-content: center;
-        font-size: 20px;
-        font-weight: 400;
+    .picker-columns {
+      display: flex;
+      justify-content: flex-end;
+      height: 180px;
+
+      .picker-col {
+        overflow: auto;
+
+        button {
+          display: flex;
+          justify-content: center;
+          font-size: 20px;
+          font-weight: 400;
+        }
       }
     }
   }
-}
 
-.backdrop {
-  z-index: 1;
-  background-color: black;
-  height: 100vh;
-  width: 100vw;
-  opacity: 0.4;
-  position: fixed;
-  top: 0;
-  left: 0;
-}
-
-.readonly {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  border-bottom: 1px solid #dedede;
-
-  & > span:first-child {
-    cursor: pointer;
-    width: 90%;
+  .backdrop {
+    z-index: 1;
+    background-color: black;
+    height: 100vh;
+    width: 100vw;
+    opacity: 0.4;
+    position: fixed;
+    top: 0;
+    left: 0;
   }
 
-  button {
-    width: 30px;
-    height: 30px;
-    border-radius: 15%;
-    line-height: 32px;
+  .readonly {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    border-bottom: 1px solid #dedede;
+
+    & > span:first-child {
+      cursor: pointer;
+      width: 90%;
+      line-height: 36px;
+    }
+
+    /*button {
+      width: 30px;
+      height: 30px;
+      border-radius: 15%;
+      line-height: 30px;
+    }*/
   }
 }
