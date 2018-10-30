@@ -1,18 +1,25 @@
-mat-sidenav {
-  width: 170px;
-}
+:host {
+  mat-sidenav {
+    width: 170px;
+    padding: 5px 10px;
+  }
 
-#footer {
-  width: 100%;
-  bottom: 0;
-  left: 0;
-  position: fixed;
+  mat-form-field {
+    max-width: 100%;
+  }
 
-  & > * {
+  #footer {
     width: 100%;
+    bottom: 0;
+    left: 0;
+    position: fixed;
 
-    .mat-tab-link, .mat-ink-bar {
+    & > * {
       width: 100%;
+
+      .mat-tab-link, .mat-ink-bar {
+        width: 100%;
+      }
     }
   }
 }
