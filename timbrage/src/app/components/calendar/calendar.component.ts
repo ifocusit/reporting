@@ -7,7 +7,7 @@ import {Moment} from "moment";
 import {DATETIME_ISO_FORMAT, Time} from "../../models/time.model";
 import {map} from "rxjs/operators";
 import {CalculationService} from "../../services/calculation.service";
-import {CalendarState, MoveMonth, SelectDate} from "../../store/calendar.store";
+import {CalendarDayModel, CalendarState, MoveMonth, SelectDate} from "../../store/calendar.store";
 
 @Component({
     selector: 'app-calendar',
@@ -21,7 +21,7 @@ export class CalendarComponent implements OnInit {
     @Select(TimesState.times) times$: Observable<Time[]>;
     @Select(TimesState.date) selected$: Observable<Moment>;
     @Select(TimesState.loading) loading$: Observable<Moment>;
-    @Select(CalendarState.days) days$: Observable<Moment[]>;
+    @Select(CalendarState.days) days$: Observable<CalendarDayModel[]>;
 
     sumDay$: Observable<string>;
 

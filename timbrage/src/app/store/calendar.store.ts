@@ -11,10 +11,14 @@ import {DATE_ISO_FORMAT, MONTH_ISO_FORMAT, Time, TimeAdapter} from "../models/ti
 import {map, toArray} from "rxjs/operators";
 import {ReadTimes, TimesState} from "./time.store";
 
+export interface CalendarDayModel {
+    date: Moment;
+    hasTimes: boolean;
+}
+
 export interface CalendarStateModel {
     loading: boolean;
-    days: Moment[];
-    monthTimes: string[];
+    days: CalendarDayModel[];
 }
 
 //**************************************************************************************/
@@ -49,8 +53,7 @@ export class MonthTimesReaded {
     name: 'calendar',
     defaults: {
         loading: false,
-        days: [],
-        monthTimes: []
+        days: []
     },
     children: [TimesState]
 })
@@ -82,8 +85,7 @@ export class CalendarState {
         ctx.setState({
             ...ctx.getState(),
             loading: true,
-            days: [],
-            monthTimes: []
+            days: []
         });
 
         // load month
@@ -102,11 +104,14 @@ export class CalendarState {
             .forEach(times => daysWithTimes.push(new TimeAdapter(times[0]).getDay()));
 
         const state = ctx.getState();
+        const days = CalendarState.getDaysInMonth(action.date);
         ctx.setState({
             ...state,
             loading: false,
-            monthTimes: daysWithTimes,
-            days: CalendarState.getDaysInMonth(action.date)
+            days: days.map(date => ({
+                date: date,
+                hasTimes: !!daysWithTimes.find(dateWithTimes => dateWithTimes === date.format(DATE_ISO_FORMAT))
+            }))
         });
 
         return ctx.dispatch(new ReadTimes(action.date));
