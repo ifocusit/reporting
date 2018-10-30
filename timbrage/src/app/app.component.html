@@ -1,24 +1,37 @@
-<div fxLayout="column" fxLayoutAlign="start stretch" fxFlexFill class="wrapper">
-    <mat-toolbar id="header" color="primary" class="mat-elevation-z6" fxLayout="row" fxLayoutAlign="space-between center">
-        <h1>Timbrage</h1>
-        <button mat-icon-button (click)="exportMonth()" *ngIf="showExport()">
-            <mat-icon>assignment_returned</mat-icon>
-        </button>
-        <a #export style="display: none">hidden link</a>
-    </mat-toolbar>
+<mat-toolbar color="primary" class="mat-elevation-z6" fxLayout="row" fxLayoutAlign="space-between center">
+    <button mat-icon-button (click)="sidenav.toggle()" *ngIf="calendarPage()">
+        <mat-icon>menu</mat-icon>
+    </button>
+    <h1 fxFlex="calc(100%-80px)">Timbrage</h1>
+    <button mat-icon-button (click)="exportMonth()" *ngIf="calendarPage()">
+        <mat-icon>assignment_returned</mat-icon>
+    </button>
+    <a #export style="display: none">hidden link</a>
+</mat-toolbar>
+<mat-sidenav-container class="example-container">
+    <mat-sidenav #sidenav mode="side" closed role="navigation">
+        <mat-nav-list>
+        </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
 
-    <div id="content">
-        <div>
-            <router-outlet></router-outlet>
+        <div fxLayout="column" fxLayoutAlign="start stretch" fxFlexFill class="wrapper">
+
+            <div id="content">
+                <div>
+                    <router-outlet></router-outlet>
+                </div>
+            </div>
+
+            <mat-toolbar id="footer">
+                <nav mat-tab-nav-bar>
+                    <a mat-tab-link *ngFor="let link of navLinks"
+                       [routerLink]="link.path" routerLinkActive #rla="routerLinkActive" [active]="rla.isActive">
+                        {{link.label}}
+                    </a>
+                </nav>
+            </mat-toolbar>
         </div>
-    </div>
 
-    <mat-toolbar id="footer">
-        <nav mat-tab-nav-bar>
-            <a mat-tab-link *ngFor="let link of navLinks"
-               [routerLink]="link.path" routerLinkActive #rla="routerLinkActive" [active]="rla.isActive">
-                {{link.label}}
-            </a>
-        </nav>
-    </mat-toolbar>
-</div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

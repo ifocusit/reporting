@@ -43,7 +43,6 @@
       #sumDay {
         float: right;
         position: relative;
-        top: 1em;
 
         & > div:nth-child(1) {
           text-align: end;
@@ -60,7 +59,7 @@
 
       #now {
         font-size: 2em;
-        padding: 1em 2em 0.2em 1em;
+        padding: 1em 2em 0.2em 0.3em;
 
         @media screen and (max-width: 320px) {
           padding-left: 0;
