@@ -1,46 +1,31 @@
 import {Injectable} from '@angular/core';
 import * as moment from "moment";
 import {Moment} from "moment";
-
-export class Settings {
-  endOfDay = {
-    hour: 18,
-    minute: 0,
-    second: 0
-  };
-
-  startOfDay = {
-    hour: 8,
-    minute: 0,
-    second: 0
-  };
-
-  saveMissings = true;
-}
+import {SettingsState, SettingsStateModel} from "../store/settings.store";
+import {Store} from "@ngxs/store";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class SettingsService {
 
-  private settings = new Settings();
+    constructor(private store: Store) {
+    }
 
-  constructor() {
-  }
+    public get(): SettingsStateModel {
+        return this.store.selectSnapshot(SettingsState);
+    }
 
-  public get(): Settings {
-    return this.settings;
-  }
+    public getEndOfDay(): Moment {
+        return this.applyEndOfDay();
+    }
 
-  public getEndOfDay(): Moment {
-    return this.applyEndOfDay();
-  }
+    public applyEndOfDay(date: Moment = moment()): Moment {
+        const state = this.get();
+        date.hour(state.endOfDay.hour);
+        date.minute(state.endOfDay.minute);
+        date.second(0);
 
-  public applyEndOfDay(date: Moment = moment()): Moment {
-    date.hour(this.settings.endOfDay.hour);
-    date.minute(this.settings.endOfDay.minute);
-    date.second(this.settings.endOfDay.second);
-
-    return date;
-  }
+        return date;
+    }
 }
