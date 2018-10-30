@@ -11,6 +11,12 @@
 <mat-sidenav-container class="example-container">
     <mat-sidenav #sidenav mode="side" closed role="navigation">
         <mat-nav-list>
+            <form>
+                <mat-form-field>
+                    <input matInput placeholder="Format de la date" [formControl]="formatFormControl" (change)="setExportFormat()">
+                    <mat-error *ngIf="formatFormControl.hasError('required')">Export format is <strong>required</strong></mat-error>
+                </mat-form-field>
+            </form>
         </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>

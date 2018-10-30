@@ -10,6 +10,7 @@ import {
     MatCardModule,
     MatFormFieldModule,
     MatIconModule,
+    MatInputModule,
     MatListModule,
     MatOptionModule,
     MatSelectModule,
@@ -23,7 +24,7 @@ import {RouterModule, Routes} from "@angular/router";
 import {CalendarComponent} from './components/calendar/calendar.component';
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {TimeComponent} from './components/time/time.component';
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {NgxsModule} from "@ngxs/store";
 import {TimesState} from "./store/time.store";
@@ -31,6 +32,7 @@ import {MomentPipe} from "./pipes/moment.pipe";
 import {TimesClientService} from "./services/times-client.service";
 import {TimesLocalClientService} from "./services/times-local-client.service";
 import {CalendarState} from "./store/calendar.store";
+import {SettingsState} from "./store/settings.store";
 
 const appRoutes: Routes = [
     {path: 'timbrage', component: TimbrageComponent},
@@ -56,6 +58,7 @@ const appRoutes: Routes = [
         RouterModule.forRoot(appRoutes),
         HttpClientModule,
         ReactiveFormsModule,
+        FormsModule,
         // pwa
         ServiceWorkerModule.register('/ngsw-worker.js', {enabled: environment.production}),
         // material
@@ -72,8 +75,9 @@ const appRoutes: Routes = [
         MatFormFieldModule,
         MatSelectModule,
         MatOptionModule,
+        MatInputModule,
         // ngxs
-        NgxsModule.forRoot([TimesState, CalendarState])
+        NgxsModule.forRoot([TimesState, CalendarState, SettingsState])
     ],
     providers: [
         {provide: LOCALE_ID, useValue: 'fr'},
