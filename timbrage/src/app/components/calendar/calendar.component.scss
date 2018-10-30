@@ -46,13 +46,13 @@
           color: gray;
           padding: 5px;
 
-          &.active {
-            background: #606fc7;
-            color: white;
-          }
-
           &.with-times {
             background-color: #E1BEE7;
+            color: white;
+          }
+          
+          &.active {
+            background: #606fc7;
             color: white;
           }
 
