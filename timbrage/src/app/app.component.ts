@@ -6,7 +6,7 @@ import localeFrExtra from '@angular/common/locales/extra/fr';
 import {ExportService} from "./services/export.service";
 import {TimesState} from "./store/time.store";
 import {Store} from "@ngxs/store";
-import {ActivatedRouteSnapshot} from "@angular/router";
+import * as moment from "moment";
 
 @Component({
     selector: 'app-root',
@@ -28,6 +28,7 @@ export class AppComponent implements OnDestroy {
                 private store: Store, private exportService: ExportService) {
 
         registerLocaleData(localeFr, 'fr', localeFrExtra);
+        moment.locale('fr');
 
         this.mobileQuery = media.matchMedia('(max-width: 600px)');
         this._mobileQueryListener = () => changeDetectorRef.detectChanges();
@@ -43,7 +44,7 @@ export class AppComponent implements OnDestroy {
         this.exportService.exportMonth(date, this.exportLink);
     }
 
-    public showExport() {
+    public calendarPage() {
         return window.location.pathname.match('.*calendar.*');
     }
 }

@@ -1,9 +1,9 @@
 <mat-card fxLayout="column" class="mat-elevation-z0">
-    <mat-card-header fxFlex="60" class="mat-elevation-z1" *ngIf="selected$ | async as selected">
+    <mat-card-header fxFlex="60" class="mat-elevation-z1" *ngIf="selected$ | async as selectedDate">
         <div>
             <div class="month" fxLayout="row" fxLayoutAlign="space-around center">
                 <div class="prev" (click)="changeMonth(-1)" fxFlex="0 1 20px">&#10094;</div>
-                <div>{{selected.format('MMMM')}}<span class="year" fxFlex="4 1 auto">{{selected.format('YYYY')}}</span></div>
+                <div>{{selectedDate | moment: 'MMMM YYYY'}}</div>
                 <div class="next" (click)="changeMonth(+1)" fxFlex="0 1 20px">&#10095;</div>
             </div>
 
@@ -13,8 +13,8 @@
 
             <div class="days" fxLayout="row wrap" fxLayoutAlign="space-around center">
                 <ng-container *ngFor="let day of days$ | async">
-                    <div *ngIf="selected.month() === day.date.month(); else readOnly"
-                         [class.active]="selected.format('YYYYMMDD') === day.date.format('YYYYMMDD')"
+                    <div *ngIf="selectedDate.month() === day.date.month(); else readOnly"
+                         [class.active]="selectedDate.format('YYYYMMDD') === day.date.format('YYYYMMDD')"
                          [class.with-times]="day.hasTimes"
                          (click)="select(day.date)" fxFlex="13.6" fxLayoutAlign="center"
                     >
