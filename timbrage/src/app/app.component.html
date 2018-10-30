@@ -1,9 +1,9 @@
 <div fxLayout="column" fxLayoutAlign="start stretch" fxFlexFill class="wrapper">
-    <mat-toolbar id="header" color="primary" class="mat-elevation-z6" fxFlex="5">
+    <mat-toolbar id="header" color="primary" class="mat-elevation-z6" fxLayout="row" fxLayoutAlign="space-between center">
         <h1>Timbrage</h1>
-        <span class="spacer"></span>
-        <mat-icon>favorite</mat-icon>
-        <button mat-button color="primary" (click)="exportMonth()">export</button>
+        <button mat-icon-button (click)="exportMonth()" *ngIf="showExport()">
+            <mat-icon>assignment_returned</mat-icon>
+        </button>
         <a #export style="display: none">hidden link</a>
     </mat-toolbar>
 
@@ -13,7 +13,7 @@
         </div>
     </div>
 
-    <mat-toolbar id="footer" fxFlex="5">
+    <mat-toolbar id="footer">
         <nav mat-tab-nav-bar>
             <a mat-tab-link *ngFor="let link of navLinks"
                [routerLink]="link.path" routerLinkActive #rla="routerLinkActive" [active]="rla.isActive">

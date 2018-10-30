@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Observable} from "rxjs/internal/Observable";
 import {Select, Store} from "@ngxs/store";
 import {AddTime, TimesState} from "../../store/time.store";

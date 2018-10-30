@@ -1,7 +1,7 @@
 <div class="readonly">
     <span (click)="startEditing()">{{time | moment: 'HH:mm'}}</span>
-    <button mat-raised-button color="accent" mat-icon-button (click)="delete()">
-        <mat-icon>delete</mat-icon>
+    <button mat-icon-button color="accent" (click)="delete()">
+        <mat-icon>delete_forever</mat-icon>
     </button>
 </div>
 <div class="backdrop" *ngIf="editing"></div>
