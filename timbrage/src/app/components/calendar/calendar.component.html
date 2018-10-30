@@ -12,16 +12,21 @@
             </div>
 
             <div class="days" fxLayout="row wrap" fxLayoutAlign="space-around center">
-                <div *ngFor="let day of days$ | async" fxFlex="13.6" fxLayoutAlign="center">
-                    <span *ngIf="selected.month() === day.month(); else readOnly"
-                          [class.active]="selected.format('YYYYMMDD') === day.format('YYYYMMDD')"
-                          (click)="select(day)">{{day.date()}}</span>
-                    <ng-template #readOnly><span class="inactive">{{day.date()}}</span></ng-template>
-                </div>
+                <ng-container *ngFor="let day of days$ | async">
+                    <div *ngIf="selected.month() === day.month(); else readOnly"
+                         [class.active]="selected.format('YYYYMMDD') === day.format('YYYYMMDD')"
+                         (click)="select(day)" fxFlex="13.6" fxLayoutAlign="center"
+                    >
+                        {{day.date()}}
+                    </div>
+                    <ng-template #readOnly>
+                        <div class="inactive" fxFlex="13.6" fxLayoutAlign="center">{{day.date()}}</div>
+                    </ng-template>
+                </ng-container>
             </div>
         </div>
         <mat-card-actions>
-            <button id="add" (click)="addTimbrage()" mat-fab color="accent">
+            <button id="add" (click)="addTimbrage()" mat-mini-fab color="accent">
                 <mat-icon>add</mat-icon>
             </button>
         </mat-card-actions>
