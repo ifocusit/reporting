@@ -1,5 +1,6 @@
-import {DATETIME_ISO_FORMAT} from "../models/time.model";
 import {Action, State, StateContext} from "@ngxs/store";
+import {of} from "rxjs";
+import {filter, map, tap} from "rxjs/operators";
 
 export interface SettingsTimeStateModel {
     hour: number;
@@ -13,6 +14,19 @@ export interface SettingsStateModel {
     exportFormat: string;
 }
 
+export class LoadSettings {
+    static readonly type = '[Settings] Load';
+
+    constructor() {
+    }
+}
+
+export class SaveSettings {
+    static readonly type = '[Settings] Save';
+
+    constructor() {
+    }
+}
 
 export class SetExportFormat {
     static readonly type = '[Settings] Set Export Format';
@@ -33,13 +47,30 @@ export class SetExportFormat {
                 minute: 0
             },
             saveMissings: true,
-            exportFormat: DATETIME_ISO_FORMAT
+            exportFormat: 'YYYY-MM-DD HH:mm'
         }
     }
 )
 export class SettingsState {
+    private static SETTINGS_KEY = 'timbrage-settings';
 
     constructor() {
+    }
+
+    @Action(LoadSettings)
+    loadSettings(ctx: StateContext<SettingsStateModel>) {
+        return of(localStorage.getItem(SettingsState.SETTINGS_KEY))
+            .pipe(
+                tap(value => console.log("item=" + value)),
+                filter(value => !!value),
+                map(json => JSON.parse(json)),
+                tap(settings => ctx.setState(settings))
+            );
+    }
+
+    @Action(SaveSettings)
+    saveSettings(ctx: StateContext<SettingsStateModel>) {
+        localStorage.setItem(SettingsState.SETTINGS_KEY, JSON.stringify(ctx.getState()));
     }
 
     @Action(SetExportFormat)
@@ -48,5 +79,7 @@ export class SettingsState {
             ...ctx.getState(),
             exportFormat: action.format
         });
+
+        return ctx.dispatch(new SaveSettings());
     }
 }
