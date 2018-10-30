@@ -5,10 +5,9 @@ import localeFr from '@angular/common/locales/fr';
 import localeFrExtra from '@angular/common/locales/extra/fr';
 import {ExportService} from "./services/export.service";
 import {TimesState} from "./store/time.store";
-import {Select, Store} from "@ngxs/store";
+import {Store} from "@ngxs/store";
 import * as moment from "moment";
-import {SetExportFormat, SettingsState, SettingsStateModel} from "./store/settings.store";
-import {Observable} from "rxjs/internal/Observable";
+import {LoadSettings, SetExportFormat} from "./store/settings.store";
 import {FormControl, Validators} from "@angular/forms";
 
 @Component({
@@ -27,7 +26,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     @ViewChild('export') private exportLink: ElementRef;
 
-    public formatFormControl;
+    public formatFormControl = new FormControl('', [Validators.required]);
 
     constructor(private changeDetectorRef: ChangeDetectorRef, private media: MediaMatcher,
                 private store: Store, private exportService: ExportService) {
@@ -41,8 +40,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        const state = this.store.selectSnapshot(SettingsState);
-        this.formatFormControl = new FormControl(state.exportFormat, [Validators.required]);
+        this.store.dispatch(new LoadSettings()).subscribe(state => this.formatFormControl.setValue(state.settings.exportFormat));
     }
 
     ngOnDestroy(): void {
