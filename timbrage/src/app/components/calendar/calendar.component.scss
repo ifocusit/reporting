@@ -34,17 +34,20 @@
         padding: 5px;
       }
 
+      .prev, .next {
+        cursor: pointer;
+      }
+
       /* Days (1-31) */
       .days {
         background: #eee;
-      }
 
-      .days {
         & > div {
           margin-bottom: 5px;
           font-size: 12px;
           color: gray;
           padding: 5px;
+          cursor: pointer;
 
           &.with-times {
             background-color: #E1BEE7;
@@ -58,6 +61,7 @@
 
           &.inactive {
             color: lightgray;
+            cursor: default;
           }
         }
       }
@@ -77,6 +81,15 @@
       font-size: 2em;
       padding: 10px;
       border-bottom: 1px solid #dedede;
+      position: fixed;
+      top: 256px;
+      background-color: white;
+      width: 100%;
+      z-index: 1;
+    }
+
+    #times {
+      padding-top: 20px;
     }
 
     app-time {
