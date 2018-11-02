@@ -7,19 +7,4 @@
   mat-form-field {
     max-width: 100%;
   }
-
-  #footer {
-    width: 100%;
-    bottom: 0;
-    left: 0;
-    position: fixed;
-
-    & > * {
-      width: 100%;
-
-      .mat-tab-link, .mat-ink-bar {
-        width: 100%;
-      }
-    }
-  }
 }

@@ -41,7 +41,9 @@
             <div id="sumDay" fxFlex="row" fxLayoutAlign="start center">
                 <span>{{ sumDay$ | async }}</span>
             </div>
-            <app-time *ngFor="let time of (times$ | async)" [model]="time"></app-time>
+            <div id="times">
+                <app-time *ngFor="let time of (times$ | async)" [model]="time"></app-time>
+            </div>
         </ng-template>
     </mat-card-content>
 </mat-card>

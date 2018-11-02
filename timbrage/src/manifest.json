@@ -4,9 +4,20 @@
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",
+  "orientation" : "portrait",
   "scope": "/",
   "start_url": "/",
   "icons": [
+    {
+      "src": "assets/icons/drawable-ldpi-icon.png",
+      "sizes": "36x36",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icons/drawable-mdpi-icon.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
     {
       "src": "assets/icons/drawable-hdpi-icon.png",
       "sizes": "72x72",
