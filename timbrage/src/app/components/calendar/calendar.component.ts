@@ -3,7 +3,7 @@ import {Observable} from "rxjs/internal/Observable";
 import {Select, Store} from "@ngxs/store";
 import {AddTime, TimesState} from "../../store/time.store";
 import * as moment from "moment";
-import {Moment} from "moment";
+import {Duration, Moment} from "moment";
 import {DATETIME_ISO_FORMAT, Time} from "../../models/time.model";
 import {map} from "rxjs/operators";
 import {CalculationService} from "../../services/calculation.service";
@@ -23,15 +23,14 @@ export class CalendarComponent implements OnInit {
     @Select(TimesState.loading) loading$: Observable<Moment>;
     @Select(CalendarState.days) days$: Observable<CalendarDayModel[]>;
 
-    sumDay$: Observable<string>;
+    sumDay$: Observable<Duration>;
 
     constructor(private store: Store, private calculationService: CalculationService) {
     }
 
     ngOnInit() {
         this.sumDay$ = this.times$.pipe(
-            map(times => this.calculationService.calculate(times, false)),
-            map(duration => duration.toISOString().replace("P", "").replace("T", "").toLowerCase())
+            map(times => this.calculationService.calculate(times, false))
         );
 
         this.select(moment());
