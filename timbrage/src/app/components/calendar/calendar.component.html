@@ -39,7 +39,7 @@
         </ng-container>
         <ng-template #timeList>
             <div id="sumDay" fxFlex="row" fxLayoutAlign="start center">
-                <span>{{ sumDay$ | async }}</span>
+                <span>{{ (sumDay$ | async) | duration }}</span>
             </div>
             <div id="times">
                 <app-time *ngFor="let time of (times$ | async)" [model]="time"></app-time>
