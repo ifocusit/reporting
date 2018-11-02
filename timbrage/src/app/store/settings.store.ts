@@ -1,6 +1,6 @@
 import {Action, State, StateContext} from "@ngxs/store";
 import {of} from "rxjs";
-import {filter, map, tap} from "rxjs/operators";
+import {defaultIfEmpty, filter, map, tap} from "rxjs/operators";
 
 export interface SettingsTimeStateModel {
     hour: number;
@@ -64,7 +64,8 @@ export class SettingsState {
                 tap(value => console.log("item=" + value)),
                 filter(value => !!value),
                 map(json => JSON.parse(json)),
-                tap(settings => ctx.setState(settings))
+                defaultIfEmpty(ctx.getState()),
+                tap(settings => ctx.setState(settings)),
             );
     }
 

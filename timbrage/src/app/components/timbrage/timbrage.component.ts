@@ -6,6 +6,7 @@ import {DATE_ISO_FORMAT, Time} from "../../models/time.model";
 import {AddTime, ReadTimes, TimesState} from "../../store/time.store";
 import {Select, Store} from '@ngxs/store';
 import {map, withLatestFrom} from "rxjs/operators";
+import {Duration} from "moment";
 
 
 @Component({
@@ -20,7 +21,7 @@ export class TimbrageComponent implements OnInit, OnDestroy {
     @Select(TimesState.times) times$: Observable<Time[]>;
     @Select(TimesState.loading) loading$: Observable<boolean>;
 
-    sumDay$: Observable<string>;
+    sumDay$: Observable<Duration>;
 
     constructor(private calculationService: CalculationService, private store: Store) {
     }
@@ -30,8 +31,7 @@ export class TimbrageComponent implements OnInit, OnDestroy {
         this.store.dispatch(new ReadTimes(moment().format(DATE_ISO_FORMAT)));
 
         this.sumDay$ = this.times$.pipe(
-            map(times => this.calculationService.calculate(times)),
-            map(duration => duration.toISOString().replace("PT", "").toLowerCase())
+            map(times => this.calculationService.calculate(times))
         );
     }
 

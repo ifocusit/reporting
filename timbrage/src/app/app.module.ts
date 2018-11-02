@@ -33,6 +33,7 @@ import {TimesClientService} from "./services/times-client.service";
 import {TimesLocalClientService} from "./services/times-local-client.service";
 import {CalendarState} from "./store/calendar.store";
 import {SettingsState} from "./store/settings.store";
+import { DurationPipe } from './pipes/duration.pipe';
 
 const appRoutes: Routes = [
     {path: 'timbrage', component: TimbrageComponent},
@@ -51,7 +52,8 @@ const appRoutes: Routes = [
         TimbrageComponent,
         CalendarComponent,
         TimeComponent,
-        MomentPipe
+        MomentPipe,
+        DurationPipe
     ],
     imports: [
         BrowserModule,
