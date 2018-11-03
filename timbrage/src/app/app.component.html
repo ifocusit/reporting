@@ -8,7 +8,7 @@
     </button>
     <a #export style="display: none">hidden link</a>
 </mat-toolbar>
-<mat-sidenav-container class="example-container">
+<mat-sidenav-container>
     <mat-sidenav #sidenav mode="side" role="navigation">
         <mat-nav-list>
             <form>
@@ -29,7 +29,7 @@
 
         <div fxLayout="column" fxLayoutAlign="start stretch" fxFlexFill class="wrapper">
 
-            <div id="content">
+            <div id="main" role="main">
                 <div>
                     <router-outlet></router-outlet>
                 </div>
