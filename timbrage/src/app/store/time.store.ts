@@ -1,10 +1,11 @@
 import {Time} from "../models/time.model";
 import {Action, Selector, State, StateContext} from "@ngxs/store";
 import {TimesClientService} from "../services/times-client.service";
-import {map, tap} from "rxjs/operators";
+import {defaultIfEmpty, filter, map, switchMap, tap, toArray} from "rxjs/operators";
 import * as _ from 'lodash';
 import * as moment from "moment";
 import {Moment} from "moment";
+import {from} from "rxjs";
 
 //**************************************************************************************/
 // STATE
@@ -29,6 +30,13 @@ export class AddTime {
     }
 }
 
+export class AddTimes {
+    static readonly type = '[Time] Add Times';
+
+    constructor(public times: Time[]) {
+    }
+}
+
 export class UpdateTime {
     static readonly type = '[Time] Update Time';
 
@@ -40,6 +48,13 @@ export class DeleteTime {
     static readonly type = '[Time] Delete Time';
 
     constructor(public time: Time) {
+    }
+}
+
+export class DeleteTimes {
+    static readonly type = '[Time] Delete Times';
+
+    constructor(public times: Time[]) {
     }
 }
 
@@ -126,16 +141,45 @@ export class TimesState {
             loading: true
         });
         return this.timeClient.create(action.time).pipe(
-            map((time: Time) => {
-                ctx.setState({
+            filter(time => time.time.startsWith(state.date)),
+            tap(time => ctx.setState({
                     ...state,
                     loading: false,
                     times: [
                         ...state.times,
                         time
                     ]
-                });
-            })
+                })
+            ),
+            defaultIfEmpty(ctx.setState({
+                ...state,
+                loading: false
+            }))
+        );
+    }
+
+    @Action(AddTimes)
+    addTimes(ctx: StateContext<TimesStateModel>, action: AddTimes) {
+        const state = ctx.getState();
+        ctx.setState({
+            ...state,
+            loading: true
+        });
+        return from(action.times).pipe(
+            switchMap(time => this.timeClient.create(time)),
+            filter(time => time.time.startsWith(state.date)),
+            toArray(),
+            tap(times => ctx.setState({
+                ...state,
+                loading: false,
+                times: [
+                    ..._.uniqBy([...state.times, ...times], 'time')
+                ]
+            })),
+            defaultIfEmpty(ctx.setState({
+                ...state,
+                loading: false
+            }))
         );
     }
 
@@ -172,6 +216,14 @@ export class TimesState {
                     times: state.times.filter(time => time.id !== action.time.id)
                 });
             })
+        );
+    }
+
+    @Action(DeleteTimes)
+    deleteTimes(ctx: StateContext<TimesStateModel>, action: DeleteTimes) {
+        return from(action.times).pipe(
+            switchMap(time => ctx.dispatch(new DeleteTime(time))),
+            toArray()
         );
     }
 }

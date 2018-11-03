@@ -61,7 +61,6 @@ export class SettingsState {
     loadSettings(ctx: StateContext<SettingsStateModel>) {
         return of(localStorage.getItem(SettingsState.SETTINGS_KEY))
             .pipe(
-                tap(value => console.log("item=" + value)),
                 filter(value => !!value),
                 map(json => JSON.parse(json)),
                 defaultIfEmpty(ctx.getState()),

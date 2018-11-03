@@ -4,11 +4,12 @@ import {registerLocaleData} from "@angular/common";
 import localeFr from '@angular/common/locales/fr';
 import localeFrExtra from '@angular/common/locales/extra/fr';
 import {ExportService} from "./services/export.service";
-import {TimesState} from "./store/time.store";
+import {AddTimes, DeleteTimes, TimesState} from "./store/time.store";
 import {Store} from "@ngxs/store";
 import * as moment from "moment";
 import {LoadSettings, SetExportFormat} from "./store/settings.store";
 import {FormControl, Validators} from "@angular/forms";
+import {Time, TimeAdapter} from "./models/time.model";
 
 @Component({
     selector: 'app-root',
@@ -25,8 +26,10 @@ export class AppComponent implements OnInit, OnDestroy {
     private _mobileQueryListener: () => void;
 
     @ViewChild('export') private exportLink: ElementRef;
+    @ViewChild('fileSelector') private fileSelector: ElementRef;
 
     public formatFormControl = new FormControl('', [Validators.required]);
+    private times: Time[];
 
     constructor(private changeDetectorRef: ChangeDetectorRef, private media: MediaMatcher,
                 private store: Store, private exportService: ExportService) {
@@ -58,5 +61,29 @@ export class AppComponent implements OnInit, OnDestroy {
 
     public setExportFormat() {
         this.store.dispatch(new SetExportFormat(this.formatFormControl.value));
+    }
+
+    public selectFile() {
+        this.fileSelector.nativeElement.click();
+    }
+
+    public fileChanged(e) {
+        const file = e.target.files[0];
+        let reader = new FileReader();
+        reader.onload = () => {
+            this.times = [];
+            reader.result.split('\r\n').forEach(line => {
+                this.times.push(TimeAdapter.createTime(line));
+            });
+            this.times = this.times.filter(time => !!time);
+            this.store.dispatch(new AddTimes(this.times));
+        };
+        reader.readAsText(file);
+    }
+
+    public cancelImport() {
+        if (this.times) {
+            this.store.dispatch(new DeleteTimes(this.times)).subscribe(() => this.times = undefined);
+        }
     }
 }

@@ -16,6 +16,12 @@
                     <input matInput placeholder="Format de la date" [formControl]="formatFormControl" (change)="setExportFormat()">
                     <mat-error *ngIf="formatFormControl.hasError('required')">Export format is <strong>required</strong></mat-error>
                 </mat-form-field>
+                <mat-form-field>
+                    <input matInput placeholder="Importer" disabled>
+                    <mat-icon matSuffix color="primary" (click)="selectFile()">attach_file</mat-icon>
+                </mat-form-field>
+                <button mat-raised-button (click)="cancelImport()" *ngIf="times">Annuler l'import</button>
+                <input #fileSelector type="file" (change)="fileChanged($event)" style="display: none">
             </form>
         </mat-nav-list>
     </mat-sidenav>

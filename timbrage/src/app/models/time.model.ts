@@ -4,17 +4,28 @@ import {Moment} from "moment";
 export const DATETIME_ISO_FORMAT = "YYYY-MM-DDTHH:mm";
 export const DATE_ISO_FORMAT = "YYYY-MM-DD";
 export const MONTH_ISO_FORMAT = "YYYY-MM";
-const DATETIME_FORMAT = "YYYY-MM-DD HH:mm";
 
-export class Time {
-
-    public constructor(public time: string = moment().format(DATETIME_ISO_FORMAT), public id?: string) {
-    }
+export interface Time {
+    time: string;
+    id?: string
 }
 
 export class TimeAdapter {
 
     constructor(private _time: Time) {
+    }
+
+    public static createTime(time: string | Moment = moment(), id?: string) {
+        if (typeof time === "string") {
+            time = moment(time);
+        }
+        if (!time.isValid()) {
+            return null;
+        }
+        return {
+            id: id,
+            time: time.format(DATETIME_ISO_FORMAT)
+        };
     }
 
     get time() {
@@ -53,15 +64,11 @@ export class TimeAdapter {
         return this.getMoment().format(DATE_ISO_FORMAT);
     }
 
-    public toString(): string {
-        return this.getMoment().format(DATETIME_FORMAT);
-    }
-
     public copyTimeWithCurrentTime(): Time {
         const time = this.getMoment();
         const now = moment();
         time.hours(now.hours());
         time.minutes(now.minutes());
-        return new Time(time.format(DATETIME_ISO_FORMAT));
+        return {time: time.format(DATETIME_ISO_FORMAT)};
     }
 }
