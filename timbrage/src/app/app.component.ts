@@ -29,7 +29,7 @@ export class AppComponent implements OnInit, OnDestroy {
     @ViewChild('fileSelector') private fileSelector: ElementRef;
 
     public formatFormControl = new FormControl('', [Validators.required]);
-    private times: Time[];
+    public times: Time[];
 
     constructor(private changeDetectorRef: ChangeDetectorRef, private media: MediaMatcher,
                 private store: Store, private exportService: ExportService) {
