@@ -4,6 +4,7 @@ import {DATE_ISO_FORMAT, MONTH_ISO_FORMAT, Time, TimeAdapter} from "../models/ti
 import {filter, map, switchMap, tap, toArray} from "rxjs/operators";
 import {v4 as uuid} from 'uuid';
 import {from, of} from 'rxjs';
+import * as _ from 'lodash';
 
 @Injectable({
     providedIn: 'root'
@@ -35,29 +36,30 @@ export class TimesLocalClientService {
                 map(store => store || '[]'),
                 map(json => JSON.parse(json)),
                 switchMap(array => from(array)),
-                map((value: { id: string, time: string }) => new Time(value.time, value.id)),
+                map((value: { id: string, time: string }) => TimeAdapter.createTime(value.time, value.id)),
                 toArray()
             );
     }
 
     public create(time: Time): Observable<Time> {
         time.id = uuid();
-        const key = this.getKey(time);
-        return this.read(key)
+        const key = TimesLocalClientService.getKey(time);
+        return this.readDay(key)
             .pipe(
                 tap(values => values.push(time)),
+                map(times => _.uniqBy(times, 'time')),
                 this.save(key),
                 map(() => time)
             );
     }
 
-    private getKey(time: Time) {
+    private static getKey(time: Time) {
         return new TimeAdapter(time).getMoment().format(DATE_ISO_FORMAT);
     }
 
     public update(time: Time): Observable<Time> {
-        const key = this.getKey(time);
-        return this.read(key)
+        const key = TimesLocalClientService.getKey(time);
+        return this.readDay(key)
             .pipe(
                 this.remove(time),
                 tap(values => values.push(time)),
@@ -67,8 +69,8 @@ export class TimesLocalClientService {
     }
 
     public delete(time: Time): Observable<any> {
-        const key = this.getKey(time);
-        return this.read(key)
+        const key = TimesLocalClientService.getKey(time);
+        return this.readDay(key)
             .pipe(
                 this.remove(time),
                 this.save(key)

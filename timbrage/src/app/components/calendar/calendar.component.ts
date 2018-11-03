@@ -4,7 +4,7 @@ import {Select, Store} from "@ngxs/store";
 import {AddTime, TimesState} from "../../store/time.store";
 import * as moment from "moment";
 import {Duration, Moment} from "moment";
-import {DATETIME_ISO_FORMAT, Time} from "../../models/time.model";
+import {Time, TimeAdapter} from "../../models/time.model";
 import {map} from "rxjs/operators";
 import {CalculationService} from "../../services/calculation.service";
 import {CalendarDayModel, CalendarState, MoveMonth, SelectDate} from "../../store/calendar.store";
@@ -47,6 +47,6 @@ export class CalendarComponent implements OnInit {
     public addTimbrage() {
         const selected = this.store.selectSnapshot(TimesState.date);
         const time = moment().date(selected.date()).month(selected.month()).year(selected.year());
-        this.store.dispatch([new AddTime(new Time(time.format(DATETIME_ISO_FORMAT)))]);
+        this.store.dispatch([new AddTime(TimeAdapter.createTime(time))]);
     }
 }
