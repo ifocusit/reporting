@@ -20,8 +20,8 @@ export class ExportService {
             toArray(),
             map((values: Time[][]) => {
                 let csvContent = '';
-                values.forEach(times => times.forEach(time => csvContent += `${new TimeAdapter(time)
-                    .getMoment().format(this.settings.get().exportFormat)}\r\n`));
+                values.forEach(times => times
+                    .forEach(time => csvContent += `${new TimeAdapter(time).format(this.settings.get().exportFormat)}\r\n`));
                 return csvContent;
             })
         ).subscribe(csvContent => {

@@ -8,7 +8,7 @@ import {Moment} from "moment";
 import {TimesClientService} from "../services/times-client.service";
 import {Action, Selector, State, StateContext, Store} from "@ngxs/store";
 import {DATE_ISO_FORMAT, MONTH_ISO_FORMAT, Time, TimeAdapter} from "../models/time.model";
-import {map, toArray} from "rxjs/operators";
+import {defaultIfEmpty, map, toArray} from "rxjs/operators";
 import {ReadTimes, TimesState} from "./time.store";
 
 export interface CalendarDayModel {
@@ -91,7 +91,11 @@ export class CalendarState {
         // load month
         return this.timeClient.read(action.date.format(MONTH_ISO_FORMAT)).pipe(
             toArray(),
-            map(times => ctx.dispatch(new MonthTimesReaded(action.date.format(DATE_ISO_FORMAT), times)))
+            map(times => ctx.dispatch(new MonthTimesReaded(action.date.format(DATE_ISO_FORMAT), times))),
+            defaultIfEmpty(ctx.setState({
+                ...ctx.getState(),
+                loading: false
+            }))
         );
     }
 
@@ -124,7 +128,7 @@ export class CalendarState {
         return ctx.dispatch(new SelectDate(date.add(action.change, 'months')));
     }
 
-    private static getDaysInMonth(selectedDate: string): Moment[] {
+    public static getDaysInMonth(selectedDate: string): Moment[] {
         const days = [];
         let date = moment(selectedDate).date(1);
         while (date.days() !== 1) {
