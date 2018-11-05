@@ -1,12 +1,12 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import {CalculationService} from "../../services/calculation.service";
 import * as moment from "moment";
+import {Duration} from "moment";
 import {Observable} from "rxjs/internal/Observable";
 import {DATE_ISO_FORMAT, Time, TimeAdapter} from "../../models/time.model";
 import {AddTime, ReadTimes, TimesState} from "../../store/time.store";
 import {Select, Store} from '@ngxs/store';
 import {map, withLatestFrom} from "rxjs/operators";
-import {Duration} from "moment";
 
 
 @Component({
@@ -50,6 +50,6 @@ export class TimbrageComponent implements OnInit, OnDestroy {
     }
 
     public addTimbrage() {
-        this.store.dispatch([new AddTime(TimeAdapter.createTime())]).pipe(withLatestFrom(this.times$));
+        this.store.dispatch([new AddTime([TimeAdapter.createTime()])]).pipe(withLatestFrom(this.times$));
     }
 }

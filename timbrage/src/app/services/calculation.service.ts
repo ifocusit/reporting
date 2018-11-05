@@ -57,7 +57,7 @@ export class CalculationService {
 
                     if (this.settings.get().saveMissings) {
                         //   missing timbrage must be save to database
-                        this.store.dispatch(new AddTime(missing));
+                        this.store.dispatch(new AddTime([missing]));
                     }
                 }
                 pairs.push([list[i], missing]);

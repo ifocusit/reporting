@@ -27,6 +27,7 @@
     "@angular/pwa": "^0.8.3",
     "@angular/router": "^6.1.8",
     "@angular/service-worker": "^6.1.8",
+    "@ngx-pwa/local-storage": "6",
     "@ngxs/store": "^3.2.0",
     "core-js": "^2.5.7",
     "lodash": "^4.17.11",

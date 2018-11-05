@@ -15,7 +15,7 @@ export class TimeAdapter {
     constructor(private _time: Time) {
     }
 
-    public static createTime(time: string | Moment = moment(), id?: string) {
+    public static createTime(time: string | Moment = moment(), id?: string): Time | null {
         if (typeof time === "string") {
             time = moment(time);
         }
@@ -57,11 +57,15 @@ export class TimeAdapter {
     }
 
     public getMonth(): string {
-        return this.getMoment().format(MONTH_ISO_FORMAT);
+        return this.format(MONTH_ISO_FORMAT);
     }
 
     public getDay(): string {
-        return this.getMoment().format(DATE_ISO_FORMAT);
+        return this.format(DATE_ISO_FORMAT);
+    }
+
+    public format(format = DATETIME_ISO_FORMAT) {
+        return this.getMoment().format(format);
     }
 
     public copyTimeWithCurrentTime(): Time {
