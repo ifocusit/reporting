@@ -34,6 +34,7 @@ import {TimesLocalClientService} from "./services/times-local-client.service";
 import {CalendarState} from "./store/calendar.store";
 import {SettingsState} from "./store/settings.store";
 import { DurationPipe } from './pipes/duration.pipe';
+import {localStorageProviders} from "@ngx-pwa/local-storage";
 
 const appRoutes: Routes = [
     {path: 'timbrage', component: TimbrageComponent},
@@ -83,7 +84,8 @@ const appRoutes: Routes = [
     ],
     providers: [
         {provide: LOCALE_ID, useValue: 'fr'},
-        {provide: TimesClientService, useClass: environment.client.in_memory ? TimesLocalClientService : TimesClientService}
+        {provide: TimesClientService, useClass: environment.client.in_memory ? TimesLocalClientService : TimesClientService},
+        localStorageProviders({ prefix: 'timbrage' })
     ],
     bootstrap: [AppComponent]
 })

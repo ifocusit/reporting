@@ -4,12 +4,15 @@ import {registerLocaleData} from "@angular/common";
 import localeFr from '@angular/common/locales/fr';
 import localeFrExtra from '@angular/common/locales/extra/fr';
 import {ExportService} from "./services/export.service";
-import {AddTimes, DeleteTimes, TimesState} from "./store/time.store";
+import {AddTime, DeleteTimes, TimesState} from "./store/time.store";
 import {Store} from "@ngxs/store";
 import * as moment from "moment";
 import {LoadSettings, SetExportFormat} from "./store/settings.store";
 import {FormControl, Validators} from "@angular/forms";
-import {Time, TimeAdapter} from "./models/time.model";
+import {DATE_ISO_FORMAT, Time, TimeAdapter} from "./models/time.model";
+import {TimesClientService} from "./services/times-client.service";
+import {from, of} from "rxjs/index";
+import {catchError, filter, map, mergeMap, tap} from "rxjs/operators";
 
 @Component({
     selector: 'app-root',
@@ -32,7 +35,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public times: Time[];
 
     constructor(private changeDetectorRef: ChangeDetectorRef, private media: MediaMatcher,
-                private store: Store, private exportService: ExportService) {
+                private store: Store, private exportService: ExportService, private timeClient: TimesClientService) {
 
         registerLocaleData(localeFr, 'fr', localeFrExtra);
         moment.locale('fr');
@@ -44,6 +47,23 @@ export class AppComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.store.dispatch(new LoadSettings()).subscribe(state => this.formatFormControl.setValue(state.settings.exportFormat));
+        setTimeout(() => this.migrateStorage(), 1000);
+    }
+
+    private migrateStorage() {
+        const keys = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            keys.push(localStorage.key(i))
+        }
+        from(keys).pipe(
+            filter(key => key.match(/\d{4}-\d{2}-\d{2}/g)),
+            map(key => localStorage.getItem(key)),
+            filter(json => !!json),
+            map(json => JSON.parse(json)),
+            mergeMap(times => this.timeClient.create(times, true)),
+            tap(times => localStorage.removeItem(new TimeAdapter(times[0]).format(DATE_ISO_FORMAT))),
+            catchError(() => of(true))
+        ).subscribe().unsubscribe();
     }
 
     ngOnDestroy(): void {
@@ -76,7 +96,7 @@ export class AppComponent implements OnInit, OnDestroy {
                 this.times.push(TimeAdapter.createTime(line));
             });
             this.times = this.times.filter(time => !!time);
-            this.store.dispatch(new AddTimes(this.times));
+            this.store.dispatch(new AddTime(this.times, true));
         };
         reader.readAsText(file);
     }

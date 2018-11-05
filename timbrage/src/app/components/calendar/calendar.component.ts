@@ -47,6 +47,6 @@ export class CalendarComponent implements OnInit {
     public addTimbrage() {
         const selected = this.store.selectSnapshot(TimesState.date);
         const time = moment().date(selected.date()).month(selected.month()).year(selected.year());
-        this.store.dispatch([new AddTime(TimeAdapter.createTime(time))]);
+        this.store.dispatch([new AddTime([TimeAdapter.createTime(time)])]);
     }
 }
