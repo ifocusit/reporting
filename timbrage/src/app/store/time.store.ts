@@ -142,7 +142,7 @@ export class TimesState {
             tap(times => ctx.setState({
                     ...state,
                     loading: false,
-                    times: action.uniq ? _.uniqBy([...state.times, ...times], 'times') : [...state.times, ...times]
+                    times: times
                 }
             )),
             defaultIfEmpty(ctx.setState({
