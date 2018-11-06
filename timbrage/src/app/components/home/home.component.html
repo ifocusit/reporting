@@ -1,0 +1,38 @@
+<mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #drawer class="sidenav" fixedInViewport="true"
+                 [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+                 [mode]="(isHandset$ | async) ? 'over' : 'side'"
+                 [opened]="!(isHandset$ | async)">
+        <mat-toolbar color="primary">Options</mat-toolbar>
+        <app-sidenav></app-sidenav>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <header>
+            <mat-toolbar color="primary" fxLayout="row" fxLayoutAlign="space-between center">
+                <button type="button" aria-label="Toggle sidenav" mat-icon-button
+                        (click)="drawer.toggle()" *ngIf="isHandset$ | async">
+                    <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+                </button>
+                <span fxFlex="calc(100%-168px)">Timbrage</span>
+                <button mat-button (click)="goToday()">Auj.</button>
+                <button mat-icon-button (click)="exportMonth()" *ngIf="calendarPage()">
+                    <mat-icon>assignment_returned</mat-icon>
+                </button>
+                <a #export style="display: none">hidden link</a>
+            </mat-toolbar>
+        </header>
+
+        <main role="main">
+            <router-outlet></router-outlet>
+        </main>
+
+        <footer>
+            <mat-toolbar>
+                <nav mat-tab-nav-bar>
+                    <a mat-tab-link *ngFor="let link of navLinks"
+                       [routerLink]="link.path" routerLinkActive #rla="routerLinkActive" [active]="rla.isActive">{{link.label}}</a>
+                </nav>
+            </mat-toolbar>
+        </footer>
+    </mat-sidenav-content>
+</mat-sidenav-container>
