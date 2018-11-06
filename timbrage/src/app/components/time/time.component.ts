@@ -17,6 +17,9 @@ export class TimeComponent implements OnInit {
         this.time = new TimeAdapter(model).getMoment();
     }
 
+    @Input()
+    private odd: boolean;
+
     private _model: Time;
 
     public time: Moment;

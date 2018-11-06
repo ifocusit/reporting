@@ -41,6 +41,6 @@
         </mat-card-actions>
     </mat-card-header>
     <mat-card-content fxFlexFill fxLayout="column">
-        <app-time *ngFor="let time of (times$ | async)" [model]="time"></app-time>
+        <app-time *ngFor="let time of (times$ | async); let odd=odd" [model]="time" [odd]="odd"></app-time>
     </mat-card-content>
 </mat-card>
