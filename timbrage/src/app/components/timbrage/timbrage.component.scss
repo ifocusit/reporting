@@ -12,6 +12,8 @@
       height: 200px;
       background-color: #606fc7;
       color: white;
+      position: fixed;
+      z-index: 1;
 
       & > div {
         width: 100%;
@@ -67,10 +69,19 @@
       }
     }
 
+    mat-card-content {
+      margin-top: 205px;
+
+      & > div {
+        padding-top: 12px;
+      }
+    }
+
     mat-card-actions {
       position: fixed;
       right: 20px;
       top: 218px;
+      z-index: 1;
     }
   }
 }

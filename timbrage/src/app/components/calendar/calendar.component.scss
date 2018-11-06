@@ -7,6 +7,12 @@
 
     mat-card-header {
 
+      width: 100%;
+      height: 252px;
+      position: fixed;
+      z-index: 1;
+      background-color: #eee;
+
       & > div {
         width: 100%;
       }
@@ -18,6 +24,12 @@
         font-size: 20px;
         text-transform: uppercase;
         letter-spacing: 3px;
+        height: 46px;
+
+        .date {
+          width: 60%;
+          text-align: center;
+        }
 
         .year {
           padding-left: 10px;
@@ -36,6 +48,7 @@
 
       .prev, .next {
         cursor: pointer;
+        margin: 15px 15px;
       }
 
       /* Days (1-31) */
@@ -47,6 +60,7 @@
           font-size: 12px;
           color: gray;
           padding: 5px;
+          //padding: 10px;
           cursor: pointer;
 
           &.with-times {
@@ -66,35 +80,26 @@
         }
       }
     }
-
-    mat-card-actions {
-      position: fixed;
-      right: 20px;
-      top: 258px;
-    }
   }
 
   mat-card-content {
+    padding-top: 252px;
+
     #sumDay {
       min-height: 2em;
       font-weight: 700;
       font-size: 2em;
       padding: 10px;
       border-bottom: 1px solid #dedede;
-      position: fixed;
-      top: 256px;
       background-color: white;
       width: 100%;
-      z-index: 1;
     }
+  }
 
-    #times {
-      padding-top: 20px;
-    }
-
-    app-time {
-      margin: 0 15px;
-    }
+  mat-card-actions {
+    position: fixed;
+    right: 20px;
+    top: 307px;
   }
 }
 

@@ -33,8 +33,10 @@ import {TimesClientService} from "./services/times-client.service";
 import {TimesLocalClientService} from "./services/times-local-client.service";
 import {CalendarState} from "./store/calendar.store";
 import {SettingsState} from "./store/settings.store";
-import { DurationPipe } from './pipes/duration.pipe';
+import {DurationPipe} from './pipes/duration.pipe';
 import {localStorageProviders} from "@ngx-pwa/local-storage";
+import {HomeComponent} from './components/home/home.component';
+import { SidenavComponent } from './components/sidenav/sidenav.component';
 
 const appRoutes: Routes = [
     {path: 'timbrage', component: TimbrageComponent},
@@ -54,7 +56,9 @@ const appRoutes: Routes = [
         CalendarComponent,
         TimeComponent,
         MomentPipe,
-        DurationPipe
+        DurationPipe,
+        HomeComponent,
+        SidenavComponent,
     ],
     imports: [
         BrowserModule,
@@ -85,7 +89,7 @@ const appRoutes: Routes = [
     providers: [
         {provide: LOCALE_ID, useValue: 'fr'},
         {provide: TimesClientService, useClass: environment.client.in_memory ? TimesLocalClientService : TimesClientService},
-        localStorageProviders({ prefix: 'timbrage' })
+        localStorageProviders({prefix: 'timbrage'})
     ],
     bootstrap: [AppComponent]
 })

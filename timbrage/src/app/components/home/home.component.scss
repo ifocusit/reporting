@@ -1,0 +1,37 @@
+:host {
+  header {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 2;
+    height: 56px;
+  }
+
+  footer {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 2;
+    height: 56px;
+
+    mat-toolbar > * {
+      width: 100%;
+
+      .mat-tab-link, .mat-ink-bar {
+        width: 100%;
+      }
+    }
+  }
+
+  main {
+    min-height: 100%;
+    margin-top: 56px;
+    margin-bottom: 56px;
+  }
+
+  mat-sidenav-container {
+    height: 100%;
+  }
+}

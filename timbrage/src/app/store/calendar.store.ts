@@ -143,6 +143,13 @@ export class CalendarState {
             days.push(moment(date));
             date.add(1, 'days');
         }
+        if (days.length > 35) {
+            while (days.length < 42) {
+                days.push(moment(date));
+                date.add(1, 'days');
+            }
+        }
+
         return days;
     }
 }
