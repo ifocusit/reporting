@@ -6,10 +6,10 @@
 import * as moment from "moment";
 import {Moment} from "moment";
 import {TimesClientService} from "../services/times-client.service";
-import {Action, Selector, State, StateContext, Store} from "@ngxs/store";
+import {Action, Selector, State, StateContext} from "@ngxs/store";
 import {DATE_ISO_FORMAT, MONTH_ISO_FORMAT, Time, TimeAdapter} from "../models/time.model";
 import {defaultIfEmpty, map, toArray} from "rxjs/operators";
-import {ReadTimes, TimesState} from "./time.store";
+import {ReadTimes, TimesState, TimesStateModel} from "./time.store";
 
 export interface CalendarDayModel {
     date: Moment;
@@ -19,6 +19,7 @@ export interface CalendarDayModel {
 export interface CalendarStateModel {
     loading: boolean;
     days: CalendarDayModel[];
+    month: string;
 }
 
 //**************************************************************************************/
@@ -53,13 +54,14 @@ export class MonthTimesReaded {
     name: 'calendar',
     defaults: {
         loading: false,
+        month: "",
         days: []
     },
     children: [TimesState]
 })
 export class CalendarState {
 
-    constructor(private timeClient: TimesClientService, private store: Store) {
+    constructor(private timeClient: TimesClientService) {
     }
 
     // SELECTORS
@@ -73,19 +75,16 @@ export class CalendarState {
 
     @Action(SelectDate)
     selectDate(ctx: StateContext<CalendarStateModel>, action: SelectDate) {
-        if (ctx.getState().days.length > 0) {
-            const selected = this.store.selectSnapshot(TimesState.date);
-
-            if (selected.format(MONTH_ISO_FORMAT) === action.date.format(MONTH_ISO_FORMAT)) {
-                // month don't change => only reload day times
-                return ctx.dispatch(new ReadTimes(action.date.format(DATE_ISO_FORMAT)));
-            }
+        if (ctx.getState().month === action.date.format(MONTH_ISO_FORMAT)) {
+            // month don't change => only reload day times
+            return ctx.dispatch(new ReadTimes(action.date.format(DATE_ISO_FORMAT)));
         }
 
         ctx.setState({
             ...ctx.getState(),
             loading: true,
-            days: []
+            days: [],
+            month: action.date.format(MONTH_ISO_FORMAT)
         });
 
         // load month
@@ -122,10 +121,9 @@ export class CalendarState {
     }
 
     @Action(MoveMonth)
-    moveMonth(ctx: StateContext<CalendarStateModel>, action: MoveMonth) {
-        const selected = this.store.selectSnapshot(TimesState.date);
-        const date = moment(selected);
-        return ctx.dispatch(new SelectDate(date.add(action.change, 'months')));
+    moveMonth(ctx: StateContext<CalendarStateModel & { times: TimesStateModel }>, action: MoveMonth) {
+        const moveTo = moment(ctx.getState().times.date).add(action.change, 'months');
+        return ctx.dispatch(new SelectDate(moveTo));
     }
 
     public static getDaysInMonth(selectedDate: string): Moment[] {
