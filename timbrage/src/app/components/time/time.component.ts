@@ -18,7 +18,7 @@ export class TimeComponent implements OnInit {
     }
 
     @Input()
-    private odd: boolean;
+    public odd: boolean;
 
     private _model: Time;
 
