@@ -10,7 +10,9 @@
             <button mat-flat-button color="secondary" (click)="selectFile()">Importer
                 <mat-icon>attach_file</mat-icon>
             </button>
-            <button mat-raised-button (click)="cancelImport()" *ngIf="times">Annuler l'import</button>
+        </mat-list-item>
+        <mat-list-item>
+            <button mat-raised-button (click)="cancelImport()" [disabled]="!times">Annuler l'import</button>
         </mat-list-item>
     </mat-nav-list>
 
