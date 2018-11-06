@@ -38,7 +38,7 @@
             <span>{{ (sumDay$ | async) | duration }}</span>
         </div>
         <div id="times">
-            <app-time *ngFor="let time of (times$ | async)" [model]="time"></app-time>
+            <app-time *ngFor="let time of (times$ | async); let odd=odd" [model]="time" [odd]="odd"></app-time>
         </div>
     </mat-card-content>
 </mat-card>
