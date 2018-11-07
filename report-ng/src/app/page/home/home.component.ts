@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {MomentPipe} from '../../pipe/moment/moment.pipe';
-import moment = require('moment');
+import * as moment from "moment";
 
 @Component({
   selector: 'app-home',

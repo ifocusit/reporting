@@ -14,7 +14,7 @@
                     <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
                 </button>
                 <span fxFlex="calc(100%-168px)">Timbrage</span>
-                <button mat-button (click)="goToday()">Auj.</button>
+                <button mat-button (click)="goToday()" *ngIf="calendarPage()">Auj.</button>
                 <button mat-icon-button (click)="exportMonth()" *ngIf="calendarPage()">
                     <mat-icon>assignment_returned</mat-icon>
                 </button>

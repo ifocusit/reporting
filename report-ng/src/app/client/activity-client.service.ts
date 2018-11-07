@@ -1,23 +1,24 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs/Observable";
 import {Activity, ActivityType} from "../model/activity.model";
 import {environment} from "../../environments/environment";
+import {Observable} from "rxjs/internal/Observable";
 
 @Injectable()
 export class ActivityClient {
 
-  constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) {
+    }
 
-  get url(): string {
-    return `${environment.api}/activities`;
-  }
+    get url(): string {
+        return `${environment.api}/activities`;
+    }
 
-  getActivities$(month: string): Observable<Activity[]> {
-    return this.http.get<Activity[]>(`${this.url}/month/${month}`);
-  }
+    getActivities$(month: string): Observable<Activity[]> {
+        return this.http.get<Activity[]>(`${this.url}/month/${month}`);
+    }
 
-  saveActivity$(date: string, duration: string, type: ActivityType = ActivityType.WORK): Observable<Activity> {
-    return this.http.post<Activity>(this.url, new Activity(date, duration, type));
-  }
+    saveActivity$(date: string, duration: string, type: ActivityType = ActivityType.WORK): Observable<Activity> {
+        return this.http.post<Activity>(this.url, new Activity(date, duration, type));
+    }
 }
