@@ -37,7 +37,7 @@ export class SidenavComponent implements OnInit {
         let reader = new FileReader();
         reader.onload = () => {
             this.times = [];
-            reader.result.split('\r\n').forEach(line => {
+            (reader.result as string).split('\r\n').forEach(line => {
                 this.times.push(TimeAdapter.createTime(line));
             });
             this.times = this.times.filter(time => !!time);
