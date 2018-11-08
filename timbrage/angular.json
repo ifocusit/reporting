@@ -128,5 +128,8 @@
       }
     }
   },
-  "defaultProject": "timbrage"
+  "defaultProject": "timbrage",
+  "cli": {
+    "defaultCollection": "@nativescript/schematics"
+  }
 }
