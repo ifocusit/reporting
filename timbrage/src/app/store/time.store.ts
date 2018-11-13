@@ -1,11 +1,11 @@
-import {Time} from "../models/time.model";
-import {Action, Selector, State, StateContext} from "@ngxs/store";
-import {TimesClientService} from "../services/times-client.service";
-import {defaultIfEmpty, map, mergeMap, tap} from "rxjs/operators";
+import { Time } from "../models/time.model";
+import { Action, Selector, State, StateContext } from "@ngxs/store";
+import { TimesClientService } from "../services/times-client.service";
+import { defaultIfEmpty, map, mergeMap, tap } from "rxjs/operators";
 import * as _ from 'lodash';
 import * as moment from "moment";
-import {Moment} from "moment";
-import {from} from "rxjs";
+import { Moment } from "moment";
+import { from } from "rxjs";
 
 //**************************************************************************************/
 // STATE
@@ -13,9 +13,9 @@ import {from} from "rxjs";
 
 // description de l'état
 export interface TimesStateModel {
-    loading: boolean;
-    date: string;
-    times: Time[];
+  loading: boolean;
+  date: string;
+  times: Time[];
 }
 
 //**************************************************************************************/
@@ -24,45 +24,45 @@ export interface TimesStateModel {
 
 // définition des actions possibles sur l'état
 export class AddTime {
-    static readonly type = '[Time] Add Time(s)';
+  static readonly type = '[Time] Add Time(s)';
 
-    constructor(public times: Time[], public uniq = false) {
-    }
+  constructor(public times: Time[], public uniq = false) {
+  }
 }
 
 export class UpdateTime {
-    static readonly type = '[Time] Update Time';
+  static readonly type = '[Time] Update Time';
 
-    constructor(public time: Time) {
-    }
+  constructor(public time: Time) {
+  }
 }
 
 export class DeleteTime {
-    static readonly type = '[Time] Delete Time';
+  static readonly type = '[Time] Delete Time';
 
-    constructor(public time: Time) {
-    }
+  constructor(public time: Time) {
+  }
 }
 
 export class DeleteTimes {
-    static readonly type = '[Time] Delete Times';
+  static readonly type = '[Time] Delete Times';
 
-    constructor(public times: Time[]) {
-    }
+  constructor(public times: Time[]) {
+  }
 }
 
 export class ReadTimes {
-    static readonly type = '[Time] Read Times';
+  static readonly type = '[Time] Read Times';
 
-    constructor(public date: string) {
-    }
+  constructor(public date: string) {
+  }
 }
 
 export class ReadedTimes {
-    static readonly type = '[Time] Readed Times';
+  static readonly type = '[Time] Readed Times';
 
-    constructor(public times: Time[]) {
-    }
+  constructor(public times: Time[]) {
+  }
 }
 
 //**************************************************************************************/
@@ -71,125 +71,125 @@ export class ReadedTimes {
 
 // initialisation de l'état
 @State<TimesStateModel>({
-    name: 'times',
-    defaults: {
-        date: moment().format("YYYY-MM-DD"),
-        loading: false,
-        times: []
-    }
+  name: 'times',
+  defaults: {
+    date: moment().format("YYYY-MM-DD"),
+    loading: false,
+    times: []
+  }
 })
 export class TimesState {
 
-    constructor(private timeClient: TimesClientService) {
-    }
+  constructor(private timeClient: TimesClientService) {
+  }
 
-    // SELECTORS
+  // SELECTORS
 
-    @Selector()
-    public static loading(state: TimesStateModel) {
-        return state.loading;
-    }
+  @Selector()
+  public static loading(state: TimesStateModel) {
+    return state.loading;
+  }
 
-    @Selector()
-    public static times(state: TimesStateModel) {
-        return _.orderBy(state.times, ['time'], ['asc']);
-    }
+  @Selector()
+  public static times(state: TimesStateModel) {
+    return _.orderBy(state.times, ['time'], ['asc']);
+  }
 
-    @Selector()
-    public static date(state: TimesStateModel): Moment {
-        return moment(state.date);
-    }
+  @Selector()
+  public static date(state: TimesStateModel): Moment {
+    return moment(state.date);
+  }
 
-    // ACTIONS
+  // ACTIONS
 
-    @Action(ReadTimes)
-    readTimes(ctx: StateContext<TimesStateModel>, action: ReadTimes) {
+  @Action(ReadTimes)
+  readTimes(ctx: StateContext<TimesStateModel>, action: ReadTimes) {
+    ctx.setState({
+      ...ctx.getState(),
+      loading: true,
+      date: action.date,
+      times: []
+    });
+
+    return this.timeClient.read(action.date).pipe(
+      map((times: Time[]) => ctx.dispatch(new ReadedTimes(times))),
+      defaultIfEmpty(ctx.setState({
+        ...ctx.getState(),
+        loading: false
+      }))
+    );
+  }
+
+  @Action(ReadedTimes)
+  readedTimes(ctx: StateContext<TimesStateModel>, action: ReadedTimes) {
+    const state = ctx.getState();
+    ctx.setState({
+      ...state,
+      loading: false,
+      times: action.times
+    });
+  }
+
+  @Action(AddTime)
+  addTime(ctx: StateContext<TimesStateModel>, action: AddTime) {
+    const state = ctx.getState();
+    ctx.setState({
+      ...state,
+      loading: true
+    });
+    return this.timeClient.create(action.times, action.uniq).pipe(
+      map(times => times.filter(time => time.time.startsWith(state.date))),
+      tap(times => ctx.setState({
+          ...state,
+          loading: false,
+          times: times
+        }
+      )),
+      defaultIfEmpty(ctx.setState({
+        ...state,
+        loading: false
+      }))
+    );
+  }
+
+  @Action(UpdateTime)
+  updateTime(ctx: StateContext<TimesStateModel>, action: UpdateTime) {
+    const state = ctx.getState();
+    ctx.setState({
+      ...state,
+      loading: true
+    });
+    return this.timeClient.update(action.time).pipe(
+      tap((time: Time) => {
+        state.times.filter(value => value.id === time.id).forEach(value => value.time = time.time);
         ctx.setState({
-            ...ctx.getState(),
-            loading: true,
-            date: action.date,
-            times: []
+          ...state,
+          loading: false
         });
+      })
+    );
+  }
 
-        return this.timeClient.read(action.date).pipe(
-            map((times: Time[]) => ctx.dispatch(new ReadedTimes(times))),
-            defaultIfEmpty(ctx.setState({
-                ...ctx.getState(),
-                loading: false
-            }))
-        );
-    }
-
-    @Action(ReadedTimes)
-    readedTimes(ctx: StateContext<TimesStateModel>, action: ReadedTimes) {
-        const state = ctx.getState();
+  @Action(DeleteTime)
+  deleteTime(ctx: StateContext<TimesStateModel>, action: DeleteTime) {
+    const state = ctx.getState();
+    ctx.setState({
+      ...state,
+      loading: true
+    });
+    return this.timeClient.delete(action.time).pipe(
+      tap(() => {
         ctx.setState({
-            ...state,
-            loading: false,
-            times: action.times
+          ...state,
+          loading: false,
+          times: state.times.filter(time => time.id !== action.time.id)
         });
-    }
+      })
+    );
+  }
 
-    @Action(AddTime)
-    addTime(ctx: StateContext<TimesStateModel>, action: AddTime) {
-        const state = ctx.getState();
-        ctx.setState({
-            ...state,
-            loading: true
-        });
-        return this.timeClient.create(action.times, action.uniq).pipe(
-            map(times => times.filter(time => time.time.startsWith(state.date))),
-            tap(times => ctx.setState({
-                    ...state,
-                    loading: false,
-                    times: times
-                }
-            )),
-            defaultIfEmpty(ctx.setState({
-                ...state,
-                loading: false
-            }))
-        );
-    }
-
-    @Action(UpdateTime)
-    updateTime(ctx: StateContext<TimesStateModel>, action: UpdateTime) {
-        const state = ctx.getState();
-        ctx.setState({
-            ...state,
-            loading: true
-        });
-        return this.timeClient.update(action.time).pipe(
-            tap((time: Time) => {
-                state.times.filter(value => value.id === time.id).forEach(value => value.time = time.time);
-                ctx.setState({
-                    ...state,
-                    loading: false
-                });
-            })
-        );
-    }
-
-    @Action(DeleteTime)
-    deleteTime(ctx: StateContext<TimesStateModel>, action: DeleteTime) {
-        const state = ctx.getState();
-        ctx.setState({
-            ...state,
-            loading: true
-        });
-        return this.timeClient.delete(action.time).pipe(
-            tap(() => {
-                ctx.setState({
-                    ...state,
-                    loading: false,
-                    times: state.times.filter(time => time.id !== action.time.id)
-                });
-            })
-        );
-    }
-
-    @Action(DeleteTimes)
-    deleteTimes(ctx: StateContext<TimesStateModel>, action: DeleteTimes) {
-        return from(action.times).pipe(mergeMap(time => ctx.dispatch(new DeleteTime(time))));
-    }
+  @Action(DeleteTimes)
+  deleteTimes(ctx: StateContext<TimesStateModel>, action: DeleteTimes) {
+    return from(action.times).pipe(mergeMap(time => ctx.dispatch(new DeleteTime(time))));
+  }
 }
