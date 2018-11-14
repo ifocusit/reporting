@@ -12,8 +12,6 @@ spring:
       client:
         registration:
           google:
-            client-id: 836360158078-tddf925rblamtjr37f9msfhfmtse89pd.apps.googleusercontent.com
-            client-secret: G6j8Eeg6ZQe_X85ILEM77gY1
             scope: profile
 logging:
   level:
