@@ -1,6 +1,6 @@
 version: '2.1'
 services:
-  reporting-***REMOVED***
+  reporting-server:
     build: reporting-server
     image: reporting-server
     depends_on:

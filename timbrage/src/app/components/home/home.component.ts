@@ -27,7 +27,7 @@ export class HomeComponent {
 
     @ViewChild('export') private exportLink: ElementRef;
 
-    constructor(private breakpointOb***REMOVED*** BreakpointObserver, private exportService: ExportService, private store: Store) {
+    constructor(private breakpointObserver: BreakpointObserver, private exportService: ExportService, private store: Store) {
     }
 
     public calendarPage() {

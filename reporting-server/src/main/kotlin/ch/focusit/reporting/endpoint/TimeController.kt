@@ -4,6 +4,7 @@ import ch.focusit.reporting.domain.Time
 import ch.focusit.reporting.repository.TimeRepository
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Flux
@@ -30,7 +31,7 @@ class TimeController(val repository: TimeRepository) {
         val PATTERN_YEAR = Pattern.compile("(\\d{4})")!!
     }
 
-    @GetMapping
+    @GetMapping(produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
     fun findAll() = repository.findAllByOrderByTimeAsc()
 
     @PostMapping

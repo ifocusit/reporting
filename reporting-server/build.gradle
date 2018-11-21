@@ -1,7 +1,7 @@
 buildscript {
     ext {
-        kotlinVersion = '1.2.41'
-        springBootVersion = '2.0.0.RELEASE'
+        kotlinVersion = '1.3.0'
+        springBootVersion = '2.1.0.RELEASE'
     }
 
     repositories {
@@ -52,6 +52,7 @@ dependencies {
     compile("org.xhtmlrenderer:flying-saucer-pdf:9.1.4")
     compile("org.springframework.boot:spring-boot-devtools")
     compile("org.springframework.security:spring-security-oauth2-client")
+    compile("org.springframework.security:spring-security-oauth2-jose")
 
     testCompile('org.jetbrains.kotlin:kotlin-test')
     testCompile('org.assertj:assertj-core:3.9.0')

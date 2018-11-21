@@ -98,7 +98,7 @@ export class MonthComponent implements OnInit {
     edit(toEdit: WorkingDateReporting): void {
         let dialogRef = this.dialog.open(DailyReportComponent, {
             width: '300px',
-          ***REMOVED*** {
+            data: {
                 date: toEdit.date,
                 times: !toEdit.times ? [] : toEdit.times.map((time) => time.clone())
             }
