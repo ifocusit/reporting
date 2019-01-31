@@ -31,7 +31,7 @@ class TimeController(val repository: TimeRepository) {
         val PATTERN_YEAR = Pattern.compile("(\\d{4})")!!
     }
 
-    @GetMapping(produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
+    @GetMapping(produces = [MediaType.APPLICATION_STREAM_JSON_VALUE])
     fun findAll() = repository.findAllByOrderByTimeAsc()
 
     @PostMapping

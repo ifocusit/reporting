@@ -26,7 +26,7 @@ export interface TimesStateModel {
 export class AddTime {
   static readonly type = '[Time] Add Time(s)';
 
-  constructor(public times: Time[], public uniq = false) {
+  constructor(public times: Time[]) {
   }
 }
 
@@ -137,12 +137,14 @@ export class TimesState {
       ...state,
       loading: true
     });
-    return this.timeClient.create(action.times, action.uniq).pipe(
+    return this.timeClient.create(action.times).pipe(
+      // many time can be added but we wa't return only time of the selected date
       map(times => times.filter(time => time.time.startsWith(state.date))),
       tap(times => ctx.setState({
           ...state,
           loading: false,
-          times: times
+          // merge list
+          times: [...state.times, ...times]
         }
       )),
       defaultIfEmpty(ctx.setState({

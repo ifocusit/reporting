@@ -41,7 +41,7 @@ export class SidenavComponent implements OnInit {
                 this.times.push(TimeAdapter.createTime(line));
             });
             this.times = this.times.filter(time => !!time);
-            this.store.dispatch(new AddTime(this.times, true));
+            this.store.dispatch(new AddTime(this.times));
         };
         reader.readAsText(file);
     }

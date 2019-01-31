@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs/internal/Observable";
 import { Time } from "../models/time.model";
-import { environment } from "../../environments/environment";
 import { HttpClient } from "@angular/common/http";
 import { from } from "rxjs";
 import { mergeMap, toArray } from "rxjs/operators";
@@ -18,7 +17,7 @@ export class TimesClientService {
     return this.http.get<Time[]>(`/api/times/date/${date}`)
   }
 
-  public create(times: Time[], uniq?): Observable<Time[]> {
+  public create(times: Time[]): Observable<Time[]> {
     return from(times).pipe(
       mergeMap(time => this.http.post<Time>(`/api/times`, time)),
       toArray()
