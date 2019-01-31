@@ -19,7 +19,7 @@ import java.util.regex.Pattern
 import javax.validation.Valid
 
 @RestController
-@RequestMapping("times")
+@RequestMapping("api/times")
 class TimeController(val repository: TimeRepository) {
 
     companion object {

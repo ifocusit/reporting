@@ -15,21 +15,21 @@ export class TimesClientService {
   }
 
   public read(date: string): Observable<Time[]> {
-    return this.http.get<Time[]>(`${environment.client.base_url}/times/date/${date}`)
+    return this.http.get<Time[]>(`/api/times/date/${date}`)
   }
 
   public create(times: Time[], uniq?): Observable<Time[]> {
     return from(times).pipe(
-      mergeMap(time => this.http.post<Time>(`${environment.client.base_url}/times`, time)),
+      mergeMap(time => this.http.post<Time>(`/api/times`, time)),
       toArray()
     );
   }
 
   public update(time: Time): Observable<Time> {
-    return this.http.put<Time>(`${environment.client.base_url}/times/${time.id}`, time);
+    return this.http.put<Time>(`/api/times/${time.id}`, time);
   }
 
   public delete(time: Time): Observable<any> {
-    return this.http.delete<any>(`${environment.client.base_url}/times/${time.id}`);
+    return this.http.delete<any>(`/api/times/${time.id}`);
   }
 }

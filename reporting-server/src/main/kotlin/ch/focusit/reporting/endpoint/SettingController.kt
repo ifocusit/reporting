@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono
 import javax.validation.Valid
 
 @RestController
-@RequestMapping("settings")
+@RequestMapping("api/settings")
 class SettingController(val repository: SettingRepository) {
 
     @GetMapping

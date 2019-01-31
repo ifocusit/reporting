@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import java.util.stream.Collectors
 
 @Controller
-@RequestMapping("billing")
+@RequestMapping("api/billing")
 class BillingController(val timeController: TimeController, val settingRepository: SettingRepository) {
 
     @GetMapping("/generate/{month}")

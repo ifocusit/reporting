@@ -12,7 +12,7 @@ import java.time.YearMonth
 import javax.validation.Valid
 
 @RestController
-@RequestMapping("activities")
+@RequestMapping("api/activities")
 class ActivityController(val repository: ActivityRepository) {
 
     @GetMapping

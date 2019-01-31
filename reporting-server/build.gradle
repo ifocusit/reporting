@@ -51,8 +51,8 @@ dependencies {
     compile("org.jetbrains.kotlin:kotlin-reflect")
     compile("org.xhtmlrenderer:flying-saucer-pdf:9.1.4")
     compile("org.springframework.boot:spring-boot-devtools")
-    compile("org.springframework.security:spring-security-oauth2-client")
-    compile("org.springframework.security:spring-security-oauth2-jose")
+    //compile("org.springframework.security:spring-security-oauth2-client")
+    //compile("org.springframework.security:spring-security-oauth2-jose")
 
     testCompile('org.jetbrains.kotlin:kotlin-test')
     testCompile('org.assertj:assertj-core:3.9.0')
