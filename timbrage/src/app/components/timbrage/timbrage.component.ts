@@ -1,13 +1,13 @@
-import {Component, OnDestroy, OnInit} from "@angular/core";
-import {CalculationService} from "../../services/calculation.service";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { CalculationService } from "../../services/calculation.service";
 import * as moment from "moment";
-import {Duration} from "moment";
-import {Observable} from "rxjs/internal/Observable";
-import {DATE_ISO_FORMAT, Time, TimeAdapter} from "../../models/time.model";
-import {AddTime, ReadTimes, TimesState} from "../../store/time.store";
-import {Select, Store} from '@ngxs/store';
-import {map, withLatestFrom} from "rxjs/operators";
-
+import { Duration } from "moment";
+import { Observable } from "rxjs/internal/Observable";
+import { DATE_ISO_FORMAT, Time, TimeAdapter } from "../../models/time.model";
+import { AddTime, ReadTimes, TimesState } from "../../store/time.store";
+import { Select, Store } from '@ngxs/store';
+import { map, withLatestFrom, startWith } from "rxjs/operators";
+import { Subject } from 'rxjs';
 
 @Component({
     selector: 'app-timbrage',
@@ -21,7 +21,7 @@ export class TimbrageComponent implements OnInit, OnDestroy {
     @Select(TimesState.times) times$: Observable<Time[]>;
     @Select(TimesState.loading) loading$: Observable<boolean>;
 
-    sumDay$: Observable<Duration>;
+    sumDay$: Subject<Duration>;
 
     constructor(private calculationService: CalculationService, private store: Store) {
     }
@@ -30,14 +30,18 @@ export class TimbrageComponent implements OnInit, OnDestroy {
         this.startTimers();
         this.store.dispatch(new ReadTimes(moment().format(DATE_ISO_FORMAT)));
 
-        this.sumDay$ = this.times$.pipe(
-            map(times => this.calculationService.calculate(times))
+        this.sumDay$ = new Subject();
+
+        this.times$.pipe(
+            map(times => this.calculationService.calculate(times)),
+            startWith(this.sumDay$)
         );
     }
 
     private startTimers(): void {
         this.timerDay = setInterval(() => {
             this.now = new Date();
+            this.sumDay$.next(this.calculationService.calculate(this.store.selectSnapshot(TimesState.times)));
         }, 1000);
     }
 
@@ -47,6 +51,7 @@ export class TimbrageComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.stopTimers()
+        this.sumDay$.unsubscribe();
     }
 
     public addTimbrage() {

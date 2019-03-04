@@ -5,7 +5,7 @@
 export const environment = {
     production: false,
     client: {
-        in_memory: false,
+        in_memory: true,
         base_url: "http://localhost:8080"
     }
 };
