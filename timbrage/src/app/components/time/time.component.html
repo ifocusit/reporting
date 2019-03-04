@@ -1,29 +1,25 @@
 <div class="readonly">
-    <div (click)="startEditing()">{{time | moment: 'HH:mm'}}<span *ngIf="!odd">début</span><span *ngIf="odd">fin</span></div>
-    <button mat-icon-button color="accent" (click)="delete()">
-        <mat-icon>delete_forever</mat-icon>
-    </button>
+  <div (click)="startEditing()">{{ time | moment: 'HH:mm' }}<span *ngIf="!odd">début</span><span *ngIf="odd">fin</span></div>
+  <button mat-icon-button color="accent" (click)="delete()">
+    <mat-icon>delete_forever</mat-icon>
+  </button>
 </div>
 <div class="backdrop" *ngIf="editing"></div>
 <div class="picker-wrapper" *ngIf="editing">
-    <div class="picker-toolbar">
-        <button mat-button color="accent" (click)="revert()">CANCEL</button>
-        <button mat-button color="accent" (click)="submit()">DONE</button>
+  <div class="picker-toolbar">
+    <button mat-button color="accent" (click)="revert()">CANCEL</button>
+    <button mat-button color="accent" (click)="submit()">DONE</button>
+  </div>
+  <div class="picker-columns">
+    <div id="hours" class="picker-col">
+      <button mat-button *ngFor="let hour of hours" (click)="time.hours(hour)" [class.mat-accent]="time.hours() === +hour">
+        {{ hour }}
+      </button>
     </div>
-    <div class="picker-columns">
-        <div id="hours" class="picker-col">
-            <button mat-button *ngFor="let hour of hours"
-                    (click)="time.hours(hour)"
-                    [class.mat-accent]="time.hours() === +hour">
-                {{hour}}
-            </button>
-        </div>
-        <div id="minutes" class="picker-col">
-            <button mat-button *ngFor="let minute of minutes"
-                    (click)="time.minutes(minute)"
-                    [class.mat-accent]="time.minutes() === +minute">
-                {{minute}}
-            </button>
-        </div>
+    <div id="minutes" class="picker-col">
+      <button mat-button *ngFor="let minute of minutes" (click)="time.minutes(minute)" [class.mat-accent]="time.minutes() === +minute">
+        {{ minute }}
+      </button>
     </div>
+  </div>
 </div>

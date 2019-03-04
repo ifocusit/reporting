@@ -4,9 +4,10 @@
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",
-  "orientation" : "portrait",
+  "orientation": "portrait",
   "scope": "/",
   "start_url": "/",
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "assets/icons/drawable-ldpi-icon.png",

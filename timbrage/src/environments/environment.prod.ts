@@ -1,7 +1,7 @@
 export const environment = {
-    production: true,
-    client: {
-        in_memory: true,
-        base_url: ""
-    }
+  production: true,
+  client: {
+    in_memory: true,
+    base_url: '',
+  },
 };

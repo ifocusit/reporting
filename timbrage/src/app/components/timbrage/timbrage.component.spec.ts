@@ -8,9 +8,8 @@ describe('TimbrageComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TimbrageComponent ]
-    })
-    .compileComponents();
+      declarations: [TimbrageComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

@@ -1,8 +1,7 @@
-import {MomentPipe} from './moment.pipe';
+import { MomentPipe } from './moment.pipe';
 import * as moment from 'moment';
 
 describe('MomentPipe', () => {
-
   const pipe = new MomentPipe();
 
   it('create an instance', () => {

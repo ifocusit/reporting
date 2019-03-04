@@ -19,7 +19,8 @@
         width: 100%;
       }
 
-      #date, #sumDay {
+      #date,
+      #sumDay {
         display: inline-block;
       }
 
@@ -37,7 +38,7 @@
           }
 
           & > span:nth-child(2) {
-            color: #E1BEE7;
+            color: #e1bee7;
           }
         }
       }
@@ -55,8 +56,9 @@
         }
       }
 
-      #sumWeek, #sumMonth {
-        color: #E1BEE7;
+      #sumWeek,
+      #sumMonth {
+        color: #e1bee7;
       }
 
       #now {

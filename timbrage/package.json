@@ -4,12 +4,14 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve -o --port 4402 --host 0.0.0.0",
-    "build": "ng build",
+    "build": "ng build --prod --build-optimizer",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "deploy": "firebase deploy --only hosting",
-    "predeploy": "rm -rf dist && ng build --prod"
+    "predeploy": "rm -rf dist && ng build --prod",
+    "docker:build": "docker build -t ifocusit/reporting/timbrage .",
+    "docker:run": "docker run -P ifocusit/reporting/timbrage"
   },
   "private": true,
   "dependencies": {

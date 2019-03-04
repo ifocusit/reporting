@@ -3,13 +3,13 @@
 //**************************************************************************************/
 
 // description de l'état
-import * as moment from "moment";
-import { Moment } from "moment";
-import { TimesClientService } from "../services/times-client.service";
-import { Action, Selector, State, StateContext } from "@ngxs/store";
-import { DATE_ISO_FORMAT, MONTH_ISO_FORMAT, Time, TimeAdapter } from "../models/time.model";
-import { catchError, defaultIfEmpty, map, toArray } from "rxjs/operators";
-import { ReadTimes, TimesState, TimesStateModel } from "./time.store";
+import * as moment from 'moment';
+import { Moment } from 'moment';
+import { TimesClientService } from '../services/times-client.service';
+import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { DATE_ISO_FORMAT, MONTH_ISO_FORMAT, Time, TimeAdapter } from '../models/time.model';
+import { catchError, defaultIfEmpty, map, toArray } from 'rxjs/operators';
+import { ReadTimes, TimesState, TimesStateModel } from './time.store';
 
 export interface CalendarDayModel {
   date: Moment;
@@ -29,22 +29,19 @@ export interface CalendarStateModel {
 export class SelectDate {
   static readonly type = '[Calendar] Set Date';
 
-  constructor(public date: Moment) {
-  }
+  constructor(public date: Moment) {}
 }
 
 export class MoveMonth {
   static readonly type = '[Calendar] Move Month';
 
-  constructor(public change: number) {
-  }
+  constructor(public change: number) {}
 }
 
 export class MonthTimesReaded {
   static readonly type = '[Calendar] Month Times Readed';
 
-  constructor(public date: string, public times: Time[][]) {
-  }
+  constructor(public date: string, public times: Time[][]) {}
 }
 
 //**************************************************************************************/
@@ -54,15 +51,13 @@ export class MonthTimesReaded {
   name: 'calendar',
   defaults: {
     loading: false,
-    month: "",
-    days: []
+    month: '',
+    days: [],
   },
-  children: [TimesState]
+  children: [TimesState],
 })
 export class CalendarState {
-
-  constructor(private timeClient: TimesClientService) {
-  }
+  constructor(private timeClient: TimesClientService) {}
 
   // SELECTORS
 
@@ -84,7 +79,7 @@ export class CalendarState {
       ...ctx.getState(),
       loading: true,
       days: [],
-      month: action.date.format(MONTH_ISO_FORMAT)
+      month: action.date.format(MONTH_ISO_FORMAT),
     });
 
     // load month
@@ -92,20 +87,20 @@ export class CalendarState {
       catchError(() => []),
       toArray(),
       map(times => ctx.dispatch(new MonthTimesReaded(action.date.format(DATE_ISO_FORMAT), times))),
-      defaultIfEmpty(ctx.setState({
-        ...ctx.getState(),
-        loading: false
-      }))
+      defaultIfEmpty(
+        ctx.setState({
+          ...ctx.getState(),
+          loading: false,
+        })
+      )
     );
   }
 
   @Action(MonthTimesReaded)
   monthTimesReaded(ctx: StateContext<CalendarStateModel>, action: MonthTimesReaded) {
-
     // list of days having times
     const daysWithTimes = [];
-    action.times.filter(times => times.length > 0)
-      .forEach(times => daysWithTimes.push(new TimeAdapter(times[0]).getDay()));
+    action.times.filter(times => times.length > 0).forEach(times => daysWithTimes.push(new TimeAdapter(times[0]).getDay()));
 
     const state = ctx.getState();
     const days = CalendarState.getDaysInMonth(action.date);
@@ -114,8 +109,8 @@ export class CalendarState {
       loading: false,
       days: days.map(date => ({
         date: date,
-        hasTimes: !!daysWithTimes.find(dateWithTimes => dateWithTimes === date.format(DATE_ISO_FORMAT))
-      }))
+        hasTimes: !!daysWithTimes.find(dateWithTimes => dateWithTimes === date.format(DATE_ISO_FORMAT)),
+      })),
     });
 
     return ctx.dispatch(new ReadTimes(action.date));

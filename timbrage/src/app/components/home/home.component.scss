@@ -19,7 +19,8 @@
     mat-toolbar > * {
       width: 100%;
 
-      .mat-tab-link, .mat-ink-bar {
+      .mat-tab-link,
+      .mat-ink-bar {
         width: 100%;
       }
     }
