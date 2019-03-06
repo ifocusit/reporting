@@ -66,7 +66,7 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     FormsModule,
     // pwa
-    ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     // material
     FlexLayoutModule,
     BrowserAnimationsModule,

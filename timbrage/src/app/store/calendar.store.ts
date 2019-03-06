@@ -75,8 +75,7 @@ export class CalendarState {
       return ctx.dispatch(new ReadTimes(action.date.format(DATE_ISO_FORMAT)));
     }
 
-    ctx.setState({
-      ...ctx.getState(),
+    ctx.patchState({
       loading: true,
       days: [],
       month: action.date.format(MONTH_ISO_FORMAT),
@@ -86,13 +85,12 @@ export class CalendarState {
     return this.timeClient.read(action.date.format(MONTH_ISO_FORMAT)).pipe(
       catchError(() => []),
       toArray(),
-      map(times => ctx.dispatch(new MonthTimesReaded(action.date.format(DATE_ISO_FORMAT), times))),
-      defaultIfEmpty(
-        ctx.setState({
-          ...ctx.getState(),
-          loading: false,
-        })
-      )
+      map((times: Time[][]) => ctx.dispatch(new MonthTimesReaded(action.date.format(DATE_ISO_FORMAT), times)))
+      // defaultIfEmpty(
+      //   ctx.patchState({
+      //     loading: false,
+      //   })
+      // )
     );
   }
 
@@ -104,8 +102,7 @@ export class CalendarState {
 
     const state = ctx.getState();
     const days = CalendarState.getDaysInMonth(action.date);
-    ctx.setState({
-      ...state,
+    ctx.patchState({
       loading: false,
       days: days.map(date => ({
         date: date,

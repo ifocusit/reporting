@@ -7,7 +7,6 @@
   "orientation": "portrait",
   "scope": "/",
   "start_url": "/",
-  "prefer_related_applications": false,
   "icons": [
     {
       "src": "assets/icons/drawable-ldpi-icon.png",
