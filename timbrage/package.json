@@ -11,7 +11,8 @@
     "deploy": "firebase deploy --only hosting",
     "predeploy": "rm -rf dist && ng build --prod",
     "docker:build": "docker build -t ifocusit/reporting/timbrage .",
-    "docker:run": "docker run -p 32768:80 ifocusit/reporting/timbrage"
+    "docker:run": "docker run -p 32768:80 ifocusit/reporting/timbrage",
+    "http": "ng build --prod && cd dist && angular-http-server --open"
   },
   "private": true,
   "dependencies": {
@@ -27,7 +28,7 @@
     "@angular/flex-layout": "^7.0.0-beta.23",
     "@angular/http": "~7.2.0",
     "@angular/material": "^7.3.3",
-    "@angular/pwa": "^0.13.4",
+    "@angular/pwa": "^0.13.5",
     "@angular/service-worker": "~7.2.0",
     "@ngx-pwa/local-storage": "~7.4.2",
     "@ngxs/store": "~3.4.1",
