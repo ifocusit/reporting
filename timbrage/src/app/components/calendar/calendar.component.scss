@@ -6,7 +6,6 @@
     background-color: transparent;
 
     mat-card-header {
-
       width: 100%;
       height: 252px;
       position: fixed;
@@ -46,7 +45,8 @@
         padding: 5px;
       }
 
-      .prev, .next {
+      .prev,
+      .next {
         cursor: pointer;
         margin: 15px 15px;
       }
@@ -64,7 +64,7 @@
           cursor: pointer;
 
           &.with-times {
-            background-color: #E1BEE7;
+            background-color: #e1bee7;
             color: white;
           }
 

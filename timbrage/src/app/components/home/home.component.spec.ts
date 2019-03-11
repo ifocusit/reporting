@@ -1,4 +1,3 @@
-
 import { fakeAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { HomeComponent } from './home.component';
@@ -10,9 +9,8 @@ describe('HomeComponent', () => {
   beforeEach(fakeAsync(() => {
     TestBed.configureTestingModule({
       imports: [MatSidenavModule],
-      declarations: [HomeComponent]
-    })
-    .compileComponents();
+      declarations: [HomeComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(HomeComponent);
     component = fixture.componentInstance;

@@ -5,7 +5,7 @@ import { TimesClientService } from './times-client.service';
 describe('TimesClientService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [TimesClientService]
+      providers: [TimesClientService],
     });
   });
 

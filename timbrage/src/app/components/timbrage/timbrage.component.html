@@ -1,48 +1,28 @@
 <mat-card fxLayout="column" class="mat-elevation-z0">
-    <mat-card-header fxFlex="60" class="mat-elevation-z1">
-        <div>
-            <span id="date">
-                <span>{{ now | date: 'd' }}</span>
-                <span>
-                    <span>{{ now | date: 'EEEE' }}</span>
-                    <span>{{ now | date: 'MMMM yyyy' }}</span>
-                </span>
-            </span>
-            <span id="sumDay">
-                <div>Total journalier</div>
-                <div>{{(sumDay$ | async) | duration }}</div>
-            </span>
-            <div id="now">{{ now | date: 'HH:mm:ss' }}</div>
-        </div>
-        <!--<div id="date">
-            <span>{{ now | date: 'dd' }}</span>
-            <span>
-                <span>{{ now | date: 'EEEE' }}</span>
-                <span>{{ now | date: 'MMMM yyyy' }}</span>
-            </span>
-        </div>
-        <div id="sumDay">
-            <div>Total journalier:</div>
-            <div>{{ sumDay }}</div>
-        </div>
-        <div id="now">
-            {{ now | date: 'HH:mm:ss' }}
-        </div>
-        <div id="sumWeek">
-            total hebdomadaire : {{ sumWeek }}
-        </div>
-        <div id="sumMonth">
-            total mensuel : {{ sumMonth }}
-        </div>-->
-    </mat-card-header>
-    <mat-card-actions>
-        <button id="add" (click)="addTimbrage()" mat-fab color="accent">
-            <mat-icon>add</mat-icon>
-        </button>
-    </mat-card-actions>
-    <mat-card-content>
-        <div fxFlexFill fxLayout="column">
-            <app-time *ngFor="let time of (times$ | async); let odd=odd" [model]="time" [odd]="odd"></app-time>
-        </div>
-    </mat-card-content>
+  <mat-card-header fxFlex="60" class="mat-elevation-z1">
+    <div *ngIf="(now$ | async) as now">
+      <span id="date">
+        <span>{{ now | date: 'd' }}</span>
+        <span>
+          <span>{{ now | date: 'EEEE' }}</span>
+          <span>{{ now | date: 'MMMM yyyy' }}</span>
+        </span>
+      </span>
+      <span id="sumDay">
+        <div>Total journalier</div>
+        <div>{{ sumDay$ | async | duration }}</div>
+      </span>
+      <div id="now">{{ now | date: 'HH:mm:ss' }}</div>
+    </div>
+  </mat-card-header>
+  <mat-card-actions>
+    <button id="add" (click)="addTimbrage()" mat-fab color="accent">
+      <mat-icon>add</mat-icon>
+    </button>
+  </mat-card-actions>
+  <mat-card-content>
+    <div fxFlexFill fxLayout="column">
+      <app-time *ngFor="let time of (times$ | async); let odd = odd" [model]="time" [odd]="odd"></app-time>
+    </div>
+  </mat-card-content>
 </mat-card>

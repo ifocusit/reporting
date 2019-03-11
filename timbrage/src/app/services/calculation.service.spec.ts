@@ -5,7 +5,7 @@ import { CalculationService } from './calculation.service';
 describe('CalculationService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [CalculationService]
+      providers: [CalculationService],
     });
   });
 

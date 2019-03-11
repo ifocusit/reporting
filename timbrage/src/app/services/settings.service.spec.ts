@@ -5,7 +5,7 @@ import { SettingsService } from './settings.service';
 describe('SettingsService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [SettingsService]
+      providers: [SettingsService],
     });
   });
 

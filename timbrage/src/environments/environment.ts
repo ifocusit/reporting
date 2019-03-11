@@ -3,10 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-    production: false,
-    client: {
-        in_memory: false
-    }
+  production: false,
+  client: {
+    in_memory: false,
+  },
 };
 
 /*
