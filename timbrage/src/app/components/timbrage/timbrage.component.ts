@@ -6,53 +6,31 @@ import { Observable } from 'rxjs/internal/Observable';
 import { DATE_ISO_FORMAT, Time, TimeAdapter } from '../../models/time.model';
 import { AddTime, ReadTimes, TimesState } from '../../store/time.store';
 import { Select, Store } from '@ngxs/store';
-import { map, withLatestFrom, startWith } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { map, withLatestFrom, startWith, tap } from 'rxjs/operators';
+import { interval, Subject, timer } from 'rxjs';
 
 @Component({
   selector: 'app-timbrage',
   templateUrl: './timbrage.component.html',
   styleUrls: ['./timbrage.component.scss'],
 })
-export class TimbrageComponent implements OnInit, OnDestroy {
-  now = new Date();
-  timerDay: any;
+export class TimbrageComponent implements OnInit {
+  now$: Observable<Date>;
+  sumDay$: Observable<Duration>;
 
   @Select(TimesState.times) times$: Observable<Time[]>;
   @Select(TimesState.loading) loading$: Observable<boolean>;
-
-  sumDay$: Subject<Duration>;
 
   constructor(private calculationService: CalculationService, private store: Store) {}
 
   ngOnInit() {
     this.startTimers();
     this.store.dispatch(new ReadTimes(moment().format(DATE_ISO_FORMAT)));
-
-    this.sumDay$ = new Subject();
-
-    this.times$.pipe(
-      map(times => this.calculationService.calculate(times)),
-      startWith(this.sumDay$)
-    );
   }
 
-  private startTimers(): void {
-    this.timerDay = setInterval(() => {
-      this.now = new Date();
-      this.sumDay$.next(this.calculationService.calculate(this.store.selectSnapshot(TimesState.times)));
-    }, 1000);
-  }
-
-  private stopTimers() {
-    if (this.timerDay) {
-      clearInterval(this.timerDay);
-    }
-  }
-
-  ngOnDestroy(): void {
-    this.stopTimers();
-    this.sumDay$.unsubscribe();
+  private startTimers() {
+    this.now$ = interval(1000).pipe(map(() => new Date()));
+    this.sumDay$ = interval(1000).pipe(map(() => this.calculationService.calculate(this.store.selectSnapshot(TimesState.times))));
   }
 
   public addTimbrage() {

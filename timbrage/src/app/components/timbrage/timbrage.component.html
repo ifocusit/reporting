@@ -1,6 +1,6 @@
 <mat-card fxLayout="column" class="mat-elevation-z0">
   <mat-card-header fxFlex="60" class="mat-elevation-z1">
-    <div>
+    <div *ngIf="(now$ | async) as now">
       <span id="date">
         <span>{{ now | date: 'd' }}</span>
         <span>
