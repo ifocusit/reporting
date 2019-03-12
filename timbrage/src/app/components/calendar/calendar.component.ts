@@ -15,7 +15,7 @@ import { CalendarDayModel, CalendarState, MoveMonth, SelectDate } from '../../st
   styleUrls: ['./calendar.component.scss'],
 })
 export class CalendarComponent implements OnInit {
-  public weekDays = ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'];
+  public weekDays = ['Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa', 'Di'];
 
   @Select(TimesState.times) times$: Observable<Time[]>;
   @Select(TimesState.date) selected$: Observable<Moment>;
