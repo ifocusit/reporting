@@ -111,7 +111,7 @@ export class TimesState {
     ctx.patchState({
       loading: true,
     });
-    return this.timeClient.create(action.times, action.uniq).pipe(
+    return this.timeClient.create(action.times).pipe(
       map((times: Time[]) => times.filter((time: Time) => time.time.startsWith(state.date))),
       tap(times =>
         ctx.patchState({

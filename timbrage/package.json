@@ -9,10 +9,10 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "deploy": "firebase deploy --only hosting",
-    "predeploy": "rm -rf dist && ng build --prod",
+    "predeploy": "ng build --prod",
     "docker:build": "docker build -t ifocusit/reporting/timbrage .",
     "docker:run": "docker run -p 32768:80 ifocusit/reporting/timbrage",
-    "http": "ng build --prod && cd dist && angular-http-server --open"
+    "http": "ng build --prod && cd dist && angular-http-server --open -p 4402"
   },
   "private": true,
   "dependencies": {

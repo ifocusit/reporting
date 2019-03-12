@@ -44,7 +44,7 @@ export class AppComponent implements OnInit {
         map(key => localStorage.getItem(key)),
         filter(json => !!json),
         map(json => JSON.parse(json)),
-        mergeMap(times => this.timeClient.create(times, true)),
+        mergeMap(times => this.timeClient.create(times)),
         tap(times => localStorage.removeItem(new TimeAdapter(times[0]).format(DATE_ISO_FORMAT))),
         catchError(() => of(true))
       )
