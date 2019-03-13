@@ -70,10 +70,11 @@ export class CalendarState {
 
   @Action(SelectDate)
   selectDate(ctx: StateContext<CalendarStateModel>, action: SelectDate) {
-    if (ctx.getState().month === action.date.format(MONTH_ISO_FORMAT)) {
-      // month don't change => only reload day times
-      return ctx.dispatch(new ReadTimes(action.date.format(DATE_ISO_FORMAT)));
-    }
+    // comment this lines to force reload all month
+    // if (ctx.getState().month === action.date.format(MONTH_ISO_FORMAT)) {
+    //   // month don't change => only reload day times
+    //   return ctx.dispatch(new ReadTimes(action.date.format(DATE_ISO_FORMAT)));
+    // }
 
     ctx.patchState({
       loading: true,

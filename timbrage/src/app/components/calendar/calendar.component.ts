@@ -46,6 +46,6 @@ export class CalendarComponent implements OnInit {
       .date(selected.date())
       .month(selected.month())
       .year(selected.year());
-    this.store.dispatch([new AddTime([TimeAdapter.createTime(time)])]);
+    this.store.dispatch(new AddTime([TimeAdapter.createTime(time)]));
   }
 }
