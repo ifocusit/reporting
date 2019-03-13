@@ -122,7 +122,7 @@ export class CalendarState {
   public static getDaysInMonth(selectedDate: string): Moment[] {
     const days = [];
     let date = moment(selectedDate).date(1);
-    while (date.days() !== 1) {
+    while (date.days() !== 0) {
       date.add(-1, 'days');
       days.unshift(moment(date));
     }
