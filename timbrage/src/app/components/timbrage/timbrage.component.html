@@ -1,5 +1,5 @@
 <mat-card fxLayout="column" class="mat-elevation-z0">
-  <mat-card-header fxFlex="60" class="mat-elevation-z1">
+  <mat-card-header fxFlex="200px" class="mat-elevation-z1">
     <div *ngIf="(now$ | async) as now">
       <span id="date">
         <span>{{ now | date: 'd' }}</span>
@@ -20,7 +20,7 @@
       <mat-icon>add</mat-icon>
     </button>
   </mat-card-actions>
-  <mat-card-content>
+  <mat-card-content class="scrollbar">
     <div fxFlexFill fxLayout="column">
       <app-time *ngFor="let time of (times$ | async); let odd = odd" [model]="time" [odd]="odd"></app-time>
     </div>

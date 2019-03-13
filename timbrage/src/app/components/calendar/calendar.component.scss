@@ -1,20 +1,13 @@
 :host {
   mat-card {
     padding: 0;
-    height: 100%;
+    height: 100vh;
     width: 100%;
     background-color: transparent;
 
     mat-card-header {
       width: 100%;
-      height: 252px;
-      position: fixed;
-      z-index: 1;
       background-color: #eee;
-
-      & > div {
-        width: 100%;
-      }
 
       /* Month header */
       .month {
@@ -23,37 +16,33 @@
         font-size: 20px;
         text-transform: uppercase;
         letter-spacing: 3px;
-        height: 46px;
-
-        .date {
-          width: 60%;
-          text-align: center;
-        }
+        height: 4em;
 
         .year {
           padding-left: 10px;
+        }
+
+        .prev,
+        .next {
+          cursor: pointer;
         }
       }
 
       /* Weekdays (Mon-Sun) */
       .weekdays {
         background-color: #ddd;
-      }
+        height: 4em;
 
-      .weekdays > * {
-        color: #666;
-        padding: 5px;
-      }
-
-      .prev,
-      .next {
-        cursor: pointer;
-        margin: 15px 15px;
+        & > * {
+          color: #666;
+          padding: 5px;
+        }
       }
 
       /* Days (1-31) */
       .days {
         background: #eee;
+        height: 24em;
 
         & > div {
           margin-bottom: 5px;
@@ -80,29 +69,23 @@
         }
       }
     }
-  }
-
-  mat-card-content {
-    padding-top: 252px;
 
     #sumDay {
-      min-height: 2em;
       font-weight: 700;
       font-size: 2em;
       padding: 10px;
       border-bottom: 1px solid #dedede;
       background-color: white;
       width: 100%;
+      height: 2.5em;
+    }
+
+    mat-card-content {
+      margin-bottom: 8em;
     }
   }
 
-  mat-card-actions {
-    position: fixed;
-    right: 20px;
-    top: 307px;
+  ::ng-deep mat-card mat-card-header div.mat-card-header-text {
+    margin: 0;
   }
-}
-
-::ng-deep mat-card mat-card-header div.mat-card-header-text {
-  margin: 0;
 }

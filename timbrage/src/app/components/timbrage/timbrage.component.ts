@@ -29,8 +29,8 @@ export class TimbrageComponent implements OnInit {
   }
 
   private startTimers() {
-    this.now$ = interval(1000).pipe(map(() => new Date()));
-    this.sumDay$ = interval(1000).pipe(map(() => this.calculationService.calculate(this.store.selectSnapshot(TimesState.times))));
+    this.now$ = timer(0, 1000).pipe(map(() => new Date()));
+    this.sumDay$ = timer(0, 1000).pipe(map(() => this.calculationService.calculate(this.store.selectSnapshot(TimesState.times))));
   }
 
   public addTimbrage() {
