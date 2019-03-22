@@ -1,5 +1,10 @@
 <mat-card class="mat-elevation-z0">
-  <mat-card-header fxLayout="column" *ngIf="(selected$ | async) as selectedDate">
+  <mat-card-header
+    fxLayout="column"
+    *ngIf="(selected$ | async) as selectedDate"
+    (swipeleft)="changeMonth(+1)"
+    (swiperight)="changeMonth(-1)"
+  >
     <div id="calendar">
       <div class="month" fxLayoutAlign="space-around center">
         <div class="prev" (click)="changeMonth(-1)" fxFlex="0 1 20px">&#10094;</div>

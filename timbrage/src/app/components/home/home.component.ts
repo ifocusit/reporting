@@ -16,7 +16,9 @@ import * as moment from 'moment';
 export class HomeComponent {
   navLinks = [{ path: 'timbrage', label: 'Timbrage' }, { path: 'calendar', label: 'Calendar' }];
 
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset).pipe(map(result => result.matches));
+  isHandset$: Observable<boolean> = this.breakpointObserver
+    .observe(Breakpoints.Handset)
+    .pipe(map((result: { matches: boolean }) => result.matches));
 
   @ViewChild('export') private exportLink: ElementRef;
 

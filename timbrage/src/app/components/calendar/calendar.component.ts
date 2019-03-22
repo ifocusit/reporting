@@ -27,7 +27,7 @@ export class CalendarComponent implements OnInit {
   constructor(private store: Store, private calculationService: CalculationService) {}
 
   ngOnInit() {
-    this.sumDay$ = this.times$.pipe(map(times => this.calculationService.calculate(times, false)));
+    this.sumDay$ = this.times$.pipe(map((times: Time[]) => this.calculationService.calculate(times, false)));
 
     this.select(moment());
   }
