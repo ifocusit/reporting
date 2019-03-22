@@ -1,6 +1,6 @@
 <mat-card fxLayout="column" class="mat-elevation-z0">
   <mat-card-header fxLayout="column" *ngIf="(selected$ | async) as selectedDate">
-    <div id="calendar" fxLayout="column">
+    <div id="calendar">
       <div class="month" fxLayoutAlign="space-around center">
         <div class="prev" (click)="changeMonth(-1)" fxFlex="0 1 20px">&#10094;</div>
         <div class="date">{{ selectedDate | moment: 'MMMM YYYY' }}</div>

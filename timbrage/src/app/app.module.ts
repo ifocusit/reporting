@@ -83,7 +83,7 @@ const appRoutes: Routes = [
     MatOptionModule,
     MatInputModule,
     // ngxs
-    NgxsModule.forRoot([TimesState, CalendarState, SettingsState]),
+    NgxsModule.forRoot([TimesState, CalendarState, SettingsState], { developmentMode: !environment.production }),
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'fr' },
