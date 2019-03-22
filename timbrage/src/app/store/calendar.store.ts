@@ -78,7 +78,6 @@ export class CalendarState {
 
     ctx.patchState({
       loading: true,
-      days: [],
       month: action.date.format(MONTH_ISO_FORMAT),
     });
 
