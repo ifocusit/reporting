@@ -16,7 +16,7 @@ import {
   MatSelectModule,
   MatSidenavModule,
   MatTabsModule,
-  MatToolbarModule,
+  MatToolbarModule
 } from '@angular/material';
 import { TimbrageComponent } from './components/timbrage/timbrage.component';
 import { LayoutModule } from '@angular/cdk/layout';
@@ -29,14 +29,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgxsModule } from '@ngxs/store';
 import { TimesState } from './store/time.store';
 import { MomentPipe } from './pipes/moment.pipe';
-import { TimesClientService } from './services/times-client.service';
-import { TimesLocalClientService } from './services/times-local-client.service';
 import { CalendarState } from './store/calendar.store';
 import { SettingsState } from './store/settings.store';
 import { DurationPipe } from './pipes/duration.pipe';
-import { localStorageProviders } from '@ngx-pwa/local-storage';
 import { HomeComponent } from './components/home/home.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 
 const appRoutes: Routes = [
   { path: 'timbrage', component: TimbrageComponent },
@@ -44,8 +42,8 @@ const appRoutes: Routes = [
   {
     path: '',
     redirectTo: '/timbrage',
-    pathMatch: 'full',
-  },
+    pathMatch: 'full'
+  }
 ];
 
 @NgModule({
@@ -57,7 +55,7 @@ const appRoutes: Routes = [
     MomentPipe,
     DurationPipe,
     HomeComponent,
-    SidenavComponent,
+    SidenavComponent
   ],
   imports: [
     BrowserModule,
@@ -84,12 +82,8 @@ const appRoutes: Routes = [
     MatInputModule,
     // ngxs
     NgxsModule.forRoot([TimesState, CalendarState, SettingsState], { developmentMode: !environment.production }),
+    NgxsReduxDevtoolsPluginModule.forRoot()
   ],
-  providers: [
-    { provide: LOCALE_ID, useValue: 'fr' },
-    { provide: TimesClientService, useClass: environment.client.in_memory ? TimesLocalClientService : TimesClientService },
-    localStorageProviders({ prefix: 'timbrage' }),
-  ],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}

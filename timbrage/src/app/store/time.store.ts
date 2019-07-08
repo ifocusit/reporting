@@ -1,6 +1,5 @@
 import { Time } from '../models/time.model';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { TimesClientService } from '../services/times-client.service';
 import { defaultIfEmpty, map, mergeMap, tap } from 'rxjs/operators';
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -54,11 +53,11 @@ export class ReadedTimes {
   defaults: {
     date: moment().format('YYYY-MM-DD'),
     loading: false,
-    times: [],
-  },
+    times: []
+  }
 })
 export class TimesState {
-  constructor(private timeClient: TimesClientService) {}
+  constructor() {}
 
   // SELECTORS
 
@@ -84,24 +83,15 @@ export class TimesState {
     ctx.patchState({
       loading: true,
       date: action.date,
-      times: [],
+      times: []
     });
-
-    return this.timeClient.read(action.date).pipe(
-      map((times: Time[]) => ctx.dispatch(new ReadedTimes(times)))
-      // defaultIfEmpty(
-      // ctx.patchState({
-      // loading: false,
-      // })
-      // )
-    );
   }
 
   @Action(ReadedTimes)
   readedTimes(ctx: StateContext<TimesStateModel>, action: ReadedTimes) {
     ctx.patchState({
       loading: false,
-      times: action.times,
+      times: action.times
     });
   }
 
@@ -109,55 +99,22 @@ export class TimesState {
   addTime(ctx: StateContext<TimesStateModel>, action: AddTime) {
     const state = ctx.getState();
     ctx.patchState({
-      loading: true,
+      loading: true
     });
-    return this.timeClient.create(action.times).pipe(
-      map((times: Time[]) => times.filter((time: Time) => time.time.startsWith(state.date))),
-      tap(times =>
-        ctx.patchState({
-          loading: false,
-          times: times,
-        })
-      )
-      // defaultIfEmpty(
-      //   ctx.patchState({
-      //     loading: false,
-      //   })
-      // )
-    );
   }
 
   @Action(UpdateTime)
   updateTime(ctx: StateContext<TimesStateModel>, action: UpdateTime) {
     ctx.patchState({
-      loading: true,
+      loading: true
     });
-    return this.timeClient.update(action.time).pipe(
-      tap((time: Time) => {
-        ctx
-          .getState()
-          .times.filter(value => value.id === time.id)
-          .forEach(value => (value.time = time.time));
-        ctx.patchState({
-          loading: false,
-        });
-      })
-    );
   }
 
   @Action(DeleteTime)
   deleteTime(ctx: StateContext<TimesStateModel>, action: DeleteTime) {
     ctx.patchState({
-      loading: true,
+      loading: true
     });
-    return this.timeClient.delete(action.time).pipe(
-      tap(() => {
-        ctx.patchState({
-          loading: false,
-          times: ctx.getState().times.filter(time => time.id !== action.time.id),
-        });
-      })
-    );
   }
 
   @Action(DeleteTimes)
