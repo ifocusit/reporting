@@ -11,7 +11,7 @@ import * as moment from 'moment';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
+  styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
   navLinks = [{ path: 'timbrage', label: 'Timbrage' }, { path: 'calendar', label: 'Calendar' }];
@@ -20,7 +20,7 @@ export class HomeComponent {
     .observe(Breakpoints.Handset)
     .pipe(map((result: { matches: boolean }) => result.matches));
 
-  @ViewChild('export') private exportLink: ElementRef;
+  @ViewChild('export', { static: true }) private exportLink: ElementRef;
 
   constructor(private breakpointObserver: BreakpointObserver, private exportService: ExportService, private store: Store) {}
 

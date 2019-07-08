@@ -8,10 +8,10 @@ import { Store } from '@ngxs/store';
 @Component({
   selector: 'app-sidenav',
   templateUrl: './sidenav.component.html',
-  styleUrls: ['./sidenav.component.scss'],
+  styleUrls: ['./sidenav.component.scss']
 })
 export class SidenavComponent implements OnInit {
-  @ViewChild('fileSelector') private fileSelector: ElementRef;
+  @ViewChild('fileSelector', { static: true }) private fileSelector: ElementRef;
 
   public formatFormControl = new FormControl('', [Validators.required]);
   public times: Time[];
@@ -32,7 +32,7 @@ export class SidenavComponent implements OnInit {
 
   public fileChanged(e) {
     const file = e.target.files[0];
-    let reader = new FileReader();
+    const reader = new FileReader();
     reader.onload = () => {
       this.times = [];
       (reader.result as string).split('\r\n').forEach(line => {
