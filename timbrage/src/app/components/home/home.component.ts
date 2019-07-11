@@ -7,6 +7,7 @@ import { ExportService } from '../../services/export.service';
 import { Store } from '@ngxs/store';
 import { SelectDate } from '../../store/calendar.store';
 import * as moment from 'moment';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -22,7 +23,10 @@ export class HomeComponent {
 
   @ViewChild('export', { static: true }) private exportLink: ElementRef;
 
-  constructor(private breakpointObserver: BreakpointObserver, private exportService: ExportService, private store: Store) {}
+  constructor(private breakpointObserver: BreakpointObserver, 
+              private exportService: ExportService, 
+              private store: Store, 
+              private authService: AuthService) {}
 
   public calendarPage() {
     return window.location.pathname.match('.*calendar.*');
@@ -35,5 +39,9 @@ export class HomeComponent {
 
   public goToday() {
     this.store.dispatch(new SelectDate(moment()));
+  }
+
+  signOut() {
+    this.authService.signOutUser();
   }
 }

@@ -13,7 +13,7 @@
   <mat-sidenav-content>
     <header>
       <mat-toolbar color="primary" fxLayout="row" fxLayoutAlign="space-between center">
-        <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" *ngIf="(isHandset$ | async)">
+        <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" *ngIf="isHandset$ | async">
           <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
         </button>
         <span fxFlex="calc(100%-168px)">Timbrage</span>
@@ -22,6 +22,9 @@
           <mat-icon>get_app</mat-icon>
         </button>
         <a #export style="display: none">hidden link</a>
+        <button mat-icon-button (click)="signOut()">
+          <mat-icon>exit_to_app</mat-icon>
+        </button>
       </mat-toolbar>
     </header>
 

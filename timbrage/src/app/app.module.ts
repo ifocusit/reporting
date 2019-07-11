@@ -35,10 +35,17 @@ import { DurationPipe } from './pipes/duration.pipe';
 import { HomeComponent } from './components/home/home.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { AuthGuardService } from './services/auth-guard.service';
+import { AuthComponent } from './components/auth/auth.component';
 
 const appRoutes: Routes = [
-  { path: 'timbrage', component: TimbrageComponent },
-  { path: 'calendar', component: CalendarComponent },
+  { path: 'auth', component: AuthComponent },
+  { path: 'timbrage', canActivate: [AuthGuardService], component: TimbrageComponent },
+  { path: 'calendar', canActivate: [AuthGuardService], component: CalendarComponent },
   {
     path: '',
     redirectTo: '/timbrage',
@@ -55,7 +62,8 @@ const appRoutes: Routes = [
     MomentPipe,
     DurationPipe,
     HomeComponent,
-    SidenavComponent
+    SidenavComponent,
+    AuthComponent
   ],
   imports: [
     BrowserModule,
@@ -82,7 +90,12 @@ const appRoutes: Routes = [
     MatInputModule,
     // ngxs
     NgxsModule.forRoot([TimesState, CalendarState, SettingsState], { developmentMode: !environment.production }),
-    NgxsReduxDevtoolsPluginModule.forRoot()
+    NgxsReduxDevtoolsPluginModule.forRoot(),
+    // firebase
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFirestoreModule,
+    AngularFireAuthModule,
+    AngularFireStorageModule
   ],
   bootstrap: [AppComponent]
 })
