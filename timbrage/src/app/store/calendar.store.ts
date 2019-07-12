@@ -6,9 +6,11 @@
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { DATE_ISO_FORMAT, MONTH_ISO_FORMAT, Time, TimeAdapter } from '../models/time.model';
-import { catchError, defaultIfEmpty, map, toArray } from 'rxjs/operators';
+import { DATE_ISO_FORMAT, MONTH_ISO_FORMAT, Time, TimeAdapter, TimeModel, DATETIME_ISO_FORMAT } from '../models/time.model';
+import { catchError, defaultIfEmpty, map, toArray, switchMap, mergeMap } from 'rxjs/operators';
 import { ReadTimes, TimesState, TimesStateModel } from './time.store';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 export interface CalendarDayModel {
   date: Moment;
@@ -16,7 +18,6 @@ export interface CalendarDayModel {
 }
 
 export interface CalendarStateModel {
-  loading: boolean;
   days: CalendarDayModel[];
   month: string;
 }
@@ -40,7 +41,7 @@ export class MoveMonth {
 export class MonthTimesReaded {
   static readonly type = '[Calendar] Month Times Readed';
 
-  constructor(public date: string, public times: Time[][]) {}
+  constructor(public date: string, public times: Time[]) {}
 }
 
 // **************************************************************************************/
@@ -49,14 +50,13 @@ export class MonthTimesReaded {
 @State<CalendarStateModel>({
   name: 'calendar',
   defaults: {
-    loading: false,
     month: '',
     days: []
   },
   children: [TimesState]
 })
 export class CalendarState {
-  constructor() {}
+  constructor(private firestore: AngularFirestore, private fireauth: AngularFireAuth) {}
 
   // SELECTORS
 
@@ -65,7 +65,7 @@ export class CalendarState {
     return state.days;
   }
 
-  public static getDaysInMonth(selectedDate: string): Moment[] {
+  public static getMonthDays(selectedDate: string): Moment[] {
     const days = [];
     let date = moment(selectedDate).date(1);
     while (date.days() !== 0) {
@@ -103,24 +103,47 @@ export class CalendarState {
     // }
 
     ctx.patchState({
-      loading: true,
       month: action.date.format(MONTH_ISO_FORMAT)
     });
+
+    // define timestamp range
+    let start = moment(action.date).startOf('month').startOf('day');
+    let end = moment(action.date).endOf('month').endOf('day');
+
+    return this.fireauth.authState.pipe(
+      mergeMap(user => this.firestore
+        .collection<TimeModel>(`users/${user.uid}/times`, ref => ref
+          .where('timestamp', '>=', start.utc().valueOf())
+          .where('timestamp', '<=', end.utc().valueOf())
+          .orderBy('timestamp')
+        )
+        .snapshotChanges()),
+      map(times => times.map(data => ({
+        id: data.payload.doc.id, 
+        time: moment(data.payload.doc.data().timestamp).format(DATETIME_ISO_FORMAT)
+      } as Time))),
+      mergeMap(times => ctx.dispatch(new MonthTimesReaded(action.date.format(DATE_ISO_FORMAT), times)))
+    );
   }
 
   @Action(MonthTimesReaded)
   monthTimesReaded(ctx: StateContext<CalendarStateModel>, action: MonthTimesReaded) {
     // list of days having times
-    const daysWithTimes = [];
-    action.times.filter(times => times.length > 0).forEach(times => daysWithTimes.push(new TimeAdapter(times[0]).getDay()));
+    const daysWithTimes : Moment[] = [];
+    const days = CalendarState.getMonthDays(action.date);
 
-    const state = ctx.getState();
-    const days = CalendarState.getDaysInMonth(action.date);
+    days.forEach(day => {
+      const start = moment(day).startOf('day');
+      const end = moment(day).endOf('day');
+      const timesOfDay = action.times.filter(time => new TimeAdapter(time).getMoment().isBetween(start, end, 'day', '[]'))
+      if (timesOfDay.length > 0) {
+        daysWithTimes.push(day);
+      }
+    });
     ctx.patchState({
-      loading: false,
       days: days.map(date => ({
         date: date,
-        hasTimes: !!daysWithTimes.find(dateWithTimes => dateWithTimes === date.format(DATE_ISO_FORMAT))
+        hasTimes: !!daysWithTimes.find(dateWithTimes => dateWithTimes.isSame(date, 'day'))
       }))
     });
 

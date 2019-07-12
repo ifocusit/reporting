@@ -1,13 +1,14 @@
-import { Time } from '../models/time.model';
+import { Time, TimeAdapter, DATE_ISO_FORMAT, DATETIME_ISO_FORMAT, MONTH_ISO_FORMAT, TimeModel } from '../models/time.model';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { defaultIfEmpty, map, mergeMap, tap } from 'rxjs/operators';
+import { defaultIfEmpty, map, mergeMap, tap, switchMap, timestamp } from 'rxjs/operators';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { Moment } from 'moment';
-import { from } from 'rxjs';
+import { from, Observable } from 'rxjs';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 export interface TimesStateModel {
-  loading: boolean;
   date: string;
   times: Time[];
 }
@@ -52,19 +53,13 @@ export class ReadedTimes {
   name: 'times',
   defaults: {
     date: moment().format('YYYY-MM-DD'),
-    loading: false,
     times: []
   }
 })
 export class TimesState {
-  constructor() {}
+  constructor(private firestore: AngularFirestore, private fireauth: AngularFireAuth) {}
 
   // SELECTORS
-
-  @Selector()
-  public static loading(state: TimesStateModel) {
-    return state.loading;
-  }
 
   @Selector()
   public static times(state: TimesStateModel) {
@@ -81,40 +76,60 @@ export class TimesState {
   @Action(ReadTimes)
   readTimes(ctx: StateContext<TimesStateModel>, action: ReadTimes) {
     ctx.patchState({
-      loading: true,
       date: action.date,
       times: []
     });
+    // define timestamp range
+    let start = moment(action.date).startOf('day');
+    let end = moment(action.date).endOf('day');
+
+    return this.fireauth.user.pipe(
+      mergeMap(user => this.firestore
+        .collection<TimeModel>(`users/${user.uid}/times`, ref => ref
+          .where('timestamp', '>=', start.utc().valueOf())
+          .where('timestamp', '<=', end.utc().valueOf())
+        )
+        .snapshotChanges()),
+      map(times => times.map(data => ({
+        id: data.payload.doc.id, 
+        time: moment(data.payload.doc.data().timestamp).format(DATETIME_ISO_FORMAT)
+      } as Time))),
+      mergeMap(times => ctx.dispatch(new ReadedTimes(times)))
+    );
   }
 
   @Action(ReadedTimes)
   readedTimes(ctx: StateContext<TimesStateModel>, action: ReadedTimes) {
     ctx.patchState({
-      loading: false,
       times: action.times
     });
   }
 
   @Action(AddTime)
   addTime(ctx: StateContext<TimesStateModel>, action: AddTime) {
-    const state = ctx.getState();
-    ctx.patchState({
-      loading: true
-    });
+    const time = action.times.map(time => ({
+      timestamp: new TimeAdapter(time).timestamp
+    } as TimeModel))[0];
+    return this.fireauth.user.pipe(
+      mergeMap(user => this.firestore.collection<TimeModel>(`users/${user.uid}/times`).add(time))
+    );
   }
 
   @Action(UpdateTime)
   updateTime(ctx: StateContext<TimesStateModel>, action: UpdateTime) {
-    ctx.patchState({
-      loading: true
-    });
+    const timestamp = {
+      timestamp: new TimeAdapter(action.time).timestamp
+    } as TimeModel;
+    return this.fireauth.user.pipe(
+      mergeMap(user => this.firestore.collection<TimeModel>(`users/${user.uid}/times`).doc(action.time.id).update(timestamp))
+    );
   }
 
   @Action(DeleteTime)
   deleteTime(ctx: StateContext<TimesStateModel>, action: DeleteTime) {
-    ctx.patchState({
-      loading: true
-    });
+    return this.fireauth.user.pipe(
+      switchMap(user => this.firestore.collection<TimeModel>(`users/${user.uid}/times`).doc(action.time.id).delete())
+    );
   }
 
   @Action(DeleteTimes)

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { Select, Store } from '@ngxs/store';
-import { AddTime, TimesState } from '../../store/time.store';
+import { AddTime, TimesState, ReadTimes } from '../../store/time.store';
 import * as moment from 'moment';
 import { Duration, Moment } from 'moment';
-import { Time, TimeAdapter } from '../../models/time.model';
+import { Time, TimeAdapter, DATETIME_ISO_FORMAT } from '../../models/time.model';
 import { map } from 'rxjs/operators';
 import { CalculationService } from '../../services/calculation.service';
 import { CalendarDayModel, CalendarState, MoveMonth, SelectDate } from '../../store/calendar.store';
@@ -19,7 +19,6 @@ export class CalendarComponent implements OnInit {
 
   @Select(TimesState.times) times$: Observable<Time[]>;
   @Select(TimesState.date) selected$: Observable<Moment>;
-  @Select(TimesState.loading) loading$: Observable<Moment>;
   @Select(CalendarState.days) days$: Observable<CalendarDayModel[]>;
 
   sumDay$: Observable<Duration>;
@@ -29,7 +28,7 @@ export class CalendarComponent implements OnInit {
   ngOnInit() {
     this.sumDay$ = this.times$.pipe(map((times: Time[]) => this.calculationService.calculate(times, false)));
 
-    this.select(moment());
+    return this.store.dispatch(new SelectDate(moment()));
   }
 
   public changeMonth(change: number) {
@@ -37,7 +36,7 @@ export class CalendarComponent implements OnInit {
   }
 
   public select(date: Moment) {
-    this.store.dispatch(new SelectDate(date));
+    return this.store.dispatch(new SelectDate(date));
   }
 
   public addTimbrage() {

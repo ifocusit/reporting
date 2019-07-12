@@ -19,7 +19,6 @@ export class TimbrageComponent implements OnInit {
   sumDay$: Observable<Duration>;
 
   @Select(TimesState.times) times$: Observable<Time[]>;
-  @Select(TimesState.loading) loading$: Observable<boolean>;
 
   constructor(private calculationService: CalculationService, private store: Store) {}
 

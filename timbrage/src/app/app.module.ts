@@ -93,9 +93,8 @@ const appRoutes: Routes = [
     NgxsReduxDevtoolsPluginModule.forRoot(),
     // firebase
     AngularFireModule.initializeApp(environment.firebaseConfig),
-    AngularFirestoreModule,
-    AngularFireAuthModule,
-    AngularFireStorageModule
+    AngularFirestoreModule.enablePersistence(),
+    AngularFireAuthModule
   ],
   bootstrap: [AppComponent]
 })

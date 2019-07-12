@@ -5,6 +5,10 @@ export const DATETIME_ISO_FORMAT = 'YYYY-MM-DDTHH:mm';
 export const DATE_ISO_FORMAT = 'YYYY-MM-DD';
 export const MONTH_ISO_FORMAT = 'YYYY-MM';
 
+export interface TimeModel {
+  timestamp: number;
+}
+
 export interface Time {
   time: string;
   id?: string;
@@ -68,6 +72,10 @@ export class TimeAdapter {
 
   public format(format = DATETIME_ISO_FORMAT) {
     return this.getMoment().format(format);
+  }
+
+  public get timestamp() {
+    return this.getMoment().utc().valueOf()
   }
 
   public copyTimeWithCurrentTime(): Time {
