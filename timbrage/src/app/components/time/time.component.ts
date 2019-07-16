@@ -8,7 +8,7 @@ import { Moment } from 'moment';
 @Component({
   selector: 'app-time',
   templateUrl: './time.component.html',
-  styleUrls: ['./time.component.scss'],
+  styleUrls: ['./time.component.scss']
 })
 export class TimeComponent implements OnInit {
   @Input() set model(model: Time) {

@@ -7,7 +7,7 @@ import { Store } from '@ngxs/store';
 import { AddTime } from '../store/time.store';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class CalculationService {
   constructor(private settings: SettingsService, private store: Store) {}
@@ -30,7 +30,7 @@ export class CalculationService {
   }
 
   private diff(t1: Time, t0: Time): Duration {
-    let diff = new TimeAdapter(t1).getMoment().diff(new TimeAdapter(t0).getMoment());
+    const diff = new TimeAdapter(t1).getMoment().diff(new TimeAdapter(t0).getMoment());
 
     return moment.duration(diff);
   }
@@ -43,12 +43,12 @@ export class CalculationService {
       } else if (manageMissing) {
         const timeAdapter = new TimeAdapter(list[i]);
         // the list of timbrages is not odd
-        let missing = timeAdapter.copyTimeWithCurrentTime();
+        const missing = timeAdapter.copyTimeWithCurrentTime();
         // only if it's not in the today time
         // and the actual time is not before the parameterized end of day
         // if we must set missing report to end of the day (use in calendar view)
-        let isToday = moment().isSame(timeAdapter.getDate(), 'day');
-        let isAfterParametizedEndOfDay = moment().isAfter(this.settings.getEndOfDay());
+        const isToday = moment().isSame(timeAdapter.getDate(), 'day');
+        const isAfterParametizedEndOfDay = moment().isAfter(this.settings.getEndOfDay());
         if (setMissingToEndOfDay && (!isToday || isAfterParametizedEndOfDay)) {
           // set time to end of day
           missing.time = this.settings
@@ -58,7 +58,7 @@ export class CalculationService {
 
           if (this.settings.get().saveMissings) {
             //   missing timbrage must be save to database
-            this.store.dispatch(new AddTime([missing]));
+            this.store.dispatch(new AddTime(missing));
           }
         }
         pairs.push([list[i], missing]);

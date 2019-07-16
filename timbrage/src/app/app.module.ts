@@ -27,9 +27,7 @@ import { TimeComponent } from './components/time/time.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxsModule } from '@ngxs/store';
-import { TimesState } from './store/time.store';
 import { MomentPipe } from './pipes/moment.pipe';
-import { CalendarState } from './store/calendar.store';
 import { SettingsState } from './store/settings.store';
 import { DurationPipe } from './pipes/duration.pipe';
 import { HomeComponent } from './components/home/home.component';
@@ -41,15 +39,18 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AuthGuardService } from './services/auth-guard.service';
 import { AuthComponent } from './components/auth/auth.component';
+import { TimesState } from './store/time.store';
 
 const appRoutes: Routes = [
   { path: 'auth', component: AuthComponent },
-  { path: 'timbrage', canActivate: [AuthGuardService], component: TimbrageComponent },
-  { path: 'calendar', canActivate: [AuthGuardService], component: CalendarComponent },
   {
     path: '',
-    redirectTo: '/timbrage',
-    pathMatch: 'full'
+    component: HomeComponent,
+    children: [
+      { path: 'timbrage', canActivate: [AuthGuardService], component: TimbrageComponent },
+      { path: 'calendar', canActivate: [AuthGuardService], component: CalendarComponent },
+      { path: '', redirectTo: '/timbrage', pathMatch: 'full' }
+    ]
   }
 ];
 
@@ -89,7 +90,7 @@ const appRoutes: Routes = [
     MatOptionModule,
     MatInputModule,
     // ngxs
-    NgxsModule.forRoot([TimesState, CalendarState, SettingsState], { developmentMode: !environment.production }),
+    NgxsModule.forRoot([TimesState, SettingsState], { developmentMode: !environment.production }),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     // firebase
     AngularFireModule.initializeApp(environment.firebaseConfig),

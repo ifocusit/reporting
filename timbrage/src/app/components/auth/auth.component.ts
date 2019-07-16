@@ -9,14 +9,14 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./auth.component.scss']
 })
 export class AuthComponent implements OnInit {
-
   public signup = false;
+  public passwordSignin = false;
 
   signupForm: FormGroup;
   signinForm: FormGroup;
   errorMessage: string;
 
-  constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) { }
+  constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
     this.initForm();
@@ -27,7 +27,7 @@ export class AuthComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.pattern(/[0-9a-zA-Z]{6,}/)]]
     });
-    
+
     this.signupForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.pattern(/[0-9a-zA-Z]{6,}/)]]

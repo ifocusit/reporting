@@ -7,14 +7,32 @@ import { Moment } from 'moment';
 import { from, Observable } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { TimesService } from '../services/times.service';
 
 export interface TimesStateModel {
-  date: string;
-  times: Time[];
+  selectedDate: Moment;
+}
+
+export class SelectDate {
+  static readonly type = '[Calendar] Set Date';
+
+  constructor(public date: Moment) {}
+}
+
+export class MoveMonth {
+  static readonly type = '[Calendar] Move Month';
+
+  constructor(public change: number) {}
 }
 
 export class AddTime {
-  static readonly type = '[Time] Add Time(s)';
+  static readonly type = '[Time] Add Time';
+
+  constructor(public time: Time) {}
+}
+
+export class AddTimes {
+  static readonly type = '[Time] Add Times';
 
   constructor(public times: Time[]) {}
 }
@@ -52,84 +70,48 @@ export class ReadedTimes {
 @State<TimesStateModel>({
   name: 'times',
   defaults: {
-    date: moment().format('YYYY-MM-DD'),
-    times: []
+    selectedDate: moment()
   }
 })
 export class TimesState {
-  constructor(private firestore: AngularFirestore, private fireauth: AngularFireAuth) {}
-
-  // SELECTORS
+  constructor(private firestore: AngularFirestore, private fireauth: AngularFireAuth, private timesService: TimesService) {}
 
   @Selector()
-  public static times(state: TimesStateModel) {
-    return _.orderBy(state.times, ['time'], ['asc']);
+  public static selectedDate(state: TimesStateModel): Moment {
+    return state.selectedDate;
   }
 
-  @Selector()
-  public static date(state: TimesStateModel): Moment {
-    return moment(state.date);
-  }
-
-  // ACTIONS
-
-  @Action(ReadTimes)
-  readTimes(ctx: StateContext<TimesStateModel>, action: ReadTimes) {
-    ctx.patchState({
-      date: action.date,
-      times: []
+  @Action(SelectDate)
+  selectDate(ctx: StateContext<TimesStateModel>, action: SelectDate) {
+    return ctx.patchState({
+      selectedDate: action.date
     });
-    // define timestamp range
-    let start = moment(action.date).startOf('day');
-    let end = moment(action.date).endOf('day');
-
-    return this.fireauth.user.pipe(
-      mergeMap(user => this.firestore
-        .collection<TimeModel>(`users/${user.uid}/times`, ref => ref
-          .where('timestamp', '>=', start.utc().valueOf())
-          .where('timestamp', '<=', end.utc().valueOf())
-        )
-        .snapshotChanges()),
-      map(times => times.map(data => ({
-        id: data.payload.doc.id, 
-        time: moment(data.payload.doc.data().timestamp).format(DATETIME_ISO_FORMAT)
-      } as Time))),
-      mergeMap(times => ctx.dispatch(new ReadedTimes(times)))
-    );
   }
 
-  @Action(ReadedTimes)
-  readedTimes(ctx: StateContext<TimesStateModel>, action: ReadedTimes) {
-    ctx.patchState({
-      times: action.times
-    });
+  @Action(MoveMonth)
+  moveMonth(ctx: StateContext<TimesStateModel>, action: MoveMonth) {
+    const moveTo = moment(ctx.getState().selectedDate).add(action.change, 'months');
+    return ctx.dispatch(new SelectDate(moveTo));
   }
 
   @Action(AddTime)
   addTime(ctx: StateContext<TimesStateModel>, action: AddTime) {
-    const time = action.times.map(time => ({
-      timestamp: new TimeAdapter(time).timestamp
-    } as TimeModel))[0];
-    return this.fireauth.user.pipe(
-      mergeMap(user => this.firestore.collection<TimeModel>(`users/${user.uid}/times`).add(time))
-    );
+    return this.timesService.create(action.time);
+  }
+
+  @Action(AddTimes)
+  addTimes(ctx: StateContext<TimesStateModel>, action: AddTimes) {
+    return from(action.times).pipe(mergeMap((time: Time) => ctx.dispatch(new AddTime(time))));
   }
 
   @Action(UpdateTime)
   updateTime(ctx: StateContext<TimesStateModel>, action: UpdateTime) {
-    const timestamp = {
-      timestamp: new TimeAdapter(action.time).timestamp
-    } as TimeModel;
-    return this.fireauth.user.pipe(
-      mergeMap(user => this.firestore.collection<TimeModel>(`users/${user.uid}/times`).doc(action.time.id).update(timestamp))
-    );
+    return this.timesService.update(action.time);
   }
 
   @Action(DeleteTime)
   deleteTime(ctx: StateContext<TimesStateModel>, action: DeleteTime) {
-    return this.fireauth.user.pipe(
-      switchMap(user => this.firestore.collection<TimeModel>(`users/${user.uid}/times`).doc(action.time.id).delete())
-    );
+    return this.timesService.delete(action.time);
   }
 
   @Action(DeleteTimes)

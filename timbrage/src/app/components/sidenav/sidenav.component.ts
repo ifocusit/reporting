@@ -1,9 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { LoadSettings, SetExportFormat } from '../../store/settings.store';
 import { Time, TimeAdapter } from '../../models/time.model';
-import { AddTime, DeleteTimes } from '../../store/time.store';
 import { FormControl, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
+import { AddTimes, DeleteTimes } from 'src/app/store/time.store';
 
 @Component({
   selector: 'app-sidenav',
@@ -30,8 +30,8 @@ export class SidenavComponent implements OnInit {
     this.fileSelector.nativeElement.click();
   }
 
-  public fileChanged(e) {
-    const file = e.target.files[0];
+  public fileChanged(event) {
+    const file = event.target.files[0];
     const reader = new FileReader();
     reader.onload = () => {
       this.times = [];
@@ -39,14 +39,14 @@ export class SidenavComponent implements OnInit {
         this.times.push(TimeAdapter.createTime(line));
       });
       this.times = this.times.filter(time => !!time);
-      this.store.dispatch(new AddTime(this.times));
+      this.store.dispatch(new AddTimes(this.times)).subscribe();
     };
     reader.readAsText(file);
   }
 
   public cancelImport() {
     if (this.times) {
-      this.store.dispatch(new DeleteTimes(this.times)).subscribe(() => (this.times = undefined));
+      this.store.dispatch(new DeleteTimes(this.times)).subscribe(() => (this.times = null));
     }
   }
 }
