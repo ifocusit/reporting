@@ -1,5 +1,9 @@
+<div class="row" style="padding-bottom: 20px">
+  <h2>Bienvenue.</h2>
+  <p>Première connection ? Faite une <a mat-button (click)="totalSave()">sauvegarde totale</a>.</p>
+</div>
+
 <div class="row" *ngIf="signup" [formGroup]="signupForm">
-  <h2>Création d'un compte</h2>
   <mat-form-field>
     <input matInput placeholder="Entrez votre adresse mail" formControlName="email" />
   </mat-form-field>
@@ -11,7 +15,6 @@
 </div>
 
 <div class="row" *ngIf="!signup && passwordSignin" [formGroup]="signinForm">
-  <h2>Bienvenue.</h2>
   <mat-form-field>
     <input matInput placeholder="Entrez votre adresse mail" formControlName="email" />
   </mat-form-field>
@@ -24,7 +27,6 @@
 </div>
 
 <div class="row" *ngIf="!signup && !passwordSignin">
-  <h2>Bienvenue.</h2>
   <button mat-raised-button (click)="googleSignin()">
     <svg width="25" height="25">
       <g fill="none" fill-rule="evenodd">
@@ -57,3 +59,17 @@
 </div>
 
 <div class="row"><a mat-button href="mailto:timbrage@ifocusit.ch">Un problème ? Nous écrire.</a></div>
+<div class="row" style="padding-top: 30px">
+  <p>
+    L'application demeure totalement gratuite.
+  </p>
+  <p>
+    Une connection avec un compte permet d'avoir une base de données plus rapide et plus robuste tout en conservant les avantages d'une
+    application fonctionnant également offline.
+  </p>
+  <p>
+    Nous vous conseillons d'effectuer une sauvegarde total avant une première connection :
+    <a mat-button (click)="totalSave()">sauvegarde totale</a>.
+  </p>
+</div>
+<a #export style="display: none">hidden link</a>
