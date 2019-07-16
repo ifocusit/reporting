@@ -19,8 +19,8 @@
     <input matInput placeholder="Mot de passe" formControlName="password" />
   </mat-form-field>
   <button mat-raised-button color="primary" (click)="submitPasswordSignin()" [disabled]="signinForm.invalid">Se connecter</button>
-  <div>pas de compte?<a mat-button (click)="signup = true">se créer un compte</a></div>
   <p class="text-danger">{{ errorMessage }}</p>
+  <div>pas de compte?<a mat-button (click)="signup = true">se créer un compte</a>.</div>
 </div>
 
 <div class="row" *ngIf="!signup && !passwordSignin">
@@ -55,3 +55,5 @@
   </button>
   <div>pas de compte?<a mat-button (click)="signup = true">se créer un compte</a></div>
 </div>
+
+<div class="row"><a mat-button href="mailto:timbrage@ifocusit.ch">Un problème ? Nous écrire.</a></div>
