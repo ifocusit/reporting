@@ -43,7 +43,6 @@ export class HomeComponent implements OnInit {
       .pipe(
         mergeMap(key => this.storage.get<Time[]>(key)),
         tap((times: Time[]) => this.store.dispatch(new AddTimes(times))),
-        tap(data => console.log(data)),
         mergeMap(times => this.storage.delete(new TimeAdapter(times[0]).format(DATE_ISO_FORMAT))),
         catchError(() => of(true))
       )
