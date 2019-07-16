@@ -40,6 +40,7 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AuthGuardService } from './services/auth-guard.service';
 import { AuthComponent } from './components/auth/auth.component';
 import { TimesState } from './store/time.store';
+import { localStorageProviders, StorageModule } from '@ngx-pwa/local-storage';
 
 const appRoutes: Routes = [
   { path: 'auth', component: AuthComponent },
@@ -95,8 +96,11 @@ const appRoutes: Routes = [
     // firebase
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule.enablePersistence(),
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    // old localstorage
+    StorageModule.forRoot({ LSPrefix: 'timbrage_', IDBDBName: 'timbrage_ngStorage' })
   ],
+  providers: [{ provide: LOCALE_ID, useValue: 'fr' }],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
