@@ -16,7 +16,8 @@ import {
   MatSelectModule,
   MatSidenavModule,
   MatTabsModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatMenuModule
 } from '@angular/material';
 import { TimbrageComponent } from './components/timbrage/timbrage.component';
 import { LayoutModule } from '@angular/cdk/layout';
@@ -36,11 +37,10 @@ import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AuthGuardService } from './services/auth-guard.service';
 import { AuthComponent } from './components/auth/auth.component';
 import { TimesState } from './store/time.store';
-import { localStorageProviders, StorageModule } from '@ngx-pwa/local-storage';
+import { StorageModule } from '@ngx-pwa/local-storage';
 
 const appRoutes: Routes = [
   { path: 'auth', component: AuthComponent },
@@ -84,6 +84,7 @@ const appRoutes: Routes = [
     MatToolbarModule,
     MatButtonModule,
     MatSidenavModule,
+    MatMenuModule,
     MatListModule,
     MatCardModule,
     MatFormFieldModule,

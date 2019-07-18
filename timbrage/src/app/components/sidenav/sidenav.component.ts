@@ -4,6 +4,8 @@ import { Time, TimeAdapter } from '../../models/time.model';
 import { FormControl, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { AddTimes, DeleteTimes } from 'src/app/store/time.store';
+import { AuthService, User } from 'src/app/services/auth.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-sidenav',
@@ -16,9 +18,12 @@ export class SidenavComponent implements OnInit {
   public formatFormControl = new FormControl('', [Validators.required]);
   public times: Time[];
 
-  constructor(private store: Store) {}
+  public user$: Observable<User>;
+
+  constructor(private store: Store, private authService: AuthService) {}
 
   ngOnInit() {
+    this.user$ = this.authService.user$;
     this.store.dispatch(new LoadSettings()).subscribe(state => this.formatFormControl.setValue(state.settings.exportFormat));
   }
 
@@ -30,7 +35,7 @@ export class SidenavComponent implements OnInit {
     this.fileSelector.nativeElement.click();
   }
 
-  public fileChanged(event) {
+  public fileSelected(event) {
     const file = event.target.files[0];
     const reader = new FileReader();
     reader.onload = () => {
@@ -39,7 +44,7 @@ export class SidenavComponent implements OnInit {
         this.times.push(TimeAdapter.createTime(line));
       });
       this.times = this.times.filter(time => !!time);
-      this.store.dispatch(new AddTimes(this.times)).subscribe();
+      this.store.dispatch(new AddTimes(this.times)).subscribe(() => (this.times = undefined));
     };
     reader.readAsText(file);
   }
@@ -48,5 +53,9 @@ export class SidenavComponent implements OnInit {
     if (this.times) {
       this.store.dispatch(new DeleteTimes(this.times)).subscribe(() => (this.times = null));
     }
+  }
+
+  signOut() {
+    this.authService.signOutUser();
   }
 }

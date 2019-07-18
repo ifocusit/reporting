@@ -54,6 +54,7 @@ export class TimesService {
     };
     return this.fireauth.authState.pipe(
       mergeMap(user => this.firestore.collection<TimeModel>(`users/${user.uid}/times`).add(timestamp)),
+      take(1),
       map(
         doc =>
           ({
@@ -87,7 +88,8 @@ export class TimesService {
           .collection<TimeModel>(`users/${user.uid}/times`)
           .doc(time.id)
           .delete()
-      )
+      ),
+      take(1)
     );
   }
 }

@@ -26,7 +26,7 @@ export class TimeAdapter {
     }
     return {
       id: id,
-      time: time.format(DATETIME_ISO_FORMAT),
+      time: time.format(DATETIME_ISO_FORMAT)
     };
   }
 
@@ -75,7 +75,7 @@ export class TimeAdapter {
   }
 
   public get timestamp() {
-    return this.getMoment().utc().valueOf()
+    return this.getMoment().valueOf();
   }
 
   public copyTimeWithCurrentTime(): Time {

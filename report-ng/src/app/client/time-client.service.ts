@@ -1,37 +1,81 @@
-import {Injectable} from '@angular/core';
-import {environment} from "../../environments/environment";
-import {HttpClient} from "@angular/common/http";
-import {Time} from "../model/time.model";
-import {map} from "rxjs/operators";
-import {Observable} from "rxjs/internal/Observable";
+import { Injectable } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { Observable } from 'rxjs';
+import * as moment from 'moment';
+import { mergeMap, map, tap, take } from 'rxjs/operators';
+import { Moment } from 'moment';
+import { ISO_MONTH, Time, TimeModel, ISO_DATE_TIME } from '../model/time.model';
 
-@Injectable()
-export class TimeClient {
+@Injectable({
+  providedIn: 'root'
+})
+export class TimesService {
+  constructor(private firestore: AngularFirestore, private fireauth: AngularFireAuth) {}
 
-    private static cast = (created) => Time.from(created);
-
-    constructor(private http: HttpClient) {
+  public read(date: string | Moment): Observable<Time[]> {
+    // define timestamp range
+    let start = moment(date).startOf('day');
+    let end = moment(date).endOf('day');
+    if (typeof date === 'string' && date.length === ISO_MONTH.length) {
+      start = start.startOf('month');
+      end = end.endOf('month');
     }
+    return this.readBetween(start, end);
+  }
 
-    get url(): string {
-        return `${environment.api}/times`;
-    }
+  public readBetween(start: Moment, end: Moment): Observable<Time[]> {
+    return this.fireauth.user.pipe(
+      mergeMap(user =>
+        this.firestore
+          .collection<TimeModel>(`users/${user.uid}/times`, ref =>
+            ref
+              .where('timestamp', '>=', start.valueOf())
+              .where('timestamp', '<=', end.valueOf())
+              .orderBy('timestamp')
+          )
+          .snapshotChanges()
+      ),
+      map(docs => docs.map(doc => new Time(moment(doc.payload.doc.data().timestamp).format(ISO_DATE_TIME), doc.payload.doc.id)))
+    );
+  }
 
-    getTimes$(month: string): Observable<Time[]> {
-        return this.http.get<Time[]>(`${this.url}/month/${month}`)
-            .pipe(
-                map((times: Time[]) => times.map(TimeClient.cast))
-            );
-    }
+  public create(time: Time): Observable<Time> {
+    const timestamp = {
+      timestamp: time.timestamp
+    };
+    return this.fireauth.user.pipe(
+      mergeMap(user => this.firestore.collection<TimeModel>(`users/${user.uid}/times`).add(timestamp)),
+      take(1),
+      map(doc => new Time(time.time, doc.id))
+    );
+  }
 
-    create$(time: string): Observable<Time> {
-        return this.http.post<Time>(this.url, {time: time})
-            .pipe(
-                map(TimeClient.cast)
-            );
-    }
+  public update(time: Time): Observable<Time> {
+    const timestamp = {
+      timestamp: time.timestamp
+    } as TimeModel;
+    return this.fireauth.user.pipe(
+      mergeMap(user =>
+        this.firestore
+          .collection<TimeModel>(`users/${user.uid}/times`)
+          .doc(time.id)
+          .update(timestamp)
+      ),
+      take(1),
+      map(() => time)
+    );
+  }
 
-    delete$(time: Time): Observable<any> {
-        return this.http.delete<any>(`${this.url}/${time.id}`);
-    }
+  public delete(time: Time): Observable<void> {
+    return this.fireauth.user.pipe(
+      mergeMap(user =>
+        this.firestore
+          .collection<TimeModel>(`users/${user.uid}/times`)
+          .doc(time.id)
+          .delete()
+      ),
+      take(1)
+    );
+  }
 }

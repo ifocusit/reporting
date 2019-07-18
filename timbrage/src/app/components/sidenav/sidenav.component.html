@@ -1,23 +1,11 @@
-<div class="container">
-  <mat-nav-list>
-    <!--<mat-list-item>
-            <mat-form-field>
-                <input matInput placeholder="Format de la date" [formControl]="formatFormControl" (change)="setExportFormat()">
-                <mat-error *ngIf="formatFormControl.hasError('required')">Export format is <strong>required</strong></mat-error>
-            </mat-form-field>
-        </mat-list-item>-->
-    <mat-list-item>
-      <button mat-flat-button color="secondary" (click)="selectFile()">
-        Importer
-        <mat-icon>attach_file</mat-icon>
-      </button>
-    </mat-list-item>
-    <mat-list-item>
-      <button mat-raised-button (click)="cancelImport()" [disabled]="!times">Annuler l'import</button>
-    </mat-list-item>
-  </mat-nav-list>
+<mat-nav-list>
+  <a mat-list-item *ngIf="user$ | async as user" (click)="signOut()">{{ user.email }}<mat-icon>exit_to_app</mat-icon>Logout</a>
+  <a mat-list-item *ngIf="!times" color="secondary" (click)="selectFile()">
+    Importer
+    <mat-icon>attach_file</mat-icon>
+  </a>
+  <a mat-list-item *ngIf="times" (click)="cancelImport()">Annuler l'import</a>
 
-  <a mat-button href="mailto:timbrage@ifocusit.ch">Un problème ? Nous écrire.</a>
-
-  <input #fileSelector type="file" (change)="fileChanged($event)" style="display: none" />
-</div>
+  <a mat-list-item href="mailto:timbrage@ifocusit.ch">Un problème ? Nous écrire.</a>
+</mat-nav-list>
+<input #fileSelector type="file" (change)="fileSelected($event)" style="display: none" />

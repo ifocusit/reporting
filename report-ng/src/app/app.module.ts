@@ -1,14 +1,13 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
 
-
-import {AppComponent} from './app.component';
-import {MonthComponent} from './page/month/month.component';
-import {MomentPipe} from './pipe/moment/moment.pipe';
-import {DurationPipe} from './pipe/moment/duration.pipe';
-import {RouterModule, Routes} from '@angular/router';
-import {HomeComponent} from './page/home/home.component';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { AppComponent } from './app.component';
+import { MonthComponent } from './page/month/month.component';
+import { MomentPipe } from './pipe/moment/moment.pipe';
+import { DurationPipe } from './pipe/moment/duration.pipe';
+import { RouterModule, Routes } from '@angular/router';
+import { HomeComponent } from './page/home/home.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   MatButtonModule,
   MatCardModule,
@@ -23,36 +22,41 @@ import {
   MatOptionModule,
   MatSelectModule,
   MatTableModule,
-  MatToolbarModule,
+  MatToolbarModule
 } from '@angular/material';
-import {FormsModule} from '@angular/forms';
-import {HttpClientModule} from "@angular/common/http";
-import {ActivityClient} from "./client/activity-client.service";
-import {FlexLayoutModule} from "@angular/flex-layout";
-import {TimeClient} from "./client/time-client.service";
-import {DailyReportComponent} from './page/month/daily-report/daily-report.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { DailyReportComponent } from './page/month/daily-report/daily-report.component';
+import { AuthComponent } from './page/auth/auth.component';
+import { AuthGuardService } from './page/auth/auth-guard.service';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { environment } from 'src/environments/environment';
 
 const appRoutes: Routes = [
+  { path: 'auth', component: AuthComponent },
   {
-    path: '', redirectTo: '/home', pathMatch: 'full'
+    path: '',
+    redirectTo: '/home',
+    pathMatch: 'full'
   },
-  {path: 'home', component: HomeComponent},
-  {path: 'month/:month', component: MonthComponent}
+  { path: 'home', canActivate: [AuthGuardService], component: HomeComponent },
+  { path: 'month/:month', canActivate: [AuthGuardService], component: MonthComponent }
 ];
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    MonthComponent,
-    MomentPipe,
-    DurationPipe,
-    HomeComponent,
-    DailyReportComponent
-  ],
+  declarations: [AppComponent, MonthComponent, MomentPipe, DurationPipe, HomeComponent, DailyReportComponent, AuthComponent],
   imports: [
     BrowserModule,
+    HttpClientModule,
+    ReactiveFormsModule,
     FormsModule,
-    RouterModule.forRoot(appRoutes, {enableTracing: false}),
+    RouterModule.forRoot(appRoutes, { enableTracing: false }),
+    // material
+    FlexLayoutModule,
+    BrowserAnimationsModule,
     MatButtonModule,
     MatCardModule,
     MatDatepickerModule,
@@ -64,16 +68,15 @@ const appRoutes: Routes = [
     MatTableModule,
     MatToolbarModule,
     MatListModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    FlexLayoutModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatOptionModule
+    MatOptionModule,
+    // firebase
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFirestoreModule.enablePersistence(),
+    AngularFireAuthModule
   ],
-  providers: [ActivityClient, TimeClient],
   bootstrap: [AppComponent],
   entryComponents: [DailyReportComponent]
 })
-export class AppModule {
-}
+export class AppModule {}

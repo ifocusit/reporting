@@ -1,14 +1,12 @@
 import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Observable, from, of } from 'rxjs';
-import { map, mergeMap, tap, catchError, pairwise } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { map, mergeMap, tap, catchError } from 'rxjs/operators';
 import { ExportService } from '../../services/export.service';
 import { Store } from '@ngxs/store';
 import * as moment from 'moment';
-import { AuthService } from 'src/app/services/auth.service';
 import { TimesState, SelectDate, AddTimes } from 'src/app/store/time.store';
 import { StorageMap } from '@ngx-pwa/local-storage';
-import { filter } from 'minimatch';
 import { TimeAdapter, DATE_ISO_FORMAT, Time } from 'src/app/models/time.model';
 
 @Component({
@@ -29,7 +27,6 @@ export class HomeComponent implements OnInit {
     private breakpointObserver: BreakpointObserver,
     private exportService: ExportService,
     private store: Store,
-    private authService: AuthService,
     private storage: StorageMap
   ) {}
 
@@ -60,9 +57,5 @@ export class HomeComponent implements OnInit {
 
   public goToday() {
     this.store.dispatch(new SelectDate(moment()));
-  }
-
-  signOut() {
-    this.authService.signOutUser();
   }
 }

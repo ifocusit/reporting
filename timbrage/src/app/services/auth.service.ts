@@ -19,8 +19,8 @@ export interface User {
 export class AuthService {
   constructor(private fireauth: AngularFireAuth, private firestore: AngularFirestore) {}
 
-  connectedUser(): Observable<User> {
-    return this.fireauth.authState.pipe(
+  get user$(): Observable<User> {
+    return this.fireauth.user.pipe(
       map(credential => {
         if (credential) {
           return {
@@ -30,7 +30,7 @@ export class AuthService {
             photoURL: credential.photoURL
           } as User;
         }
-        return { displayName: 'nobody' } as User;
+        return { displayName: 'nobody', email: 'unknown' } as User;
       })
     );
   }
