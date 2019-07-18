@@ -4,12 +4,15 @@ import { Moment } from 'moment';
 import { WorkingDateReporting } from '../../model/working-date-reporting.model';
 import { ActivatedRoute } from '@angular/router';
 import { filter, groupBy, mergeMap, switchMap, tap, toArray, take, merge, map, pairwise } from 'rxjs/operators';
-import { from, of, range, Observable } from 'rxjs';
+import { from, of, range, Observable, combineLatest } from 'rxjs';
 import { MatDialog } from '@angular/material';
 import { DailyReportComponent } from './daily-report/daily-report.component';
-import { Time } from '../../model/time.model';
+import { Time, ISO_DATE_TIME, ISO_MONTH } from '../../model/time.model';
 import { TimesService } from 'src/app/client/time-client.service';
 import { AuthService, User } from '../auth/auth.service';
+import * as _ from 'lodash';
+import { TimesState, SelectDate } from 'src/app/store/month.store';
+import { Select, Store } from '@ngxs/store';
 
 @Component({
   selector: 'app-month',
@@ -20,87 +23,66 @@ export class MonthComponent implements OnInit {
   public DEFAULT_DAY_DURATION = 8;
   public WEEK_OVERTIME_MAJOR = 1.2;
 
-  _month: Moment;
-  items: Array<WorkingDateReporting>;
+  @Select(TimesState.selectedDate)
+  public selectedDate$: Observable<Moment>;
+
+  items$: Observable<WorkingDateReporting[]>;
+  private days$: Observable<WorkingDateReporting[]>;
+  private times$: Observable<Time[]>;
 
   public user$: Observable<User>;
+
+  public workDays$: Observable<number>;
+  public total$: Observable<number>;
+  public overtime$: Observable<number>;
+  public finalTotal$: Observable<number>;
 
   constructor(
     private route: ActivatedRoute,
     private timesService: TimesService,
     public dialog: MatDialog,
-    private authService: AuthService
+    private authService: AuthService,
+    private store: Store
   ) {}
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.month = moment(params['month'], 'YYYY-MM');
+      this.selectMonth(moment(params['month'], 'YYYY-MM'));
     });
     this.user$ = this.authService.user$;
-  }
 
-  private initDays(): void {
-    this.items = [];
-    for (let i = 1; i <= this._month.daysInMonth(); i++) {
-      this.items.push(new WorkingDateReporting(this._month.clone().date(i)));
-    }
-    this.timesService
-      .read(this._month.format('YYYY-MM'))
-      .pipe(
-        mergeMap(times => from(times)),
-        tap(time => {
-          const item = this.items.find(day => day.isSameDate(time.getDate()));
-          if (item) {
-            item.times.push(time);
-          }
-        })
-        // groupBy((time: Time) => {
-        //   return time.getDate();
-        // }),
-        // mergeMap(group$ => {
-        //   return group$.pipe(toArray());
-        // }),
-        // tap((groupTimes: Time[]) => {
-        //   const date = groupTimes[0].getDate();
-        //   const item = this.items.find(day => day.isSameDate(date));
-        //   if (item) {
-        //     item.times = groupTimes.sort();
-        //   }
-        // })
+    this.days$ = this.selectedDate$.pipe(
+      map(month => _.range(month.daysInMonth()).map((index: number) => new WorkingDateReporting(month.clone().date(index + 1))))
+    );
+
+    this.times$ = this.selectedDate$.pipe(mergeMap(month => this.timesService.read(month.format(ISO_MONTH))));
+
+    this.items$ = combineLatest(this.days$, this.times$).pipe(
+      map((pair: [WorkingDateReporting[], Time[]]) =>
+        pair[0].map(day => new WorkingDateReporting(day.date, pair[1].filter(time => day.isSameDate(time.date))))
       )
-      .subscribe();
+    );
+
+    this.workDays$ = this.items$.pipe(map(items => items.filter(item => item.duration).length));
+    this.total$ = this.items$.pipe(
+      map(days => {
+        const items = days.filter(report => report.duration);
+        if (items.length === 0) {
+          return 0;
+        }
+        return items.map(report => report.getDuration().asHours()).reduce((d1, d2) => d1 + d2);
+      })
+    );
+    this.overtime$ = combineLatest(this.total$, this.workDays$).pipe(
+      map((pair: [number, number]) => pair[0] - this.DEFAULT_DAY_DURATION * pair[1])
+    );
+    this.overtime$ = combineLatest(this.overtime$, this.workDays$).pipe(
+      map((pair: [number, number]) => pair[0] * this.WEEK_OVERTIME_MAJOR + this.DEFAULT_DAY_DURATION * pair[1])
+    );
   }
 
-  get month(): Moment {
-    return this._month;
-  }
-
-  set month(date: Moment) {
-    this._month = date.date(1);
-    if (this._month) {
-      this.initDays();
-    }
-  }
-
-  get workDays(): number {
-    return this.items.filter(item => item.duration).length;
-  }
-
-  get total(): number {
-    const items = this.items.filter(report => report.duration);
-
-    if (items.length === 0) {
-      return 0;
-    }
-    return items.map(report => report.getDuration().asHours()).reduce((d1, d2) => d1 + d2);
-  }
-
-  get overtime(): number {
-    return this.total - this.DEFAULT_DAY_DURATION * this.workDays;
-  }
-
-  get finalTotal(): number {
-    return this.DEFAULT_DAY_DURATION * this.workDays + this.overtime * this.WEEK_OVERTIME_MAJOR;
+  public selectMonth(date: Moment) {
+    return this.store.dispatch(new SelectDate(date));
   }
 
   public billing(): void {
@@ -108,19 +90,28 @@ export class MonthComponent implements OnInit {
   }
 
   public initMissingDays(): void {
-    from(this.items)
+    this.items$
       .pipe(
+        mergeMap(days => from(days)),
         filter(day => !day.isWeekend() && (!day.times || day.times.length === 0)),
-        tap(day => day.setDefaultTimes()),
-        mergeMap(day => from(day.times)),
+        take(1),
+        map(day => {
+          const date = day.date.clone();
+          return [
+            new Time(date.set({ hour: 8, minute: 0 }).format(ISO_DATE_TIME)),
+            new Time(date.set({ hour: 11, minute: 30 }).format(ISO_DATE_TIME)),
+            new Time(date.set({ hour: 12, minute: 30 }).format(ISO_DATE_TIME)),
+            new Time(date.set({ hour: 17, minute: 0 }).format(ISO_DATE_TIME))
+          ];
+        }),
+        mergeMap(times => from(times)),
         tap(time => console.log(`creating ${time.getDateTime()}...`)),
-        mergeMap(time => this.timesService.create(time)),
-        tap(time => console.log(`${time.getDateTime()} created.`)),
-        toArray(),
-        tap(times => console.log(`${times.length} days initialized !`))
+        // mergeMap(time => this.timesService.create(time)),
+        tap(time => console.log(`${time.getDateTime()} created.`))
+        // toArray(),
+        // tap(times => console.log(`${times.length} days initialized !`))
       )
-      .subscribe()
-      .unsubscribe();
+      .subscribe();
   }
 
   edit(toEdit: WorkingDateReporting): void {

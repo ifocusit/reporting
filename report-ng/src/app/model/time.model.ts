@@ -32,6 +32,10 @@ export class Time {
     return this.getMoment().format(ISO_DATE);
   }
 
+  public get date() {
+    return this.getDate();
+  }
+
   public getDateTime(): string {
     return this.getMoment().format(ISO_DATE_TIME);
   }

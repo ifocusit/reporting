@@ -15,7 +15,7 @@
       <button mat-menu-item (click)="signOut()"><mat-icon>exit_to_app</mat-icon>Logout</button>
     </mat-menu>
 
-    <mat-table id="times" [dataSource]="items" class="mat-elevation-z8 reports">
+    <mat-table id="times" [dataSource]="items$" class="mat-elevation-z8 reports">
       <ng-container matColumnDef="date">
         <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
         <mat-cell fxFlex="" *matCellDef="let time">{{ time.date | moment: 'DD dddd' }}</mat-cell>
@@ -42,18 +42,18 @@
       <mat-card-title>Totaux</mat-card-title>
       <mat-card-content>
         <div fxLayout="row">
-          <div fxFlex id="workDays">{{ workDays }} jours ouvrés</div>
-          <div fxFlex="50px" fxFlexAlign="end" id="total">{{ total | number: '.2-2' }}</div>
+          <div fxFlex id="workDays">{{ workDays$ | async }} jours ouvrés</div>
+          <div fxFlex="50px" fxFlexAlign="end" id="total">{{ total$ | async | number: '.2-2' }}</div>
           <div fxFlex="200px">heures</div>
         </div>
         <div fxLayout="row">
           <div fxFlex></div>
-          <div fxFlex="50px" fxFlexAlign="end" id="overtime">{{ overtime | number: '.2-2' }}</div>
+          <div fxFlex="50px" fxFlexAlign="end" id="overtime">{{ overtime$ | async | number: '.2-2' }}</div>
           <div fxFlex="200px">heure(s) supplémentaire(s)</div>
         </div>
         <div fxLayout="row">
           <div fxFlex></div>
-          <div fxFlex="50px" fxFlexAlign="end" id="finalTotal">{{ finalTotal | number: '.2-2' }}</div>
+          <div fxFlex="50px" fxFlexAlign="end" id="finalTotal">{{ finalTotal$ | async | number: '.2-2' }}</div>
           <div fxFlex="200px">heure(s) avec majoration</div>
         </div>
       </mat-card-content>

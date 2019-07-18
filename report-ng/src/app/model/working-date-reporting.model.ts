@@ -18,9 +18,8 @@ export function CalculateDuration(timbrages: Time[]): Duration {
 }
 
 function diff(t1: Time, t0: Time): Duration {
-  const diff = moment(t1.time).diff(moment(t0.time));
-
-  return moment.duration(diff);
+  const difference = moment(t1.time).diff(moment(t0.time));
+  return moment.duration(difference);
 }
 
 function splitPairs(arr: Array<Time>, ignoreSingle = true): Array<Array<Time>> {
@@ -40,18 +39,10 @@ function time(value: string): Time {
 }
 
 export class WorkingDateReporting {
-  constructor(public date: Moment, private _times: Time[] = []) {
+  constructor(public date: Moment, public times: Time[] = []) {
     // if (!_times && !this.isWeekend()) {
     //     this.setDefaultTimes();
     // }
-  }
-
-  get times() {
-    return this._times.sort((a: Time, b: Time) => a.compareTo(b));
-  }
-
-  set times(times: Time[]) {
-    this._times = times; // ? times.sort((a: Time, b: Time) => a.compareTo(b)) : times;
   }
 
   get duration(): string {
@@ -64,7 +55,7 @@ export class WorkingDateReporting {
     const date = this.date.clone();
     let diff = duration.asHours() - DEFAULT_TIME.getDuration().asHours();
     if (diff >= -DEFAULT_TIME.getMorningDuration().asHours()) {
-      this.setDefaultTimes()._times[3] = new Time(
+      this.setDefaultTimes().times[3] = new Time(
         date
           .set({ hour: DEFAULT_TIME.getDatetime(3).hour(), minute: DEFAULT_TIME.getDatetime(3).minute() })
           .add(diff, 'hours')
@@ -72,7 +63,7 @@ export class WorkingDateReporting {
       );
     } else {
       diff = duration.asHours() - DEFAULT_TIME.getMorningDuration().asHours();
-      this._times = [
+      this.times = [
         new Time(
           date.set({ hour: DEFAULT_TIME.getDatetime(0).hour(), minute: DEFAULT_TIME.getDatetime(0).minute() }).format(ISO_DATE_TIME)
         ),
@@ -96,7 +87,7 @@ export class WorkingDateReporting {
 
   public setDefaultTimes(): WorkingDateReporting {
     const date = this.date.clone();
-    this._times = [
+    this.times = [
       new Time(date.set({ hour: 8, minute: 0 }).format(ISO_DATE_TIME)),
       new Time(date.set({ hour: 11, minute: 30 }).format(ISO_DATE_TIME)),
       new Time(date.set({ hour: 12, minute: 30 }).format(ISO_DATE_TIME)),
@@ -106,16 +97,16 @@ export class WorkingDateReporting {
   }
 
   public push(time: Time) {
-    this._times.push(time);
-    this._times.sort((a: Time, b: Time) => a.compareTo(b));
+    this.times.push(time);
+    this.times.sort((a: Time, b: Time) => a.compareTo(b));
   }
 
   getDatetime(index: number): Moment {
-    return this._times[index].getMoment();
+    return this.times[index].getMoment();
   }
 
   getDuration(): Duration {
-    return CalculateDuration(this._times);
+    return CalculateDuration(this.times);
   }
 
   public isWeekend(): boolean {
@@ -128,7 +119,7 @@ export class WorkingDateReporting {
 
   public getMorningDuration(): Duration {
     const duration = moment.duration();
-    this._times
+    this.times
       .map(timestamp => timestamp.getMoment())
       .filter(timestamp => timestamp.hour() < 13)
       .reduce((result, value, index, array) => {
@@ -145,7 +136,7 @@ export class WorkingDateReporting {
   }
 
   public isEmpty(): boolean {
-    return !this._times || this._times.length == 0;
+    return !this.times || this.times.length === 0;
   }
 }
 
