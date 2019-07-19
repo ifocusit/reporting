@@ -37,6 +37,8 @@ export class MonthComponent implements OnInit {
   public overtime$: Observable<number>;
   public finalTotal$: Observable<number>;
 
+  public view = 'headline';
+
   constructor(
     private route: ActivatedRoute,
     private timesService: TimesService,
@@ -116,33 +118,12 @@ export class MonthComponent implements OnInit {
 
   edit(toEdit: WorkingDateReporting): void {
     const dialogRef = this.dialog.open(DailyReportComponent, {
-      width: '300px',
+      width: '350px',
       data: {
         date: toEdit.date,
-        times: !toEdit.times ? [] : toEdit.times.map(time => time.clone())
+        times: [...toEdit.times]
       }
     });
-
-    const deleteOlds$ = from(Array.from(toEdit.times)).pipe(
-      filter(time => time.hasId()),
-      mergeMap(toDelete => this.timesService.delete(toDelete))
-    );
-
-    const createNews$ = times =>
-      from(times).pipe(
-        mergeMap((time: Time) => this.timesService.create(time)),
-        toArray()
-      );
-
-    dialogRef
-      .afterClosed()
-      .pipe(
-        filter(x => !!x),
-        switchMap(report => createNews$(report.times)),
-        tap(times => (toEdit.times = times)),
-        switchMap(() => deleteOlds$)
-      )
-      .subscribe();
   }
 
   signOut() {

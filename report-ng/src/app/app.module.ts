@@ -22,7 +22,8 @@ import {
   MatOptionModule,
   MatSelectModule,
   MatTableModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatButtonToggleModule
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -36,6 +37,7 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { environment } from 'src/environments/environment';
 import { NgxsModule } from '@ngxs/store';
 import { TimesState } from './store/month.store';
+import { DebounceInputDirective } from './directive/debounce-input.directive';
 
 const appRoutes: Routes = [
   { path: 'auth', component: AuthComponent },
@@ -49,7 +51,7 @@ const appRoutes: Routes = [
 ];
 
 @NgModule({
-  declarations: [AppComponent, MonthComponent, MomentPipe, DurationPipe, HomeComponent, DailyReportComponent, AuthComponent],
+  declarations: [AppComponent, MonthComponent, MomentPipe, DurationPipe, HomeComponent, DailyReportComponent, AuthComponent, DebounceInputDirective],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -73,6 +75,7 @@ const appRoutes: Routes = [
     MatFormFieldModule,
     MatSelectModule,
     MatOptionModule,
+    MatButtonToggleModule,
     // ngxs
     NgxsModule.forRoot([TimesState], { developmentMode: !environment.production }),
     // firebase

@@ -1,22 +1,22 @@
 <mat-toolbar color="primary">
-    <h1>Jour : {{reporting.date | date: 'dd.MM.yyyy'}}</h1>
-    <button mat-mini-fab (click)="add()">
-        <mat-icon>add</mat-icon>
-    </button>
+  <h1 fxFlex="calc(100%-120px)">{{ workDay.date | moment: 'DD dddd' }}</h1>
+  <span>total: {{ duration$ | async | duration }}</span>
+  <button mat-mini-fab (click)="add()" class="add">
+    <mat-icon>add</mat-icon>
+  </button>
 </mat-toolbar>
 <div mat-dialog-content>
-    <mat-list>
-        <mat-list-item *ngFor="let time of reporting.times">
-            <mat-form-field class="example-form-field" cdkFocusInitial>
-                <input matInput type="text" [(ngModel)]="time.time"/>
-            </mat-form-field>
-            <button mat-icon-button (click)="remove(time)">
-                <mat-icon>delete</mat-icon>
-            </button>
-        </mat-list-item>
-    </mat-list>
+  <mat-list>
+    <mat-list-item *ngFor="let time of times$ | async">
+      <mat-form-field class="example-form-field" cdkFocusInitial>
+        <input matInput type="text" [(ngModel)]="time.time" appDebounceInput (debounceEvent)="update(time)" />
+      </mat-form-field>
+      <button mat-icon-button (click)="remove(time)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </mat-list-item>
+  </mat-list>
 </div>
 <div mat-dialog-actions>
-    <button mat-button (click)="close()">Annuler</button>
-    <button mat-button [mat-dialog-close]="reporting" cdkFocusInitial color="primary">Valider</button>
+  <button mat-button [mat-dialog-close]="reporting" cdkFocusInitial color="primary">Fermer</button>
 </div>

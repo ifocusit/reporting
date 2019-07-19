@@ -1,18 +1,33 @@
-import {Component, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
-import {Moment} from "moment";
-import {DEFAULT_TIME} from "../../../model/working-date-reporting.model";
-import {ISO_DATE_TIME, Time} from "../../../model/time.model";
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { Moment, Duration } from 'moment';
+import { DEFAULT_TIME, CalculateDuration } from '../../../model/working-date-reporting.model';
+import { ISO_DATE_TIME, Time } from '../../../model/time.model';
+import { Store } from '@ngxs/store';
+import { DeleteTime, AddTime, UpdateTime } from 'src/app/store/month.store';
+import { Observable } from 'rxjs';
+import { TimesService } from 'src/app/client/time-client.service';
+import { take, map, mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-daily-report',
   templateUrl: './daily-report.component.html',
   styleUrls: ['./daily-report.component.less']
 })
-export class DailyReportComponent {
+export class DailyReportComponent implements OnInit {
+  public times$: Observable<Time[]>;
+  public duration$: Observable<Duration>;
 
-  constructor(public dialogRef: MatDialogRef<DailyReportComponent>,
-              @Inject(MAT_DIALOG_DATA) public reporting: { date: Moment, times: Time[] }) {
+  constructor(
+    public dialogRef: MatDialogRef<DailyReportComponent>,
+    @Inject(MAT_DIALOG_DATA) public workDay: { date: Moment },
+    private store: Store,
+    private timesService: TimesService
+  ) {}
+
+  ngOnInit() {
+    this.times$ = this.timesService.read(this.workDay.date);
+    this.duration$ = this.times$.pipe(map(times => CalculateDuration(times)));
   }
 
   close(): void {
@@ -20,14 +35,27 @@ export class DailyReportComponent {
   }
 
   add(): void {
-    const index = Math.min(this.reporting.times.length, 3);
-    const defaultTime = DEFAULT_TIME.getDatetime(index);
-    const time = this.reporting.date.clone().set({'hour': defaultTime.hour(), 'minute': defaultTime.minute()});
-    this.reporting.times.push(new Time(time.format(ISO_DATE_TIME)));
-    this.reporting.times.sort((a: Time, b: Time) => a.compareTo(b));
+    this.times$
+      .pipe(
+        map(times => Math.min(times.length, 3)),
+        take(1),
+        map(index => DEFAULT_TIME.getDatetime(index)),
+        map(defaultTime =>
+          this.workDay.date
+            .clone()
+            .startOf('day')
+            .set({ hour: defaultTime.hour(), minute: defaultTime.minute() })
+        ),
+        mergeMap(time => this.store.dispatch(new AddTime(new Time(time.format(ISO_DATE_TIME)))))
+      )
+      .subscribe();
   }
 
-  remove(time): void {
-    this.reporting.times.splice(this.reporting.times.indexOf(time), 1);
+  remove(time: Time): void {
+    this.store.dispatch(new DeleteTime(time));
+  }
+
+  update(time: Time): void {
+    this.store.dispatch(new UpdateTime(time));
   }
 }

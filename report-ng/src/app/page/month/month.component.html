@@ -1,7 +1,11 @@
 <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxFlex>
   <div fxFlex class="spaced">
     <mat-toolbar color="primary">
-      <span fxFlex="calc(100%-168px)" id="month">{{ month | moment: 'MMMM YYYY' }}</span>
+      <span fxFlex="calc(100%-300px)" id="month">{{ selectedDate$ | async | moment: 'MMMM YYYY' }}</span>
+      <mat-button-toggle-group [(ngModel)]="view">
+        <mat-button-toggle value="headline"><mat-icon>view_headline</mat-icon></mat-button-toggle>
+        <mat-button-toggle value="stream"><mat-icon>view_stream</mat-icon></mat-button-toggle>
+      </mat-button-toggle-group>
       <span *ngIf="user$ | async as user">{{ user.email }}</span>
 
       <button mat-icon-button [mat-menu-trigger-for]="menu">
@@ -10,15 +14,15 @@
     </mat-toolbar>
 
     <mat-menu #menu>
-      <button mat-menu-item (click)="initMissingDays()">Initialiser les jours sans heures</button>
+      <!-- <button mat-menu-item (click)="initMissingDays()">Initialiser les jours sans heures</button> -->
       <button mat-menu-item (click)="billing()">Générer facture</button>
       <button mat-menu-item (click)="signOut()"><mat-icon>exit_to_app</mat-icon>Logout</button>
     </mat-menu>
 
-    <mat-table id="times" [dataSource]="items$" class="mat-elevation-z8 reports">
+    <mat-table id="times" [dataSource]="items$" class="mat-elevation-z8 reports" [ngClass]="{ headline: view == 'headline' }">
       <ng-container matColumnDef="date">
         <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
-        <mat-cell fxFlex="" *matCellDef="let time">{{ time.date | moment: 'DD dddd' }}</mat-cell>
+        <mat-cell fxFlex="" *matCellDef="let time" (click)="edit(time)" class="clickable">{{ time.date | moment: 'DD dddd' }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="duration">
@@ -30,7 +34,9 @@
 
       <ng-container matColumnDef="decimal">
         <mat-header-cell *matHeaderCellDef>Total journalier</mat-header-cell>
-        <mat-cell *matCellDef="let time" fxFlex="100px">{{ time.getDuration()?.asHours() | number: '2.2-2' }} </mat-cell>
+        <mat-cell *matCellDef="let time" fxFlex="100px" (click)="edit(time)" class="clickable"
+          >{{ time.getDuration()?.asHours() | number: '2.2-2' }}
+        </mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="['date', 'duration', 'decimal']"></mat-header-row>
