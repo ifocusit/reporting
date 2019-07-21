@@ -8,7 +8,7 @@
 <div mat-dialog-content>
   <mat-list>
     <mat-list-item *ngFor="let time of times$ | async">
-      <mat-form-field class="example-form-field" cdkFocusInitial>
+      <mat-form-field class="example-form-field">
         <input matInput type="text" [(ngModel)]="time.time" appDebounceInput (debounceEvent)="update(time)" />
       </mat-form-field>
       <button mat-icon-button (click)="remove(time)">

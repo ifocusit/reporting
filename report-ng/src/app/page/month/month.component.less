@@ -1,33 +1,41 @@
 mat-table.reports {
 
-  .week {
-    background-color: lightgray;
-  }
-
-  .clickable {
-    cursor: pointer;
-    width: 3em;
-    height: 1em;
-  }
-}
-
-mat-card.totals {
-  div[fxflexalign=end] {
-    padding-right: 4px;
-    text-align: end;
-    font-weight: bold;
-  }
-
-  div#finalTotal {
-    color: red;
-  }
-}
-
-mat-table.reports.headline {
-  
   mat-row {
-    min-height: 0px;
-    max-height: 22px;
+    min-height: 26px;
+    max-height: 26px;
     font-size: 12px;
+    cursor: pointer;
+    opacity: 0.5;
+
+    &.weekend, &.holiday {
+      background-color: #8e8e8e;
+    }
+
+    &.error {
+      background-color: #f05545;
+      opacity: 1;
+    }
+
+    &.worked {
+      opacity: 1;
+    }
   }
+}
+
+#total, #overtime, #finalTotal {
+  text-align: end;
+  padding-right: 4px;
+}
+
+.negative {
+  color: #e64a19;
+}
+
+#overtime {
+  font-weight: bold;
+}
+
+#finalTotal {
+  color: #b71c1c;
+  font-weight: bold;
 }

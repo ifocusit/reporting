@@ -51,7 +51,16 @@ const appRoutes: Routes = [
 ];
 
 @NgModule({
-  declarations: [AppComponent, MonthComponent, MomentPipe, DurationPipe, HomeComponent, DailyReportComponent, AuthComponent, DebounceInputDirective],
+  declarations: [
+    AppComponent,
+    MonthComponent,
+    MomentPipe,
+    DurationPipe,
+    HomeComponent,
+    DailyReportComponent,
+    AuthComponent,
+    DebounceInputDirective
+  ],
   imports: [
     BrowserModule,
     HttpClientModule,

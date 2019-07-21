@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { Moment } from 'moment';
-import { WorkingDateReporting } from '../../model/working-date-reporting.model';
+import { WorkingDateReporting, DEFAULT_DAY_DURATION, WEEK_OVERTIME_MAJOR } from '../../model/working-date-reporting.model';
 import { ActivatedRoute } from '@angular/router';
 import { filter, groupBy, mergeMap, switchMap, tap, toArray, take, merge, map, pairwise } from 'rxjs/operators';
 import { from, of, range, Observable, combineLatest } from 'rxjs';
 import { MatDialog } from '@angular/material';
 import { DailyReportComponent } from './daily-report/daily-report.component';
 import { Time, ISO_DATE_TIME, ISO_MONTH } from '../../model/time.model';
-import { TimesService } from 'src/app/client/time-client.service';
+import { TimesService } from 'src/app/service/times.service';
 import { AuthService, User } from '../auth/auth.service';
 import * as _ from 'lodash';
 import { TimesState, SelectDate } from 'src/app/store/month.store';
@@ -20,9 +20,6 @@ import { Select, Store } from '@ngxs/store';
   styleUrls: ['./month.component.less']
 })
 export class MonthComponent implements OnInit {
-  public DEFAULT_DAY_DURATION = 8;
-  public WEEK_OVERTIME_MAJOR = 1.2;
-
   @Select(TimesState.selectedDate)
   public selectedDate$: Observable<Moment>;
 
@@ -36,8 +33,7 @@ export class MonthComponent implements OnInit {
   public total$: Observable<number>;
   public overtime$: Observable<number>;
   public finalTotal$: Observable<number>;
-
-  public view = 'headline';
+  public maxMonthHours$: Observable<number>;
 
   constructor(
     private route: ActivatedRoute,
@@ -57,29 +53,45 @@ export class MonthComponent implements OnInit {
       map(month => _.range(month.daysInMonth()).map((index: number) => new WorkingDateReporting(month.clone().date(index + 1))))
     );
 
+    this.maxMonthHours$ = this.days$.pipe(map(days => days.filter(day => !day.isWeekend).length * DEFAULT_DAY_DURATION));
+
     this.times$ = this.selectedDate$.pipe(mergeMap(month => this.timesService.read(month.format(ISO_MONTH))));
 
     this.items$ = combineLatest(this.days$, this.times$).pipe(
       map((pair: [WorkingDateReporting[], Time[]]) =>
         pair[0].map(day => new WorkingDateReporting(day.date, pair[1].filter(time => day.isSameDate(time.date))))
+      ),
+      tap(days =>
+        // extrait tous les jours avant le dernier travaillé
+        // de sorte que tout ce qui se trouve avant le dernier jour travaillé
+        // et sans heures reportées est compris comme étant un jour de congé
+        days
+          .slice(
+            0,
+            days.indexOf(
+              days
+                .filter(day => day.hasTimes)
+                .slice(-1)
+                .pop()
+            )
+          )
+          .filter(day => !day.isWeekend && !day.hasTimes)
+          .forEach(day => (day.holiday = true))
       )
     );
 
-    this.workDays$ = this.items$.pipe(map(items => items.filter(item => item.duration).length));
-    this.total$ = this.items$.pipe(
-      map(days => {
-        const items = days.filter(report => report.duration);
-        if (items.length === 0) {
-          return 0;
-        }
-        return items.map(report => report.getDuration().asHours()).reduce((d1, d2) => d1 + d2);
-      })
-    );
+    // jour travaillé
+    this.workDays$ = this.items$.pipe(map(items => items.filter(item => item.hasTimes).length));
+
+    // durée totale
+    this.total$ = this.items$.pipe(map(days => days.map(report => report.duration.asHours()).reduce((d1, d2) => d1 + d2)));
+
     this.overtime$ = combineLatest(this.total$, this.workDays$).pipe(
-      map((pair: [number, number]) => pair[0] - this.DEFAULT_DAY_DURATION * pair[1])
+      map((pair: [number, number]) => pair[0] - DEFAULT_DAY_DURATION * pair[1])
     );
-    this.overtime$ = combineLatest(this.overtime$, this.workDays$).pipe(
-      map((pair: [number, number]) => pair[0] * this.WEEK_OVERTIME_MAJOR + this.DEFAULT_DAY_DURATION * pair[1])
+
+    this.finalTotal$ = combineLatest(this.overtime$, this.total$).pipe(
+      map((pair: [number, number]) => Math.max(pair[0], 0) * WEEK_OVERTIME_MAJOR + pair[1])
     );
   }
 
@@ -95,7 +107,7 @@ export class MonthComponent implements OnInit {
     this.items$
       .pipe(
         mergeMap(days => from(days)),
-        filter(day => !day.isWeekend() && (!day.times || day.times.length === 0)),
+        filter(day => !day.isWeekend && !day.hasTimes),
         take(1),
         map(day => {
           const date = day.date.clone();

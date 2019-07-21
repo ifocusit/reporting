@@ -7,7 +7,7 @@ import { from, Observable } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Time } from 'src/app/model/time.model';
-import { TimesService } from 'src/app/client/time-client.service';
+import { TimesService } from 'src/app/service/times.service';
 
 export interface TimesStateModel {
   selectedDate: Moment;

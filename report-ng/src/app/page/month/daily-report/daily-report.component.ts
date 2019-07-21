@@ -1,13 +1,14 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Moment, Duration } from 'moment';
-import { DEFAULT_TIME, CalculateDuration } from '../../../model/working-date-reporting.model';
+import { DEFAULT_TIME } from '../../../model/working-date-reporting.model';
 import { ISO_DATE_TIME, Time } from '../../../model/time.model';
 import { Store } from '@ngxs/store';
 import { DeleteTime, AddTime, UpdateTime } from 'src/app/store/month.store';
 import { Observable } from 'rxjs';
-import { TimesService } from 'src/app/client/time-client.service';
+import { TimesService } from 'src/app/service/times.service';
 import { take, map, mergeMap } from 'rxjs/operators';
+import { CalculateDuration } from 'src/app/service/calculate-duration.tools';
 
 @Component({
   selector: 'app-daily-report',
