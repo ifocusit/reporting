@@ -38,6 +38,7 @@ import { environment } from 'src/environments/environment';
 import { NgxsModule } from '@ngxs/store';
 import { TimesState } from './store/month.store';
 import { DebounceInputDirective } from './directive/debounce-input.directive';
+import { BillComponent } from './page/bill/bill.component';
 
 const appRoutes: Routes = [
   { path: 'auth', component: AuthComponent },
@@ -47,7 +48,8 @@ const appRoutes: Routes = [
     pathMatch: 'full'
   },
   { path: 'home', canActivate: [AuthGuardService], component: HomeComponent },
-  { path: 'month/:month', canActivate: [AuthGuardService], component: MonthComponent }
+  { path: 'month/:month', canActivate: [AuthGuardService], component: MonthComponent },
+  { path: 'bill/:month', canActivate: [AuthGuardService], component: BillComponent }
 ];
 
 @NgModule({
@@ -59,7 +61,8 @@ const appRoutes: Routes = [
     HomeComponent,
     DailyReportComponent,
     AuthComponent,
-    DebounceInputDirective
+    DebounceInputDirective,
+    BillComponent
   ],
   imports: [
     BrowserModule,

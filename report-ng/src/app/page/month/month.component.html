@@ -11,7 +11,9 @@
 
     <mat-menu #menu>
       <!-- <button mat-menu-item (click)="initMissingDays()">Initialiser les jours sans heures</button> -->
-      <button mat-menu-item (click)="billing()">Générer facture</button>
+      <button mat-menu-item *ngIf="selectedDate$ | async as selectedDate" [routerLink]="['/bill', selectedDate.format('YYYY-MM')]">
+        Générer facture
+      </button>
       <button mat-menu-item (click)="signOut()"><mat-icon>exit_to_app</mat-icon>Logout</button>
     </mat-menu>
 

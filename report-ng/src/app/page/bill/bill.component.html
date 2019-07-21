@@ -1,0 +1,38 @@
+<div class="correspondant">
+  <div>
+    <div *ngFor="let info of infosClient">{{ info }}</div>
+  </div>
+</div>
+
+<h4>Facture du mois de {{ month }}</h4>
+<h2>Facture {{ idFacture }}</h2>
+<div>n° TVA : {{ numeroTVA }}</div>
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th class="amount">Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{{ duration }} heures</td>
+      <td class="amount">{{ amount }}</td>
+    </tr>
+    <tr class="divider subtotal">
+      <td>Total Hors TVA</td>
+      <td class="amount">{{ totalHT }}</td>
+    </tr>
+    <tr class="subtotal">
+      <td>TVA {{ tva }}%</td>
+      <td class="amount">{{ totalTVA }}</td>
+    </tr>
+    <tr class="total">
+      <td>Total</td>
+      <td class="amount">{{ totalTTC }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<div>Paiement net à 30 jours auprès de:</div>
+<div>Compte postal {{ compte }} CHF / IBAN {{ iban }}</div>
