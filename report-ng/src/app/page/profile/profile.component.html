@@ -28,6 +28,17 @@
       <mat-form-field>
         <input matInput placeholder="Taux de TVA" formControlName="tvaRate" />
       </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Numéro de TVA" formControlName="tvaNumber" />
+      </mat-form-field>
+      <div formGroupName="account" fxLayout="column">
+        <mat-form-field>
+          <input matInput placeholder="Numéro de compte" formControlName="number" />
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="IBAN" formControlName="iban" />
+        </mat-form-field>
+      </div>
     </div>
     <button mat-raised-button color="primary" (click)="save()">Enregistrer</button>
   </form>

@@ -1,38 +1,40 @@
-<div class="correspondant">
-  <div>
-    <div *ngFor="let info of infosClient">{{ info }}</div>
+<ng-container *ngIf="bill$ | async as bill">
+  <div class="correspondant">
+    <div>
+      <div *ngFor="let info of infosClient">{{ bill.clientInfos }}</div>
+    </div>
   </div>
-</div>
 
-<h4>Facture du mois de {{ month }}</h4>
-<h2>Facture {{ idFacture }}</h2>
-<div>n° TVA : {{ numeroTVA }}</div>
-<table>
-  <thead>
-    <tr>
-      <th></th>
-      <th class="amount">Total</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>{{ duration }} heures</td>
-      <td class="amount">{{ amount }}</td>
-    </tr>
-    <tr class="divider subtotal">
-      <td>Total Hors TVA</td>
-      <td class="amount">{{ totalHT }}</td>
-    </tr>
-    <tr class="subtotal">
-      <td>TVA {{ tva }}%</td>
-      <td class="amount">{{ totalTVA }}</td>
-    </tr>
-    <tr class="total">
-      <td>Total</td>
-      <td class="amount">{{ totalTTC }}</td>
-    </tr>
-  </tbody>
-</table>
+  <h4>Facture du mois de {{ bill.month }}</h4>
+  <h2>Facture {{ bill.idFacture }}</h2>
+  <div>n° TVA : {{ bill.tvaNumber }}</div>
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th class="amount">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ bill.duration.asHours() | number: '2.2-2' }} heures</td>
+        <td class="amount">{{ bill.amount | number: '2.2-2' }}</td>
+      </tr>
+      <tr class="divider subtotal">
+        <td>Total Hors TVA</td>
+        <td class="amount">{{ bill.totalHT | number: '2.2-2' }}</td>
+      </tr>
+      <tr class="subtotal">
+        <td>TVA {{ tva }}%</td>
+        <td class="amount">{{ bill.totalTVA | number: '2.2-2' }}</td>
+      </tr>
+      <tr class="total">
+        <td>Total</td>
+        <td class="amount">{{ bill.totalTTC | number: '2.2-2' }}</td>
+      </tr>
+    </tbody>
+  </table>
 
-<div>Paiement net à 30 jours auprès de:</div>
-<div>Compte postal {{ compte }} CHF / IBAN {{ iban }}</div>
+  <div>Paiement net à 30 jours auprès de:</div>
+  <div>Compte postal {{ bill.account?.number }} {{ bill.currency }} / IBAN {{ bill.account?.iban }}</div>
+</ng-container>
