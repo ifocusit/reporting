@@ -3,9 +3,7 @@ import { mergeMap } from 'rxjs/operators';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { Moment } from 'moment';
-import { from, Observable } from 'rxjs';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { AngularFireAuth } from '@angular/fire/auth';
+import { from } from 'rxjs';
 import { Time } from 'src/app/model/time.model';
 import { TimesService } from 'src/app/service/times.service';
 
@@ -74,7 +72,7 @@ export class ReadedTimes {
   }
 })
 export class TimesState {
-  constructor(private firestore: AngularFirestore, private fireauth: AngularFireAuth, private timesService: TimesService) {}
+  constructor(private timesService: TimesService) {}
 
   @Selector()
   public static selectedDate(state: TimesStateModel): Moment {

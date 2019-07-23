@@ -1,0 +1,34 @@
+<div class="header">
+  <div fxLayout="column" fxLayoutAlign="center center" *ngIf="user$ | async as user">
+    <img *ngIf="user.photoURL; else defaultProfileIcon" src="user.photoURL" />
+    <ng-template #defaultProfileIcon>
+      <img src="/assets/profile_default_icon.png" />
+    </ng-template>
+    <h3 *ngIf="user.displayName">{{ user.displayName }}</h3>
+    <h4 *ngIf="user.email">{{ user.email }}</h4>
+  </div>
+</div>
+<div class="content" fxLayout="column" *ngIf="settings$ | async">
+  <form [formGroup]="form">
+    <mat-form-field>
+      <input matInput placeholder="Nom du projet" formControlName="projectName" />
+    </mat-form-field>
+    <div formGroupName="bill" fxLayout="column">
+      <mat-form-field>
+        <mat-select placeholder="Devise" formControlName="currency">
+          <mat-option value="CHF">CHF</mat-option>
+          <mat-option value="EUR">EUR</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Taux horaire" formControlName="hourlyRate" />
+        <!-- <span matPrefix *ngIf="form.bill.currency.value == 'CHF'">CHF</span> -->
+        <!-- <span matSuffix *ngIf="form.bill.currency.value == 'EUR'">€</span> -->
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Taux de TVA" formControlName="tvaRate" />
+      </mat-form-field>
+    </div>
+    <button mat-raised-button color="primary" (click)="save()">Enregistrer</button>
+  </form>
+</div>

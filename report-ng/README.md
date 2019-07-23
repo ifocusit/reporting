@@ -4,17 +4,7 @@
 
 - edition facture
 - ajout ligne manuelle (libellé, montant HT)
-- page settings pour :
-  - timbrages par défaut
-  - h/j
-  - taux horaire
-  - taux TVA (liste avec date début ?)
-  - logo société
-  - infos client
-  - num TVA
-  - paiement à X jours
-  - compte postal
-  - iban
+- page settings
 - gestion multi-client / settings par défaut
 - saisie plus rapide
 - bouton marké comme non congé (ajout de 2 time avec la mm valeur => ne sera pas compté comme un congé :))
@@ -23,3 +13,4 @@
 - facture paramétrable
 - carte totaux reponsive pour Pixel2
 - naviguer entre les mois
+- formulaire de création d'un compte amélioré : https://stackblitz.com/edit/example-angular-material-reactive-form

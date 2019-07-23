@@ -9,10 +9,12 @@ import { MatDialog } from '@angular/material';
 import { DailyReportComponent } from './daily-report/daily-report.component';
 import { Time, ISO_DATE_TIME, ISO_MONTH } from '../../model/time.model';
 import { TimesService } from 'src/app/service/times.service';
-import { AuthService, User } from '../auth/auth.service';
 import * as _ from 'lodash';
 import { TimesState, SelectDate } from 'src/app/store/month.store';
 import { Select, Store } from '@ngxs/store';
+import { User } from 'src/app/model/user.model';
+import { ProfileService } from 'src/app/service/profile.service';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-month',
@@ -39,6 +41,7 @@ export class MonthComponent implements OnInit {
     private route: ActivatedRoute,
     private timesService: TimesService,
     public dialog: MatDialog,
+    private profileSevice: ProfileService,
     private authService: AuthService,
     private store: Store
   ) {}
@@ -47,7 +50,7 @@ export class MonthComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.selectMonth(moment(params['month'], 'YYYY-MM'));
     });
-    this.user$ = this.authService.user$;
+    this.user$ = this.profileSevice.user$;
 
     this.days$ = this.selectedDate$.pipe(
       map(month => _.range(month.daysInMonth()).map((index: number) => new WorkingDateReporting(month.clone().date(index + 1))))

@@ -3,7 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
-import { mergeMap, map, tap, take } from 'rxjs/operators';
+import { mergeMap, map, take } from 'rxjs/operators';
 import { Moment } from 'moment';
 import { ISO_MONTH, Time, TimeModel, ISO_DATE_TIME } from '../model/time.model';
 

@@ -23,7 +23,8 @@ import {
   MatSelectModule,
   MatTableModule,
   MatToolbarModule,
-  MatButtonToggleModule
+  MatButtonToggleModule,
+  MatTabsModule
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -39,6 +40,8 @@ import { NgxsModule } from '@ngxs/store';
 import { TimesState } from './store/month.store';
 import { DebounceInputDirective } from './directive/debounce-input.directive';
 import { BillComponent } from './page/bill/bill.component';
+import { ProfileComponent } from './page/profile/profile.component';
+import { SettingsState } from './store/settings.store';
 
 const appRoutes: Routes = [
   { path: 'auth', component: AuthComponent },
@@ -49,7 +52,8 @@ const appRoutes: Routes = [
   },
   { path: 'home', canActivate: [AuthGuardService], component: HomeComponent },
   { path: 'month/:month', canActivate: [AuthGuardService], component: MonthComponent },
-  { path: 'bill/:month', canActivate: [AuthGuardService], component: BillComponent }
+  { path: 'bill/:month', canActivate: [AuthGuardService], component: BillComponent },
+  { path: 'profile', canActivate: [AuthGuardService], component: ProfileComponent }
 ];
 
 @NgModule({
@@ -62,7 +66,8 @@ const appRoutes: Routes = [
     DailyReportComponent,
     AuthComponent,
     DebounceInputDirective,
-    BillComponent
+    BillComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -88,8 +93,9 @@ const appRoutes: Routes = [
     MatSelectModule,
     MatOptionModule,
     MatButtonToggleModule,
+    MatTabsModule,
     // ngxs
-    NgxsModule.forRoot([TimesState], { developmentMode: !environment.production }),
+    NgxsModule.forRoot([TimesState, SettingsState], { developmentMode: !environment.production }),
     // firebase
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule.enablePersistence(),
