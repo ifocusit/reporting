@@ -1,4 +1,8 @@
 <ng-container *ngIf="bill$ | async as bill">
+  <div class="society">
+    <img id="logo" *ngIf="logo$ | async; let url" [src]="url" alt="Logo du projet" />
+    <!-- <div th:each="info : ${society}" th:text="${info}"/> -->
+  </div>
   <div class="correspondant">
     <div>
       <div *ngFor="let info of infosClient">{{ bill.clientInfos }}</div>
@@ -34,6 +38,7 @@
       </tr>
     </tbody>
   </table>
+  <button id="add-line" mat-fab class="no-print" aria-label="Ajouter une ligne à la facture"><mat-icon>add</mat-icon></button>
 
   <div>Paiement net à 30 jours auprès de:</div>
   <div>Compte postal {{ bill.account?.number }} {{ bill.currency }} / IBAN {{ bill.account?.iban }}</div>

@@ -1,42 +1,72 @@
+body {
+  width: 210mm;
+  height: 297mm;
+  margin: auto;
+}
 
+@page {
+  size: A4;
+  /*margin: 0;*/
+}
+
+@media print {
+  html, body {
+      width: 210mm;
+      height: 297mm;
+  }
+  .no-print {
+    display: none;
+  }
+}
+
+.society {
+  img {
+    width: 7em;
+  }
+}
 
 table {
   width: 100%;
   padding: 5em 0;
-}
 
-table thead tr th {
-  text-align: start;
-  border-bottom: solid 0.5px
-}
+  thead tr th {
+    text-align: start;
+    border-bottom: solid 0.5px
+  }
 
-table .amount {
-  width: 5em;
-  text-align: end;
-}
+  .amount {
+    width: 5em;
+    text-align: end;
+  }
 
-table td {
-  padding: 0.5em;
-}
+  td {
+    padding: 0.5em;
+  }
 
-table tr.subtotal, table tr.total {
-  font-weight: bold;
-}
+  tr.subtotal, tr.total {
+    font-weight: bold;
+  }
 
-table tr.subtotal td:nth-child(1), table tr.total td:nth-child(1) {
-  text-align: end;
-}
+  tr.subtotal td:nth-child(1), tr.total td:nth-child(1) {
+    text-align: end;
+  }
 
-table .total td {
-  padding-top: 2em;
-}
+  .total td {
+    padding-top: 2em;
+  }
 
-table .divider td {
-  border-top: solid red
+  .divider td {
+    border-top: solid red
+  }
 }
 
 .correspondant {
   overflow: hidden;
   padding-bottom: 4em;
   padding-left: 4em;
+}
+
+#add-line {
+  position: relative;
+  top: -14em;
 }

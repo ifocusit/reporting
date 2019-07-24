@@ -39,6 +39,10 @@
           <input matInput placeholder="IBAN" formControlName="iban" />
         </mat-form-field>
       </div>
+      <div>
+        <input placeholder="Logo" type="file" (change)="uploadLogo($event)" accept="images/*" />
+        <img id="logo" *ngIf="logo$ | async; let url" [src]="url" alt="Logo du projet" />
+      </div>
     </div>
     <button mat-raised-button color="primary" (click)="save()">Enregistrer</button>
   </form>

@@ -42,6 +42,7 @@ import { DebounceInputDirective } from './directive/debounce-input.directive';
 import { BillComponent } from './page/bill/bill.component';
 import { ProfileComponent } from './page/profile/profile.component';
 import { SettingsState } from './store/settings.store';
+import { AngularFireStorageModule } from '@angular/fire/storage';
 
 const appRoutes: Routes = [
   { path: 'auth', component: AuthComponent },
@@ -99,7 +100,8 @@ const appRoutes: Routes = [
     // firebase
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule.enablePersistence(),
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    AngularFireStorageModule
   ],
   bootstrap: [AppComponent],
   entryComponents: [DailyReportComponent]

@@ -4,14 +4,12 @@ import { Select } from '@ngxs/store';
 import { SettingsState } from 'src/app/store/settings.store';
 import { mergeMap, map } from 'rxjs/operators';
 import { SettingsService } from 'src/app/service/settings.service';
-import { Settings, DEFAULT_SETTINGS } from 'src/app/model/settings.model';
+import { DEFAULT_SETTINGS } from 'src/app/model/settings.model';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 import { TimesService } from 'src/app/service/times.service';
 import { ISO_MONTH } from 'src/app/model/time.model';
-import { settings } from 'cluster';
 import { CalculateDuration } from 'src/app/service/calculate-duration.tools';
-import { Time } from '@angular/common';
 
 @Component({
   selector: 'app-bill',
@@ -19,18 +17,6 @@ import { Time } from '@angular/common';
   styleUrls: ['./bill.component.scss']
 })
 export class BillComponent implements OnInit {
-  infosClient = ['info client', 'sur plusieurs', 'lignes'];
-  month = 'Juillet 2019';
-  idFacture = '21911';
-  numeroTVA = 'TVA-1234567-IJHG';
-  compte = 'CPT 98765432123456';
-  iban = 'CHF 1234 56789 1234 56';
-  duration = 146.0;
-  amount = 26500.0;
-  totalHT = 26500.0;
-  totalTVA = 1300.0;
-  totalTTC = this.totalHT + this.totalTVA;
-
   @Select(SettingsState.project)
   public project$: Observable<string>;
 
@@ -62,6 +48,8 @@ export class BillComponent implements OnInit {
         ...data[1].bill // settings
       }))
     );
+
+    this.logo$ = this.project$.pipe(mergeMap(projectName => this.settingsService.readLogo(projectName)));
   }
 
   private calculateHT(duration: moment.Duration, hourlyRate: number) {
