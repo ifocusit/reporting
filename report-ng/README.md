@@ -2,14 +2,11 @@
 
 ## TODO
 
-- upload logo
+- création projet / sélection / suppression
 - couleur projet (utiliser dans la facture)
 - ajout toolbar application :
   - au couleur du projet
   - avec combo pour switcher de projet
-  - toujour visible
-  - lien vers profile
-  - lien vers la page 'home'
 - page facture :
   - ajout ligne manuelle (libellé, montant HT)
   - archiver facture => impression PDF + upload dans collection bills

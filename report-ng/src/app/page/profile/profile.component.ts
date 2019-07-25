@@ -3,8 +3,8 @@ import { ProfileService } from 'src/app/service/profile.service';
 import { User } from 'src/app/model/user.model';
 import { Observable, of } from 'rxjs';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { tap, mergeMap } from 'rxjs/operators';
-import { SettingsState, SaveSettings } from 'src/app/store/settings.store';
+import { tap, mergeMap, map } from 'rxjs/operators';
+import { SettingsState, SaveSettings, SelectProject } from 'src/app/store/settings.store';
 import { Select, Store } from '@ngxs/store';
 import { SettingsService } from 'src/app/service/settings.service';
 import { Settings, DEFAULT_SETTINGS } from 'src/app/model/settings.model';
@@ -23,6 +23,7 @@ export class ProfileComponent implements OnInit {
   public project$: Observable<string>;
 
   public settings$: Observable<Settings>;
+  public projects$: Observable<string[]>;
 
   public form: FormGroup;
 
@@ -63,12 +64,33 @@ export class ProfileComponent implements OnInit {
     this.user$ = this.profileService.user$.pipe(tap(user => this.form.patchValue(user)));
 
     this.settings$ = this.project$.pipe(
+      tap(() => this.form.reset()),
       mergeMap(projectName => this.settingsService.read(projectName)),
-      mergeMap(settings => (settings ? of(settings) : this.settingsService.save(DEFAULT_SETTINGS))),
+      map(settings => ({ ...DEFAULT_SETTINGS, ...settings })),
       tap(settings => this.form.patchValue(settings))
     );
 
+    this.projects$ = this.settingsService.projects$;
+
     this.logo$ = this.project$.pipe(mergeMap(projectName => this.settingsService.readLogo(projectName)));
+  }
+
+  public selectProject(event) {
+    return this.store.dispatch(new SelectProject(event.value));
+  }
+
+  public addProject(projectName: string) {
+    this.settingsService
+      .save({ ...DEFAULT_SETTINGS, projectName: projectName })
+      .pipe(mergeMap(settings => this.store.dispatch(new SelectProject(settings.projectName))))
+      .subscribe();
+  }
+
+  public removeProject(projectName: string) {
+    this.settingsService
+      .removeSettings(projectName)
+      .pipe(mergeMap(settings => this.store.dispatch(new SelectProject(DEFAULT_SETTINGS.projectName))))
+      .subscribe();
   }
 
   public get today() {

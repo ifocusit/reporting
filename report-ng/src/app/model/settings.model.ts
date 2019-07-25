@@ -7,7 +7,7 @@ export interface Settings {
     defaults: string[];
     dailyReport: number; // h par j
   };
-  bill: {
+  bill?: {
     hourlyRate: number; // taux horaire
     currency: string;
     tvaRate: number;
@@ -27,15 +27,5 @@ export const DEFAULT_SETTINGS: Settings = {
   timbrage: {
     dailyReport: DEFAULT_DAY_DURATION,
     defaults: DEFAULT_TIME.times.map(time => time.getMoment().format(ISO_TIME))
-  },
-  bill: {
-    currency: 'CHF',
-    tvaRate: 7.8,
-    hourlyRate: 10,
-    tvaNumber: '',
-    account: {
-      number: '',
-      iban: ''
-    }
   }
 };

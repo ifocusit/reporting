@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { Observable } from 'rxjs';
-import { map, mergeMap, take } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { map, mergeMap, take, pairwise, catchError } from 'rxjs/operators';
 import { Settings } from '../model/settings.model';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { UploadTaskSnapshot } from '@angular/fire/storage/interfaces';
@@ -12,6 +12,13 @@ import { UploadTaskSnapshot } from '@angular/fire/storage/interfaces';
 })
 export class SettingsService {
   constructor(private fireauth: AngularFireAuth, private firestore: AngularFirestore, private firestorage: AngularFireStorage) {}
+
+  get projects$(): Observable<string[]> {
+    return this.fireauth.user.pipe(
+      mergeMap(user => this.firestore.collection<{ projectName: string }>(`users/${user.uid}/settings`).valueChanges()),
+      map(results => results.map(result => result.projectName))
+    );
+  }
 
   public read(projectName: string): Observable<Settings> {
     return this.fireauth.user.pipe(
@@ -44,6 +51,20 @@ export class SettingsService {
   }
 
   public readLogo(projectName: string): Observable<string> {
-    return this.fireauth.user.pipe(mergeMap(user => this.firestorage.ref(`users/${user.uid}/${projectName}/logo.png`).getDownloadURL()));
+    return this.fireauth.user.pipe(
+      mergeMap(user => this.firestorage.ref(`users/${user.uid}/${projectName}/logo.png`).getDownloadURL()),
+      catchError(error => {
+        console.log(error);
+        return of(true);
+      })
+    );
+  }
+
+  public removeSettings(projectName: string) {
+    return this.fireauth.user.pipe(
+      mergeMap(user => this.firestore.doc(`users/${user.uid}/settings/${projectName}`).delete()),
+      mergeMap(() => this.fireauth.user),
+      mergeMap(user => this.firestorage.ref(`users/${user.uid}/${projectName}`).delete())
+    );
   }
 }

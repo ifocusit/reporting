@@ -1,5 +1,10 @@
 <mat-toolbar>
-  <div fxFlex="calc(100%-168px)">
+  <mat-select [value]="project$ | async" (selectionChange)="selectProject($event)">
+    <mat-option *ngFor="let projetName of projects$ | async" [value]="projetName">
+      {{ projetName }}
+    </mat-option>
+  </mat-select>
+  <div fxFlex="calc(100%-300px)">
     Profile
   </div>
   <button mat-button (click)="signOut()">Logout</button>
@@ -15,6 +20,7 @@
     <h4 *ngIf="user.email">{{ user.email }}</h4>
   </div>
 </div>
+
 <mat-tab-group>
   <mat-tab label="Calendrier">
     <div class="content">
@@ -25,8 +31,12 @@
     <div class="content" *ngIf="settings$ | async">
       <form [formGroup]="form">
         <mat-form-field>
-          <input matInput placeholder="Nom du projet" formControlName="projectName" readonly />
+          <input #project matInput placeholder="Nom du projet" formControlName="projectName" />
         </mat-form-field>
+        <button mat-mini-fab (click)="addProject(project.value)"><mat-icon>add</mat-icon></button>
+        <button mat-mini-fab (click)="removeProject(project.value)" color="secondary" *ngIf="(project$ | async) !== 'Default'">
+          <mat-icon>remove</mat-icon>
+        </button>
         <div formGroupName="bill" fxLayout="column">
           <mat-form-field>
             <mat-select placeholder="Devise" formControlName="currency">
@@ -36,8 +46,6 @@
           </mat-form-field>
           <mat-form-field>
             <input matInput placeholder="Taux horaire" formControlName="hourlyRate" />
-            <!-- <span matPrefix *ngIf="form.bill.currency.value == 'CHF'">CHF</span> -->
-            <!-- <span matSuffix *ngIf="form.bill.currency.value == 'EUR'">€</span> -->
           </mat-form-field>
           <mat-form-field>
             <input matInput placeholder="Taux de TVA" formControlName="tvaRate" />
