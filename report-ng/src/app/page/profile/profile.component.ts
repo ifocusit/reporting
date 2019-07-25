@@ -8,7 +8,8 @@ import { SettingsState, SaveSettings } from 'src/app/store/settings.store';
 import { Select, Store } from '@ngxs/store';
 import { SettingsService } from 'src/app/service/settings.service';
 import { Settings, DEFAULT_SETTINGS } from 'src/app/model/settings.model';
-import { AngularFireStorage } from '@angular/fire/storage';
+import * as moment from 'moment';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -27,13 +28,19 @@ export class ProfileComponent implements OnInit {
 
   public logo$: Observable<string>;
 
+  public uploadLogo$ = (file: File) => this.project$.pipe(mergeMap(projectName => this.settingsService.uploadLogo(file, projectName)));
+
   constructor(
     private fb: FormBuilder,
     private profileService: ProfileService,
     private settingsService: SettingsService,
     private store: Store,
-    private firestorage: AngularFireStorage
+    private authService: AuthService
   ) {}
+
+  signOut() {
+    this.authService.signOutUser();
+  }
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -64,17 +71,11 @@ export class ProfileComponent implements OnInit {
     this.logo$ = this.project$.pipe(mergeMap(projectName => this.settingsService.readLogo(projectName)));
   }
 
-  public save() {
-    this.store.dispatch(new SaveSettings({ ...this.form.value }));
+  public get today() {
+    return moment().format('YYYY-MM');
   }
 
-  uploadLogo(event) {
-    const file = event.target.files[0];
-    this.project$
-      .pipe(
-        mergeMap(projectName => this.settingsService.uploadLogo(file, projectName)),
-        tap(() => (this.logo$ = this.project$.pipe(mergeMap(projectName => this.settingsService.readLogo(projectName)))))
-      )
-      .subscribe();
+  public save() {
+    this.store.dispatch(new SaveSettings({ ...this.form.value }));
   }
 }

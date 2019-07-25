@@ -1,4 +1,14 @@
 <ng-container *ngIf="bill$ | async as bill">
+  <mat-toolbar class="no-print">
+    <button mat-button [routerLink]="['/month', bill.month]"><mat-icon>arrow_back</mat-icon></button>
+
+    <div fxFlex="calc(100%-168px)">
+      Reporting
+    </div>
+    <!-- <button mat-button><mat-icon>print</mat-icon></button> -->
+    <button mat-button [routerLink]="['/profile']"><mat-icon>person</mat-icon></button>
+  </mat-toolbar>
+
   <div class="society">
     <img id="logo" *ngIf="logo$ | async; let url" [src]="url" alt="Logo du projet" />
     <!-- <div th:each="info : ${society}" th:text="${info}"/> -->

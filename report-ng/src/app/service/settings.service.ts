@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { map, mergeMap, take } from 'rxjs/operators';
 import { Settings } from '../model/settings.model';
 import { AngularFireStorage } from '@angular/fire/storage';
+import { UploadTaskSnapshot } from '@angular/fire/storage/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -36,10 +37,9 @@ export class SettingsService {
     );
   }
 
-  uploadLogo(file: File, projectName: string): Observable<string> {
+  uploadLogo(file: File, projectName: string): Observable<UploadTaskSnapshot> {
     return this.fireauth.user.pipe(
-      mergeMap(user => this.firestorage.upload(`users/${user.uid}/${projectName}/logo.png`, file).snapshotChanges()),
-      map(data => data.state)
+      mergeMap(user => this.firestorage.upload(`users/${user.uid}/${projectName}/logo.png`, file).snapshotChanges())
     );
   }
 

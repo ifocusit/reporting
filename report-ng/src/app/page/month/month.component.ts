@@ -140,8 +140,4 @@ export class MonthComponent implements OnInit {
       }
     });
   }
-
-  signOut() {
-    this.authService.signOutUser();
-  }
 }

@@ -6,7 +6,6 @@ import { MonthComponent } from './page/month/month.component';
 import { MomentPipe } from './pipe/moment/moment.pipe';
 import { DurationPipe } from './pipe/moment/duration.pipe';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './page/home/home.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   MatButtonModule,
@@ -24,7 +23,8 @@ import {
   MatTableModule,
   MatToolbarModule,
   MatButtonToggleModule,
-  MatTabsModule
+  MatTabsModule,
+  MatProgressBarModule
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -43,15 +43,17 @@ import { BillComponent } from './page/bill/bill.component';
 import { ProfileComponent } from './page/profile/profile.component';
 import { SettingsState } from './store/settings.store';
 import { AngularFireStorageModule } from '@angular/fire/storage';
+import { DropZoneDirective } from './component/drop-zone.directive';
+import { FileUploadComponent } from './component/file-upload/file-upload.component';
+import { FileSizePipe } from './component/file-size.pipe';
 
 const appRoutes: Routes = [
   { path: 'auth', component: AuthComponent },
   {
     path: '',
-    redirectTo: '/home',
+    redirectTo: '/profile',
     pathMatch: 'full'
   },
-  { path: 'home', canActivate: [AuthGuardService], component: HomeComponent },
   { path: 'month/:month', canActivate: [AuthGuardService], component: MonthComponent },
   { path: 'bill/:month', canActivate: [AuthGuardService], component: BillComponent },
   { path: 'profile', canActivate: [AuthGuardService], component: ProfileComponent }
@@ -63,12 +65,14 @@ const appRoutes: Routes = [
     MonthComponent,
     MomentPipe,
     DurationPipe,
-    HomeComponent,
     DailyReportComponent,
     AuthComponent,
     DebounceInputDirective,
     BillComponent,
-    ProfileComponent
+    ProfileComponent,
+    DropZoneDirective,
+    FileUploadComponent,
+    FileSizePipe
   ],
   imports: [
     BrowserModule,
@@ -95,6 +99,7 @@ const appRoutes: Routes = [
     MatOptionModule,
     MatButtonToggleModule,
     MatTabsModule,
+    MatProgressBarModule,
     // ngxs
     NgxsModule.forRoot([TimesState, SettingsState], { developmentMode: !environment.production }),
     // firebase

@@ -2,20 +2,12 @@
   <div fxFlex class="spaced">
     <mat-toolbar color="primary">
       <span fxFlex="calc(100%-300px)" id="month">{{ selectedDate$ | async | moment: 'MMMM YYYY' }}</span>
-      <span *ngIf="user$ | async as user">{{ user.email }}</span>
 
-      <button mat-icon-button [mat-menu-trigger-for]="menu">
-        <mat-icon>more_vert</mat-icon>
-      </button>
-    </mat-toolbar>
-
-    <mat-menu #menu>
-      <!-- <button mat-menu-item (click)="initMissingDays()">Initialiser les jours sans heures</button> -->
-      <button mat-menu-item *ngIf="selectedDate$ | async as selectedDate" [routerLink]="['/bill', selectedDate.format('YYYY-MM')]">
+      <button mat-button *ngIf="selectedDate$ | async as selectedDate" [routerLink]="['/bill', selectedDate.format('YYYY-MM')]">
         Générer facture
       </button>
-      <button mat-menu-item (click)="signOut()"><mat-icon>exit_to_app</mat-icon>Logout</button>
-    </mat-menu>
+      <button mat-button [routerLink]="['/profile']"><mat-icon>person</mat-icon></button>
+    </mat-toolbar>
 
     <mat-table id="times" [dataSource]="items$" class="mat-elevation-z8 reports">
       <ng-container matColumnDef="date">

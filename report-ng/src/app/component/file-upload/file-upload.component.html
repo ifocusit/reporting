@@ -1,0 +1,24 @@
+<div
+  class="dropzone"
+  dropZone
+  (hovered)="toggleHover($event)"
+  (dropped)="startUpload($event)"
+  [class.hovering]="isHovering"
+  fxFlexFill
+  fxLayoutAlign="space-around center"
+>
+  <div fxLayout="column" fxLayoutAlign="center center">
+    <label mat-label>Drag and Drop a File</label>
+    <input #inputFile type="file" (change)="startUpload($event.target.files)" />
+    <button mat-stroked-button (click)="inputFile.click()">or choose a file…</button>
+  </div>
+  <div *ngIf="downloadURL | async as url"><img [src]="url" /></div>
+</div>
+<div *ngIf="task$ | async as task" fxLayout="column" fxLayoutGap="10px">
+  <mat-progress-bar mode="determinate" color="primary" [value]="calculatePercent(task)"></mat-progress-bar>
+  <div>
+    <button mat-stroked-button (click)="task.task.pause()" color="primary" [disabled]="!isActive(task)">Pause</button>
+    <button mat-stroked-button (click)="task.task.cancel()" color="accent" [disabled]="!isActive(task)">Cancel</button>
+    <button mat-stroked-button (click)="task.task.resume()" color="primary" [disabled]="!(task.state === 'paused')">Resume</button>
+  </div>
+</div>

@@ -19,8 +19,8 @@ import { CalculateDuration } from 'src/app/service/calculate-duration.tools';
 export class BillComponent implements OnInit {
   @Select(SettingsState.project)
   public project$: Observable<string>;
-
   public bill$: Observable<any>;
+  public logo$: Observable<string>;
 
   constructor(private route: ActivatedRoute, private settingsService: SettingsService, private timesService: TimesService) {}
 
