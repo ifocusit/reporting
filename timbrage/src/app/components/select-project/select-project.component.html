@@ -1,0 +1,7 @@
+<mat-menu #projectMenu="matMenu">
+  <button mat-menu-item *ngFor="let project of projects$ | async" (click)="select(project)">{{ project }}</button>
+</mat-menu>
+<button mat-button [matMenuTriggerFor]="projectMenu">
+  <mat-icon>business</mat-icon>
+  {{ project$ | async }}
+</button>

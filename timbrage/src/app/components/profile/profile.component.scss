@@ -1,0 +1,35 @@
+:host {
+  mat-card {
+    padding: 0;
+    height: 100vh;
+    width: 100%;
+    background-color: transparent;
+
+    mat-card-header {
+      padding: 20px;
+      width: 100%;
+      background: #E1E2E1;
+      color: white;
+
+      & > div {
+        width: 100%;
+      }
+
+      h3, h4 {
+        margin: 5px 0;
+      }
+
+      img {
+        width: 70px;
+      }
+    }
+
+    mat-card-content {
+      padding-top: 17px;
+    }
+  }
+
+  ::ng-deep mat-card mat-card-header div.mat-card-header-text {
+    margin: 0;
+  }
+}
