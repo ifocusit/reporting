@@ -12,36 +12,16 @@ export interface TimeModel {
 export class Time {
   public constructor(public time: string, public id?: string) {}
 
-  public static from(initial: Time): Time {
-    return new Time(initial.time, initial.id);
-  }
-
-  public clone(): Time {
-    return new Time(this.time);
-  }
-
   public getMoment() {
     return moment(this.time);
   }
 
-  public hasId(): boolean {
-    return !!this.id;
-  }
-
-  public getDate(): string {
-    return this.getMoment().format(ISO_DATE);
-  }
-
   public get date() {
-    return this.getDate();
+    return this.getMoment().format(ISO_DATE);
   }
 
   public getDateTime(): string {
     return this.getMoment().format(ISO_DATE_TIME);
-  }
-
-  public compareTo(time: Time): number {
-    return this.getDateTime().localeCompare(time.getDateTime());
   }
 
   public get timestamp() {

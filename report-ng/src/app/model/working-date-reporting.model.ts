@@ -37,4 +37,3 @@ function time(value: string): Time {
 
 export const DEFAULT_DAY_DURATION = 8;
 export const WEEK_OVERTIME_MAJOR = 1.2;
-export const DEFAULT_TIME = new WorkingDateReporting(moment(), [time('08:00'), time('11:30'), time('12:30'), time('17:00')]);

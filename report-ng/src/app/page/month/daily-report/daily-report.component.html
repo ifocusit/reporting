@@ -1,8 +1,11 @@
 <mat-toolbar color="primary">
-  <h1 fxFlex="calc(100%-120px)">{{ workDay.date | moment: 'DD dddd' }}</h1>
+  <h1 fxFlex="calc(100%-240px)">{{ workDay.date | moment: 'DD dddd' }}</h1>
   <span>total: {{ duration$ | async | duration }}</span>
   <button mat-mini-fab (click)="add()" class="add">
-    <mat-icon>add</mat-icon>
+    <mat-icon>add_box</mat-icon>
+  </button>
+  <button mat-mini-fab (click)="addAll()" class="add">
+    <mat-icon>library_add</mat-icon>
   </button>
 </mat-toolbar>
 <div mat-dialog-content>

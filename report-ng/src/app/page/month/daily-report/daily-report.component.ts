@@ -1,14 +1,16 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Moment, Duration } from 'moment';
-import { DEFAULT_TIME } from '../../../model/working-date-reporting.model';
-import { ISO_DATE_TIME, Time } from '../../../model/time.model';
+import { ISO_DATE_TIME, Time, ISO_TIME } from '../../../model/time.model';
 import { Store } from '@ngxs/store';
-import { DeleteTime, AddTime, UpdateTime } from 'src/app/store/month.store';
+import { DeleteTime, AddTime, UpdateTime, AddTimes } from 'src/app/store/month.store';
 import { Observable } from 'rxjs';
 import { TimesService } from 'src/app/service/times.service';
 import { take, map, mergeMap } from 'rxjs/operators';
 import { CalculateDuration } from 'src/app/service/calculate-duration.tools';
+import { ProjectService } from 'src/app/service/project.service';
+import { ProjectState } from 'src/app/store/project.store';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-daily-report',
@@ -19,11 +21,18 @@ export class DailyReportComponent implements OnInit {
   public times$: Observable<Time[]>;
   public duration$: Observable<Duration>;
 
+  private defaultTimes$ = () =>
+    this.store.select(ProjectState.project).pipe(
+      mergeMap(project => this.projectService.readSettings(project)),
+      map(settings => settings.timbrage.defaults.map(time => moment(time, ISO_TIME)))
+    )
+
   constructor(
     public dialogRef: MatDialogRef<DailyReportComponent>,
     @Inject(MAT_DIALOG_DATA) public workDay: { date: Moment },
     private store: Store,
-    private timesService: TimesService
+    private timesService: TimesService,
+    private projectService: ProjectService
   ) {}
 
   ngOnInit() {
@@ -35,12 +44,31 @@ export class DailyReportComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  addAll() {
+    this.defaultTimes$()
+      .pipe(
+        map(times =>
+          times.map(
+            time =>
+              new Time(
+                moment(this.workDay.date)
+                  .startOf('day')
+                  .set({ hour: time.hour(), minute: time.minute() })
+                  .format(ISO_DATE_TIME)
+              )
+          )
+        ),
+        mergeMap(times => this.store.dispatch(new AddTimes(times)))
+      )
+      .subscribe();
+  }
+
   add(): void {
     this.times$
       .pipe(
         map(times => Math.min(times.length, 3)),
         take(1),
-        map(index => DEFAULT_TIME.getDatetime(index)),
+        mergeMap(index => this.defaultTimes$().pipe(map(times => times[index]))),
         map(defaultTime =>
           this.workDay.date
             .clone()

@@ -30,7 +30,7 @@ export class BillComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const settings$ = this.project$.pipe(mergeMap(projectName => this.projectService.read(projectName)));
+    const settings$ = this.project$.pipe(mergeMap(projectName => this.projectService.readSettings(projectName)));
 
     const selectedDate$ = this.route.params.pipe(map(params => moment(params['month'], 'YYYY-MM')));
 

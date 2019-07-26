@@ -3,10 +3,9 @@ import * as moment from 'moment';
 import { Moment } from 'moment';
 import { WorkingDateReporting, DEFAULT_DAY_DURATION, WEEK_OVERTIME_MAJOR } from '../../model/working-date-reporting.model';
 import { ActivatedRoute } from '@angular/router';
-import { filter, groupBy, mergeMap, switchMap, tap, toArray, take, merge, map, pairwise } from 'rxjs/operators';
-import { from, of, range, Observable, combineLatest } from 'rxjs';
+import { filter, mergeMap, tap, take, map } from 'rxjs/operators';
+import { from, Observable, combineLatest } from 'rxjs';
 import { MatDialog } from '@angular/material';
-import { DailyReportComponent } from './daily-report/daily-report.component';
 import { Time, ISO_DATE_TIME, ISO_MONTH } from '../../model/time.model';
 import { TimesService } from 'src/app/service/times.service';
 import * as _ from 'lodash';
@@ -14,7 +13,7 @@ import { TimesState, SelectDate } from 'src/app/store/month.store';
 import { Select, Store } from '@ngxs/store';
 import { User } from 'src/app/model/user.model';
 import { ProfileService } from 'src/app/service/profile.service';
-import { AuthService } from '../auth/auth.service';
+import { DailyReportComponent } from './daily-report/daily-report.component';
 
 @Component({
   selector: 'app-month',
@@ -42,7 +41,6 @@ export class MonthComponent implements OnInit {
     private timesService: TimesService,
     public dialog: MatDialog,
     private profileSevice: ProfileService,
-    private authService: AuthService,
     private store: Store
   ) {}
 
@@ -102,10 +100,6 @@ export class MonthComponent implements OnInit {
     return this.store.dispatch(new SelectDate(date));
   }
 
-  public billing(): void {
-    console.log('billing');
-  }
-
   public initMissingDays(): void {
     this.items$
       .pipe(
@@ -132,7 +126,7 @@ export class MonthComponent implements OnInit {
   }
 
   edit(toEdit: WorkingDateReporting): void {
-    const dialogRef = this.dialog.open(DailyReportComponent, {
+    this.dialog.open(DailyReportComponent, {
       width: '350px',
       data: {
         date: toEdit.date,

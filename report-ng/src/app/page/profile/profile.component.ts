@@ -65,7 +65,7 @@ export class ProfileComponent implements OnInit {
 
     this.settings$ = this.project$.pipe(
       tap(() => this.form.reset()),
-      mergeMap(projectName => this.projectService.read(projectName)),
+      mergeMap(projectName => this.projectService.readSettings(projectName)),
       tap(settings => this.form.patchValue(settings))
     );
 
