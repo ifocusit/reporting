@@ -65,10 +65,7 @@ export class ProjectState {
 
   @Action(ReadSettings)
   readSettings(ctx: StateContext<ProjectStateModel>, action: ReadSettings) {
-    return this.settingsService.readSettings(action.projectName).pipe(
-      map(settings => ({ ...DEFAULT_SETTINGS, ...settings })),
-      tap(data => console.log(data))
-    );
+    return this.settingsService.readSettings(action.projectName).pipe(map(settings => ({ ...DEFAULT_SETTINGS, ...settings })));
   }
 
   @Action(SaveSettings)

@@ -46,6 +46,7 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { DropZoneDirective } from './component/drop-zone.directive';
 import { FileUploadComponent } from './component/file-upload/file-upload.component';
 import { FileSizePipe } from './component/file-size.pipe';
+import { SelectProjectComponent } from './component/select-project/select-project.component';
 
 const appRoutes: Routes = [
   { path: 'auth', component: AuthComponent },
@@ -72,7 +73,8 @@ const appRoutes: Routes = [
     ProfileComponent,
     DropZoneDirective,
     FileUploadComponent,
-    FileSizePipe
+    FileSizePipe,
+    SelectProjectComponent
   ],
   imports: [
     BrowserModule,

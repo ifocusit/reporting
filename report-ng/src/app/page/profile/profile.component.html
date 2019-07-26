@@ -1,12 +1,8 @@
 <mat-toolbar>
-  <mat-select [value]="project$ | async" (selectionChange)="selectProject($event)">
-    <mat-option *ngFor="let projetName of projects$ | async" [value]="projetName">
-      {{ projetName }}
-    </mat-option>
-  </mat-select>
   <div fxFlex="calc(100%-300px)">
     Profile
   </div>
+  <select-project></select-project>
   <button mat-button (click)="signOut()">Logout</button>
 </mat-toolbar>
 

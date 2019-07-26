@@ -74,10 +74,6 @@ export class ProfileComponent implements OnInit {
     this.logo$ = this.project$.pipe(mergeMap(projectName => this.projectService.readLogo(projectName)));
   }
 
-  public selectProject(event) {
-    return this.store.dispatch(new SelectProject(event.value));
-  }
-
   public addProject(projectName: string) {
     this.store.dispatch(new SaveProject({ ...DEFAULT_SETTINGS, projectName: projectName })).subscribe();
   }

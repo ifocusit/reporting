@@ -14,6 +14,7 @@ import { Select, Store } from '@ngxs/store';
 import { User } from 'src/app/model/user.model';
 import { ProfileService } from 'src/app/service/profile.service';
 import { DailyReportComponent } from './daily-report/daily-report.component';
+import { ProjectState } from 'src/app/store/project.store';
 
 @Component({
   selector: 'app-month',
@@ -21,10 +22,13 @@ import { DailyReportComponent } from './daily-report/daily-report.component';
   styleUrls: ['./month.component.less']
 })
 export class MonthComponent implements OnInit {
+  @Select(ProjectState.project)
+  public project$: Observable<any>;
+
   @Select(TimesState.selectedDate)
   public selectedDate$: Observable<Moment>;
 
-  items$: Observable<WorkingDateReporting[]>;
+  public items$: Observable<WorkingDateReporting[]>;
   private days$: Observable<WorkingDateReporting[]>;
   private times$: Observable<Time[]>;
 
@@ -48,6 +52,7 @@ export class MonthComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.selectMonth(moment(params['month'], 'YYYY-MM'));
     });
+
     this.user$ = this.profileSevice.user$;
 
     this.days$ = this.selectedDate$.pipe(
@@ -56,7 +61,10 @@ export class MonthComponent implements OnInit {
 
     this.maxMonthHours$ = this.days$.pipe(map(days => days.filter(day => !day.isWeekend).length * DEFAULT_DAY_DURATION));
 
-    this.times$ = this.selectedDate$.pipe(mergeMap(month => this.timesService.read(month.format(ISO_MONTH))));
+    this.times$ = combineLatest(this.project$, this.selectedDate$).pipe(
+      map(pair => pair[1]),
+      mergeMap(month => this.timesService.read(month.format(ISO_MONTH)))
+    );
 
     this.items$ = combineLatest(this.days$, this.times$).pipe(
       map((pair: [WorkingDateReporting[], Time[]]) =>
@@ -117,10 +125,7 @@ export class MonthComponent implements OnInit {
         }),
         mergeMap(times => from(times)),
         tap(time => console.log(`creating ${time.getDateTime()}...`)),
-        // mergeMap(time => this.timesService.create(time)),
         tap(time => console.log(`${time.getDateTime()} created.`))
-        // toArray(),
-        // tap(times => console.log(`${times.length} days initialized !`))
       )
       .subscribe();
   }
