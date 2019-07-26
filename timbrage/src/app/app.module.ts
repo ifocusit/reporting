@@ -29,10 +29,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxsModule } from '@ngxs/store';
 import { MomentPipe } from './pipes/moment.pipe';
-import { SettingsState } from './store/settings.store';
 import { DurationPipe } from './pipes/duration.pipe';
 import { HomeComponent } from './components/home/home.component';
-import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
@@ -41,6 +39,10 @@ import { AuthGuardService } from './services/auth-guard.service';
 import { AuthComponent } from './components/auth/auth.component';
 import { TimesState } from './store/time.store';
 import { StorageModule } from '@ngx-pwa/local-storage';
+import { SelectProjectComponent } from './components/select-project/select-project.component';
+import { ProjectState } from './store/project.store';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { ProfileComponent } from './components/profile/profile.component';
 
 const appRoutes: Routes = [
   { path: 'auth', component: AuthComponent },
@@ -50,6 +52,7 @@ const appRoutes: Routes = [
     children: [
       { path: 'timbrage', canActivate: [AuthGuardService], component: TimbrageComponent },
       { path: 'calendar', canActivate: [AuthGuardService], component: CalendarComponent },
+      { path: 'profile', canActivate: [AuthGuardService], component: ProfileComponent },
       { path: '', redirectTo: '/timbrage', pathMatch: 'full' }
     ]
   }
@@ -64,8 +67,9 @@ const appRoutes: Routes = [
     MomentPipe,
     DurationPipe,
     HomeComponent,
-    SidenavComponent,
-    AuthComponent
+    AuthComponent,
+    SelectProjectComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -92,12 +96,13 @@ const appRoutes: Routes = [
     MatOptionModule,
     MatInputModule,
     // ngxs
-    NgxsModule.forRoot([TimesState, SettingsState], { developmentMode: !environment.production }),
+    NgxsModule.forRoot([TimesState, ProjectState], { developmentMode: !environment.production }),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     // firebase
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule.enablePersistence(),
     AngularFireAuthModule,
+    AngularFireStorageModule,
     // old localstorage
     StorageModule.forRoot({ LSPrefix: 'timbrage_', IDBDBName: 'timbrage_ngStorage' })
   ],

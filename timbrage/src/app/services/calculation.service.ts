@@ -2,26 +2,40 @@ import { Injectable } from '@angular/core';
 import { Time, TimeAdapter } from '../models/time.model';
 import * as moment from 'moment';
 import { Duration } from 'moment';
-import { SettingsService } from './settings.service';
 import { Store } from '@ngxs/store';
 import { AddTime } from '../store/time.store';
+import { ProjectService } from './project.service';
+import { Observable, of } from 'rxjs';
+import { ProjectState } from '../store/project.store';
+import { mergeMap, map } from 'rxjs/operators';
+import { Settings } from '../models/settings.model';
+import { Moment } from 'moment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CalculationService {
-  constructor(private settings: SettingsService, private store: Store) {}
+  private getEndOfDay = (settings: Settings): Moment => settings.timbrage.defaults.map(time => moment(time, 'HH:mm')).pop();
 
-  public calculate(timbrages: Array<Time>, manageMissing = true, setMissingToEndOfDay = false): Duration {
+  constructor(private projectService: ProjectService, private store: Store) {}
+
+  public calculate(timbrages: Array<Time>, manageMissing = true, setMissingToEndOfDay = false): Observable<Duration> {
+    return this.store.select(ProjectState.project).pipe(
+      mergeMap(project => this.projectService.readSettings(project)),
+      map(settings => this._calculate(timbrages, settings, manageMissing, setMissingToEndOfDay))
+    );
+  }
+
+  private _calculate(timbrages: Array<Time>, settings: Settings, manageMissing = true, setMissingToEndOfDay = false): Duration {
     let duration = moment.duration();
 
-    if (!timbrages || timbrages.length == 0) {
+    if (!timbrages || timbrages.length === 0) {
       // no times
       return duration;
     }
 
     // calculate duration by pairs of Timbrage
-    this.splitPairs(timbrages, manageMissing, setMissingToEndOfDay).forEach(pair => {
+    this.splitPairs(timbrages, settings, manageMissing, setMissingToEndOfDay).forEach(pair => {
       duration = duration.add(this.diff(pair[1], pair[0]));
     });
 
@@ -35,7 +49,7 @@ export class CalculationService {
     return moment.duration(diff);
   }
 
-  private splitPairs(list: Array<Time>, manageMissing = true, setMissingToEndOfDay = false): Array<Array<Time>> {
+  private splitPairs(list: Array<Time>, settings: Settings, manageMissing = true, setMissingToEndOfDay = false): Array<Array<Time>> {
     const pairs = [];
     for (let i = 0; i < list.length; i += 2) {
       if (list[i + 1] !== undefined) {
@@ -48,15 +62,14 @@ export class CalculationService {
         // and the actual time is not before the parameterized end of day
         // if we must set missing report to end of the day (use in calendar view)
         const isToday = moment().isSame(timeAdapter.getDate(), 'day');
-        const isAfterParametizedEndOfDay = moment().isAfter(this.settings.getEndOfDay());
+        const isAfterParametizedEndOfDay = moment().isAfter(this.applyEndOfDay(settings));
         if (setMissingToEndOfDay && (!isToday || isAfterParametizedEndOfDay)) {
           // set time to end of day
-          missing.time = this.settings
-            .applyEndOfDay(moment(list[i].time))
+          missing.time = this.applyEndOfDay(settings, moment(list[i].time))
             .startOf('minute')
             .format();
 
-          if (this.settings.get().saveMissings) {
+          if (settings.timbrage.saveMissings) {
             //   missing timbrage must be save to database
             this.store.dispatch(new AddTime(missing));
           }
@@ -65,5 +78,10 @@ export class CalculationService {
       }
     }
     return pairs;
+  }
+
+  private applyEndOfDay(settings: Settings, date: Moment = moment()): Moment {
+    const endOfDay = this.getEndOfDay(settings);
+    return date.startOf('day').set({ hour: endOfDay.hour(), minute: endOfDay.minute() });
   }
 }

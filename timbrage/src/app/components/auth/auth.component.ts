@@ -2,12 +2,9 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
-import { TimeAdapter, Time, DATE_ISO_FORMAT } from 'src/app/models/time.model';
-import { SettingsService } from 'src/app/services/settings.service';
-import { toArray, mergeMap, map, pairwise } from 'rxjs/operators';
+import { TimeAdapter, Time, DATETIME_ISO_FORMAT } from 'src/app/models/time.model';
+import { toArray, mergeMap, map } from 'rxjs/operators';
 import { StorageMap } from '@ngx-pwa/local-storage';
-import { range } from 'rxjs';
-import * as moment from 'moment';
 
 @Component({
   selector: 'app-auth',
@@ -24,13 +21,7 @@ export class AuthComponent implements OnInit {
   signinForm: FormGroup;
   errorMessage: string;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private authService: AuthService,
-    private router: Router,
-    private settings: SettingsService,
-    private storage: StorageMap
-  ) {}
+  constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router, private storage: StorageMap) {}
 
   ngOnInit() {
     this.initForm();
@@ -87,26 +78,6 @@ export class AuthComponent implements OnInit {
     );
   }
 
-  // public insertTestsData() {
-  //   range(0, 1000)
-  //     .pipe(
-  //       map(index =>
-  //         moment()
-  //           .add(index * -1, 'days')
-  //           .format(DATE_ISO_FORMAT)
-  //       ),
-  //       mergeMap(date =>
-  //         this.storage.set(date, [
-  //           { id: `${date}1`, time: `${date}T08:00` },
-  //           { id: `${date}2`, time: `${date}T11:30` },
-  //           { id: `${date}3`, time: `${date}T12:30` },
-  //           { id: `${date}4`, time: `${date}T18:00` }
-  //         ])
-  //       )
-  //     )
-  //     .subscribe();
-  // }
-
   public totalSave() {
     this.storage
       .keys()
@@ -116,7 +87,7 @@ export class AuthComponent implements OnInit {
         map((nestedArrays: Time[][]) => ([] as Time[]).concat(...nestedArrays)),
         map(times => {
           let csvContent = '';
-          times.forEach(time => (csvContent += `${new TimeAdapter(time).format(this.settings.get().exportFormat)}\r\n`));
+          times.forEach(time => (csvContent += `${new TimeAdapter(time).format(DATETIME_ISO_FORMAT)}\r\n`));
           return csvContent;
         })
       )

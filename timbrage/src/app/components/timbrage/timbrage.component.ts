@@ -1,9 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CalculationService } from '../../services/calculation.service';
 import * as moment from 'moment';
 import { Duration, Moment } from 'moment';
 import { Observable } from 'rxjs/internal/Observable';
-import { DATE_ISO_FORMAT, Time, TimeAdapter } from '../../models/time.model';
+import { Time, TimeAdapter } from '../../models/time.model';
 import { TimesState, SelectDate, AddTime } from '../../store/time.store';
 import { Select, Store } from '@ngxs/store';
 import { map, mergeMap } from 'rxjs/operators';
@@ -16,23 +16,23 @@ import { TimesService } from 'src/app/services/times.service';
   styleUrls: ['./timbrage.component.scss']
 })
 export class TimbrageComponent implements OnInit {
-  now$: Observable<Date>;
-  sumDay$: Observable<Duration>;
-
   @Select(TimesState.selectedDate)
-  public selectedDate$: Observable<Moment>;
+  public selectedDate$: Observable<Moment>; // jour sélectionné
 
-  public times$: Observable<Time[]>;
+  public times$: Observable<Time[]>; // timbrage du jour
 
-  private timer$ = timer(0, 1000);
+  now$: Observable<Date>; // horloge
+  sumDay$: Observable<Duration>; // somme des heures travaillées du jour
 
   constructor(private calculationService: CalculationService, private timesService: TimesService, private store: Store) {}
 
   ngOnInit() {
-    this.store.dispatch(new SelectDate(moment()));
     this.times$ = this.selectedDate$.pipe(mergeMap(date => this.timesService.read(date)));
+    // basé sur un timer
     this.now$ = timer(0, 1000).pipe(map(() => new Date()));
-    this.sumDay$ = combineLatest(this.timer$, this.times$).pipe(map(pair => this.calculationService.calculate(pair[1])));
+    this.sumDay$ = combineLatest(timer(0, 1000), this.times$).pipe(mergeMap(pair => this.calculationService.calculate(pair[1])));
+
+    this.store.dispatch(new SelectDate(moment())); // charge le jour en cours
   }
 
   public addTimbrage() {

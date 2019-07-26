@@ -24,11 +24,11 @@ export class CalendarComponent implements OnInit, OnDestroy {
   constructor(private calculationService: CalculationService, private timesService: TimesService, private store: Store) {}
   public weekDays = ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'];
 
-  public month$: Observable<Time[]>;
-  public times$: Observable<Time[]>;
   @Select(TimesState.selectedDate)
-  public selectedDate$: Observable<Moment>;
-  public days$: Observable<CalendarDayModel[]>;
+  public selectedDate$: Observable<Moment>; // jour sélectionné
+  public month$: Observable<Time[]>; // timbrages du mois
+  public times$: Observable<Time[]>; // timbrages du jour
+  public days$: Observable<CalendarDayModel[]>; // jours dispo dans le mois
 
   sumDay$: Observable<Duration>;
 
@@ -65,10 +65,13 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.month$ = this.selectedDate$.pipe(mergeMap(date => this.timesService.read(date.format(MONTH_ISO_FORMAT))));
+
     this.times$ = combineLatest(this.selectedDate$, this.month$).pipe(
       map(pair => pair[1].filter(time => time.time.startsWith(pair[0].format(DATE_ISO_FORMAT))))
     );
-    this.sumDay$ = this.times$.pipe(map(times => this.calculationService.calculate(times, false)));
+
+    this.sumDay$ = this.times$.pipe(mergeMap(times => this.calculationService.calculate(times, false)));
+
     this.days$ = combineLatest(this.selectedDate$, this.month$).pipe(
       map(pair => [CalendarComponent.getMonthDays(pair[0]), pair[1]]),
       map((pair: [Moment[], Time[]]) =>
@@ -79,7 +82,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
       )
     );
 
-    this.select(moment());
+    this.select(moment()); // charge le jour en cours par défaut
   }
 
   ngOnDestroy() {}

@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, of, combineLatest } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
-import { ProjectState, ReadSettings } from 'src/app/store/project.store';
+import { ProjectState } from 'src/app/store/project.store';
 import { mergeMap, map } from 'rxjs/operators';
 import { ProjectService } from 'src/app/service/project.service';
-import { DEFAULT_SETTINGS } from 'src/app/model/settings.model';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 import { TimesService } from 'src/app/service/times.service';
@@ -22,12 +21,7 @@ export class BillComponent implements OnInit {
   public bill$: Observable<any>;
   public logo$: Observable<string>;
 
-  constructor(
-    private route: ActivatedRoute,
-    private projectService: ProjectService,
-    private timesService: TimesService,
-    private store: Store
-  ) {}
+  constructor(private route: ActivatedRoute, private projectService: ProjectService, private timesService: TimesService) {}
 
   ngOnInit() {
     const settings$ = this.project$.pipe(mergeMap(projectName => this.projectService.readSettings(projectName)));

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Observable, of } from 'rxjs';
-import { map, mergeMap, take, catchError, tap, defaultIfEmpty, filter } from 'rxjs/operators';
+import { map, mergeMap, take, catchError } from 'rxjs/operators';
 import { Settings, DEFAULT_SETTINGS } from '../model/settings.model';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { UploadTaskSnapshot } from '@angular/fire/storage/interfaces';
@@ -32,8 +32,7 @@ export class ProjectService {
   public readSettings(projectName: string): Observable<Settings> {
     return this.fireauth.user.pipe(
       mergeMap(user => this.firestore.doc<Settings>(`users/${user.uid}/projects/${projectName}`).valueChanges()),
-      map(data => _.merge(DEFAULT_SETTINGS, data, { projectName })),
-      tap(data => console.log(data))
+      map(data => _.merge(DEFAULT_SETTINGS, data, { projectName }))
     );
   }
 

@@ -22,18 +22,13 @@ export class SaveProject {
   constructor(public readonly settings: Settings) {}
 }
 
-export class ReadSettings {
-  static readonly type = '[Project] ReadSettings]';
-  constructor(public readonly projectName: string) {}
-}
-
 export class SaveSettings {
   static readonly type = '[Project] SaveSettings]';
   constructor(public readonly settings: Settings) {}
 }
 
 @State<ProjectStateModel>({
-  name: 'settings',
+  name: 'project',
   defaults: {
     name: 'Default'
   }
@@ -61,11 +56,6 @@ export class ProjectState {
     return this.settingsService
       .saveSettings(action.settings)
       .pipe(mergeMap(settings => ctx.dispatch(new SelectProject(settings.projectName))));
-  }
-
-  @Action(ReadSettings)
-  readSettings(ctx: StateContext<ProjectStateModel>, action: ReadSettings) {
-    return this.settingsService.readSettings(action.projectName).pipe(map(settings => ({ ...DEFAULT_SETTINGS, ...settings })));
   }
 
   @Action(SaveSettings)

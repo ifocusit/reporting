@@ -1,13 +1,14 @@
 import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Observable, of } from 'rxjs';
-import { map, mergeMap, tap, catchError } from 'rxjs/operators';
+import { of, from } from 'rxjs';
+import { mergeMap, tap, catchError, take } from 'rxjs/operators';
 import { ExportService } from '../../services/export.service';
 import { Store } from '@ngxs/store';
 import * as moment from 'moment';
 import { TimesState, SelectDate, AddTimes } from 'src/app/store/time.store';
 import { StorageMap } from '@ngx-pwa/local-storage';
-import { TimeAdapter, DATE_ISO_FORMAT, Time } from 'src/app/models/time.model';
+import { TimeAdapter, DATE_ISO_FORMAT, Time, TimeModel } from 'src/app/models/time.model';
+import { AuthService } from 'src/app/services/auth.service';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-home',
@@ -17,17 +18,14 @@ import { TimeAdapter, DATE_ISO_FORMAT, Time } from 'src/app/models/time.model';
 export class HomeComponent implements OnInit {
   navLinks = [{ path: '/timbrage', label: 'Timbrage' }, { path: '/calendar', label: 'Calendar' }];
 
-  isHandset$: Observable<boolean> = this.breakpointObserver
-    .observe(Breakpoints.Handset)
-    .pipe(map((result: { matches: boolean }) => result.matches));
-
   @ViewChild('export', { static: true }) private exportLink: ElementRef;
 
   constructor(
-    private breakpointObserver: BreakpointObserver,
     private exportService: ExportService,
     private store: Store,
-    private storage: StorageMap
+    private storage: StorageMap,
+    private authService: AuthService,
+    private firestore: AngularFirestore
   ) {}
 
   ngOnInit() {
@@ -44,10 +42,39 @@ export class HomeComponent implements OnInit {
         catchError(() => of(true))
       )
       .subscribe();
+    this.authService.user$
+      .pipe(
+        mergeMap(user =>
+          this.firestore
+            .collection<TimeModel>(`users/${user.uid}/times`)
+            .valueChanges()
+            .pipe(
+              take(1),
+              mergeMap(times => from(times)),
+              tap(time => console.log(time)),
+              mergeMap(time => this.firestore.collection<TimeModel>(`users/${user.uid}/projects/Default/times`).add(time)),
+              mergeMap(data =>
+                this.firestore
+                  .collection<TimeModel>(`users/${user.uid}/times`)
+                  .doc(data.id)
+                  .delete()
+              )
+            )
+        )
+      )
+      .subscribe();
   }
 
   public calendarPage() {
     return window.location.pathname.match('.*calendar.*');
+  }
+
+  public profilePage() {
+    return window.location.pathname.match('.*profile.*');
+  }
+
+  public timbragePage() {
+    return window.location.pathname.match('.*timbrage.*');
   }
 
   public exportMonth() {
@@ -57,5 +84,9 @@ export class HomeComponent implements OnInit {
 
   public goToday() {
     this.store.dispatch(new SelectDate(moment()));
+  }
+
+  signOut() {
+    this.authService.signOutUser();
   }
 }

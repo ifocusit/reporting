@@ -1,15 +1,14 @@
 import { ElementRef, Injectable } from '@angular/core';
 import { Moment } from 'moment';
-import { map, toArray, take } from 'rxjs/operators';
-import { Time, TimeAdapter } from '../models/time.model';
-import { SettingsService } from './settings.service';
+import { map, take } from 'rxjs/operators';
+import { TimeAdapter, DATETIME_ISO_FORMAT } from '../models/time.model';
 import { TimesService } from './times.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExportService {
-  constructor(private settings: SettingsService, private timesService: TimesService) {}
+  constructor(private timesService: TimesService) {}
 
   public exportMonth(date: Moment, exportLink: ElementRef) {
     const month = date.format('YYYY-MM');
@@ -19,7 +18,7 @@ export class ExportService {
         take(1),
         map(times => {
           let csvContent = '';
-          times.forEach(time => (csvContent += `${new TimeAdapter(time).format(this.settings.get().exportFormat)}\r\n`));
+          times.forEach(time => (csvContent += `${new TimeAdapter(time).format(DATETIME_ISO_FORMAT)}\r\n`));
           return csvContent;
         })
       )

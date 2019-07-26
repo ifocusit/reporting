@@ -1,17 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
 import { auth } from 'firebase/app';
-
-export interface User {
-  uid: string;
-  email: string;
-  photoURL?: string;
-  displayName?: string;
-  myCustomData?: string;
-}
+import { Observable } from 'rxjs';
+import { User } from '../models/user.model';
+import { mergeMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -20,19 +13,11 @@ export class AuthService {
   constructor(private fireauth: AngularFireAuth, private firestore: AngularFirestore) {}
 
   get user$(): Observable<User> {
-    return this.fireauth.user.pipe(
-      map(credential => {
-        if (credential) {
-          return {
-            uid: credential.uid,
-            email: credential.email,
-            displayName: credential.displayName || credential.email,
-            photoURL: credential.photoURL
-          } as User;
-        }
-        return { displayName: 'nobody', email: 'unknown' } as User;
-      })
-    );
+    return this.fireauth.user.pipe(mergeMap(user => this.firestore.doc<User>(`users/${user.uid}`).valueChanges()));
+  }
+
+  public update(user: User) {
+    return this.firestore.doc(`users/${user.uid}`).set(user, { merge: true });
   }
 
   async googleSignin() {
@@ -51,18 +36,6 @@ export class AuthService {
     // return this.fireauth.auth.signInWithPopup(provider).then(credential => this.updateUserData(credential.user));
   }
 
-  private updateUserData(user: User) {
-    // Sets user data to firestore on login
-    const data = {
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName,
-      photoURL: user.photoURL
-    } as User;
-
-    return this.firestore.doc(`users/${user.uid}`).set(data, { merge: true });
-  }
-
   createNewUser(email: string, password: string) {
     return this.fireauth.auth.createUserWithEmailAndPassword(email, password).then(credential => this.updateUserData(credential.user));
   }
@@ -73,5 +46,17 @@ export class AuthService {
 
   signOutUser() {
     return this.fireauth.auth.signOut();
+  }
+
+  private updateUserData(user: firebase.User) {
+    // Sets user data to firestore on login
+    const data = {
+      uid: user.uid,
+      email: user.email,
+      displayName: user.displayName,
+      photoURL: user.photoURL
+    } as User;
+
+    return this.firestore.doc(`users/${user.uid}`).set(data, { merge: true });
   }
 }

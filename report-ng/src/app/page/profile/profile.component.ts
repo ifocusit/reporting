@@ -4,7 +4,7 @@ import { User } from 'src/app/model/user.model';
 import { Observable } from 'rxjs';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { tap, mergeMap } from 'rxjs/operators';
-import { ProjectState, SaveSettings, SelectProject, ReadSettings, SaveProject } from 'src/app/store/project.store';
+import { ProjectState, SaveSettings, SelectProject, SaveProject } from 'src/app/store/project.store';
 import { Select, Store } from '@ngxs/store';
 import { ProjectService } from 'src/app/service/project.service';
 import { Settings, DEFAULT_SETTINGS } from 'src/app/model/settings.model';
@@ -81,7 +81,7 @@ export class ProfileComponent implements OnInit {
   public removeProject(projectName: string) {
     this.projectService
       .delete(projectName)
-      .pipe(mergeMap(settings => this.store.dispatch(new SelectProject(DEFAULT_SETTINGS.projectName))))
+      .pipe(mergeMap(() => this.store.dispatch(new SelectProject(DEFAULT_SETTINGS.projectName))))
       .subscribe();
   }
 

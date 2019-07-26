@@ -2,6 +2,7 @@
 
 ## TODO
 
+- ajouter settings manquants
 - créer page 'calendrier'
   - résumé par mois :
     - heures reportées
