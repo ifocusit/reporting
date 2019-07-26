@@ -31,9 +31,14 @@
     </div>
     <div id="sumDay" fxLayoutAlign="space-between center">
       <span>{{ sumDay$ | async | duration }}</span>
-      <button id="add" (click)="addTimbrage()" mat-mini-fab color="accent">
-        <mat-icon>add</mat-icon>
-      </button>
+      <div fxLayoutGap="10px">
+        <button (click)="addTimbrage()" mat-mini-fab color="accent">
+          <mat-icon>add</mat-icon>
+        </button>
+        <button (click)="addTimbrages()" mat-mini-fab color="accent">
+          <mat-icon>library_add</mat-icon>
+        </button>
+      </div>
     </div>
   </mat-card-header>
 

@@ -5,10 +5,12 @@ import { Duration, Moment } from 'moment';
 import { Time, TimeAdapter, MONTH_ISO_FORMAT, DATE_ISO_FORMAT } from '../../models/time.model';
 import { map, mergeMap, take, tap } from 'rxjs/operators';
 import { CalculationService } from '../../services/calculation.service';
-import { TimesService } from 'src/app/services/times.service';
-import { Subject, BehaviorSubject, combineLatest } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
-import { TimesState, MoveMonth, SelectDate } from 'src/app/store/time.store';
+import { TimesState, MoveMonth, SelectDate, AddTimes } from '../../store/time.store';
+import { TimesService } from '../../services/times.service';
+import { combineLatest } from 'rxjs';
+import { ProjectService } from '../../services/project.service';
+import { ProjectState } from 'src/app/store/project.store';
 
 export interface CalendarDayModel {
   date: Moment;
@@ -21,16 +23,23 @@ export interface CalendarDayModel {
   styleUrls: ['./calendar.component.scss']
 })
 export class CalendarComponent implements OnInit, OnDestroy {
-  constructor(private calculationService: CalculationService, private timesService: TimesService, private store: Store) {}
   public weekDays = ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'];
 
   @Select(TimesState.selectedDate)
   public selectedDate$: Observable<Moment>; // jour sélectionné
+
   public month$: Observable<Time[]>; // timbrages du mois
   public times$: Observable<Time[]>; // timbrages du jour
   public days$: Observable<CalendarDayModel[]>; // jours dispo dans le mois
 
   sumDay$: Observable<Duration>;
+
+  constructor(
+    private calculationService: CalculationService,
+    private timesService: TimesService,
+    private store: Store,
+    private projectService: ProjectService
+  ) {}
 
   private static getMonthDays(selectedDate: Moment): Moment[] {
     const days = [];
@@ -106,6 +115,31 @@ export class CalendarComponent implements OnInit, OnDestroy {
             .year(selected.year())
         ),
         mergeMap(time => this.timesService.create(TimeAdapter.createTime(time)))
+      )
+      .subscribe();
+  }
+
+  public addTimbrages() {
+    this.selectedDate$
+      .pipe(
+        take(1),
+        mergeMap(date =>
+          this.store.select(ProjectState.project).pipe(
+            mergeMap(project => this.projectService.readSettings(project)),
+            take(1),
+            map(settings =>
+              settings.timbrage.defaults
+                .map(time => moment(time, 'HH.mm'))
+                .map(time =>
+                  moment(date)
+                    .startOf('day')
+                    .set({ hour: time.hour(), minute: time.minute() })
+                )
+                .map(time => TimeAdapter.createTime(time))
+            ),
+            mergeMap(times => this.store.dispatch(new AddTimes(times)))
+          )
+        )
       )
       .subscribe();
   }

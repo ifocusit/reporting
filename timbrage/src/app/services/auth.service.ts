@@ -4,7 +4,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { auth } from 'firebase/app';
 import { Observable } from 'rxjs';
 import { User } from '../models/user.model';
-import { mergeMap } from 'rxjs/operators';
+import { mergeMap, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,10 @@ export class AuthService {
   constructor(private fireauth: AngularFireAuth, private firestore: AngularFirestore) {}
 
   get user$(): Observable<User> {
-    return this.fireauth.user.pipe(mergeMap(user => this.firestore.doc<User>(`users/${user.uid}`).valueChanges()));
+    return this.fireauth.user.pipe(
+      mergeMap(user => this.firestore.doc<User>(`users/${user.uid}`).valueChanges()),
+      take(1)
+    );
   }
 
   public update(user: User) {

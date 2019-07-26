@@ -7,7 +7,7 @@ import { AddTime } from '../store/time.store';
 import { ProjectService } from './project.service';
 import { Observable, of } from 'rxjs';
 import { ProjectState } from '../store/project.store';
-import { mergeMap, map } from 'rxjs/operators';
+import { mergeMap, map, take } from 'rxjs/operators';
 import { Settings } from '../models/settings.model';
 import { Moment } from 'moment';
 
@@ -22,6 +22,7 @@ export class CalculationService {
   public calculate(timbrages: Array<Time>, manageMissing = true, setMissingToEndOfDay = false): Observable<Duration> {
     return this.store.select(ProjectState.project).pipe(
       mergeMap(project => this.projectService.readSettings(project)),
+      take(1),
       map(settings => this._calculate(timbrages, settings, manageMissing, setMissingToEndOfDay))
     );
   }
