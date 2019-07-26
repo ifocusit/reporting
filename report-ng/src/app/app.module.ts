@@ -41,7 +41,7 @@ import { TimesState } from './store/month.store';
 import { DebounceInputDirective } from './directive/debounce-input.directive';
 import { BillComponent } from './page/bill/bill.component';
 import { ProfileComponent } from './page/profile/profile.component';
-import { SettingsState } from './store/settings.store';
+import { ProjectState } from './store/project.store';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { DropZoneDirective } from './component/drop-zone.directive';
 import { FileUploadComponent } from './component/file-upload/file-upload.component';
@@ -101,7 +101,7 @@ const appRoutes: Routes = [
     MatTabsModule,
     MatProgressBarModule,
     // ngxs
-    NgxsModule.forRoot([TimesState, SettingsState], { developmentMode: !environment.production }),
+    NgxsModule.forRoot([TimesState, ProjectState], { developmentMode: !environment.production }),
     // firebase
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule.enablePersistence(),

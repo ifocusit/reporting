@@ -2,7 +2,7 @@
 
 ## TODO
 
-- création projet / sélection / suppression
+- suppression projet
 - couleur projet (utiliser dans la facture)
 - ajout toolbar application :
   - au couleur du projet

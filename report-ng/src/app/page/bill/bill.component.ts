@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, of, combineLatest } from 'rxjs';
-import { Select } from '@ngxs/store';
-import { SettingsState } from 'src/app/store/settings.store';
+import { Select, Store } from '@ngxs/store';
+import { ProjectState, ReadSettings } from 'src/app/store/project.store';
 import { mergeMap, map } from 'rxjs/operators';
-import { SettingsService } from 'src/app/service/settings.service';
+import { ProjectService } from 'src/app/service/project.service';
 import { DEFAULT_SETTINGS } from 'src/app/model/settings.model';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
@@ -17,18 +17,20 @@ import { CalculateDuration } from 'src/app/service/calculate-duration.tools';
   styleUrls: ['./bill.component.scss']
 })
 export class BillComponent implements OnInit {
-  @Select(SettingsState.project)
+  @Select(ProjectState.project)
   public project$: Observable<string>;
   public bill$: Observable<any>;
   public logo$: Observable<string>;
 
-  constructor(private route: ActivatedRoute, private settingsService: SettingsService, private timesService: TimesService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private projectService: ProjectService,
+    private timesService: TimesService,
+    private store: Store
+  ) {}
 
   ngOnInit() {
-    const settings$ = this.project$.pipe(
-      mergeMap(projectName => this.settingsService.read(projectName)),
-      mergeMap(data => (data ? of(data) : this.settingsService.save(DEFAULT_SETTINGS)))
-    );
+    const settings$ = this.project$.pipe(mergeMap(projectName => this.projectService.read(projectName)));
 
     const selectedDate$ = this.route.params.pipe(map(params => moment(params['month'], 'YYYY-MM')));
 
@@ -49,7 +51,7 @@ export class BillComponent implements OnInit {
       }))
     );
 
-    this.logo$ = this.project$.pipe(mergeMap(projectName => this.settingsService.readLogo(projectName)));
+    this.logo$ = this.project$.pipe(mergeMap(projectName => this.projectService.readLogo(projectName)));
   }
 
   private calculateHT(duration: moment.Duration, hourlyRate: number) {

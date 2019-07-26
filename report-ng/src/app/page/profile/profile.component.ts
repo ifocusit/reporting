@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ProfileService } from 'src/app/service/profile.service';
 import { User } from 'src/app/model/user.model';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { tap, mergeMap, map } from 'rxjs/operators';
-import { SettingsState, SaveSettings, SelectProject } from 'src/app/store/settings.store';
+import { tap, mergeMap } from 'rxjs/operators';
+import { ProjectState, SaveSettings, SelectProject, ReadSettings, SaveProject } from 'src/app/store/project.store';
 import { Select, Store } from '@ngxs/store';
-import { SettingsService } from 'src/app/service/settings.service';
+import { ProjectService } from 'src/app/service/project.service';
 import { Settings, DEFAULT_SETTINGS } from 'src/app/model/settings.model';
 import * as moment from 'moment';
 import { AuthService } from '../auth/auth.service';
@@ -19,7 +19,7 @@ import { AuthService } from '../auth/auth.service';
 export class ProfileComponent implements OnInit {
   public user$: Observable<User>;
 
-  @Select(SettingsState.project)
+  @Select(ProjectState.project)
   public project$: Observable<string>;
 
   public settings$: Observable<Settings>;
@@ -29,12 +29,12 @@ export class ProfileComponent implements OnInit {
 
   public logo$: Observable<string>;
 
-  public uploadLogo$ = (file: File) => this.project$.pipe(mergeMap(projectName => this.settingsService.uploadLogo(file, projectName)));
+  public uploadLogo$ = (file: File) => this.project$.pipe(mergeMap(projectName => this.projectService.uploadLogo(file, projectName)));
 
   constructor(
     private fb: FormBuilder,
     private profileService: ProfileService,
-    private settingsService: SettingsService,
+    private projectService: ProjectService,
     private store: Store,
     private authService: AuthService
   ) {}
@@ -65,14 +65,13 @@ export class ProfileComponent implements OnInit {
 
     this.settings$ = this.project$.pipe(
       tap(() => this.form.reset()),
-      mergeMap(projectName => this.settingsService.read(projectName)),
-      map(settings => ({ ...DEFAULT_SETTINGS, ...settings })),
+      mergeMap(projectName => this.projectService.read(projectName)),
       tap(settings => this.form.patchValue(settings))
     );
 
-    this.projects$ = this.settingsService.projects$;
+    this.projects$ = this.projectService.projects$;
 
-    this.logo$ = this.project$.pipe(mergeMap(projectName => this.settingsService.readLogo(projectName)));
+    this.logo$ = this.project$.pipe(mergeMap(projectName => this.projectService.readLogo(projectName)));
   }
 
   public selectProject(event) {
@@ -80,15 +79,12 @@ export class ProfileComponent implements OnInit {
   }
 
   public addProject(projectName: string) {
-    this.settingsService
-      .save({ ...DEFAULT_SETTINGS, projectName: projectName })
-      .pipe(mergeMap(settings => this.store.dispatch(new SelectProject(settings.projectName))))
-      .subscribe();
+    this.store.dispatch(new SaveProject({ ...DEFAULT_SETTINGS, projectName: projectName })).subscribe();
   }
 
   public removeProject(projectName: string) {
-    this.settingsService
-      .removeSettings(projectName)
+    this.projectService
+      .delete(projectName)
       .pipe(mergeMap(settings => this.store.dispatch(new SelectProject(DEFAULT_SETTINGS.projectName))))
       .subscribe();
   }
