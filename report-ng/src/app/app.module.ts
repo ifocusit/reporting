@@ -47,6 +47,7 @@ import { DropZoneDirective } from './component/drop-zone.directive';
 import { FileUploadComponent } from './component/file-upload/file-upload.component';
 import { FileSizePipe } from './component/file-size.pipe';
 import { SelectProjectComponent } from './component/select-project/select-project.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 const appRoutes: Routes = [
   { path: 'auth', component: AuthComponent },
@@ -108,7 +109,8 @@ const appRoutes: Routes = [
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule.enablePersistence(),
     AngularFireAuthModule,
-    AngularFireStorageModule
+    AngularFireStorageModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   bootstrap: [AppComponent],
   entryComponents: [DailyReportComponent]

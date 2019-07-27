@@ -8,7 +8,12 @@
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "deploy": "firebase deploy --only hosting",
+    "predeploy": "ng build --prod",
+    "docker:build": "docker build -t ifocusit/reporting/report-ng .",
+    "docker:run": "docker run -p 32001:80 ifocusit/reporting/report-ng",
+    "http": "ng build --prod && cd dist && angular-http-server --open -p 4401"
   },
   "private": true,
   "dependencies": {
@@ -23,7 +28,9 @@
     "@angular/material": "^8.0.2",
     "@angular/platform-browser": "~8.0.0",
     "@angular/platform-browser-dynamic": "~8.0.0",
+    "@angular/pwa": "^0.801.2",
     "@angular/router": "~8.0.0",
+    "@angular/service-worker": "~8.0.0",
     "@ngxs/store": "^3.4.3",
     "core-js": "^3.1.4",
     "firebase": "^6.2.4",
