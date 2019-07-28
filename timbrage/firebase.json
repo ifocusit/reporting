@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "timbrage-reporting",
     "public": "dist",
     "rewrites": [
       {

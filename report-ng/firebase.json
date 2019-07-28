@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "admin-reporting",
     "public": "dist",
     "rewrites": [
       {
