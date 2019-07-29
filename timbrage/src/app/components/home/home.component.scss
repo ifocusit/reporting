@@ -1,32 +1,16 @@
-:host {
-  footer {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    z-index: 2;
-    height: 56px;
+header {
+  height: 56px;
+}
 
-    mat-toolbar > * {
+footer {
+  height: 56px;
+
+  mat-toolbar > * {
+    width: 100%;
+
+    .mat-tab-link,
+    .mat-ink-bar {
       width: 100%;
-
-      .mat-tab-link,
-      .mat-ink-bar {
-        width: 100%;
-      }
-    }
-  }
-
-  main {
-    height: 100vh;
-    margin-bottom: 56px;
-  }
-
-  mat-sidenav-container {
-    height: 100vh;
-
-    mat-sidenav-content {
-      overflow: hidden;
     }
   }
 }

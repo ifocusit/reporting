@@ -1,26 +1,27 @@
-<mat-card fxLayout="column" class="mat-elevation-z0">
-  <mat-card-header fxFlex="200px" class="mat-elevation-z1">
-    <div fxLayout="column" fxLayoutAlign="center center" *ngIf="user$ | async as user">
-      <img *ngIf="user.photoURL; else defaultProfileIcon" [src]="user.photoURL" />
-      <ng-template #defaultProfileIcon>
-        <img src="/assets/profile_default_icon.png" />
-      </ng-template>
-      <h3 *ngIf="user.displayName">{{ user.displayName }}</h3>
-      <h4 *ngIf="user.email">{{ user.email }}</h4>
-    </div>
+<mat-card fxLayout="column" class="container">
+  <mat-card-header fxLayout="column" fxLayoutAlign="center center" *ngIf="user$ | async as user">
+    <img *ngIf="user.photoURL; else defaultProfileIcon" [src]="user.photoURL" />
+    <ng-template #defaultProfileIcon>
+      <img src="/assets/profile_default_icon.png" />
+    </ng-template>
+    <h3 *ngIf="user.displayName">{{ user.displayName }}</h3>
+    <h4 *ngIf="user.email">{{ user.email }}</h4>
   </mat-card-header>
-  <mat-card-content class="scrollbar" fxLayout="column" fxLayoutAlign="start start">
-    <a mat-button href="mailto:timbrage@ifocusit.ch" target="_blank">Un problème ? Nous écrire.</a>
+  <mat-card-content>
+    <div fxLayout="column" fxLayoutAlign="space-between start" fxFill>
+      <div fxLayout="column" fxLayoutAlign="start start">
+        <a mat-button *ngIf="!times" color="secondary" (click)="selectFile()">
+          Importer des timbrages à partir d'un fichier csv
+        </a>
+        <a mat-button *ngIf="times" (click)="cancelImport()">Annuler l'import</a>
 
-    <a mat-button *ngIf="!times" color="secondary" (click)="selectFile()">
-      <mat-icon>attach_file</mat-icon>
-      Importer
-    </a>
-    <a mat-button *ngIf="times" (click)="cancelImport()">Annuler l'import</a>
+        <button mat-button (click)="exportAll()">Exporter tous les timbrages</button>
 
-    <button mat-button (click)="exportAll()">Exporter tous les timbrages</button>
+        <input #fileSelector type="file" (change)="fileSelected($event)" style="display: none" />
+        <a #export style="display: none">hidden link</a>
+      </div>
 
-    <input #fileSelector type="file" (change)="fileSelected($event)" style="display: none" />
-    <a #export style="display: none">hidden link</a>
+      <a mat-button href="mailto:timbrage@ifocusit.ch" target="_blank">Un problème ? Nous écrire.</a>
+    </div>
   </mat-card-content>
 </mat-card>

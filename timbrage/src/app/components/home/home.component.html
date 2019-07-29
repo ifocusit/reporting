@@ -1,35 +1,40 @@
-<header>
-  <mat-toolbar color="primary" fxLayout="row" fxLayoutAlign="space-between center">
-    <span *ngIf="profilePage()" fxFlex="calc(100%-180px)">Profile</span>
-    <span *ngIf="timbragePage()" fxFlex="calc(100%-95px)">Timbrage</span>
-    <span *ngIf="calendarPage()" fxFlex="calc(100%-200px)">Calendrier</span>
-    <button mat-icon-button (click)="goToday()" *ngIf="calendarPage()">Auj.</button>
-    <button mat-icon-button (click)="exportMonth()" *ngIf="calendarPage()">
-      <mat-icon>get_app</mat-icon>
-    </button>
-    <a #export style="display: none">hidden link</a>
-    <button *ngIf="!profilePage()" mat-icon-button [routerLink]="['/profile']"><mat-icon>settings</mat-icon></button>
-    <button *ngIf="profilePage()" mat-icon-button [routerLink]="['/timbrage']"><mat-icon>list</mat-icon></button>
-    <button *ngIf="profilePage()" mat-button (click)="signOut()">Logout</button>
-  </mat-toolbar>
-</header>
+<div class="container">
+  <header>
+    <mat-toolbar color="primary" fxLayout="row" fxLayoutAlign="space-between center">
+      <button *ngIf="profilePage()" mat-icon-button [routerLink]="['/timbrage']"><mat-icon>arrow_back</mat-icon></button>
+      <span *ngIf="profilePage()" fxFlex="calc(100%-180px)">Profile</span>
+      <span *ngIf="timbragePage()" fxFlex="calc(100%-95px)">Timbrage</span>
+      <span *ngIf="calendarPage()" fxFlex="calc(100%-200px)">Calendrier</span>
+      <button mat-icon-button (click)="goToday()" *ngIf="calendarPage()">Auj.</button>
+      <button mat-icon-button (click)="exportMonth()" *ngIf="calendarPage()">
+        <mat-icon>get_app</mat-icon>
+      </button>
+      <a #export style="display: none">hidden link</a>
+      <button *ngIf="!profilePage()" mat-icon-button [routerLink]="['/profile']"><mat-icon>settings</mat-icon></button>
+      <button *ngIf="profilePage()" mat-button (click)="signOut()">Logout</button>
+    </mat-toolbar>
+  </header>
 
-<main role="main">
-  <router-outlet></router-outlet>
-</main>
+  <main class="content" role="main">
+    <router-outlet></router-outlet>
+  </main>
 
-<footer *ngIf="!profilePage()">
-  <mat-toolbar>
-    <nav mat-tab-nav-bar>
-      <a
-        mat-tab-link
-        *ngFor="let link of navLinks"
-        [routerLink]="link.path"
-        routerLinkActive
-        #rla="routerLinkActive"
-        [active]="rla.isActive"
-        >{{ link.label }}</a
-      >
-    </nav>
-  </mat-toolbar>
-</footer>
+  <footer *ngIf="!profilePage()">
+    <mat-toolbar>
+      <nav mat-tab-nav-bar>
+        <a
+          mat-tab-link
+          *ngFor="let link of navLinks"
+          [routerLink]="link.path"
+          routerLinkActive
+          #rla="routerLinkActive"
+          [active]="rla.isActive"
+          replaceUrl="true"
+          >{{ link.label }}</a
+        >
+        <!-- <a mat-tab-link (click)="open('/timbrage')" routerLinkActive #rla="routerLinkActive" [active]="rla.isActive">Timbrage</a> -->
+        <!-- <a mat-tab-link (click)="open('/timbrage')" routerLinkActive #rla="routerLinkActive" [active]="rla.isActive">Calendrier</a> -->
+      </nav>
+    </mat-toolbar>
+  </footer>
+</div>

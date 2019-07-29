@@ -11,6 +11,7 @@ import { TimesService } from '../../services/times.service';
 import { combineLatest } from 'rxjs';
 import { ProjectService } from '../../services/project.service';
 import { ProjectState } from 'src/app/store/project.store';
+import { Router } from '@angular/router';
 
 export interface CalendarDayModel {
   date: Moment;
@@ -38,7 +39,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
     private calculationService: CalculationService,
     private timesService: TimesService,
     private store: Store,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private router: Router
   ) {}
 
   private static getMonthDays(selectedDate: Moment): Moment[] {
@@ -142,5 +144,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
         )
       )
       .subscribe();
+  }
+
+  public openTimbrage() {
+    this.router.navigate(['/timbrage'], { replaceUrl: true });
   }
 }

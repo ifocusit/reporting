@@ -1,9 +1,6 @@
 :host {
   mat-card {
     padding: 0;
-    height: 100vh;
-    width: 100%;
-    background-color: transparent;
 
     mat-card-header {
       padding: 20px;
@@ -68,11 +65,7 @@
     }
 
     mat-card-content {
-      margin-bottom: 110px;
-
-      & > div {
-        padding-top: 17px;
-      }
+      padding-top: 17px;
     }
 
     mat-card-actions {

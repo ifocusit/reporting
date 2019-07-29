@@ -1,4 +1,4 @@
-<mat-card class="mat-elevation-z0" *ngIf="selectedDate$ | async as selectedDate">
+<mat-card class="container mat-elevation-z0" *ngIf="selectedDate$ | async as selectedDate" fxLayout="column">
   <mat-card-header fxLayout="column" (swipeleft)="changeMonth(+1)" (swiperight)="changeMonth(-1)">
     <div id="calendar">
       <div class="month" fxLayoutAlign="space-around center">
@@ -42,7 +42,7 @@
     </div>
   </mat-card-header>
 
-  <mat-card-content class="scrollbar">
+  <mat-card-content class="scrollbar" (swiperight)="openTimbrage()">
     <app-time *ngFor="let time of times$ | async; let odd = odd" [model]="time" [odd]="odd"></app-time>
   </mat-card-content>
 </mat-card>
