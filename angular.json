@@ -29,6 +29,7 @@
               "src/manifest.webmanifest"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/pink-bluegrey.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -92,6 +93,7 @@
               "src/manifest.webmanifest"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/pink-bluegrey.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -146,6 +148,7 @@
               "projects/timbrage/src/manifest.webmanifest"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "projects/timbrage/src/styles.css"
             ],
             "scripts": []
@@ -209,6 +212,7 @@
               "projects/timbrage/src/manifest.webmanifest"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "projects/timbrage/src/styles.css"
             ],
             "scripts": []
@@ -263,6 +267,7 @@
               "projects/admin/src/manifest.webmanifest"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
               "projects/admin/src/styles.css"
             ],
             "scripts": []
@@ -326,6 +331,7 @@
               "projects/admin/src/manifest.webmanifest"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
               "projects/admin/src/styles.css"
             ],
             "scripts": []
@@ -392,6 +398,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "reporting"
 }
