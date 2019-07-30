@@ -25,7 +25,8 @@
             "aot": false,
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/manifest.webmanifest"
             ],
             "styles": [
               "src/styles.scss"
@@ -55,7 +56,9 @@
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
                 }
-              ]
+              ],
+              "serviceWorker": true,
+              "ngswConfigPath": "ngsw-config.json"
             }
           }
         },
@@ -85,7 +88,8 @@
             "karmaConfig": "karma.conf.js",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/manifest.webmanifest"
             ],
             "styles": [
               "src/styles.scss"
@@ -138,7 +142,8 @@
             "aot": false,
             "assets": [
               "projects/timbrage/src/favicon.ico",
-              "projects/timbrage/src/assets"
+              "projects/timbrage/src/assets",
+              "projects/timbrage/src/manifest.webmanifest"
             ],
             "styles": [
               "projects/timbrage/src/styles.css"
@@ -168,7 +173,9 @@
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
                 }
-              ]
+              ],
+              "serviceWorker": true,
+              "ngswConfigPath": "projects/timbrage/ngsw-config.json"
             }
           }
         },
@@ -198,7 +205,8 @@
             "karmaConfig": "projects/timbrage/karma.conf.js",
             "assets": [
               "projects/timbrage/src/favicon.ico",
-              "projects/timbrage/src/assets"
+              "projects/timbrage/src/assets",
+              "projects/timbrage/src/manifest.webmanifest"
             ],
             "styles": [
               "projects/timbrage/src/styles.css"
@@ -251,7 +259,8 @@
             "aot": false,
             "assets": [
               "projects/admin/src/favicon.ico",
-              "projects/admin/src/assets"
+              "projects/admin/src/assets",
+              "projects/admin/src/manifest.webmanifest"
             ],
             "styles": [
               "projects/admin/src/styles.css"
@@ -281,7 +290,9 @@
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
                 }
-              ]
+              ],
+              "serviceWorker": true,
+              "ngswConfigPath": "projects/admin/ngsw-config.json"
             }
           }
         },
@@ -311,7 +322,8 @@
             "karmaConfig": "projects/admin/karma.conf.js",
             "assets": [
               "projects/admin/src/favicon.ico",
-              "projects/admin/src/assets"
+              "projects/admin/src/assets",
+              "projects/admin/src/manifest.webmanifest"
             ],
             "styles": [
               "projects/admin/src/styles.css"
