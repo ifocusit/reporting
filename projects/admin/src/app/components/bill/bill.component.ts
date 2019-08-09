@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonsService } from 'projects/commons/src/public-api';
 
 @Component({
   selector: 'app-bill',
@@ -7,9 +6,7 @@ import { CommonsService } from 'projects/commons/src/public-api';
   styleUrls: ['./bill.component.css']
 })
 export class BillComponent implements OnInit {
-  public message = this.service.sayHello();
-
-  constructor(private service: CommonsService) {}
+  constructor() {}
 
   ngOnInit() {}
 }

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from 'projects/commons/src/lib/auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'Timbrage';
+
+  constructor(private authService: AuthService) {}
+
+  public logout() {
+    this.authService.signOutUser();
+  }
 }

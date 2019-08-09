@@ -30,6 +30,7 @@
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/pink-bluegrey.css",
+              "node_modules/firebaseui/dist/firebaseui.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -149,6 +150,7 @@
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+              "node_modules/firebaseui/dist/firebaseui.css",
               "projects/timbrage/src/styles.css"
             ],
             "scripts": []
@@ -268,6 +270,7 @@
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
+              "node_modules/firebaseui/dist/firebaseui.css",
               "projects/admin/src/styles.css"
             ],
             "scripts": []

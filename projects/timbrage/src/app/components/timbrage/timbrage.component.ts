@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { TimesService } from 'projects/commons/src/lib/times/times.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-timbrage',
@@ -6,10 +8,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./timbrage.component.css']
 })
 export class TimbrageComponent implements OnInit {
+  public times$: Observable<any>;
 
-  constructor() { }
+  constructor(private timesService: TimesService) {}
 
   ngOnInit() {
+    this.times$ = this.timesService.read('2019-07');
   }
-
 }

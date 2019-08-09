@@ -3,11 +3,11 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CommonsModule } from 'projects/commons/src/public-api';
 import { TimbrageComponent } from './components/timbrage/timbrage.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AuthModule, TimesModule } from 'projects/commons/src/public-api';
 
 const providers = [];
 
@@ -16,9 +16,10 @@ const providers = [];
   imports: [
     BrowserModule,
     AppRoutingModule,
-    CommonsModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    AuthModule,
+    TimesModule
   ],
   providers,
   bootstrap: [AppComponent]
