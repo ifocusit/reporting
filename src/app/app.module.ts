@@ -8,7 +8,7 @@ import { TimbrageSharedModule } from 'projects/timbrage/src/app/app.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatToolbarModule, MatButtonModule } from '@angular/material';
+import { MaterialModule } from 'projects/commons/src/lib/material.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -19,9 +19,7 @@ import { MatToolbarModule, MatButtonModule } from '@angular/material';
     TimbrageSharedModule.forRoot(),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     BrowserAnimationsModule,
-    // material
-    MatToolbarModule,
-    MatButtonModule
+    MaterialModule
   ],
   providers: [],
   bootstrap: [AppComponent]

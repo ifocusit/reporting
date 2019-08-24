@@ -20,10 +20,6 @@ export class AuthService {
     );
   }
 
-  public update(user: User) {
-    return this.firestore.doc(`users/${user.uid}`).set(user, { merge: true });
-  }
-
   async googleSignin() {
     return new Promise<any>((resolve, reject) => {
       const provider = new auth.GoogleAuthProvider();
@@ -52,11 +48,12 @@ export class AuthService {
     return this.fireauth.auth.signOut();
   }
 
-  private updateUserData(user: firebase.User) {
+  public updateUserData(user: firebase.User) {
     // Sets user data to firestore on login
     const data = {
       uid: user.uid,
       email: user.email,
+      phoneNumber: user.phoneNumber,
       displayName: user.displayName,
       photoURL: user.photoURL
     } as User;

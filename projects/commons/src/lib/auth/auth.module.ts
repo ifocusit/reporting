@@ -10,6 +10,7 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 
 import { environment } from 'src/environments/environment.prod';
 import { LoginComponent } from './login/login.component';
+import { AuthService } from './auth.service';
 
 const firebaseUiAuthConfig = {
   signInFlow: 'redirect',
@@ -18,7 +19,8 @@ const firebaseUiAuthConfig = {
     {
       requireDisplayName: true,
       provider: firebase.auth.EmailAuthProvider.PROVIDER_ID
-    }
+    },
+    firebase.auth.PhoneAuthProvider.PROVIDER_ID
   ],
   signInSuccessUrl: '/',
   // tosUrl: '/',
@@ -36,6 +38,7 @@ const firebaseUiAuthConfig = {
     AngularFireStorageModule,
     FirebaseUIModule.forRoot(firebaseUiAuthConfig)
   ],
+  providers: [AuthService],
   exports: [LoginComponent]
 })
 export class AuthModule {}

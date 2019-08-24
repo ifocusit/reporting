@@ -149,9 +149,8 @@
               "projects/timbrage/src/manifest.webmanifest"
             ],
             "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "node_modules/firebaseui/dist/firebaseui.css",
-              "projects/timbrage/src/styles.css"
+              "projects/timbrage/src/styles.scss"
             ],
             "scripts": []
           },
@@ -269,9 +268,8 @@
               "projects/admin/src/manifest.webmanifest"
             ],
             "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
               "node_modules/firebaseui/dist/firebaseui.css",
-              "projects/admin/src/styles.css"
+              "projects/admin/src/styles.scss"
             ],
             "scripts": []
           },

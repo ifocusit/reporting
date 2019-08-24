@@ -1,3 +1,26 @@
-<p>timbrage works!</p>
-
-<h4 *ngFor="let time of times$ | async">{{ time.timestamp }}</h4>
+<mat-card fxLayout="column" class="container mat-elevation-z0">
+  <mat-card-header fxFlex="200px" class="mat-elevation-z1" (swipeleft)="openCalendar()">
+    <div *ngIf="now$ | async as now">
+      <span id="date">
+        <span>{{ now | date: 'd' }}</span>
+        <span>
+          <span>{{ now | date: 'EEEE' }}</span>
+          <span>{{ now | date: 'MMMM yyyy' }}</span>
+        </span>
+      </span>
+      <span id="sumDay">
+        <div>Total journalier</div>
+        <div>{{ sumDay$ | async | duration }}</div>
+      </span>
+      <div id="now">{{ now | date: 'HH:mm:ss' }}</div>
+    </div>
+  </mat-card-header>
+  <mat-card-actions>
+    <button id="add" (click)="addTimbrage()" mat-fab color="accent">
+      <mat-icon>add</mat-icon>
+    </button>
+  </mat-card-actions>
+  <mat-card-content class="scrollbar" (swipeleft)="openCalendar()" fxLayout="column">
+    <app-time *ngFor="let time of times$ | async; let odd = odd" [model]="time" [odd]="odd"></app-time>
+  </mat-card-content>
+</mat-card>

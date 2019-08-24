@@ -2,7 +2,8 @@ export const DEFAULT_USER = {
   uid: '',
   email: 'unknown@nobody.com',
   displayName: 'Invité',
-  lastProject: 'Default'
+  lastProject: 'Default',
+  isMultiProject: false
 };
 
 export interface User {
@@ -10,5 +11,7 @@ export interface User {
   email: string;
   photoURL?: string;
   displayName?: string;
+  phoneNumber?: string;
   lastProject: string;
+  isMultiProject: boolean;
 }

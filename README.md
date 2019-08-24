@@ -1,27 +1,34 @@
-# Reporting
+# TODO common
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.0.2.
+- composant sélection projet
+  - paramétrage via un setting (multiPorjectEnable)
 
-## Development server
+# TODO Timbrage
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+- licence/copyright
+- afficher total mensuel
+- afficher total annuel => paramétrable
+- lien vers la version reporting complet
+- profile pour modifier les settings relatifs
 
-## Code scaffolding
+# TODO ReportNg
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+- créer page 'calendrier'
+  - résumé par mois :
+    - heures reportées
+    - indicateur facture émise
+    - lien vers le mois
+  - scroll infini ?
+- page facture :
+  - ajout ligne manuelle (libellé, montant HT)
+  - archiver facture => impression PDF + upload dans collection bills
+  - bouton retour vers la page édition des heures du mois
+- gestion dernier compte sélectionné
+- ajouter settings manquants
+- bouton "marquer comme non congé" (ajout de 2 times avec la mm valeur => ne sera pas compté comme un congé :))
+- bouton initialiser un mois avec les heures par défaut
+- carte totaux reponsive pour Pixel2
+- naviguer entre les mois
+- afficher lien vers facture archivée
+- formulaire de création d'un compte amélioré firebaseUI ? ou https://stackblitz.com/edit/example-angular-material-reactive-form ?
+- theme projet (utiliser dans la facture + app)

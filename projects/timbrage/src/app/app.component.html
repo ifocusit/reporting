@@ -1,4 +1,43 @@
-<h1>Timbrage</h1>
-<button mat-button (click)="logout()">logout</button>
+<div class="container">
+  <header>
+    <mat-toolbar color="primary" fxLayout="row" fxLayoutAlign="space-between center">
+      <button *ngIf="profilePage()" mat-icon-button [routerLink]="['/timbrage']"><mat-icon>arrow_back</mat-icon></button>
+      <span *ngIf="profilePage()" fxFlex="calc(100%-180px)">Profile</span>
+      <!-- <span *ngIf="timbragePage()">Timbrage</span> -->
+      <!-- <span *ngIf="calendarPage()">Calendrier</span> -->
+      <span *ngIf="loginPage()">Connection</span>
+      <lib-select-project *ngIf="timbragePage()" fxFlex="calc(100%-40px)"></lib-select-project>
+      <lib-select-project *ngIf="calendarPage()" fxFlex="calc(100%-120px)"></lib-select-project>
+      <button mat-icon-button (click)="goToday()" *ngIf="calendarPage()">Auj.</button>
+      <button mat-icon-button (click)="exportMonth()" *ngIf="calendarPage()">
+        <mat-icon>get_app</mat-icon>
+      </button>
+      <a #export style="display: none">hidden link</a>
+      <button *ngIf="!profilePage() && !loginPage()" mat-icon-button [routerLink]="['/profile']"><mat-icon>settings</mat-icon></button>
+      <button *ngIf="profilePage()" mat-button (click)="signOut()">Logout</button>
+    </mat-toolbar>
+  </header>
 
-<router-outlet></router-outlet>
+  <main class="content" role="main">
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer *ngIf="!profilePage() && !loginPage()">
+    <mat-toolbar>
+      <nav mat-tab-nav-bar>
+        <a
+          mat-tab-link
+          *ngFor="let link of navLinks"
+          [routerLink]="link.path"
+          routerLinkActive
+          #rla="routerLinkActive"
+          [active]="rla.isActive"
+          replaceUrl="true"
+          >{{ link.label }}</a
+        >
+        <!-- <a mat-tab-link (click)="open('/timbrage')" routerLinkActive #rla="routerLinkActive" [active]="rla.isActive">Timbrage</a> -->
+        <!-- <a mat-tab-link (click)="open('/timbrage')" routerLinkActive #rla="routerLinkActive" [active]="rla.isActive">Calendrier</a> -->
+      </nav>
+    </mat-toolbar>
+  </footer>
+</div>
