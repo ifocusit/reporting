@@ -1,3 +1,32 @@
+mat-card {
+  margin: 0 10px;
+}
+
+mat-toolbar {
+  border-radius: 4px 4px 0 0;
+}
+
+@media screen and (max-width: 959px) {
+  mat-card {
+    margin: 0;
+    padding: 0;
+  }
+  
+  #sums {
+    padding: 10px 0;
+  
+    mat-card{
+      padding: 10px;
+    }
+  }
+}
+
+@media screen and (max-width: 599px) {
+  mat-card, mat-toolbar {
+    border-radius: 0;
+  }
+}
+
 mat-table.reports {
 
   mat-row {
