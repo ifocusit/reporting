@@ -16,7 +16,7 @@
     "http:timbrage": "npm run build:timbrage && cd dist/timbrage && angular-http-server --open -p 4402",
     "start:admin": "ng serve --open --port 4401 --project admin",
     "build:admin": "ng build --prod --project admin",
-    "deploy:admin": "firebase deploy --only hosting:timbrage",
+    "deploy:admin": "firebase deploy --only hosting:admin",
     "predeploy:admin": "npm run build:admin",
     "http:admin": "npm run build:admin && cd dist/admin && angular-http-server --open -p 4401"
   },

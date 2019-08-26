@@ -17,6 +17,7 @@ import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { FilesModule } from 'projects/commons/src/lib/files/files.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { DailyReportComponent } from './components/month/daily-report/daily-report.component';
+import { AngularFireModule } from '@angular/fire';
 
 const providers = [];
 
@@ -30,6 +31,7 @@ const providers = [];
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     BrowserAnimationsModule,
     ReportingCommonModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
     AuthModule,
     SettingsModule,
     TimesModule,

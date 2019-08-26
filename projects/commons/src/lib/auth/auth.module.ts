@@ -30,7 +30,6 @@ const firebaseUiAuthConfig = {
   declarations: [LoginComponent],
   imports: [
     // firebase
-    AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule.enablePersistence(),
     AngularFireAuthModule,
     AngularFireStorageModule,

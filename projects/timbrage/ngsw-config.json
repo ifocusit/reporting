@@ -7,13 +7,14 @@
       "installMode": "prefetch",
       "resources": {
         "files": [
-          "/favicon.ico",
+          "/favicon.ico.png",
           "/index.html",
           "/*.css",
           "/*.js"
         ]
       }
-    }, {
+    },
+    {
       "name": "assets",
       "installMode": "lazy",
       "updateMode": "prefetch",

@@ -6,8 +6,8 @@
       <!-- <span *ngIf="timbragePage()">Timbrage</span> -->
       <!-- <span *ngIf="calendarPage()">Calendrier</span> -->
       <span *ngIf="loginPage()">Connection</span>
-      <lib-select-project *ngIf="timbragePage()" fxFlex="calc(100%-40px)"></lib-select-project>
-      <lib-select-project *ngIf="calendarPage()" fxFlex="calc(100%-120px)"></lib-select-project>
+      <lib-select-project defaultName="Timbrage" *ngIf="timbragePage()" fxFlex="calc(100%-40px)"></lib-select-project>
+      <lib-select-project defaultName="Calendar" *ngIf="calendarPage()" fxFlex="calc(100%-120px)"></lib-select-project>
       <button mat-icon-button (click)="goToday()" *ngIf="calendarPage()">Auj.</button>
       <button mat-icon-button (click)="exportMonth()" *ngIf="calendarPage()">
         <mat-icon>get_app</mat-icon>

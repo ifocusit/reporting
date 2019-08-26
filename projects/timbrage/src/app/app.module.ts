@@ -15,6 +15,7 @@ import { TimeComponent } from './components/time/time.component';
 import { NgxsModule } from '@ngxs/store';
 import { TimesState } from 'projects/commons/src/lib/times/time.store';
 import { ProjectState } from 'projects/commons/src/lib/settings/project.store';
+import { AngularFireModule } from '@angular/fire';
 
 const providers = [];
 
@@ -26,6 +27,7 @@ const providers = [];
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     BrowserAnimationsModule,
     ReportingCommonModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
     AuthModule,
     TimesModule,
     SettingsModule,
