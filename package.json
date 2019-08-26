@@ -9,13 +9,13 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "start-timbrage": "ng serve --open --port 4402 --project timbrage",
-    "build-timbrage": "ng build --prod --project timbrage",
-    "deploy-timbrage": "firebase deploy --only hosting:timbrage",
-    "predeploy-timbrage": "npm run build-timbrage",
-    "http-timbrage": "npm run build-timbrage && cd dist/timbrage && angular-http-server --open -p 4402",
-    "start-admin": "ng serve --open --port 4401 --project admin",
-    "build-admin": "ng build --prod --project admin"
+    "star:-timbrage": "ng serve --open --port 4402 --project timbrage",
+    "build:timbrage": "ng build --prod --project timbrage",
+    "deploy:timbrage": "firebase deploy --only hosting:timbrage",
+    "predeploy:timbrage": "npm run build-timbrage",
+    "http:timbrage": "npm run build-timbrage && cd dist/timbrage && angular-http-server --open -p 4402",
+    "start:admin": "ng serve --open --port 4401 --project admin",
+    "build:admin": "ng build --prod --project admin"
   },
   "private": true,
   "dependencies": {

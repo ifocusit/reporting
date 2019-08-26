@@ -15,6 +15,22 @@
         "**/.*",
         "**/node_modules/**"
       ]
+    },
+    {
+      "target": "admin",
+      "site": "admin-reporting",
+      "public": "dist/admin",
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ],
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ]
     }
   ]
 }
