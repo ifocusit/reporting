@@ -19,3 +19,9 @@
     margin-top: 20px;
   }
 }
+
+@media screen and (max-width: 599px) {
+  .content {
+    margin: 10px;
+  }
+}

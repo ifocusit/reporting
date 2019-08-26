@@ -3,55 +3,57 @@
     <mat-toolbar>
       <button mat-button [routerLink]="['/month', bill.month]"><mat-icon>arrow_back</mat-icon></button>
 
-      <div fxFlex="calc(100%-168px)">
+      <div fxFlex="calc(100%-140px)">
         Reporting
       </div>
-      <!-- <button mat-button><mat-icon>print</mat-icon></button> -->
-      <button mat-button [routerLink]="['/profile']"><mat-icon>person</mat-icon></button>
+      <button mat-icon-button (click)="print()"><mat-icon>print</mat-icon></button>
+      <button mat-icon-button [routerLink]="['/profile']"><mat-icon>person</mat-icon></button>
     </mat-toolbar>
   </header>
 
-  <div class="society">
-    <img id="logo" *ngIf="logo$ | async; let url" [src]="url" alt="Logo du projet" />
-    <!-- <div th:each="info : ${society}" th:text="${info}"/> -->
-  </div>
-  <div class="correspondant">
-    <div>
-      <div *ngFor="let info of infosClient">{{ bill.clientInfos }}</div>
+  <div class="content">
+    <div class="society">
+      <img id="logo" *ngIf="logo$ | async; let url" [src]="url" alt="Logo du projet" />
+      <!-- <div th:each="info : ${society}" th:text="${info}"/> -->
     </div>
+    <div class="correspondant">
+      <div>
+        <div *ngFor="let info of infosClient">{{ bill.clientInfos }}</div>
+      </div>
+    </div>
+
+    <h4>Facture du mois de {{ bill.month }}</h4>
+    <h2>Facture {{ bill.idFacture }}</h2>
+    <div>n° TVA : {{ bill.tvaNumber }}</div>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th class="amount">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ bill.duration.asHours() | number: '2.2-2' }} heures</td>
+          <td class="amount">{{ bill.amount | number: '2.2-2' }}</td>
+        </tr>
+        <tr class="divider subtotal">
+          <td>Total Hors TVA</td>
+          <td class="amount">{{ bill.totalHT | number: '2.2-2' }}</td>
+        </tr>
+        <tr class="subtotal">
+          <td>TVA {{ tva }}%</td>
+          <td class="amount">{{ bill.totalTVA | number: '2.2-2' }}</td>
+        </tr>
+        <tr class="total">
+          <td>Total</td>
+          <td class="amount">{{ bill.totalTTC | number: '2.2-2' }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <button id="add-line" mat-fab class="no-print" aria-label="Ajouter une ligne à la facture"><mat-icon>add</mat-icon></button>
+
+    <div>Paiement net à 30 jours auprès de:</div>
+    <div>Compte postal {{ bill.account?.number }} {{ bill.currency }} / IBAN {{ bill.account?.iban }}</div>
   </div>
-
-  <h4>Facture du mois de {{ bill.month }}</h4>
-  <h2>Facture {{ bill.idFacture }}</h2>
-  <div>n° TVA : {{ bill.tvaNumber }}</div>
-  <table>
-    <thead>
-      <tr>
-        <th></th>
-        <th class="amount">Total</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>{{ bill.duration.asHours() | number: '2.2-2' }} heures</td>
-        <td class="amount">{{ bill.amount | number: '2.2-2' }}</td>
-      </tr>
-      <tr class="divider subtotal">
-        <td>Total Hors TVA</td>
-        <td class="amount">{{ bill.totalHT | number: '2.2-2' }}</td>
-      </tr>
-      <tr class="subtotal">
-        <td>TVA {{ tva }}%</td>
-        <td class="amount">{{ bill.totalTVA | number: '2.2-2' }}</td>
-      </tr>
-      <tr class="total">
-        <td>Total</td>
-        <td class="amount">{{ bill.totalTTC | number: '2.2-2' }}</td>
-      </tr>
-    </tbody>
-  </table>
-  <button id="add-line" mat-fab class="no-print" aria-label="Ajouter une ligne à la facture"><mat-icon>add</mat-icon></button>
-
-  <div>Paiement net à 30 jours auprès de:</div>
-  <div>Compte postal {{ bill.account?.number }} {{ bill.currency }} / IBAN {{ bill.account?.iban }}</div>
 </ng-container>

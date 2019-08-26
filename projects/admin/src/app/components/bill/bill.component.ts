@@ -59,4 +59,8 @@ export class BillComponent implements OnInit {
   private calculateTTC(duration: moment.Duration, hourlyRate: number, tvaRate: number) {
     return this.calculateHT(duration, hourlyRate) + this.calculateTVA(duration, hourlyRate, tvaRate);
   }
+
+  public print() {
+    window.print();
+  }
 }

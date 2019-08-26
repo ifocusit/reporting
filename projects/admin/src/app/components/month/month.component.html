@@ -7,7 +7,7 @@
       <button mat-button *ngIf="selectedDate$ | async as selectedDate" [routerLink]="['/bill', selectedDate.format('YYYY-MM')]">
         Générer facture
       </button>
-      <button mat-button [routerLink]="['/profile']"><mat-icon>person</mat-icon></button>
+      <button mat-icon-button [routerLink]="['/profile']"><mat-icon>person</mat-icon></button>
     </mat-toolbar>
 
     <mat-table id="times" [dataSource]="items$" class="mat-elevation-z8 reports">
