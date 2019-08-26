@@ -14,10 +14,10 @@ import { Settings, DEFAULT_SETTINGS } from './settings.model';
 export class ProjectService {
   constructor(private fireauth: AngularFireAuth, private firestore: AngularFirestore, private firestorage: AngularFireStorage) {}
 
-  get projects$(): Observable<string[]> {
+  public get projects$(): Observable<string[]> {
     return this.fireauth.user.pipe(
-      mergeMap(user => this.firestore.collection<{ projectName: string }>(`users/${user.uid}/projects`).valueChanges()),
-      map(results => results.map(result => result.projectName))
+      mergeMap(user => this.firestore.collection<{ project: { name: string } }>(`users/${user.uid}/projects`).valueChanges()),
+      map(results => results.map(result => result.project.name))
     );
   }
 
@@ -32,7 +32,7 @@ export class ProjectService {
   public readSettings(projectName: string): Observable<Settings> {
     return this.fireauth.user.pipe(
       mergeMap(user => this.firestore.doc<Settings>(`users/${user.uid}/projects/${projectName}`).valueChanges()),
-      map(data => _.merge(DEFAULT_SETTINGS, data, { projectName }))
+      map(data => _.merge(DEFAULT_SETTINGS, data, { project: { name: projectName } }))
     );
   }
 
@@ -41,7 +41,7 @@ export class ProjectService {
       mergeMap(user =>
         this.firestore
           .collection<Settings>(`users/${user.uid}/projects`)
-          .doc(settings.projectName)
+          .doc(settings.project.name)
           .set(settings)
       ),
       take(1),

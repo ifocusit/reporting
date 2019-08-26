@@ -41,6 +41,7 @@ export class BillComponent implements OnInit {
         totalHT: this.calculateHT(data[3], data[1].bill.hourlyRate), // same by default
         totalTVA: this.calculateTVA(data[3], data[1].bill.hourlyRate, data[1].bill.tvaRate),
         totalTTC: this.calculateTTC(data[3], data[1].bill.hourlyRate, data[1].bill.tvaRate),
+        project: data[1].project,
         ...data[1].bill // settings
       }))
     );

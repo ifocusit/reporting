@@ -15,6 +15,8 @@ import { Time, MONTH_ISO_FORMAT, DATETIME_ISO_FORMAT, TimeAdapter } from 'projec
 import { User } from 'projects/commons/src/lib/auth/user.model';
 import { TimesService } from 'projects/commons/src/lib/times/times.service';
 import { AuthService } from 'projects/commons/src/lib/auth/auth.service';
+import { ProjectService } from 'projects/commons/src/lib/settings/project.service';
+import { Settings } from 'projects/commons/src/lib/settings/settings.model';
 
 @Component({
   selector: 'app-month',
@@ -33,6 +35,7 @@ export class MonthComponent implements OnInit {
   private times$: Observable<Time[]>;
 
   public user$: Observable<User>;
+  public settings$: Observable<Settings>;
 
   public workDays$: Observable<number>;
   public total$: Observable<number>;
@@ -45,6 +48,7 @@ export class MonthComponent implements OnInit {
     private timesService: TimesService,
     public dialog: MatDialog,
     private profileSevice: AuthService,
+    private projectService: ProjectService,
     private store: Store
   ) {}
 
@@ -52,6 +56,8 @@ export class MonthComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.selectMonth(moment(params.month, 'YYYY-MM'));
     });
+
+    this.settings$ = this.project$.pipe(mergeMap(projectName => this.projectService.readSettings(projectName)));
 
     this.user$ = this.profileSevice.user$;
 

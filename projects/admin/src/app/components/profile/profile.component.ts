@@ -38,7 +38,10 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.fb.group({
-      projectName: ['', Validators.required],
+      project: this.fb.group({
+        name: ['', Validators.required],
+        color: ['', Validators.required]
+      }),
       timbrage: this.fb.group({
         dailyReport: ['', [Validators.required, Validators.pattern('^[0-9]*$')]]
       }),
@@ -70,13 +73,13 @@ export class ProfileComponent implements OnInit {
   }
 
   public addProject(projectName: string) {
-    this.store.dispatch(new SaveProject({ ...DEFAULT_SETTINGS, projectName })).subscribe();
+    this.store.dispatch(new SaveProject({ ...DEFAULT_SETTINGS, project: { name: projectName } })).subscribe();
   }
 
   public removeProject(projectName: string) {
     this.projectService
       .delete(projectName)
-      .pipe(mergeMap(() => this.store.dispatch(new SelectProject(DEFAULT_SETTINGS.projectName))))
+      .pipe(mergeMap(() => this.store.dispatch(new SelectProject(DEFAULT_SETTINGS.project.name))))
       .subscribe();
   }
 

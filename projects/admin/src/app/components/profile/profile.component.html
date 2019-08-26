@@ -26,13 +26,18 @@
   <mat-tab label="Configuration du projet" fxLayout="column">
     <div class="content" *ngIf="settings$ | async">
       <form [formGroup]="form">
-        <mat-form-field>
-          <input #project matInput placeholder="Nom du projet" formControlName="projectName" />
-        </mat-form-field>
-        <button mat-mini-fab (click)="addProject(project.value)"><mat-icon>add</mat-icon></button>
-        <button mat-mini-fab (click)="removeProject(project.value)" color="secondary" *ngIf="(project$ | async) !== 'Default'">
-          <mat-icon>remove</mat-icon>
-        </button>
+        <div id="project" formGroupName="project" fxLayout="row" fxLayoutGap="10px">
+          <mat-form-field>
+            <input #project matInput placeholder="Nom du projet" formControlName="name" />
+          </mat-form-field>
+          <button mat-mini-fab (click)="addProject(project.value)"><mat-icon>add</mat-icon></button>
+          <button mat-mini-fab (click)="removeProject(project.value)" color="secondary" *ngIf="(project$ | async) !== 'Default'">
+            <mat-icon>remove</mat-icon>
+          </button>
+          <mat-form-field>
+            <input matInput placeholder="Couleur du projet" formControlName="color" />
+          </mat-form-field>
+        </div>
         <div id="bill" formGroupName="bill" fxLayout="column">
           <mat-form-field>
             <mat-select placeholder="Devise" formControlName="currency">
@@ -51,7 +56,7 @@
           </mat-form-field>
           <div formGroupName="account" fxLayout="column">
             <mat-form-field>
-              <input matInput placeholder="Numéro de compte" />
+              <input matInput placeholder="Numéro de compte" formControlName="number" />
             </mat-form-field>
             <mat-form-field>
               <input matInput placeholder="IBAN" formControlName="iban" />

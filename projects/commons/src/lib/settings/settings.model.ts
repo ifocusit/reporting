@@ -1,5 +1,8 @@
 export interface Settings {
-  projectName: string;
+  project: {
+    name: string;
+    color?: string;
+  };
   timbrage: {
     defaults: string[];
     dailyReport: number; // h par j
@@ -23,7 +26,10 @@ export interface Settings {
 }
 
 export const DEFAULT_SETTINGS: Settings = {
-  projectName: 'Default',
+  project: {
+    name: 'Default',
+    color: ''
+  },
   timbrage: {
     defaults: ['08:00', '11:30', '12:30', '17:00'],
     dailyReport: 8,

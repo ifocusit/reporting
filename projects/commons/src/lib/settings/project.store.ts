@@ -55,7 +55,7 @@ export class ProjectState {
   create(ctx: StateContext<ProjectStateModel>, action: SaveProject) {
     return this.settingsService
       .saveSettings(action.settings)
-      .pipe(mergeMap(settings => ctx.dispatch(new SelectProject(settings.projectName))));
+      .pipe(mergeMap(settings => ctx.dispatch(new SelectProject(settings.project.name))));
   }
 
   @Action(SaveSettings)

@@ -23,7 +23,7 @@
     <h4>
       Facture du mois de <span class="capitalize">{{ bill.month | moment: 'MMMM YYYY' }}</span>
     </h4>
-    <h2 class="accent">Facture {{ bill.idFacture }}</h2>
+    <h2 [style.color]="bill.project.color">Facture {{ bill.idFacture }}</h2>
     <div>n° TVA : {{ bill.tvaNumber }}</div>
     <table>
       <thead>
@@ -38,8 +38,8 @@
           <td class="amount">{{ bill.amount | number: '2.2-2' }}</td>
         </tr>
         <tr class="divider subtotal">
-          <td>Total Hors TVA</td>
-          <td class="amount">{{ bill.totalHT | number: '2.2-2' }}</td>
+          <td [style.border-color]="bill.project.color">Total Hors TVA</td>
+          <td class="amount" [style.border-color]="bill.project.color">{{ bill.totalHT | number: '2.2-2' }}</td>
         </tr>
         <tr class="subtotal">
           <td>TVA {{ tva }}%</td>
