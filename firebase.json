@@ -1,0 +1,20 @@
+{
+  "hosting": [
+    {
+      "target": "timbrage",
+      "site": "timbrage-reporting",
+      "public": "dist/timbrage",
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ],
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ]
+    }
+  ]
+}

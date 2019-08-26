@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "timbrage-reporting"
+  },
+  "targets": {
+    "timbrage-reporting": {
+      "hosting": {
+        "timbrage": [
+          "timbrage-reporting"
+        ]
+      }
+    }
+  }
+}

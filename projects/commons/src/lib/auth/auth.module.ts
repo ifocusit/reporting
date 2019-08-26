@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 
-import { FirebaseUIModule } from 'firebaseui-angular';
-import * as firebase from 'firebase/app';
-import * as firebaseui from 'firebaseui';
+import { FirebaseUIModule, firebaseui, firebase } from 'firebaseui-angular';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
