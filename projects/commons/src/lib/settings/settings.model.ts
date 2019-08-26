@@ -11,7 +11,8 @@ export interface Settings {
     currency: string;
     tvaRate: number;
     logo?: string;
-    clientInfos?: string[];
+    correspondant?: string;
+    society?: string;
     tvaNumber?: string;
     account?: {
       number: string;

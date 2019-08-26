@@ -45,6 +45,8 @@ export class ProfileComponent implements OnInit {
       bill: this.fb.group({
         currency: ['', Validators.required],
         tvaNumber: ['', Validators.required],
+        correspondant: ['', Validators.required],
+        society: ['', Validators.required],
         hourlyRate: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
         tvaRate: ['', [Validators.required, Validators.pattern(/^\d+\.\d{2}$/)]],
         account: this.fb.group({

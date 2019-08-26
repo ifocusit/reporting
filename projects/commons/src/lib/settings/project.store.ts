@@ -47,7 +47,7 @@ export class ProjectState {
   }
 
   @Action(DeleteProject)
-  delete(action: DeleteProject) {
+  delete(ctx: StateContext<ProjectStateModel>, action: DeleteProject) {
     return this.settingsService.delete(action.projectName);
   }
 
@@ -59,7 +59,7 @@ export class ProjectState {
   }
 
   @Action(SaveSettings)
-  save(action: SaveSettings) {
+  save(ctx: StateContext<ProjectStateModel>, action: SaveSettings) {
     return this.settingsService.saveSettings(action.settings);
   }
 }

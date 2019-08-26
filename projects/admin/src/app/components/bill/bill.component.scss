@@ -13,10 +13,16 @@ mat-toolbar {
   margin-bottom: 20px;
 }
 
-.society {
-  img {
-    width: 7em;
-  }
+.content {
+  white-space: pre-wrap;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.accent {
+  color: red;
 }
 
 table {
@@ -54,10 +60,16 @@ table {
   }
 }
 
-.correspondant {
-  overflow: hidden;
-  padding-bottom: 4em;
-  padding-left: 4em;
+.header {
+  .society {
+    img {
+      width: 7em;
+    }
+  }
+
+  .correspondant {
+    padding: 4em;
+  }
 }
 
 #add-line {

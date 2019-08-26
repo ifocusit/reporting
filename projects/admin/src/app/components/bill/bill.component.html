@@ -12,18 +12,18 @@
   </header>
 
   <div class="content">
-    <div class="society">
-      <img id="logo" *ngIf="logo$ | async; let url" [src]="url" alt="Logo du projet" />
-      <!-- <div th:each="info : ${society}" th:text="${info}"/> -->
-    </div>
-    <div class="correspondant">
-      <div>
-        <div *ngFor="let info of infosClient">{{ bill.clientInfos }}</div>
+    <div class="header" fxLayout="row-reverse" fxLayoutAlign="space-between stretch">
+      <div class="society">
+        <img id="logo" *ngIf="logo$ | async; let url" [src]="url" alt="Logo du projet" />
+        <div>{{ bill.society }}</div>
       </div>
+      <div class="correspondant">{{ bill.correspondant }}</div>
     </div>
 
-    <h4>Facture du mois de {{ bill.month }}</h4>
-    <h2>Facture {{ bill.idFacture }}</h2>
+    <h4>
+      Facture du mois de <span class="capitalize">{{ bill.month | moment: 'MMMM YYYY' }}</span>
+    </h4>
+    <h2 class="accent">Facture {{ bill.idFacture }}</h2>
     <div>n° TVA : {{ bill.tvaNumber }}</div>
     <table>
       <thead>
