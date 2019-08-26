@@ -6,6 +6,19 @@ export interface Settings {
     saveMissings: boolean;
     exportFormat: string;
   };
+  bill: {
+    hourlyRate: number; // taux horaire
+    currency: string;
+    tvaRate: number;
+    logo?: string;
+    clientInfos?: string[];
+    tvaNumber?: string;
+    account?: {
+      number: string;
+      iban: string;
+    };
+    billBottomInfos?: string[];
+  };
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -15,5 +28,10 @@ export const DEFAULT_SETTINGS: Settings = {
     dailyReport: 8,
     saveMissings: true,
     exportFormat: 'YYYY-MM-DD HH:mm'
+  },
+  bill: {
+    hourlyRate: 1,
+    currency: 'CHF',
+    tvaRate: 7.7
   }
 };

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { UploadTaskSnapshot } from '@angular/fire/storage/interfaces';
 
 @Component({
-  selector: 'file-upload',
+  selector: 'lib-file-upload',
   templateUrl: './file-upload.component.html',
   styleUrls: ['./file-upload.component.scss']
 })

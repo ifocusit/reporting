@@ -5,6 +5,7 @@ import { DurationPipe } from './pipes/duration.pipe';
 import { MomentPipe } from './pipes/moment.pipe';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { LayoutModule } from '@angular/cdk/layout';
+import { FilesModule } from './files/files.module';
 
 @NgModule({
   declarations: [DurationPipe, MomentPipe],

@@ -1,0 +1,65 @@
+
+@page {
+  size: A4;
+}
+
+@media print {
+  .no-print {
+    display: none;
+  }
+}
+mat-toolbar {
+  margin-bottom: 20px;
+}
+
+.society {
+  img {
+    width: 7em;
+  }
+}
+
+table {
+  width: 100%;
+  padding: 5em 0;
+
+  thead tr th {
+    text-align: start;
+    border-bottom: solid 0.5px
+  }
+
+  .amount {
+    width: 5em;
+    text-align: end;
+  }
+
+  td {
+    padding: 0.5em;
+  }
+
+  tr.subtotal, tr.total {
+    font-weight: bold;
+  }
+
+  tr.subtotal td:nth-child(1), tr.total td:nth-child(1) {
+    text-align: end;
+  }
+
+  .total td {
+    padding-top: 2em;
+  }
+
+  .divider td {
+    border-top: solid red
+  }
+}
+
+.correspondant {
+  overflow: hidden;
+  padding-bottom: 4em;
+  padding-left: 4em;
+}
+
+#add-line {
+  position: relative;
+  top: -14em;
+}

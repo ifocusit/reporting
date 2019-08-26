@@ -43,9 +43,9 @@ import { BillComponent } from './page/bill/bill.component';
 import { ProfileComponent } from './page/profile/profile.component';
 import { ProjectState } from './store/project.store';
 import { AngularFireStorageModule } from '@angular/fire/storage';
-import { DropZoneDirective } from './component/drop-zone.directive';
-import { FileUploadComponent } from './component/file-upload/file-upload.component';
-import { FileSizePipe } from './component/file-size.pipe';
+import { DropZoneDirective } from '../../../projects/commons/src/lib/files/drop-zone.directive';
+import { FileUploadComponent } from '../../../projects/commons/src/lib/files/file-upload/file-upload.component';
+import { FileSizePipe } from '../../../projects/commons/src/lib/files/file-size.pipe';
 import { SelectProjectComponent } from './component/select-project/select-project.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 

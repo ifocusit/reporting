@@ -4,6 +4,7 @@ import { Moment } from 'moment';
 export const DATETIME_ISO_FORMAT = 'YYYY-MM-DDTHH:mm';
 export const DATE_ISO_FORMAT = 'YYYY-MM-DD';
 export const MONTH_ISO_FORMAT = 'YYYY-MM';
+export const TIME_ISO_FORMAT = 'HH:mm';
 
 export interface TimeModel {
   timestamp: number;
@@ -25,7 +26,7 @@ export class TimeAdapter {
       return null;
     }
     return {
-      id: id,
+      id,
       time: time.format(DATETIME_ISO_FORMAT)
     };
   }

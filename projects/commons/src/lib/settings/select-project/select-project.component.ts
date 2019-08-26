@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -13,6 +13,9 @@ import { User } from '../../auth/user.model';
   styleUrls: ['./select-project.component.scss']
 })
 export class SelectProjectComponent implements OnInit {
+  @Input()
+  public defaultName = 'Reporting';
+
   @Select(ProjectState.project)
   public project$: Observable<string>;
 
