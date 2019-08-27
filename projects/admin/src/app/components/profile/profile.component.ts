@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, range } from 'rxjs';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { tap, mergeMap } from 'rxjs/operators';
+import { tap, mergeMap, map, toArray } from 'rxjs/operators';
 import { Select, Store } from '@ngxs/store';
 import * as moment from 'moment';
 import { AuthService } from 'projects/commons/src/lib/auth/auth.service';
@@ -35,6 +35,9 @@ export class ProfileComponent implements OnInit {
   public form: FormGroup;
 
   public logo$: Observable<string>;
+
+  public months$: Observable<string[]>;
+  public today = moment().format('YYYY-MM');
 
   public uploadLogo$ = (file: File) => this.project$.pipe(mergeMap(projectName => this.projectService.uploadLogo(file, projectName)));
 
@@ -78,6 +81,15 @@ export class ProfileComponent implements OnInit {
     this.projects$ = this.projectService.projects$;
 
     this.logo$ = this.project$.pipe(mergeMap(projectName => this.projectService.readLogo(projectName)));
+
+    this.months$ = range(0, 12).pipe(
+      map(index =>
+        moment()
+          .month(index)
+          .format('YYYY-MM')
+      ),
+      toArray()
+    );
   }
 
   public setTheme(code: string) {
@@ -93,10 +105,6 @@ export class ProfileComponent implements OnInit {
       .delete(projectName)
       .pipe(mergeMap(() => this.store.dispatch(new SelectProject(DEFAULT_SETTINGS.project.name))))
       .subscribe();
-  }
-
-  public get today() {
-    return moment().format('YYYY-MM');
   }
 
   public save() {

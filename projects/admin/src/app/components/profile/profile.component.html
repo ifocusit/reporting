@@ -20,8 +20,16 @@
 
   <mat-tab-group>
     <mat-tab label="Calendrier">
-      <div class="content">
-        <button mat-button color="primary" [routerLink]="['/month', today]">Mois en cours {{ today }}</button>
+      <div class="content" fxLayout="row wrap">
+        <div
+          class="month accent-lighter-bg accent-border"
+          fxFlex="100px"
+          *ngFor="let month of months$ | async"
+          [class.primary-color]="month === today"
+          [routerLink]="['/month', month]"
+        >
+          {{ month | moment: 'MMM' }}
+        </div>
       </div>
     </mat-tab>
     <mat-tab label="Configuration du projet" fxLayout="column">
