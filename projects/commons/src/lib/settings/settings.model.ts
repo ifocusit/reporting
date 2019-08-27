@@ -1,7 +1,7 @@
 export interface Settings {
   project: {
     name: string;
-    color?: string;
+    theme?: string;
   };
   timbrage: {
     defaults: string[];
@@ -28,7 +28,7 @@ export interface Settings {
 export const DEFAULT_SETTINGS: Settings = {
   project: {
     name: 'Default',
-    color: ''
+    theme: 'default-theme'
   },
   timbrage: {
     defaults: ['08:00', '11:30', '12:30', '17:00'],

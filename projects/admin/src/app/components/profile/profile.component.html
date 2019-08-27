@@ -1,96 +1,114 @@
-<mat-toolbar>
-  <div fxFlex="calc(100%-300px)">
-    Profile
-  </div>
-  <lib-select-project></lib-select-project>
-  <button mat-button (click)="signOut()">Logout</button>
-</mat-toolbar>
-
-<div class="header">
-  <div fxLayout="column" fxLayoutAlign="center center" *ngIf="user$ | async as user">
-    <img *ngIf="user.photoURL; else defaultProfileIcon" src="user.photoURL" />
-    <ng-template #defaultProfileIcon>
-      <img src="/assets/profile_default_icon.png" />
-    </ng-template>
-    <h3 *ngIf="user.displayName">{{ user.displayName }}</h3>
-    <h4 *ngIf="user.email">{{ user.email }}</h4>
-  </div>
-</div>
-
-<mat-tab-group>
-  <mat-tab label="Calendrier">
-    <div class="content">
-      <button mat-button color="primary" [routerLink]="['/month', today]">Mois en cours {{ today }}</button>
+<ng-container *ngIf="settings$ | async as settings">
+  <mat-toolbar color="primary">
+    <div fxFlex="calc(100%-300px)">
+      Profile
     </div>
-  </mat-tab>
-  <mat-tab label="Configuration du projet" fxLayout="column">
-    <div class="content" *ngIf="settings$ | async">
-      <form [formGroup]="form">
-        <div id="project" formGroupName="project" fxLayout="row" fxLayoutGap="10px">
-          <mat-form-field>
-            <input #project matInput placeholder="Nom du projet" formControlName="name" />
-          </mat-form-field>
-          <button mat-mini-fab (click)="addProject(project.value)"><mat-icon>add</mat-icon></button>
-          <button mat-mini-fab (click)="removeProject(project.value)" color="secondary" *ngIf="(project$ | async) !== 'Default'">
-            <mat-icon>remove</mat-icon>
-          </button>
-          <mat-form-field>
-            <input matInput placeholder="Couleur du projet" formControlName="color" />
-          </mat-form-field>
-        </div>
-        <div id="bill" formGroupName="bill" fxLayout="column">
-          <mat-form-field>
-            <mat-select placeholder="Devise" formControlName="currency">
-              <mat-option value="CHF">CHF</mat-option>
-              <mat-option value="EUR">EUR</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="Taux horaire" formControlName="hourlyRate" />
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="Taux de TVA" formControlName="tvaRate" />
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="Numéro de TVA" formControlName="tvaNumber" />
-          </mat-form-field>
-          <div formGroupName="account" fxLayout="column">
+    <lib-select-project></lib-select-project>
+    <button mat-button (click)="signOut()">Logout</button>
+  </mat-toolbar>
+
+  <div class="header">
+    <div fxLayout="column" fxLayoutAlign="center center" *ngIf="user$ | async as user">
+      <img *ngIf="user.photoURL; else defaultProfileIcon" src="user.photoURL" />
+      <ng-template #defaultProfileIcon>
+        <img src="/assets/profile_default_icon.png" />
+      </ng-template>
+      <h3 *ngIf="user.displayName">{{ user.displayName }}</h3>
+      <h4 *ngIf="user.email">{{ user.email }}</h4>
+    </div>
+  </div>
+
+  <mat-tab-group>
+    <mat-tab label="Calendrier">
+      <div class="content">
+        <button mat-button color="primary" [routerLink]="['/month', today]">Mois en cours {{ today }}</button>
+      </div>
+    </mat-tab>
+    <mat-tab label="Configuration du projet" fxLayout="column">
+      <div class="content">
+        <form [formGroup]="form">
+          <div id="project" formGroupName="project" fxLayout="row" fxLayoutGap="10px">
             <mat-form-field>
-              <input matInput placeholder="Numéro de compte" formControlName="number" />
+              <input #project matInput placeholder="Nom du projet" formControlName="name" />
+            </mat-form-field>
+            <button mat-mini-fab (click)="addProject(project.value)"><mat-icon>add</mat-icon></button>
+            <button mat-mini-fab (click)="removeProject(project.value)" color="secondary" *ngIf="(project$ | async) !== 'Default'">
+              <mat-icon>remove</mat-icon>
+            </button>
+            <div>
+              <mat-menu #themePickerMenu="matMenu">
+                <ul
+                  fxLayout="row"
+                  mat-menu-item
+                  *ngFor="let theme of themes"
+                  (click)="setTheme(theme.code)"
+                  class="theme-picker-content"
+                  [class.selected]="form.value.project.theme === theme.code"
+                >
+                  <li class="color" [style.background-color]="theme.primary"></li>
+                  <li class="color" [style.background-color]="theme.accent"></li>
+                  <li class="color" [style.background-color]="theme.warn"></li>
+                </ul>
+              </mat-menu>
+              <button mat-button [matMenuTriggerFor]="themePickerMenu">
+                <mat-icon>format_color_fill</mat-icon>
+              </button>
+            </div>
+          </div>
+          <div id="bill" formGroupName="bill" fxLayout="column">
+            <mat-form-field>
+              <mat-select placeholder="Devise" formControlName="currency">
+                <mat-option value="CHF">CHF</mat-option>
+                <mat-option value="EUR">EUR</mat-option>
+              </mat-select>
             </mat-form-field>
             <mat-form-field>
-              <input matInput placeholder="IBAN" formControlName="iban" />
+              <input matInput placeholder="Taux horaire" formControlName="hourlyRate" />
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="Taux de TVA" formControlName="tvaRate" />
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="Numéro de TVA" formControlName="tvaNumber" />
+            </mat-form-field>
+            <div formGroupName="account" fxLayout="column">
+              <mat-form-field>
+                <input matInput placeholder="Numéro de compte" formControlName="number" />
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput placeholder="IBAN" formControlName="iban" />
+              </mat-form-field>
+            </div>
+            <div class="mat-form-field-wrapper">
+              <mat-label>Image du logo :</mat-label>
+              <lib-file-upload [downloadURL]="logo$" [upload]="uploadLogo$"></lib-file-upload>
+            </div>
+            <mat-form-field>
+              <mat-label>Société :</mat-label>
+              <textarea
+                matInput
+                cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="1"
+                cdkAutosizeMaxRows="10"
+                formControlName="society"
+              ></textarea>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Information destinataire :</mat-label>
+              <textarea
+                matInput
+                cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="1"
+                cdkAutosizeMaxRows="10"
+                formControlName="correspondant"
+              ></textarea>
             </mat-form-field>
           </div>
-          <div class="mat-form-field-wrapper">
-            <mat-label>Image du logo :</mat-label>
-            <lib-file-upload [downloadURL]="logo$" [upload]="uploadLogo$"></lib-file-upload>
-          </div>
-          <mat-form-field>
-            <mat-label>Société :</mat-label>
-            <textarea
-              matInput
-              cdkTextareaAutosize
-              #autosize="cdkTextareaAutosize"
-              cdkAutosizeMinRows="1"
-              cdkAutosizeMaxRows="10"
-              formControlName="society"
-            ></textarea>
-          </mat-form-field>
-          <mat-form-field>
-            <mat-label>Information destinataire :</mat-label>
-            <textarea
-              matInput
-              cdkTextareaAutosize
-              #autosize="cdkTextareaAutosize"
-              cdkAutosizeMinRows="1"
-              cdkAutosizeMaxRows="10"
-              formControlName="correspondant"
-            ></textarea>
-          </mat-form-field>
-        </div>
-        <button mat-raised-button color="primary" (click)="save()">Enregistrer</button>
-      </form>
-    </div>
-  </mat-tab>
-</mat-tab-group>
+          <button mat-raised-button color="primary" (click)="save()">Enregistrer</button>
+        </form>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</ng-container>

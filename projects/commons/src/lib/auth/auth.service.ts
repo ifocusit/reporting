@@ -20,6 +20,12 @@ export class AuthService {
     return this.fireauth.auth.signOut();
   }
 
+  public updateUser(data: User) {
+    return this.fireauth.user.pipe(
+      mergeMap(user => this.firestore.doc<User>(`users/${user.uid}`).set({ ...data, uid: user.uid }, { merge: true }))
+    );
+  }
+
   public updateUserData(user: firebase.User) {
     // Sets user data to firestore on login
     const data = {

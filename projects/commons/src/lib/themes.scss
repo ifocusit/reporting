@@ -1,0 +1,63 @@
+@import '~@angular/material/theming';
+@include mat-core();
+
+@mixin custom-theme-classes($theme) {
+  $primary-default: mat-color(map-get($theme, primary), default);
+  $foreground-default: mat-color(map-get($theme, foreground), default);
+  $accent-default: mat-color(map-get($theme, accent), default);
+  $accent-lighter: mat-color(map-get($theme, accent), lighter);
+
+  .accent-lighter-color {
+    color: $accent-lighter;
+  }
+
+  .accent-lighter-bg {
+    background-color: $accent-lighter;
+    color: $foreground-default;
+  }
+
+  .accent-border {
+    border-color: $accent-default;
+  }
+
+  .primary-bg {
+    background-color: $primary-default;
+    color: white;
+  }
+
+  .primary-color {
+    color: $primary-default;
+  }
+
+  .primary-border {
+    border-color: $primary-default;
+  }
+}
+
+// ajout d'un theme
+@mixin addTheme($name, $primary, $accent, $warn: mat-palette($mat-red), $dark-theme: false) {
+  $theme: mat-light-theme($primary, $accent, $warn);
+  @if $dark-theme {
+    $theme: mat-dark-theme($primary, $accent, $warn);
+  }
+
+  body.#{$name}-theme {
+    background: mat-color(map-get($theme, background), background);
+  }
+
+  .#{$name}-theme {
+    @include angular-material-theme($theme);
+    @include custom-theme-classes($theme);
+  }
+}
+
+// default theme : indigo/pink
+$default-theme: mat-light-theme(mat-palette($mat-indigo), mat-palette($mat-pink, A200, A100, A400));
+@include angular-material-theme($default-theme);
+@include custom-theme-classes($default-theme);
+
+// other themes
+@include addTheme('mobi', mat-palette($mat-red, A700, 500, 900), mat-palette($mat-indigo));
+@include addTheme('deeppurple-amber', mat-palette($mat-deep-purple), mat-palette($mat-amber, A200, A100, A400));
+@include addTheme('pink-bluegrey', mat-palette($mat-pink, 700, 500, 900), mat-palette($mat-blue-grey, A200, A100, A400), $dark-theme: true);
+@include addTheme('purple-green', mat-palette($mat-purple, 700, 500, 800), mat-palette($mat-green, A200, A100, A400), $dark-theme: true);

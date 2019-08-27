@@ -1,11 +1,11 @@
 <mat-card fxLayout="column" class="container mat-elevation-z0">
-  <mat-card-header fxFlex="200px" class="mat-elevation-z1" (swipeleft)="openCalendar()">
+  <mat-card-header fxFlex="200px" class="mat-elevation-z1 primary-bg" (swipeleft)="openCalendar()">
     <div *ngIf="now$ | async as now">
       <span id="date">
         <span>{{ now | date: 'd' }}</span>
         <span>
           <span>{{ now | date: 'EEEE' }}</span>
-          <span>{{ now | date: 'MMMM yyyy' }}</span>
+          <span class="accent-lighter-color">{{ now | date: 'MMMM yyyy' }}</span>
         </span>
       </span>
       <span id="sumDay">

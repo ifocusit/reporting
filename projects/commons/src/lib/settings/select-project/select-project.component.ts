@@ -1,11 +1,12 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, mergeMap } from 'rxjs/operators';
 import { ProjectState, SelectProject } from 'projects/commons/src/lib/settings/project.store';
 import { ProjectService } from 'projects/commons/src/lib/settings/project.service';
 import { AuthService } from '../../auth/auth.service';
 import { User } from '../../auth/user.model';
+import { Settings } from '../settings.model';
 
 @Component({
   selector: 'lib-select-project',
@@ -35,7 +36,10 @@ export class SelectProjectComponent implements OnInit {
   public select(projectName) {
     return this.store
       .dispatch(new SelectProject(projectName))
-      .pipe(tap(() => this.valueChange.emit(projectName)))
+      .pipe(
+        tap(() => this.valueChange.emit(projectName)),
+        mergeMap(() => this.authService.updateUser({ lastProject: projectName } as User))
+      )
       .subscribe();
   }
 }

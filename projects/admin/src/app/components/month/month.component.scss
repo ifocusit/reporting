@@ -1,9 +1,13 @@
+#page {
+  padding: 15px;
+}
+
 mat-card {
   margin: 0 10px;
 }
 
-mat-toolbar {
-  border-radius: 4px 4px 0 0;
+mat-card, mat-toolbar {
+  border-radius: 0;
 }
 
 @media screen and (max-width: 959px) {
@@ -18,12 +22,6 @@ mat-toolbar {
     mat-card{
       padding: 10px;
     }
-  }
-}
-
-@media screen and (max-width: 599px) {
-  mat-card, mat-toolbar {
-    border-radius: 0;
   }
 }
 

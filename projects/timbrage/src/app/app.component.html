@@ -1,6 +1,12 @@
 <div class="container">
   <header>
-    <mat-toolbar color="primary" fxLayout="row" fxLayoutAlign="space-between center">
+    <mat-toolbar
+      color="primary"
+      *ngIf="settings$ | async as settings"
+      class="mat-elevation-z8"
+      fxLayout="row"
+      fxLayoutAlign="space-between center"
+    >
       <button *ngIf="profilePage()" mat-icon-button [routerLink]="['/timbrage']"><mat-icon>arrow_back</mat-icon></button>
       <span *ngIf="profilePage()" fxFlex="calc(100%-180px)">Profile</span>
       <!-- <span *ngIf="timbragePage()">Timbrage</span> -->

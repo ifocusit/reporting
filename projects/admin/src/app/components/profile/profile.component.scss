@@ -13,15 +13,22 @@
 }
 
 .content {
-  margin-top: 20px;
+  margin: 10px;
 
   form button {
     margin-top: 20px;
   }
 }
 
-@media screen and (max-width: 599px) {
-  .content {
-    margin: 10px;
+.theme-picker-content {
+  list-style: none;
+
+  .selected {
+    border: solid red;
+  }
+
+  .color {
+    padding-top: 65px;
+    width: 65px;
   }
 }

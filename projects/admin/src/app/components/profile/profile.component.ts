@@ -16,6 +16,14 @@ import { SaveProject, SelectProject, SaveSettings, ProjectState } from 'projects
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
+  public themes = [
+    { code: 'default-theme', primary: '#3f51b5', accent: '#ff4081', warn: '#f44336' },
+    { code: 'mobi-theme', primary: '#d50000', accent: '#3f51b5', warn: '#f44336' },
+    { code: 'deeppurple-amber-theme', primary: '#673ab7', accent: '#ffd740', warn: '#f44336' },
+    { code: 'pink-bluegrey-theme', primary: '#c2185b', accent: '#b0bec5', warn: '#f44336' },
+    { code: 'purple-green-theme', primary: '#7b1fa2', accent: '#69f0ae', warn: '#f44336' }
+  ];
+
   public user$: Observable<User>;
 
   @Select(ProjectState.project)
@@ -40,7 +48,7 @@ export class ProfileComponent implements OnInit {
     this.form = this.fb.group({
       project: this.fb.group({
         name: ['', Validators.required],
-        color: ['', Validators.required]
+        theme: ''
       }),
       timbrage: this.fb.group({
         dailyReport: ['', [Validators.required, Validators.pattern('^[0-9]*$')]]
@@ -70,6 +78,10 @@ export class ProfileComponent implements OnInit {
     this.projects$ = this.projectService.projects$;
 
     this.logo$ = this.project$.pipe(mergeMap(projectName => this.projectService.readLogo(projectName)));
+  }
+
+  public setTheme(code: string) {
+    this.form.patchValue({ project: { theme: code } });
   }
 
   public addProject(projectName: string) {

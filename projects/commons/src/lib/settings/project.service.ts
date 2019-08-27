@@ -42,7 +42,7 @@ export class ProjectService {
         this.firestore
           .collection<Settings>(`users/${user.uid}/projects`)
           .doc(settings.project.name)
-          .set(settings)
+          .set(settings, { merge: true })
       ),
       take(1),
       map(() => settings)

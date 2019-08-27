@@ -1,7 +1,7 @@
 <mat-card fxLayout="column" class="container mat-elevation-z0" *ngIf="selectedDate$ | async as selectedDate">
   <mat-card-header fxLayout="column" (swipeleft)="changeMonth(+1)" (swiperight)="changeMonth(-1)">
     <div id="calendar">
-      <div class="month" fxLayoutAlign="space-around center">
+      <div class="month primary-bg" fxLayoutAlign="space-around center">
         <div class="prev" (click)="changeMonth(-1)" fxFlex="0 1 20px">&#10094;</div>
         <div class="date">{{ selectedDate | moment: 'MMMM YYYY' }}</div>
         <div class="next" (click)="changeMonth(+1)" fxFlex="0 1 20px">&#10095;</div>
@@ -15,8 +15,8 @@
         <ng-container *ngFor="let day of days$ | async">
           <div
             *ngIf="selectedDate.month() === day.date.month(); else readOnly"
-            [class.active]="selectedDate.format('YYYYMMDD') === day.date.format('YYYYMMDD')"
-            [class.with-times]="day.hasTimes"
+            [class.accent-lighter-bg]="day.hasTimes"
+            [class.primary-bg]="selectedDate.format('YYYYMMDD') === day.date.format('YYYYMMDD')"
             (click)="select(day.date)"
             fxFlex="13.6"
             fxLayoutAlign="center"
@@ -24,7 +24,7 @@
             {{ day.date.date() }}
           </div>
           <ng-template #readOnly>
-            <div class="inactive" fxFlex="13.6" fxLayoutAlign="center">{{ day.date.date() }}</div>
+            <div class="other-month" fxFlex="13.6" fxLayoutAlign="center">{{ day.date.date() }}</div>
           </ng-template>
         </ng-container>
       </div>

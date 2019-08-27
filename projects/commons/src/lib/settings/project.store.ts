@@ -1,7 +1,8 @@
-import { State, Action, StateContext, Selector } from '@ngxs/store';
+import { State, Action, StateContext, Selector, Store } from '@ngxs/store';
 import { mergeMap } from 'rxjs/operators';
 import { Settings } from './settings.model';
 import { ProjectService } from './project.service';
+import { AuthService } from '../auth/auth.service';
 
 export interface ProjectStateModel {
   name: string;
@@ -34,7 +35,9 @@ export class SaveSettings {
   }
 })
 export class ProjectState {
-  constructor(private settingsService: ProjectService) {}
+  constructor(private settingsService: ProjectService, private store: Store, private authService: AuthService) {
+    this.authService.user$.subscribe(user => this.store.dispatch(new SelectProject(user.lastProject)));
+  }
 
   @Selector()
   public static project(state: ProjectStateModel): string {

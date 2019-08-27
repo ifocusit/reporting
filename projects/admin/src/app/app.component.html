@@ -1,1 +1,3 @@
-<router-outlet></router-outlet>
+<ng-container *ngIf="settings$ | async as settings">
+  <router-outlet></router-outlet>
+</ng-container>

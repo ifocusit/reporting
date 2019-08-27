@@ -8,8 +8,6 @@ mat-card {
 
     /* Month header */
     .month {
-      background-color: #606fc7;
-      color: white;
       font-size: 20px;
       text-transform: uppercase;
       letter-spacing: 3px;
@@ -44,21 +42,10 @@ mat-card {
       & > div {
         margin-bottom: 5px;
         font-size: 12px;
-        color: gray;
         padding: 5px;
         cursor: pointer;
 
-        &.with-times {
-          background-color: #e1bee7;
-          color: white;
-        }
-
-        &.active {
-          background: #606fc7;
-          color: white;
-        }
-
-        &.inactive {
+        &.other-month {
           color: lightgray;
           cursor: default;
         }
