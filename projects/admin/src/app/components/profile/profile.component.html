@@ -22,7 +22,7 @@
     <mat-tab label="Calendrier">
       <div class="content" fxLayout="row wrap">
         <div
-          class="month accent-lighter-bg accent-border"
+          class="month accent-border"
           fxFlex="100px"
           *ngFor="let month of months$ | async"
           [class.primary-color]="month === today"

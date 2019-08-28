@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { Moment } from 'moment';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { filter, mergeMap, tap, take, map } from 'rxjs/operators';
 import { from, Observable, combineLatest } from 'rxjs';
 import { MatDialog } from '@angular/material';
@@ -49,7 +49,8 @@ export class MonthComponent implements OnInit {
     public dialog: MatDialog,
     private profileSevice: AuthService,
     private projectService: ProjectService,
-    private store: Store
+    private store: Store,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -144,5 +145,11 @@ export class MonthComponent implements OnInit {
         times: [...toEdit.times]
       }
     });
+  }
+
+  changeMonth(navigation: number) {
+    this.store
+      .selectOnce(TimesState.selectedDate)
+      .subscribe(date => this.router.navigate(['/month', date.add(navigation, 'month').format(MONTH_ISO_FORMAT)]));
   }
 }
