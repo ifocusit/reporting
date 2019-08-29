@@ -57,14 +57,14 @@
       </mat-card-title>
       <mat-card-content>
         <div fxLayout="row">
-          <div fxFlex="160px" id="workDays">{{ workDays$ | async }} jours travaillés</div>
-          <div fxFlex="calc(100%-360px)" fxFlexAlign="start" id="total">{{ total$ | async | duration: totalsFormat }}</div>
-          <div fxFlex="200px">heures travaillées</div>
+          <div fxFlex="115px" id="workDays">{{ workDays$ | async }} j. travaillés</div>
+          <div fxFlex="calc(100%-255px)" fxFlexAlign="start" id="total">{{ total$ | async | duration: totalsFormat }}</div>
+          <div fxFlex="145px">h. travaillées</div>
         </div>
         <div fxLayout="row">
-          <div fxFlex="160px">{{ mustHours$ | async | number: '2.2-2' }} heures demandée</div>
+          <div fxFlex="115px">{{ mustHours$ | async }} h. demandées</div>
           <div
-            fxFlex="calc(100%-360px)"
+            fxFlex="calc(100%-255px)"
             fxFlexAlign="start"
             id="overtime"
             *ngIf="overtime$ | async as overtime"
@@ -72,14 +72,14 @@
           >
             {{ overtime | duration: totalsFormat }}
           </div>
-          <div fxFlex="200px">heure(s) supplémentaire(s)</div>
+          <div fxFlex="145px">h. supp.</div>
         </div>
         <div fxLayout="row">
-          <div fxFlex="160px"></div>
-          <div fxFlex="calc(100%-360px)" fxFlexAlign="start" id="finalTotal" class="accent-color">
+          <div fxFlex="115px"></div>
+          <div fxFlex="calc(100%-255px)" fxFlexAlign="start" id="finalTotal" class="accent-color">
             {{ finalTotal$ | async | duration: totalsFormat }}
           </div>
-          <div fxFlex="200px">heure(s) avec majoration</div>
+          <div fxFlex="145px">avec h. supp. majorées</div>
         </div>
       </mat-card-content>
     </mat-card>
