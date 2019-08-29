@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
+import { AuthService } from 'projects/commons/src/lib/auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -11,11 +11,11 @@ export class AppComponent {
 
   public user$;
 
-  constructor(private fireauth: AngularFireAuth) {
-    this.user$ = this.fireauth.user;
+  constructor(private authService: AuthService) {
+    this.user$ = this.authService.user$;
   }
 
   signout() {
-    this.fireauth.auth.signOut();
+    this.authService.signOutUser();
   }
 }

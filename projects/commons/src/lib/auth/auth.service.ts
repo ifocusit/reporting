@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
-import { mergeMap, take, map } from 'rxjs/operators';
+import { mergeMap, take, map, filter } from 'rxjs/operators';
 import { User, DEFAULT_USER } from './user.model';
 
 @Injectable()
@@ -11,6 +11,7 @@ export class AuthService {
 
   public get user$(): Observable<User> {
     return this.fireauth.user.pipe(
+      filter(user => !!user),
       mergeMap(user => this.firestore.doc<User>(`users/${user.uid}`).valueChanges()),
       map(user => ({ ...DEFAULT_USER, ...user }))
     );
@@ -21,7 +22,8 @@ export class AuthService {
   }
 
   public updateUser(data: User) {
-    return this.fireauth.user.pipe(
+    return this.user$.pipe(
+      take(1),
       mergeMap(user => this.firestore.doc<User>(`users/${user.uid}`).set({ ...data, uid: user.uid }, { merge: true }))
     );
   }

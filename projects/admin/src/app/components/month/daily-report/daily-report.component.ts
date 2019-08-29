@@ -11,6 +11,7 @@ import { TimesService } from 'projects/commons/src/lib/times/times.service';
 import { ProjectService } from 'projects/commons/src/lib/settings/project.service';
 import { CalculateDuration } from 'projects/commons/src/lib/times/calculate-duration.tools';
 import { AddTimes, AddTime, DeleteTime, UpdateTime, DeleteTimes } from 'projects/commons/src/lib/times/time.store';
+import { SettingsState } from 'projects/commons/src/lib/settings/settings.store';
 
 @Component({
   selector: 'app-daily-report',
@@ -22,10 +23,7 @@ export class DailyReportComponent implements OnInit {
   public duration$: Observable<Duration>;
 
   private defaultTimes$ = () =>
-    this.store.select(ProjectState.project).pipe(
-      mergeMap(project => this.projectService.readSettings(project)),
-      map(settings => settings.timbrage.defaults.map(time => moment(time, TIME_ISO_FORMAT)))
-    )
+    this.store.select(SettingsState.settings).pipe(map(settings => settings.timbrage.defaults.map(time => moment(time, TIME_ISO_FORMAT))))
 
   constructor(
     public dialogRef: MatDialogRef<DailyReportComponent>,

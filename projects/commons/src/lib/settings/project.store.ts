@@ -1,8 +1,7 @@
-import { State, Action, StateContext, Selector, Store } from '@ngxs/store';
+import { State, Action, StateContext, Selector } from '@ngxs/store';
 import { mergeMap } from 'rxjs/operators';
 import { Settings } from './settings.model';
 import { ProjectService } from './project.service';
-import { AuthService } from '../auth/auth.service';
 
 export interface ProjectStateModel {
   name: string;
@@ -23,11 +22,6 @@ export class SaveProject {
   constructor(public readonly settings: Settings) {}
 }
 
-export class SaveSettings {
-  static readonly type = '[Project] SaveSettings]';
-  constructor(public readonly settings: Settings) {}
-}
-
 @State<ProjectStateModel>({
   name: 'project',
   defaults: {
@@ -35,9 +29,7 @@ export class SaveSettings {
   }
 })
 export class ProjectState {
-  constructor(private settingsService: ProjectService, private store: Store, private authService: AuthService) {
-    this.authService.user$.subscribe(user => this.store.dispatch(new SelectProject(user.lastProject)));
-  }
+  constructor(private settingsService: ProjectService) {}
 
   @Selector()
   public static project(state: ProjectStateModel): string {
@@ -59,10 +51,5 @@ export class ProjectState {
     return this.settingsService
       .saveSettings(action.settings)
       .pipe(mergeMap(settings => ctx.dispatch(new SelectProject(settings.project.name))));
-  }
-
-  @Action(SaveSettings)
-  save(ctx: StateContext<ProjectStateModel>, action: SaveSettings) {
-    return this.settingsService.saveSettings(action.settings);
   }
 }

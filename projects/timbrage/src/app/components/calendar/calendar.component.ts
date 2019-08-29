@@ -12,6 +12,7 @@ import { CalculationService } from 'projects/commons/src/lib/times/calculation.s
 import { TimesService } from 'projects/commons/src/lib/times/times.service';
 import { ProjectService } from 'projects/commons/src/lib/settings/project.service';
 import { ProjectState } from 'projects/commons/src/lib/settings/project.store';
+import { SettingsState } from 'projects/commons/src/lib/settings/settings.store';
 
 export interface CalendarDayModel {
   date: Moment;
@@ -131,9 +132,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
       .pipe(
         take(1),
         mergeMap(date =>
-          this.store.select(ProjectState.project).pipe(
-            mergeMap(project => this.projectService.readSettings(project)),
-            take(1),
+          this.store.select(SettingsState.settings).pipe(
             map(settings =>
               settings.timbrage.defaults
                 .map(time => moment(time, 'HH.mm'))

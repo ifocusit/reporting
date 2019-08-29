@@ -8,7 +8,8 @@ import { AuthService } from 'projects/commons/src/lib/auth/auth.service';
 import { User } from 'projects/commons/src/lib/auth/user.model';
 import { DEFAULT_SETTINGS, Settings } from 'projects/commons/src/lib/settings/settings.model';
 import { ProjectService } from 'projects/commons/src/lib/settings/project.service';
-import { SaveProject, SelectProject, SaveSettings, ProjectState } from 'projects/commons/src/lib/settings/project.store';
+import { SaveProject, SelectProject, ProjectState } from 'projects/commons/src/lib/settings/project.store';
+import { SettingsState, SaveSettings } from 'projects/commons/src/lib/settings/settings.store';
 
 @Component({
   selector: 'app-profile',
@@ -70,13 +71,7 @@ export class ProfileComponent implements OnInit {
       })
     });
 
-    this.user$ = this.authService.user$.pipe(tap(user => this.form.patchValue(user)));
-
-    this.settings$ = this.project$.pipe(
-      tap(() => this.form.reset()),
-      mergeMap(projectName => this.projectService.readSettings(projectName)),
-      tap(settings => this.form.patchValue(settings))
-    );
+    this.settings$ = this.store.select(SettingsState.settings).pipe(tap(settings => this.form.patchValue(settings)));
 
     this.projects$ = this.projectService.projects$;
 

@@ -63,8 +63,9 @@ export class ProfileComponent implements OnInit {
   }
 
   public exportAll() {
-    this.authService.user$
+    this.user$
       .pipe(
+        take(1),
         mergeMap(user =>
           this.store.select(ProjectState.project).pipe(
             mergeMap(project =>

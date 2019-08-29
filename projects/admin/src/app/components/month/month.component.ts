@@ -17,6 +17,7 @@ import { TimesService } from 'projects/commons/src/lib/times/times.service';
 import { AuthService } from 'projects/commons/src/lib/auth/auth.service';
 import { ProjectService } from 'projects/commons/src/lib/settings/project.service';
 import { Settings } from 'projects/commons/src/lib/settings/settings.model';
+import { SettingsState } from 'projects/commons/src/lib/settings/settings.store';
 
 @Component({
   selector: 'app-month',
@@ -25,7 +26,9 @@ import { Settings } from 'projects/commons/src/lib/settings/settings.model';
 })
 export class MonthComponent implements OnInit {
   @Select(ProjectState.project)
-  public project$: Observable<any>;
+  public project$: Observable<string>;
+  @Select(SettingsState.settings)
+  public settings$: Observable<Settings>;
 
   @Select(TimesState.selectedDate)
   public selectedDate$: Observable<Moment>;
@@ -35,7 +38,6 @@ export class MonthComponent implements OnInit {
   private times$: Observable<Time[]>;
 
   public user$: Observable<User>;
-  public settings$: Observable<Settings>;
 
   public workDays$: Observable<number>;
   public total$: Observable<Duration>;
@@ -59,8 +61,6 @@ export class MonthComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.selectMonth(moment(params.month, 'YYYY-MM'));
     });
-
-    this.settings$ = this.project$.pipe(mergeMap(projectName => this.projectService.readSettings(projectName)));
 
     this.user$ = this.profileSevice.user$;
 

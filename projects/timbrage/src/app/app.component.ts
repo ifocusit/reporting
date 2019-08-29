@@ -1,19 +1,17 @@
-import { Component, OnInit, ViewChild, ElementRef, HostBinding } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { AuthService } from 'projects/commons/src/lib/auth/auth.service';
 import { Store } from '@ngxs/store';
 import { ExportService } from 'projects/commons/src/lib/times/export.service';
 import { TimesState, SelectDate } from 'projects/commons/src/lib/times/time.store';
 import * as moment from 'moment';
-import { Observable } from 'rxjs';
 import { ProjectService } from 'projects/commons/src/lib/settings/project.service';
 import { mergeMap, tap } from 'rxjs/operators';
-import { Settings } from 'projects/commons/src/lib/settings/settings.model';
-import { ProjectState } from 'projects/commons/src/lib/settings/project.store';
-import { OverlayContainer } from '@angular/cdk/overlay';
+import { ProjectState, SelectProject } from 'projects/commons/src/lib/settings/project.store';
 import { SwUpdate } from '@angular/service-worker';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import localeFrExtra from '@angular/common/locales/extra/fr';
+import { SettingsState, ReadSettings } from 'projects/commons/src/lib/settings/settings.store';
 
 @Component({
   selector: 'app-root',
@@ -25,16 +23,12 @@ export class AppComponent implements OnInit {
 
   @ViewChild('export', { static: true }) private exportLink: ElementRef;
 
-  public settings$: Observable<Settings>;
-  @HostBinding('class') componentCssClass;
-
   constructor(
     private swUpdate: SwUpdate,
     private exportService: ExportService,
     private store: Store,
     private authService: AuthService,
-    private settingsService: ProjectService,
-    public overlayContainer: OverlayContainer
+    private settingsService: ProjectService
   ) {
     registerLocaleData(localeFr, 'fr', localeFrExtra);
     moment.locale('fr');
@@ -48,13 +42,19 @@ export class AppComponent implements OnInit {
         }
       });
     }
-    this.settings$ = this.store.select(ProjectState.project).pipe(
-      mergeMap(projectName => this.settingsService.readSettings(projectName)),
-      tap(settings => {
-        this.overlayContainer.getContainerElement().classList.add(settings.project.theme);
-        this.componentCssClass = settings.project.theme;
-      })
-    );
+    // changement de user => charge le dermier project et ses settings
+    this.authService.user$
+      .pipe(
+        mergeMap(user => this.store.dispatch(new SelectProject(user.lastProject))),
+        mergeMap(_ => this.store.dispatch(new ReadSettings()))
+      )
+      .subscribe();
+
+    // changement de theme
+    this.store
+      .select(SettingsState.theme)
+      .pipe(tap(theme => (document.getElementsByTagName('body')[0].classList.value = theme)))
+      .subscribe();
   }
 
   public calendarPage() {

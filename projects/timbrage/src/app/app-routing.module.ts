@@ -7,10 +7,25 @@ import { CalendarComponent } from './components/calendar/calendar.component';
 import { ProfileComponent } from './components/profile/profile.component';
 
 const routes: Routes = [
-  { path: 'timbrage', canActivate: [AuthGuard], component: TimbrageComponent },
-  { path: 'calendar', canActivate: [AuthGuard], component: CalendarComponent },
-  { path: 'profile', canActivate: [AuthGuard], component: ProfileComponent },
-  { path: 'login', component: LoginComponent },
+  {
+    path: 'timbrage',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./components/timbrage/timbrage.module').then(mod => mod.TimbrageModule)
+  },
+  {
+    path: 'calendar',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./components/calendar/calendar.module').then(mod => mod.CalendarModule)
+  },
+  {
+    path: 'profile',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./components/profile/profile.module').then(mod => mod.ProfileModule)
+  },
+  {
+    path: 'login',
+    loadChildren: () => import('projects/commons/src/lib/auth/login/login.module').then(mod => mod.LoginModule)
+  },
   { path: '', redirectTo: '/timbrage', pathMatch: 'full' }
 ];
 

@@ -8,30 +8,29 @@ import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthModule, TimesModule, ReportingCommonModule, SettingsModule } from 'projects/commons/src/public-api';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
-import { TimbrageComponent } from './components/timbrage/timbrage.component';
-import { CalendarComponent } from './components/calendar/calendar.component';
-import { ProfileComponent } from './components/profile/profile.component';
-import { TimeComponent } from './components/time/time.component';
 import { NgxsModule } from '@ngxs/store';
 import { TimesState } from 'projects/commons/src/lib/times/time.store';
 import { ProjectState } from 'projects/commons/src/lib/settings/project.store';
 import { AngularFireModule } from '@angular/fire';
+import { SettingsState } from 'projects/commons/src/lib/settings/settings.store';
+import { SelectProjectModule } from 'projects/commons/src/lib/settings/select-project/select-project.module';
 
 const providers = [];
 
 @NgModule({
-  declarations: [AppComponent, TimbrageComponent, CalendarComponent, ProfileComponent, TimeComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     BrowserAnimationsModule,
+    AppRoutingModule,
     ReportingCommonModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AuthModule,
     TimesModule,
     SettingsModule,
-    NgxsModule.forRoot([TimesState, ProjectState], { developmentMode: !environment.production }),
+    SelectProjectModule,
+    NgxsModule.forRoot([TimesState, ProjectState, SettingsState], { developmentMode: !environment.production }),
     NgxsReduxDevtoolsPluginModule.forRoot()
   ],
   providers,

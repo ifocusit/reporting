@@ -144,7 +144,7 @@
             "tsConfig": "projects/timbrage/tsconfig.app.json",
             "aot": false,
             "assets": [
-              "projects/timbrage/src/favicon.ico",
+              "projects/timbrage/src/favicon.ico.png",
               "projects/timbrage/src/assets",
               "projects/timbrage/src/manifest.webmanifest"
             ],
@@ -208,7 +208,7 @@
             "tsConfig": "projects/timbrage/tsconfig.spec.json",
             "karmaConfig": "projects/timbrage/karma.conf.js",
             "assets": [
-              "projects/timbrage/src/favicon.ico",
+              "projects/timbrage/src/favicon.ico.png",
               "projects/timbrage/src/assets",
               "projects/timbrage/src/manifest.webmanifest"
             ],
@@ -262,7 +262,7 @@
             "tsConfig": "projects/admin/tsconfig.app.json",
             "aot": false,
             "assets": [
-              "projects/admin/src/favicon.ico",
+              "projects/admin/src/favicon.ico.png",
               "projects/admin/src/assets",
               "projects/admin/src/manifest.webmanifest"
             ],
@@ -326,7 +326,7 @@
             "tsConfig": "projects/admin/tsconfig.spec.json",
             "karmaConfig": "projects/admin/karma.conf.js",
             "assets": [
-              "projects/admin/src/favicon.ico",
+              "projects/admin/src/favicon.ico.png",
               "projects/admin/src/assets",
               "projects/admin/src/manifest.webmanifest"
             ],

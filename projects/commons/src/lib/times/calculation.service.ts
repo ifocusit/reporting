@@ -4,12 +4,12 @@ import * as moment from 'moment';
 import { Duration } from 'moment';
 import { Store } from '@ngxs/store';
 import { AddTime } from './time.store';
-import { Observable, of } from 'rxjs';
-import { mergeMap, map, take } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Moment } from 'moment';
 import { Settings } from '../settings/settings.model';
 import { ProjectService } from '../settings/project.service';
-import { ProjectState } from '../settings/project.store';
+import { SettingsState } from '../settings/settings.store';
 
 @Injectable({
   providedIn: 'root'
@@ -20,11 +20,9 @@ export class CalculationService {
   constructor(private projectService: ProjectService, private store: Store) {}
 
   public calculate(timbrages: Array<Time>, manageMissing = true, setMissingToEndOfDay = false): Observable<Duration> {
-    return this.store.select(ProjectState.project).pipe(
-      mergeMap(project => this.projectService.readSettings(project)),
-      take(1),
-      map(settings => this._calculate(timbrages, settings, manageMissing, setMissingToEndOfDay))
-    );
+    return this.store
+      .select(SettingsState.settings)
+      .pipe(map(settings => this._calculate(timbrages, settings, manageMissing, setMissingToEndOfDay)));
   }
 
   private _calculate(timbrages: Array<Time>, settings: Settings, manageMissing = true, setMissingToEndOfDay = false): Duration {

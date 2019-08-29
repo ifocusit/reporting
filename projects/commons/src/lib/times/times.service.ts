@@ -5,13 +5,13 @@ import { TimeModel, Time, MONTH_ISO_FORMAT, DATETIME_ISO_FORMAT, TimeAdapter } f
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { mergeMap, map, take } from 'rxjs/operators';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { ProjectState } from '../settings/project.store';
 import { Store } from '@ngxs/store';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable()
 export class TimesService {
-  constructor(private firestore: AngularFirestore, private fireauth: AngularFireAuth, private store: Store) {}
+  constructor(private firestore: AngularFirestore, private authService: AuthService, private store: Store) {}
 
   public read(date: string | Moment): Observable<Time[]> {
     // define timestamp range
@@ -26,7 +26,7 @@ export class TimesService {
 
   public readBetween(start: Moment, end: Moment): Observable<Time[]> {
     const projectName = this.store.selectSnapshot(ProjectState.project);
-    return this.fireauth.authState.pipe(
+    return this.authService.user$.pipe(
       mergeMap(user =>
         this.firestore
           .collection<TimeModel>(`users/${user.uid}/projects/${projectName}/times`, ref =>
@@ -58,7 +58,7 @@ export class TimesService {
     const timestamp = {
       timestamp: new TimeAdapter(time).timestamp
     };
-    return this.fireauth.authState.pipe(
+    return this.authService.user$.pipe(
       mergeMap(user => this.firestore.collection<TimeModel>(`users/${user.uid}/projects/${projectName}/times`).add(timestamp)),
       take(1),
       map(
@@ -76,7 +76,7 @@ export class TimesService {
     const timestamp = {
       timestamp: new TimeAdapter(time).timestamp
     } as TimeModel;
-    return this.fireauth.authState.pipe(
+    return this.authService.user$.pipe(
       mergeMap(user =>
         this.firestore
           .collection<TimeModel>(`users/${user.uid}/projects/${projectName}/times`)
@@ -90,7 +90,7 @@ export class TimesService {
 
   public delete(time: Time): Observable<void> {
     const projectName = this.store.selectSnapshot(ProjectState.project);
-    return this.fireauth.authState.pipe(
+    return this.authService.user$.pipe(
       mergeMap(user =>
         this.firestore
           .collection<TimeModel>(`users/${user.uid}/projects/${projectName}/times`)
