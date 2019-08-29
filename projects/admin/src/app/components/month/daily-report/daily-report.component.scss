@@ -1,21 +1,43 @@
-div.mat-dialog-content {
-  overflow: hidden;
-}
+mat-card {
+  padding: 0;
+  border-radius: 0;
 
-mat-toolbar {
+  mat-card-header {
+    mat-toolbar {
+      margin-bottom: 1em;
 
-  margin-bottom: 1em;
+      button.add {
+        top: 30px;
+        right: -17px;
+      }
+    }
+  }
 
-  button.add {
-    top: 30px;
-    right: -17px;
+  mat-card-actions {
+    position: absolute;
+    right: 8px;
+    top: 60px;
+    z-index: 1;
+
+    button {
+      margin-right: 8px;
+    }
+  }
+
+  mat-card-content {
+    padding-top: 17px;
+    overflow: hidden;
+
+    mat-list {
+      min-height: 170px;
+
+      mat-list-item {
+        height: 40px;
+      }
+    }
   }
 }
 
-mat-list {
-  min-height: 170px;
-
-  mat-list-item {
-    height: 40px;
-  }
+::ng-deep mat-card mat-card-header div.mat-card-header-text {
+  margin: 0;
 }

@@ -1,6 +1,9 @@
 header, footer {
-  height: 56px;
   z-index: 1;
+
+  .mat-toolbar-row, .mat-toolbar-single-row {
+    height: 56px;
+  }
 }
 
 footer {

@@ -4,15 +4,18 @@
   max-height: 320px;
   background: url('/assets/profile-bg.jpg') 0 45% no-repeat;
   background-size: 100% auto;
-  padding: 24px;
   color: #FFF;
+
+  & > div {
+    padding-top: 10px;
+  }
 
   img {
     border-radius: 50%;
   }
 }
 
-.content {
+.tab-content {
   margin: 10px;
 
   .month {

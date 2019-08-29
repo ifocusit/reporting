@@ -10,7 +10,7 @@ import { ProjectState } from 'projects/commons/src/lib/settings/project.store';
 import { TimesService } from 'projects/commons/src/lib/times/times.service';
 import { ProjectService } from 'projects/commons/src/lib/settings/project.service';
 import { CalculateDuration } from 'projects/commons/src/lib/times/calculate-duration.tools';
-import { AddTimes, AddTime, DeleteTime, UpdateTime } from 'projects/commons/src/lib/times/time.store';
+import { AddTimes, AddTime, DeleteTime, UpdateTime, DeleteTimes } from 'projects/commons/src/lib/times/time.store';
 
 @Component({
   selector: 'app-daily-report',
@@ -42,6 +42,15 @@ export class DailyReportComponent implements OnInit {
 
   close(): void {
     this.dialogRef.close();
+  }
+
+  empty() {
+    const time = TimeAdapter.createTime(
+      moment(this.workDay.date)
+        .startOf('day')
+        .format(DATETIME_ISO_FORMAT)
+    );
+    this.store.dispatch(new AddTimes([time, time]));
   }
 
   addAll() {
@@ -85,5 +94,19 @@ export class DailyReportComponent implements OnInit {
 
   update(time: Time): void {
     this.store.dispatch(new UpdateTime(time));
+  }
+
+  clear() {
+    this.times$
+      .pipe(
+        map(times => this.store.dispatch(new DeleteTimes(times))),
+        take(1)
+      )
+      .subscribe();
+  }
+
+  public changeDay(value: number) {
+    this.workDay.date = this.workDay.date.clone().add(value, 'day');
+    this.ngOnInit();
   }
 }

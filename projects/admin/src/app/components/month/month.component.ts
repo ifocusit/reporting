@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
-import { Moment } from 'moment';
+import { Moment, Duration } from 'moment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, mergeMap, tap, take, map } from 'rxjs/operators';
 import { from, Observable, combineLatest } from 'rxjs';
@@ -38,10 +38,12 @@ export class MonthComponent implements OnInit {
   public settings$: Observable<Settings>;
 
   public workDays$: Observable<number>;
-  public total$: Observable<number>;
-  public overtime$: Observable<number>;
-  public finalTotal$: Observable<number>;
-  public maxMonthHours$: Observable<number>;
+  public total$: Observable<Duration>;
+  public overtime$: Observable<Duration>;
+  public finalTotal$: Observable<Duration>;
+  public mustHours$: Observable<number>;
+
+  private totalsAsDecimal = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -63,10 +65,8 @@ export class MonthComponent implements OnInit {
     this.user$ = this.profileSevice.user$;
 
     this.days$ = this.selectedDate$.pipe(
-      map(month => _.range(month.daysInMonth()).map((index: number) => new WorkingDateReporting(month.clone().date(index + 1))))
+      map(month => _.range(month.daysInMonth()).map(index => new WorkingDateReporting(month.clone().date(index + 1))))
     );
-
-    this.maxMonthHours$ = this.days$.pipe(map(days => days.filter(day => !day.isWeekend).length * DEFAULT_DAY_DURATION));
 
     this.times$ = combineLatest(this.project$, this.selectedDate$).pipe(
       map(pair => pair[1]),
@@ -74,40 +74,35 @@ export class MonthComponent implements OnInit {
     );
 
     this.items$ = combineLatest(this.days$, this.times$).pipe(
-      map((pair: [WorkingDateReporting[], Time[]]) =>
+      map(pair =>
         pair[0].map(day => new WorkingDateReporting(day.date, pair[1].filter(time => day.isSameDate(new TimeAdapter(time).getDay()))))
       ),
       tap(days =>
-        // extrait tous les jours avant le dernier travaillé
-        // de sorte que tout ce qui se trouve avant le dernier jour travaillé
-        // et sans heures reportées est compris comme étant un jour de congé
+        // tous les jours vides et non avant le jour en cours sont marqué comme congé
         days
-          .slice(
-            0,
-            days.indexOf(
-              days
-                .filter(day => day.hasTimes)
-                .slice(-1)
-                .pop()
-            )
-          )
-          .filter(day => !day.isWeekend && !day.hasTimes)
-          .forEach(day => (day.holiday = true))
+          .filter(day => !day.hasTimes && !day.isWeekend && day.date.isBefore(moment().startOf('day')))
+          .forEach(day => (day.isHoliday = true))
       )
     );
 
-    // jour travaillé
-    this.workDays$ = this.items$.pipe(map(items => items.filter(item => item.hasTimes).length));
+    // jours travaillés
+    this.workDays$ = this.items$.pipe(map(days => days.filter(day => !day.isHoliday && !day.isWeekend).length));
+
+    // jours ouvrés
+    // const openDays$ = this.days$.pipe(map(days => days.filter(day => !day.isWeekend).length));
+
+    // heures demandées
+    this.mustHours$ = this.workDays$.pipe(map(days => days * DEFAULT_DAY_DURATION));
 
     // durée totale
-    this.total$ = this.items$.pipe(map(days => days.map(report => report.duration.asHours()).reduce((d1, d2) => d1 + d2)));
+    this.total$ = this.items$.pipe(map(days => days.map(report => report.duration).reduce((d1, d2) => d1.add(d2))));
 
-    this.overtime$ = combineLatest(this.total$, this.workDays$).pipe(
-      map((pair: [number, number]) => pair[0] - DEFAULT_DAY_DURATION * pair[1])
+    this.overtime$ = combineLatest(this.total$, this.mustHours$).pipe(
+      map(pair => pair[0].clone().subtract(moment.duration(pair[1], 'hours')))
     );
 
     this.finalTotal$ = combineLatest(this.overtime$, this.total$).pipe(
-      map((pair: [number, number]) => Math.max(pair[0], 0) * WEEK_OVERTIME_MAJOR + pair[1])
+      map(pair => pair[1].clone().add(Math.max(pair[0].asHours(), 0) * WEEK_OVERTIME_MAJOR, 'hours'))
     );
   }
 
@@ -151,5 +146,13 @@ export class MonthComponent implements OnInit {
     this.store
       .selectOnce(TimesState.selectedDate)
       .subscribe(date => this.router.navigate(['/month', date.add(navigation, 'month').format(MONTH_ISO_FORMAT)]));
+  }
+
+  public toggleTotalsFormat() {
+    this.totalsAsDecimal = !this.totalsAsDecimal;
+  }
+
+  public get totalsFormat() {
+    return this.totalsAsDecimal ? 'hours' : null;
   }
 }

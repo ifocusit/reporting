@@ -21,7 +21,9 @@
     </div>
 
     <h4>
-      Facture du mois de <span class="capitalize">{{ bill.month | moment: 'MMMM YYYY' }}</span>
+      <span
+        >Facture du mois de <span class="capitalize">{{ bill.month | moment: 'MMMM YYYY' }}</span></span
+      >
     </h4>
     <h2 class="primary-color">Facture {{ bill.idFacture }}</h2>
     <div>n° TVA : {{ bill.tvaNumber }}</div>

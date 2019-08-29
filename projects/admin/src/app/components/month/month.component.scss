@@ -1,4 +1,4 @@
-#page {
+.content {
   padding: 15px;
 }
 
@@ -54,15 +54,10 @@ mat-table.reports {
   padding-right: 4px;
 }
 
-.negative {
-  color: #e64a19;
-}
-
 #overtime {
   font-weight: bold;
 }
 
 #finalTotal {
-  color: #b71c1c;
   font-weight: bold;
 }

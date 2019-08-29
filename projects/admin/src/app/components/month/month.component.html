@@ -1,5 +1,5 @@
 <div
-  id="page"
+  class="content"
   fxLayout="row"
   fxLayout.xs="column"
   fxLayout.sm="column"
@@ -9,11 +9,11 @@
 >
   <div id="month" fxFlex>
     <mat-toolbar color="primary" *ngIf="selectedDate$ | async as selectedDate">
-      <span fxFlex="calc(100%-400px)">{{ selectedDate | moment: 'MMMM YYYY' }}</span>
+      <span fxFlex="calc(100%-220px)">{{ selectedDate | moment: 'MMMM YYYY' }}</span>
 
       <lib-select-project defaultName=""></lib-select-project>
-      <button mat-button *ngIf="selectedDate$ | async as selectedDate" [routerLink]="['/bill', selectedDate.format('YYYY-MM')]">
-        Générer facture
+      <button mat-icon-button *ngIf="selectedDate$ | async as selectedDate" [routerLink]="['/bill', selectedDate.format('YYYY-MM')]">
+        <mat-icon>receipt</mat-icon>
       </button>
       <button mat-icon-button [routerLink]="['/profile']"><mat-icon>person</mat-icon></button>
     </mat-toolbar>
@@ -26,7 +26,7 @@
 
       <ng-container matColumnDef="type">
         <mat-header-cell *matHeaderCellDef></mat-header-cell>
-        <mat-cell *matCellDef="let time">{{ time.holiday ? 'congé' : '' }}</mat-cell>
+        <mat-cell *matCellDef="let time">{{ time.isHoliday ? 'congé' : '' }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="duration">
@@ -45,29 +45,40 @@
       <mat-row
         *matRowDef="let day; columns: ['date', 'type', 'duration', 'decimal']"
         (click)="edit(day)"
-        [ngClass]="{ weekend: day.isWeekend, error: day.isNotComplete, holiday: day.holiday, worked: day.hasTimes }"
+        [ngClass]="{ weekend: day.isWeekend, error: day.isNotComplete, holiday: day.isHoliday, worked: day.hasTime }"
       ></mat-row>
     </mat-table>
   </div>
   <div id="sums" fxFlex>
     <mat-card class="mat-elevation-z8 totals">
-      <mat-card-title>Totaux</mat-card-title>
+      <mat-card-title>
+        <span fxFlex="calc(100%-40px)">Totaux</span>
+        <button mat-icon-button (click)="toggleTotalsFormat()"><mat-icon>compare_arrows</mat-icon></button>
+      </mat-card-title>
       <mat-card-content>
         <div fxLayout="row">
-          <div fxFlex id="workDays">{{ workDays$ | async }} jours ouvrés</div>
-          <div fxFlex="45px" fxFlexAlign="start" id="total">{{ total$ | async | number: '.2-2' }}</div>
+          <div fxFlex="160px" id="workDays">{{ workDays$ | async }} jours travaillés</div>
+          <div fxFlex="calc(100%-360px)" fxFlexAlign="start" id="total">{{ total$ | async | duration: totalsFormat }}</div>
           <div fxFlex="200px">heures travaillées</div>
         </div>
         <div fxLayout="row">
-          <div fxFlex>{{ maxMonthHours$ | async }} heures demandée</div>
-          <div fxFlex="45px" fxFlexAlign="start" id="overtime" *ngIf="overtime$ | async as overtime" [ngClass]="{ negative: overtime < 0 }">
-            {{ overtime | number: '.2-2' }}
+          <div fxFlex="160px">{{ mustHours$ | async | number: '2.2-2' }} heures demandée</div>
+          <div
+            fxFlex="calc(100%-360px)"
+            fxFlexAlign="start"
+            id="overtime"
+            *ngIf="overtime$ | async as overtime"
+            [class.accent-lighter-color]="overtime < 0"
+          >
+            {{ overtime | duration: totalsFormat }}
           </div>
           <div fxFlex="200px">heure(s) supplémentaire(s)</div>
         </div>
         <div fxLayout="row">
-          <div fxFlex></div>
-          <div fxFlex="45px" fxFlexAlign="start" id="finalTotal">{{ finalTotal$ | async | number: '.2-2' }}</div>
+          <div fxFlex="160px"></div>
+          <div fxFlex="calc(100%-360px)" fxFlexAlign="start" id="finalTotal" class="accent-color">
+            {{ finalTotal$ | async | duration: totalsFormat }}
+          </div>
           <div fxFlex="200px">heure(s) avec majoration</div>
         </div>
       </mat-card-content>

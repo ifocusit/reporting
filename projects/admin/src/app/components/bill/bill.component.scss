@@ -7,6 +7,10 @@
   .no-print {
     display: none;
   }
+
+  .content {
+    padding: 0;
+  }
 }
 
 mat-toolbar {
@@ -15,6 +19,7 @@ mat-toolbar {
 
 .content {
   white-space: pre-wrap;
+  padding: 10px;
 }
 
 .capitalize {
