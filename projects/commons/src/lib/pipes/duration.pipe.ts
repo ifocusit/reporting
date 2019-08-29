@@ -3,7 +3,8 @@ import { Duration, unitOfTime } from 'moment';
 import { DecimalPipe } from '@angular/common';
 
 @Pipe({
-  name: 'duration'
+  name: 'duration',
+  pure: true
 })
 export class DurationPipe implements PipeTransform {
   constructor(private decimalPipe: DecimalPipe) {}

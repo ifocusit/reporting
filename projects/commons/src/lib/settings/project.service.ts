@@ -63,10 +63,7 @@ export class ProjectService {
     return this.authService.user$.pipe(
       mergeMap(user => this.firestorage.ref(`users/${user.uid}/${projectName}/logo.png`).getDownloadURL()),
       take(1),
-      catchError(error => {
-        console.log(error);
-        return of(true);
-      })
+      catchError(() => of(true))
     );
   }
 }

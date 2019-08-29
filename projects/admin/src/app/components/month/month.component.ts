@@ -125,9 +125,7 @@ export class MonthComponent implements OnInit {
             TimeAdapter.createTime(date.set({ hour: 17, minute: 0 }).format(DATETIME_ISO_FORMAT))
           ];
         }),
-        mergeMap(times => from(times)),
-        tap(time => console.log(`creating ${new TimeAdapter(time).format()}...`)),
-        tap(time => console.log(`${new TimeAdapter(time).format()} created.`))
+        mergeMap(times => from(times))
       )
       .subscribe();
   }

@@ -80,9 +80,8 @@ export class ProfileComponent implements OnInit {
                     const lines = data
                       .filter(time => time && time.timestamp)
                       .map(time => moment(time.timestamp).format(DATETIME_ISO_FORMAT));
-                    return this.exportService
-                      .export(fileName, lines, this.exportLink)
-                      .pipe(tap(() => console.log(`${data.length} exported`)));
+
+                    return this.exportService.export(fileName, lines, this.exportLink);
                   })
                 )
             )
