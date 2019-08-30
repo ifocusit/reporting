@@ -1,4 +1,4 @@
-<ng-container *ngIf="bill$ | async as bill">
+<page *ngIf="bill$ | async as bill">
   <header class="no-print">
     <mat-toolbar color="primary">
       <button mat-button [routerLink]="['/month', bill.month]"><mat-icon>arrow_back</mat-icon></button>
@@ -58,4 +58,4 @@
     <div>Paiement net à 30 jours auprès de:</div>
     <div>Compte postal {{ bill.account?.number }} {{ bill.currency }} / IBAN {{ bill.account?.iban }}</div>
   </div>
-</ng-container>
+</page>
