@@ -58,14 +58,12 @@ export class MonthComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.selectMonth(moment(params.month, 'YYYY-MM'));
-    });
+    this.route.params.pipe(mergeMap(params => this.store.dispatch(new SelectDate(moment(params.month, 'YYYY-MM'))))).subscribe();
 
     this.user$ = this.profileSevice.user$;
 
     this.days$ = this.selectedDate$.pipe(
-      map(month => _.range(month.daysInMonth()).map(index => new WorkingDateReporting(month.clone().date(index + 1))))
+      map(date => _.range(date.daysInMonth()).map(index => new WorkingDateReporting(date.clone().date(index + 1))))
     );
 
     this.times$ = combineLatest(this.project$, this.selectedDate$).pipe(
@@ -106,10 +104,6 @@ export class MonthComponent implements OnInit {
     );
   }
 
-  public selectMonth(date: Moment) {
-    return this.store.dispatch(new SelectDate(date));
-  }
-
   public initMissingDays(): void {
     this.items$
       .pipe(
@@ -143,7 +137,7 @@ export class MonthComponent implements OnInit {
   changeMonth(navigation: number) {
     this.store
       .selectOnce(TimesState.selectedDate)
-      .subscribe(date => this.router.navigate(['/month', date.add(navigation, 'month').format(MONTH_ISO_FORMAT)]));
+      .subscribe(date => this.router.navigate(['/month', date.add(navigation, 'month').format(MONTH_ISO_FORMAT)], { replaceUrl: true }));
   }
 
   public toggleTotalsFormat() {

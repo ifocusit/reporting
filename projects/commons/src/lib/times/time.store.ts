@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { from } from 'rxjs';
-import { Time } from './time.model';
+import { Time, MONTH_ISO_FORMAT } from './time.model';
 import { TimesService } from './times.service';
 
 export interface TimesStateModel {
@@ -77,6 +77,11 @@ export class TimesState {
   @Selector()
   public static selectedDate(state: TimesStateModel): Moment {
     return state.selectedDate;
+  }
+
+  @Selector()
+  public static selectedMonth(state: TimesStateModel): string {
+    return state.selectedDate.format(MONTH_ISO_FORMAT);
   }
 
   @Action(SelectDate)

@@ -1,14 +1,24 @@
 <ng-container *ngIf="user$ | async as user">
-  <ng-container *ngIf="user.isMultiProject; else elseTemplate">
-    <mat-menu #projectMenu="matMenu">
-      <button mat-menu-item *ngFor="let project of projects$ | async" (click)="select(project)">{{ project }}</button>
-    </mat-menu>
-    <button mat-button [matMenuTriggerFor]="projectMenu">
-      <mat-icon>business</mat-icon>
-      {{ project$ | async }}
-    </button>
+  <ng-container *ngIf="user.isMultiProject; else showDefaultName">
+    <ng-container *ngIf="!readonly; else showReadonly">
+      <mat-menu #projectMenu="matMenu">
+        <button mat-menu-item *ngFor="let project of projects$ | async" (click)="select(project)">{{ project }}</button>
+      </mat-menu>
+      <button mat-button [matMenuTriggerFor]="projectMenu">
+        <mat-icon>business</mat-icon>
+        <span>{{ project$ | async }}</span>
+      </button>
+    </ng-container>
+    <ng-template #showReadonly>
+      <span class="mat-button">
+        <span class="mat-button-wrapper">
+          <mat-icon>business</mat-icon>
+          <span>{{ project$ | async }}</span>
+        </span>
+      </span>
+    </ng-template>
   </ng-container>
-  <ng-template #elseTemplate>
+  <ng-template #showDefaultName>
     {{ defaultName }}
   </ng-template>
 </ng-container>

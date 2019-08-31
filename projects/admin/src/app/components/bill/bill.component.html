@@ -1,17 +1,18 @@
-<page *ngIf="bill$ | async as bill">
+<div class="content" *ngIf="model$ | async as bill">
   <header class="no-print">
     <mat-toolbar color="primary">
       <button mat-button [routerLink]="['/month', bill.month]"><mat-icon>arrow_back</mat-icon></button>
 
-      <div fxFlex="calc(100%-140px)">
+      <div fxFlex="calc(100%-280px)">
         Reporting
       </div>
+      <lib-select-project defaultName="" readonly="true"></lib-select-project>
       <button mat-icon-button (click)="print()"><mat-icon>print</mat-icon></button>
       <button mat-icon-button [routerLink]="['/profile']"><mat-icon>person</mat-icon></button>
     </mat-toolbar>
   </header>
 
-  <div class="content">
+  <div>
     <div class="header" fxLayout="row-reverse" fxLayoutAlign="space-between stretch">
       <div class="society">
         <img id="logo" *ngIf="logo$ | async; let url" [src]="url" alt="Logo du projet" />
@@ -35,27 +36,44 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <tr class="bill-content">
           <td>{{ bill.duration.asHours() | number: '2.2-2' }} heures</td>
           <td class="amount">{{ bill.amount | number: '2.2-2' }}</td>
         </tr>
-        <tr class="divider subtotal">
+        <tr *ngFor="let line of lines$ | async" class="bill-content">
+          <td fxLayout="row" fxLayoutAlign="space-between center" class="label">
+            <mat-form-field>
+              <input debounced matInput type="text" [(ngModel)]="line.label" (debounceEvent)="updateLine(line)" />
+            </mat-form-field>
+            <button mat-icon-button color="accent" (click)="deleteLine(line)" class="no-print">
+              <mat-icon>delete_forever</mat-icon>
+            </button>
+          </td>
+          <td class="amount">
+            <mat-form-field>
+              <input debounced matInput type="text" [(ngModel)]="line.amount" (debounceEvent)="updateLine(line)" />
+            </mat-form-field>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr class="subtotal">
           <td class="primary-border">Total Hors TVA</td>
-          <td class="amount primary-border">{{ bill.totalHT | number: '2.2-2' }}</td>
+          <td class="amount primary-border">{{ bill.totalHT | number: '.2-2' }}</td>
         </tr>
         <tr class="subtotal">
           <td>TVA {{ tva }}%</td>
-          <td class="amount">{{ bill.totalTVA | number: '2.2-2' }}</td>
+          <td class="amount">{{ bill.totalTVA | number: '.2-2' }}</td>
         </tr>
         <tr class="total">
           <td>Total</td>
-          <td class="amount">{{ bill.totalTTC | number: '2.2-2' }}</td>
+          <td class="amount">{{ bill.totalTTC | number: '.2-2' }}</td>
         </tr>
-      </tbody>
+      </tfoot>
     </table>
-    <button id="add-line" mat-fab class="no-print" aria-label="Ajouter une ligne à la facture"><mat-icon>add</mat-icon></button>
+    <button id="add-line" mat-fab (click)="addLine()" class="no-print"><mat-icon>add</mat-icon></button>
 
     <div>Paiement net à 30 jours auprès de:</div>
     <div>Compte postal {{ bill.account?.number }} {{ bill.currency }} / IBAN {{ bill.account?.iban }}</div>
   </div>
-</page>
+</div>

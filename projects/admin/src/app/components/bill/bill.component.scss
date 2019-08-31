@@ -10,6 +10,7 @@
 
   .content {
     padding: 0;
+    height: initial;
   }
 }
 
@@ -19,7 +20,7 @@ mat-toolbar {
 
 .content {
   white-space: pre-wrap;
-  padding: 10px;
+  padding: 15px;
 }
 
 .capitalize {
@@ -32,32 +33,45 @@ table {
 
   thead tr th {
     text-align: start;
-    border-bottom: solid 0.5px
+    border-bottom: solid 0.5px;
+    padding-bottom: 10px;
   }
-
+  
   .amount {
     width: 5em;
+    max-width: 5em;
     text-align: end;
+
+    mat-form-field {
+      width: 5em;
+    
+      input {
+        text-align: end;
+      }
+    }
   }
 
-  td {
-    padding: 0.5em;
+  tbody {
+    .label mat-form-field {
+      width: 100%;
+    }
   }
 
-  tr.subtotal, tr.total {
+  tfoot {
     font-weight: bold;
-  }
 
-  tr.subtotal td:nth-child(1), tr.total td:nth-child(1) {
-    text-align: end;
-  }
+    tr:nth-child(1) td {
+      border-top-style: solid;
+    }
 
-  .total td {
-    padding-top: 2em;
-  }
-
-  .divider td {
-    border-top-style: solid;
+    tr td {
+      padding-top: 10px;
+      text-align: end;
+      
+      .amount {
+        text-align: start;
+      }
+    }
   }
 }
 
@@ -75,7 +89,7 @@ table {
 
 #add-line {
   position: relative;
-  top: -14em;
+  top: -12em;
 }
 
 @media screen and (max-width: 599px) {
@@ -83,3 +97,8 @@ table {
     margin: 10px;
   }
 }
+
+
+:host ::ng-deep mat-form-field.mat-form-field-appearance-legacy .mat-form-field-wrapper { padding: 0 !important; }
+:host ::ng-deep mat-form-field.mat-form-field-appearance-legacy .mat-form-field-infix { padding: 0 !important; border-top: 0 !important; }
+:host ::ng-deep mat-form-field.mat-form-field-appearance-legacy .mat-form-field-underline { display: none !important; }

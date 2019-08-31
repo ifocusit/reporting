@@ -17,6 +17,9 @@ export class SelectProjectComponent implements OnInit {
   @Input()
   public defaultName = 'Reporting';
 
+  @Input()
+  public readonly = false;
+
   @Select(ProjectState.project)
   public project$: Observable<string>;
 

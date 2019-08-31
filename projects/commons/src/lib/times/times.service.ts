@@ -24,7 +24,7 @@ export class TimesService {
     return this.readBetween(start, end);
   }
 
-  public readBetween(start: Moment, end: Moment): Observable<Time[]> {
+  private readBetween(start: Moment, end: Moment): Observable<Time[]> {
     const projectName = this.store.selectSnapshot(ProjectState.project);
     return this.authService.user$.pipe(
       mergeMap(user =>
@@ -47,10 +47,6 @@ export class TimesService {
         )
       )
     );
-  }
-
-  public get times$(): Observable<TimeModel[]> {
-    return this.firestore.collection<TimeModel>(`users/26nyWKtW2ISZHIU5bZ6kHn7JISf1/projects/Default/times`).valueChanges();
   }
 
   public create(time: Time): Observable<Time> {

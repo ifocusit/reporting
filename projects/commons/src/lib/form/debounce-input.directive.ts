@@ -3,7 +3,7 @@ import { Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 @Directive({
-  selector: '[libDebounceInput]'
+  selector: 'input[debounced]'
 })
 export class DebounceInputDirective implements OnInit, OnDestroy {
   @Input() debounceTime = 1000;
@@ -22,7 +22,7 @@ export class DebounceInputDirective implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  @HostListener('keyup', ['$event'])
+  @HostListener('blur', ['$event'])
   clickEvent(event) {
     event.preventDefault();
     event.stopPropagation();

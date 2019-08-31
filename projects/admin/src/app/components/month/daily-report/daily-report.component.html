@@ -20,7 +20,7 @@
       <mat-list>
         <mat-list-item *ngFor="let time of times$ | async">
           <mat-form-field>
-            <input matInput type="text" [(ngModel)]="time.time" libDebounceInput (debounceEvent)="update(time)" />
+            <input debounced matInput type="text" [(ngModel)]="time.time" (debounceEvent)="update(time)" />
           </mat-form-field>
           <button mat-icon-button (click)="remove(time)">
             <mat-icon>delete</mat-icon>

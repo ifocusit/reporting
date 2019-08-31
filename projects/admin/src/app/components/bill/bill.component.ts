@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
-import { Select } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
 import { mergeMap, map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
@@ -11,6 +11,9 @@ import { CalculateDuration } from 'projects/commons/src/lib/times/calculate-dura
 import { SettingsState } from 'projects/commons/src/lib/settings/settings.store';
 import { Settings } from 'projects/commons/src/lib/settings/settings.model';
 import { ProjectState } from 'projects/commons/src/lib/settings/project.store';
+import { BillService } from '../../services/bill.service';
+import { BillLine } from '../../models/bill.model';
+import { SelectDate, TimesState } from 'projects/commons/src/lib/times/time.store';
 
 @Component({
   selector: 'app-bill',
@@ -22,45 +25,64 @@ export class BillComponent implements OnInit {
   public project$: Observable<string>;
   @Select(SettingsState.settings)
   public settings$: Observable<Settings>;
-  public bill$: Observable<any>;
-  public logo$: Observable<string>;
 
-  constructor(private route: ActivatedRoute, private projectService: ProjectService, private timesService: TimesService) {}
+  @Select(TimesState.selectedDate)
+  public selectedDate$: Observable<moment.Moment>;
+
+  public model$: Observable<any>;
+  public logo$: Observable<string>;
+  public lines$: Observable<BillLine[]>;
+
+  constructor(
+    private route: ActivatedRoute,
+    private projectService: ProjectService,
+    private timesService: TimesService,
+    private billService: BillService,
+    private store: Store
+  ) {}
 
   ngOnInit() {
-    const selectedDate$ = this.route.params.pipe(map(params => moment(params.month, 'YYYY-MM')));
+    this.route.params.pipe(mergeMap(params => this.store.dispatch(new SelectDate(moment(params.month, 'YYYY-MM'))))).subscribe();
 
-    const times$ = selectedDate$.pipe(mergeMap(month => this.timesService.read(month.format(MONTH_ISO_FORMAT))));
+    // work times duration
+    const duration$ = this.selectedDate$.pipe(
+      mergeMap(month => this.timesService.read(month.format(MONTH_ISO_FORMAT))),
+      map(times => CalculateDuration(times))
+    );
 
-    const duration$ = times$.pipe(map(times => CalculateDuration(times)));
+    // potential lines manually added
+    this.lines$ = this.billService.lines$;
 
-    this.bill$ = combineLatest(selectedDate$, this.settings$, times$, duration$).pipe(
-      map(data => ({
-        month: data[0].format(MONTH_ISO_FORMAT),
-        idFacture: `${data[0].format('YYYYMM').replace('20', '2')}1`,
-        duration: data[3], // nb heures totales
-        amount: this.calculateHT(data[3], data[1].bill.hourlyRate),
-        totalHT: this.calculateHT(data[3], data[1].bill.hourlyRate), // same by default
-        totalTVA: this.calculateTVA(data[3], data[1].bill.hourlyRate, data[1].bill.tvaRate),
-        totalTTC: this.calculateTTC(data[3], data[1].bill.hourlyRate, data[1].bill.tvaRate),
-        project: data[1].project,
-        ...data[1].bill // settings
+    // screen model that is a combination of settings, work times duration and manual bill's lines
+    // we subscribe of every compounts' modifications
+    this.model$ = combineLatest(this.selectedDate$, this.settings$, this.lines$, duration$).pipe(
+      map(data => ({ selectedDate: data[0], settings: data[1], lines: data[2], duration: data[3] })),
+      map(({ selectedDate, settings, lines, duration }) => ({
+        month: selectedDate.format(MONTH_ISO_FORMAT),
+        idFacture: `${selectedDate.format('YYYYMM').replace('20', '2')}1`,
+        duration, // nb heures totales
+        amount: this.billService.calculatWorkAmount(duration, settings.bill.hourlyRate),
+        totalHT: this.billService.calculateHT(duration, settings.bill.hourlyRate, lines),
+        totalTVA: this.billService.calculateTVA(duration, settings.bill.hourlyRate, settings.bill.tvaRate, lines),
+        totalTTC: this.billService.calculateTTC(duration, settings.bill.hourlyRate, settings.bill.tvaRate, lines),
+        project: settings.project,
+        ...settings.bill // settings
       }))
     );
 
     this.logo$ = this.project$.pipe(mergeMap(projectName => this.projectService.readLogo(projectName)));
   }
 
-  private calculateHT(duration: moment.Duration, hourlyRate: number) {
-    return duration.asHours() * hourlyRate;
+  public addLine() {
+    this.billService.addLine({ label: 'nouvelle ligne' }).subscribe();
   }
 
-  private calculateTVA(duration: moment.Duration, hourlyRate: number, tvaRate: number) {
-    return (duration.asHours() * hourlyRate * tvaRate) / 100;
+  public updateLine(line) {
+    this.billService.updateLine(line).subscribe();
   }
 
-  private calculateTTC(duration: moment.Duration, hourlyRate: number, tvaRate: number) {
-    return this.calculateHT(duration, hourlyRate) + this.calculateTVA(duration, hourlyRate, tvaRate);
+  public deleteLine(line) {
+    this.billService.deleteLine(line).subscribe();
   }
 
   public print() {
