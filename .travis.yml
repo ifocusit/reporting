@@ -16,16 +16,19 @@ cache:
   directories:
     - './node_modules'
 
-install: npm install
-
-script: npm run build:admin
-
 branches:
   only: master
 
-deploy:
-  provider: firebase
-  token:
-    secure: ogfUXjvZM1UsdizTuItFPsP2DPkiGagbas//t+ra6OVoALGA3YKRTBs+StJj95IAlAnCwsn6ky1it70tHx183+YxFpHWFZkv8sqc8BpJ9G9L4j6fAXDagB4rWZ9oezDwv+4LW/R3mv9zdfyj/0zv4nIW2cfdW5HQL1a/55QyjWh+TR36MkbsnVB2UiciJ4FZWNthzzZcDx/KI+xjgjiHcFuV0ms46UxD9ugqIgVVg8zq7vvbP7ZtbMEwWmLnkDRzy8cBPKLdiGKkj/XdGTUQIa6LI3Ui/5q1niV/LXWG54BBJYj8WaQZGBYgBHrVIFzW98mS3TKgqVVmFQTxxJDPqRxjxwp/STkOSbMfbWp1tilIBEZDNgFuulT9t1fFwnaYXTPMgLIhAoxzPoVA6H0jFXcFp9wqgky3CkeTocc7dfHO4bsS2pWGX77TiIy+UT54X0FSt126OsK9ifXHDvMn2LxaHae3mVdV9+u+C8opKQ8b88K/m1YCqjjodjfHBTGiebWAgDKpiQY159/QmYV7CifcEpCrV4ZyXZyL0xUIb77QegspnmsfObiUbUO10y0/pgq8lug6FYjsHKjq2jHT0sJ6EBEmkDWp75I/x3cLTlRf+de1oT7wwu/hhKM6Ha1OG4oH/YAF0CTDqeTtsV4aWF6AnyqZ/eQg3EBWj19olR4=
-  project: admin-reporting
-  message: Deploy Reporting Administration web app
+before_script:
+  - npm install -g firebase-tools
+  - npm install
+
+script: npm run build:admin
+
+after_success:
+  - npm run deploy:admin --token $FIREBASE_TOKEN --non-interactive
+
+env:
+  global:
+    - GPG_DIR="`pwd`/.travis"
+    - secure: VRYmVbYY2As6XRJEFFsGfXQZLs80WyFj1Ei4xtrUYSBuiasqERUQOzqm8p5ynnmNMh4Q0c9IwrsMyYVnRjHIpkCYYkJ3hZDWw5epTsR3WWgK4cdO5reGufnDtpaAvWl3Sniu9dnKbl2+YiaRiMOll1Xk0DMayTdaRbeF0F/GvcHNRpZpL682gVBELhJ3iMJ/lMUD0iwDD9esMuq/FZzIa60JcTS3Wi4eI8nDhXJVPh7uBFz/T2oOCHLwVzzeUPmivTTYEjdo/mkON6b+B1/7KvofkHJzR1Wo2JJV7PIuyhJiervdr7cnk4aFyiAukEqj8AAzlqSrC3bATDruWYIfvvlACx11LJpS3kgHtMGW8bSdnCMEKqcvF3rJ3FwMDOXMI+xl0DGny+uuCWv5nkwd8bxanJHetLl+T36Uyr6Oi4lBm/WdqJdhp8rrm6NfT3Qqy7zEmK5BnSZGAhKNIryrZ6YZvkb7nKWfEHF9tMtou9RkRsU9OYR0RncGNX3DaSL8mFkegFwMJRzAWm2ZH5t3SPfFTYxfoKiy2foFvPzI6UnHGESKA4aloAqrcN+AYoJIU92TjWG7Sy43GSTk2MjtvTdHEGvWZ7+/cfedOSE1S5yoA2Imo70lg0tnPaUJ4rUWUDRysA+rLQjiNxEe2/6OZpEorOKKxvnD+DGV28SDGuw=
