@@ -5,13 +5,6 @@ language: node_js
 node_js:
   - '10'
 
-#addons:
-#  apt:
-#    sources:
-#      - google-chrome
-#    packages:
-#      - google-chrome-stable
-
 cache:
   directories:
     - './node_modules'
@@ -26,8 +19,9 @@ before_script:
 script:
   - npm run build:admin
   - firebase deploy --only hosting:admin --token $FIREBASE_TOKEN --non-interactive
+  - npm run build:timbrage
+  - firebase deploy --only hosting:timbrage --token $FIREBASE_TOKEN --non-interactive
 
 env:
   global:
-    - GPG_DIR="`pwd`/.travis"
     - secure: VRYmVbYY2As6XRJEFFsGfXQZLs80WyFj1Ei4xtrUYSBuiasqERUQOzqm8p5ynnmNMh4Q0c9IwrsMyYVnRjHIpkCYYkJ3hZDWw5epTsR3WWgK4cdO5reGufnDtpaAvWl3Sniu9dnKbl2+YiaRiMOll1Xk0DMayTdaRbeF0F/GvcHNRpZpL682gVBELhJ3iMJ/lMUD0iwDD9esMuq/FZzIa60JcTS3Wi4eI8nDhXJVPh7uBFz/T2oOCHLwVzzeUPmivTTYEjdo/mkON6b+B1/7KvofkHJzR1Wo2JJV7PIuyhJiervdr7cnk4aFyiAukEqj8AAzlqSrC3bATDruWYIfvvlACx11LJpS3kgHtMGW8bSdnCMEKqcvF3rJ3FwMDOXMI+xl0DGny+uuCWv5nkwd8bxanJHetLl+T36Uyr6Oi4lBm/WdqJdhp8rrm6NfT3Qqy7zEmK5BnSZGAhKNIryrZ6YZvkb7nKWfEHF9tMtou9RkRsU9OYR0RncGNX3DaSL8mFkegFwMJRzAWm2ZH5t3SPfFTYxfoKiy2foFvPzI6UnHGESKA4aloAqrcN+AYoJIU92TjWG7Sy43GSTk2MjtvTdHEGvWZ7+/cfedOSE1S5yoA2Imo70lg0tnPaUJ4rUWUDRysA+rLQjiNxEe2/6OZpEorOKKxvnD+DGV28SDGuw=

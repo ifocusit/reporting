@@ -14,11 +14,17 @@
     "deploy:timbrage": "firebase deploy --only hosting:timbrage",
     "predeploy:timbrage": "npm run build:timbrage",
     "http:timbrage": "npm run build:timbrage && cd dist/timbrage && angular-http-server --open -p 4402",
+    "docker:build:timbrage": "docker build -t ifocusit/reporting/timbrage --build-arg target=timbrage .",
+    "docker:run:timbrage": "docker run -p 4402:80 ifocusit/reporting/timbrage",
+    "docker:upload:timbrage": "docker save ifocusit/reporting/timbrage:latest | ssh -C remote docker load",
     "start:admin": "ng serve --open --port 4401 --project admin",
     "build:admin": "ng build --prod --project admin",
     "deploy:admin": "firebase deploy --only hosting:admin",
     "predeploy:admin": "npm run build:admin",
-    "http:admin": "npm run build:admin && cd dist/admin && angular-http-server --open -p 4401"
+    "http:admin": "npm run build:admin && cd dist/admin && angular-http-server --open -p 4401",
+    "docker:build:admin": "docker build -t ifocusit/reporting/admin --build-arg target=admin .",
+    "docker:run:admin": "docker run -p 4401:80 ifocusit/reporting/admin",
+    "docker:upload:admin": "docker save ifocusit/reporting/admin:latest | ssh -C remote docker load"
   },
   "private": true,
   "dependencies": {
