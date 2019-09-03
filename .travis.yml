@@ -23,10 +23,9 @@ before_script:
   - npm install -g firebase-tools
   - npm install
 
-script: npm run build:admin
-
-after_success:
-  - npm run deploy:admin --token $FIREBASE_TOKEN --non-interactive
+script:
+  - npm run build:admin
+  - firebase deploy --only hosting:admin --token $FIREBASE_TOKEN --non-interactive
 
 env:
   global:
