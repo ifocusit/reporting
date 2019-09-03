@@ -3,29 +3,29 @@ sudo: false
 
 language: node_js
 node_js:
-  - "10"
+  - '10'
 
-addons:
-  apt:
-    sources:
-      - google-chrome
-    packages:
-      - google-chrome-stable
+#addons:
+#  apt:
+#    sources:
+#      - google-chrome
+#    packages:
+#      - google-chrome-stable
 
 cache:
   directories:
-    - ./node_modules
+    - './node_modules'
 
-install:
-  - npm install
+install: npm install
 
-script:
-#  - npm run test -- --watch=false --no-progress --browsers=ChromeHeadlessNoSandbox
-  - npm run build:admin
+script: npm run build:admin
+
+branches:
+  only: master
 
 deploy:
   provider: firebase
   token:
-    secure: "ENCRYPTED_TOKEN"
-  project: "admin"
-  message: "Deploy Reporting Administration web app"
+    secure: ogfUXjvZM1UsdizTuItFPsP2DPkiGagbas//t+ra6OVoALGA3YKRTBs+StJj95IAlAnCwsn6ky1it70tHx183+YxFpHWFZkv8sqc8BpJ9G9L4j6fAXDagB4rWZ9oezDwv+4LW/R3mv9zdfyj/0zv4nIW2cfdW5HQL1a/55QyjWh+TR36MkbsnVB2UiciJ4FZWNthzzZcDx/KI+xjgjiHcFuV0ms46UxD9ugqIgVVg8zq7vvbP7ZtbMEwWmLnkDRzy8cBPKLdiGKkj/XdGTUQIa6LI3Ui/5q1niV/LXWG54BBJYj8WaQZGBYgBHrVIFzW98mS3TKgqVVmFQTxxJDPqRxjxwp/STkOSbMfbWp1tilIBEZDNgFuulT9t1fFwnaYXTPMgLIhAoxzPoVA6H0jFXcFp9wqgky3CkeTocc7dfHO4bsS2pWGX77TiIy+UT54X0FSt126OsK9ifXHDvMn2LxaHae3mVdV9+u+C8opKQ8b88K/m1YCqjjodjfHBTGiebWAgDKpiQY159/QmYV7CifcEpCrV4ZyXZyL0xUIb77QegspnmsfObiUbUO10y0/pgq8lug6FYjsHKjq2jHT0sJ6EBEmkDWp75I/x3cLTlRf+de1oT7wwu/hhKM6Ha1OG4oH/YAF0CTDqeTtsV4aWF6AnyqZ/eQg3EBWj19olR4=
+  project: admin
+  message: Deploy Reporting Administration web app
