@@ -130,7 +130,7 @@ export class BillService {
     return this.readData().pipe(
       mergeMap(data =>
         this.firestorage
-          .upload(`users/${data.user.uid}/${data.project}/${data.month}.png`, bill)
+          .upload(`users/${data.user.uid}/${data.project}/${data.month}.pdf`, bill)
           .snapshotChanges()
           .pipe(
             tap(uploadTask =>
