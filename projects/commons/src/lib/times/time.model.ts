@@ -19,9 +19,7 @@ export class TimeAdapter {
   constructor(private _time: Time) {}
 
   public static createTime(time: string | Moment = moment(), id?: string): Time | null {
-    if (typeof time === 'string') {
-      time = moment(time);
-    }
+    time = moment(time).startOf('minutes');
     if (!time.isValid()) {
       return null;
     }

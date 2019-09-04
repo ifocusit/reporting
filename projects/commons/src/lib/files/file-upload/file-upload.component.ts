@@ -24,20 +24,8 @@ export class FileUploadComponent {
   }
 
   startUpload(event: FileList) {
-    // The File object
     const file = event.item(0);
 
-    // Client-side validation example
-    if (file.type.split('/')[0] !== 'image') {
-      console.error('unsupported file type :( ');
-      return;
-    }
-
-    // const path = `test/${new Date().getTime()}_${file.name}`;
-    // const customMetadata = { app: 'My AngularFire-powered PWA!' };
-    // this.task = this.storage.upload(path, file, { customMetadata });
-
-    // The main task
     this.task$ = this.upload(file).pipe(
       tap(task => {
         if (task.bytesTransferred === task.totalBytes) {

@@ -23,10 +23,6 @@ mat-toolbar {
   padding: 15px;
 }
 
-.capitalize {
-  text-transform: capitalize;
-}
-
 table {
   width: 100%;
   padding: 5em 0;
@@ -98,7 +94,10 @@ table {
   }
 }
 
-
 :host ::ng-deep mat-form-field.mat-form-field-appearance-legacy .mat-form-field-wrapper { padding: 0 !important; }
 :host ::ng-deep mat-form-field.mat-form-field-appearance-legacy .mat-form-field-infix { padding: 0 !important; border-top: 0 !important; }
 :host ::ng-deep mat-form-field.mat-form-field-appearance-legacy .mat-form-field-underline { display: none !important; }
+
+#archiveBill {
+  padding-top: 2em;
+}
