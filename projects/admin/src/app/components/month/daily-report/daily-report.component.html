@@ -1,7 +1,7 @@
 <mat-card class="mat-elevation-z0" (swipeleft)="changeDay(+1)" (swiperight)="changeDay(-1)">
   <mat-card-header>
     <mat-toolbar color="primary">
-      <h1 fxFlex="calc(100%-120px)">{{ workDay.date | moment: 'DD dddd' }}</h1>
+      <h1 fxFlex="calc(100%-120px)" class="capitalize">{{ workDay.date | moment: 'dddd DD' }}</h1>
       <span>total: {{ duration$ | async | duration }}</span>
     </mat-toolbar>
   </mat-card-header>
@@ -20,7 +20,7 @@
       <mat-list>
         <mat-list-item *ngFor="let time of times$ | async">
           <mat-form-field>
-            <input debounced matInput type="text" [(ngModel)]="time.time" (debounceEvent)="update(time)" />
+            <input matInput type="text" [(ngModel)]="time.time" libDebounce (debounceEvent)="update(time)" />
           </mat-form-field>
           <button mat-icon-button (click)="remove(time)">
             <mat-icon>delete</mat-icon>

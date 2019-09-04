@@ -6,9 +6,7 @@ import { Observable } from 'rxjs';
 import { take, map, mergeMap } from 'rxjs/operators';
 import * as moment from 'moment';
 import { Time, TimeAdapter, TIME_ISO_FORMAT, DATETIME_ISO_FORMAT } from 'projects/commons/src/lib/times/time.model';
-import { ProjectState } from 'projects/commons/src/lib/settings/project.store';
 import { TimesService } from 'projects/commons/src/lib/times/times.service';
-import { ProjectService } from 'projects/commons/src/lib/settings/project.service';
 import { CalculateDuration } from 'projects/commons/src/lib/times/calculate-duration.tools';
 import { AddTimes, AddTime, DeleteTime, UpdateTime, DeleteTimes } from 'projects/commons/src/lib/times/time.store';
 import { SettingsState } from 'projects/commons/src/lib/settings/settings.store';
@@ -29,8 +27,7 @@ export class DailyReportComponent implements OnInit {
     public dialogRef: MatDialogRef<DailyReportComponent>,
     @Inject(MAT_DIALOG_DATA) public workDay: { date: Moment },
     private store: Store,
-    private timesService: TimesService,
-    private projectService: ProjectService
+    private timesService: TimesService
   ) {}
 
   ngOnInit() {

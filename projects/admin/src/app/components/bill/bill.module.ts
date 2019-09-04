@@ -7,10 +7,11 @@ import { ReportingCommonModule } from 'projects/commons/src/public-api';
 import { SelectProjectModule } from 'projects/commons/src/lib/settings/select-project/select-project.module';
 import { BillService } from '../../services/bill.service';
 import { FormsModule } from '@angular/forms';
+import { FilesModule } from 'projects/commons/src/lib/files/files.module';
 
 @NgModule({
   declarations: [BillComponent],
   providers: [BillService],
-  imports: [CommonModule, BillRoutingModule, ReportingCommonModule, SelectProjectModule, FormsModule]
+  imports: [CommonModule, BillRoutingModule, ReportingCommonModule, SelectProjectModule, FormsModule, FilesModule]
 })
 export class BillModule {}

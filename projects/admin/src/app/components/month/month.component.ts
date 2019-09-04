@@ -100,7 +100,10 @@ export class MonthComponent implements OnInit {
     );
 
     this.finalTotal$ = combineLatest(this.overtime$, this.total$).pipe(
-      map(pair => pair[1].clone().add(Math.max(pair[0].asHours(), 0) * WEEK_OVERTIME_MAJOR, 'hours'))
+      map(pair => {
+        const duration = pair[1].clone().add(Math.max(pair[0].asHours(), 0) * WEEK_OVERTIME_MAJOR, 'hours');
+        return duration.subtract(duration.seconds(), 'seconds');
+      })
     );
   }
 

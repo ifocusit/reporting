@@ -3,11 +3,8 @@
     <mat-toolbar color="primary">
       <button mat-button [routerLink]="['/month', bill.month]"><mat-icon>arrow_back</mat-icon></button>
 
-      <div fxFlex="calc(100%-280px)">
-        Reporting
-      </div>
-      <lib-select-project defaultName="" readonly="true"></lib-select-project>
-      <button mat-icon-button (click)="print()"><mat-icon>print</mat-icon></button>
+      <div fxFlex="calc(100%-180px)">Facture {{ bill.month | moment: 'YYYY-MM' }}</div>
+      <button mat-icon-button (click)="print()" *ngIf="!bill.archived"><mat-icon>print</mat-icon></button>
       <button mat-icon-button [routerLink]="['/profile']"><mat-icon>person</mat-icon></button>
     </mat-toolbar>
   </header>
@@ -43,15 +40,29 @@
         <tr *ngFor="let line of lines$ | async" class="bill-content">
           <td fxLayout="row" fxLayoutAlign="space-between center" class="label">
             <mat-form-field>
-              <input debounced matInput type="text" [(ngModel)]="line.label" (debounceEvent)="updateLine(line)" />
+              <input
+                libDebounce
+                matInput
+                type="text"
+                [(ngModel)]="line.label"
+                (debounceEvent)="updateLine(line)"
+                [disabled]="bill.archived"
+              />
             </mat-form-field>
-            <button mat-icon-button color="accent" (click)="deleteLine(line)" class="no-print">
+            <button mat-icon-button color="accent" (click)="deleteLine(line)" class="no-print" *ngIf="!bill.archived">
               <mat-icon>delete_forever</mat-icon>
             </button>
           </td>
           <td class="amount">
             <mat-form-field>
-              <input debounced matInput type="text" [(ngModel)]="line.amount" (debounceEvent)="updateLine(line)" />
+              <input
+                libDebounce
+                matInput
+                type="text"
+                [(ngModel)]="line.amount"
+                (debounceEvent)="updateLine(line)"
+                [disabled]="bill.archived"
+              />
             </mat-form-field>
           </td>
         </tr>
@@ -71,9 +82,14 @@
         </tr>
       </tfoot>
     </table>
-    <button id="add-line" mat-fab (click)="addLine()" class="no-print"><mat-icon>add</mat-icon></button>
+    <button id="add-line" mat-fab (click)="addLine()" class="no-print" *ngIf="!bill.archived"><mat-icon>add</mat-icon></button>
 
     <div>Paiement net à 30 jours auprès de:</div>
     <div>Compte postal {{ bill.account?.number }} {{ bill.currency }} / IBAN {{ bill.account?.iban }}</div>
+  </div>
+
+  <div id="archiveBill" class="mat-form-field-wrapper no-print" *ngIf="!bill.archived">
+    <mat-label>Archiver la facture :</mat-label>
+    <lib-file-upload [upload]="archiveBill$"></lib-file-upload>
   </div>
 </div>

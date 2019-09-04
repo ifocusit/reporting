@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
-import { mergeMap, map } from 'rxjs/operators';
+import { mergeMap, map, tap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 import { ProjectService } from 'projects/commons/src/lib/settings/project.service';
@@ -12,7 +12,7 @@ import { SettingsState } from 'projects/commons/src/lib/settings/settings.store'
 import { Settings } from 'projects/commons/src/lib/settings/settings.model';
 import { ProjectState } from 'projects/commons/src/lib/settings/project.store';
 import { BillService } from '../../services/bill.service';
-import { BillLine } from '../../models/bill.model';
+import { BillLine, Bill } from '../../models/bill.model';
 import { SelectDate, TimesState } from 'projects/commons/src/lib/times/time.store';
 
 @Component({
@@ -20,7 +20,7 @@ import { SelectDate, TimesState } from 'projects/commons/src/lib/times/time.stor
   templateUrl: './bill.component.html',
   styleUrls: ['./bill.component.scss']
 })
-export class BillComponent implements OnInit {
+export class BillComponent implements OnInit, OnDestroy {
   @Select(ProjectState.project)
   public project$: Observable<string>;
   @Select(SettingsState.settings)
@@ -32,6 +32,8 @@ export class BillComponent implements OnInit {
   public model$: Observable<any>;
   public logo$: Observable<string>;
   public lines$: Observable<BillLine[]>;
+
+  public archiveBill$ = (file: File) => this.billService.archive(file);
 
   constructor(
     private route: ActivatedRoute,
@@ -53,11 +55,14 @@ export class BillComponent implements OnInit {
     // potential lines manually added
     this.lines$ = this.billService.lines$;
 
+    const bill$ = this.billService.bill$;
+
     // screen model that is a combination of settings, work times duration and manual bill's lines
     // we subscribe of every compounts' modifications
-    this.model$ = combineLatest(this.selectedDate$, this.settings$, this.lines$, duration$).pipe(
-      map(data => ({ selectedDate: data[0], settings: data[1], lines: data[2], duration: data[3] })),
-      map(({ selectedDate, settings, lines, duration }) => ({
+    this.model$ = combineLatest(this.selectedDate$, this.settings$, this.lines$, duration$, bill$).pipe(
+      map(data => ({ selectedDate: data[0], settings: data[1], lines: data[2], duration: data[3], bill: data[4] })),
+      tap(({ selectedDate, settings }) => (document.title = `Facture ${settings.project.name} ${selectedDate.format(MONTH_ISO_FORMAT)}`)),
+      map(({ selectedDate, settings, lines, duration, bill }) => ({
         month: selectedDate.format(MONTH_ISO_FORMAT),
         idFacture: `${selectedDate.format('YYYYMM').replace('20', '2')}1`,
         duration, // nb heures totales
@@ -66,11 +71,16 @@ export class BillComponent implements OnInit {
         totalTVA: this.billService.calculateTVA(duration, settings.bill.hourlyRate, settings.bill.tvaRate, lines),
         totalTTC: this.billService.calculateTTC(duration, settings.bill.hourlyRate, settings.bill.tvaRate, lines),
         project: settings.project,
-        ...settings.bill // settings
+        ...settings.bill, // settings
+        ...bill // saved data
       }))
     );
 
     this.logo$ = this.project$.pipe(mergeMap(projectName => this.projectService.readLogo(projectName)));
+  }
+
+  ngOnDestroy(): void {
+    document.title = 'Reporting';
   }
 
   public addLine() {
