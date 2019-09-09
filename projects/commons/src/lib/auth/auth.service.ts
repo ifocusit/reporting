@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
-import { mergeMap, take, map, filter } from 'rxjs/operators';
-import { User, DEFAULT_USER } from './user.model';
+import { User, DEFAULT_USER } from './user/user.model';
+import { filter, mergeMap, map } from 'rxjs/operators';
 
 @Injectable()
 export class AuthService {
@@ -19,32 +19,5 @@ export class AuthService {
 
   public signOutUser() {
     return this.fireauth.auth.signOut();
-  }
-
-  public updateUser(data: User) {
-    return this.user$.pipe(
-      take(1),
-      mergeMap(user => this.firestore.doc<User>(`users/${user.uid}`).set({ ...data, uid: user.uid }, { merge: true }))
-    );
-  }
-
-  public updateUserData(user: firebase.User) {
-    // Sets user data to firestore on login
-    const data = {
-      uid: user.uid,
-      email: user.email
-    } as User;
-
-    if (user.displayName) {
-      data.displayName = user.displayName;
-    }
-    if (user.photoURL) {
-      data.photoURL = user.photoURL;
-    }
-    if (user.phoneNumber) {
-      data.phoneNumber = user.phoneNumber;
-    }
-
-    return this.firestore.doc(`users/${user.uid}`).set(data, { merge: true });
   }
 }

@@ -8,7 +8,6 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { ProjectState } from 'projects/commons/src/lib/settings/project.store';
 import * as moment from 'moment';
 import { ExportService } from 'projects/commons/src/lib/times/export.service';
-import { User } from 'projects/commons/src/lib/auth/user.model';
 import { AuthService } from 'projects/commons/src/lib/auth/auth.service';
 
 @Component({
@@ -23,16 +22,14 @@ export class ProfileComponent implements OnInit {
     private firestore: AngularFirestore,
     private exportService: ExportService
   ) {}
-  public user$: Observable<User>;
+  public user$ = this.authService.user$;
 
   @ViewChild('export', { static: true }) private exportLink: ElementRef;
 
   @ViewChild('fileSelector', { static: true }) private fileSelector: ElementRef;
   public times: Time[];
 
-  ngOnInit() {
-    this.user$ = this.authService.user$;
-  }
+  ngOnInit() {}
 
   public selectFile() {
     this.fileSelector.nativeElement.click();

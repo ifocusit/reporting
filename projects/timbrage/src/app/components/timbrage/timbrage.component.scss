@@ -73,4 +73,11 @@
   ::ng-deep mat-card mat-card-header div.mat-card-header-text {
     margin: 0;
   }
+
+  
+  @media screen and (max-width: 359px) {
+    #month {
+      max-width: 80px;
+    }
+  }
 }

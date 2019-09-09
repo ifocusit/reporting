@@ -1,18 +1,18 @@
 <mat-card fxLayout="column" class="container mat-elevation-z0">
-  <mat-card-header fxFlex="200px" class="mat-elevation-z1 primary-bg" (swipeleft)="openCalendar()">
+  <mat-card-header fxFlex="200px" class="mat-elevation-z1 primary-bg" (swipeleft)="changeDay(+1)" (swiperight)="changeDay(-1)">
     <div *ngIf="now$ | async as now">
       <span id="date">
-        <span>{{ now | date: 'd' }}</span>
+        <span>{{ now | moment: 'Do' }}</span>
         <span>
-          <span>{{ now | date: 'EEEE' }}</span>
-          <span class="accent-lighter-color">{{ now | date: 'MMMM yyyy' }}</span>
+          <span class="capitalize">{{ now | moment: 'dddd' }}</span>
+          <span id="month" class="accent-lighter-color capitalize">{{ now | moment: 'MMMM YYYY' }}</span>
         </span>
       </span>
       <span id="sumDay">
         <div>Total journalier</div>
         <div>{{ sumDay$ | async | duration }}</div>
       </span>
-      <div id="now">{{ now | date: 'HH:mm:ss' }}</div>
+      <div id="now">{{ now | moment: 'HH:mm:ss' }}</div>
     </div>
   </mat-card-header>
   <mat-card-actions>

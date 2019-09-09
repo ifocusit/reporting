@@ -4,9 +4,8 @@ import { Observable } from 'rxjs';
 import { tap, mergeMap } from 'rxjs/operators';
 import { ProjectState, SelectProject } from 'projects/commons/src/lib/settings/project.store';
 import { ProjectService } from 'projects/commons/src/lib/settings/project.service';
-import { AuthService } from '../../auth/auth.service';
-import { User } from '../../auth/user.model';
-import { Settings } from '../settings.model';
+import { User } from '../../auth/user/user.model';
+import { UserService } from '../../auth/user/user.service';
 
 @Component({
   selector: 'lib-select-project',
@@ -29,10 +28,10 @@ export class SelectProjectComponent implements OnInit {
   @Output()
   public valueChange = new EventEmitter<string>();
 
-  constructor(private store: Store, private projectService: ProjectService, private authService: AuthService) {}
+  constructor(private store: Store, private projectService: ProjectService, private userService: UserService) {}
 
   ngOnInit() {
-    this.user$ = this.authService.user$;
+    this.user$ = this.userService.user$;
     this.projects$ = this.projectService.projects$;
   }
 
@@ -41,7 +40,7 @@ export class SelectProjectComponent implements OnInit {
       .dispatch(new SelectProject(projectName))
       .pipe(
         tap(() => this.valueChange.emit(projectName)),
-        mergeMap(() => this.authService.updateUser({ lastProject: projectName } as User))
+        mergeMap(() => this.userService.updateUser({ lastProject: projectName } as User))
       )
       .subscribe();
   }

@@ -1,14 +1,5 @@
 @import '../../commons/src/lib/themes.scss';
-
-html,
-body {
-  height: 100%;
-}
-
-body {
-  margin: 0;
-  overflow: hidden;
-}
+@import '../../commons/src/lib/commons.scss';
 
 .container {
   width: 100%;

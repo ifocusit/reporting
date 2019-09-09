@@ -5,7 +5,7 @@ import { tap, mergeMap, map, toArray } from 'rxjs/operators';
 import { Select, Store } from '@ngxs/store';
 import * as moment from 'moment';
 import { AuthService } from 'projects/commons/src/lib/auth/auth.service';
-import { User } from 'projects/commons/src/lib/auth/user.model';
+import { User } from 'projects/commons/src/lib/auth/user/user.model';
 import { DEFAULT_SETTINGS, Settings } from 'projects/commons/src/lib/settings/settings.model';
 import { ProjectService } from 'projects/commons/src/lib/settings/project.service';
 import { SaveProject, SelectProject, ProjectState } from 'projects/commons/src/lib/settings/project.store';

@@ -3,7 +3,8 @@ export const DEFAULT_USER = {
   email: 'unknown@nobody.com',
   displayName: 'Invité',
   lastProject: 'Default',
-  isMultiProject: false
+  isMultiProject: false,
+  admin: false
 };
 
 export interface User {
@@ -14,4 +15,5 @@ export interface User {
   phoneNumber?: string;
   lastProject: string;
   isMultiProject: boolean;
+  admin: boolean;
 }

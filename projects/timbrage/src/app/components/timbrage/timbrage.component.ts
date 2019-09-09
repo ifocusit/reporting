@@ -3,7 +3,7 @@ import * as moment from 'moment';
 import { Duration, Moment } from 'moment';
 import { Observable } from 'rxjs/internal/Observable';
 import { Select, Store } from '@ngxs/store';
-import { map, mergeMap } from 'rxjs/operators';
+import { map, mergeMap, take } from 'rxjs/operators';
 import { timer, combineLatest } from 'rxjs';
 import { Router } from '@angular/router';
 import { TimesService } from 'projects/commons/src/lib/times/times.service';
@@ -26,7 +26,16 @@ export class TimbrageComponent implements OnInit {
 
   public times$: Observable<Time[]>; // timbrage du jour
 
-  now$: Observable<Date>; // horloge
+  public now$ = combineLatest(timer(0, 1000), this.selectedDate$).pipe(
+    map(pair => pair[1]),
+    map(date =>
+      moment()
+        .date(date.date())
+        .month(date.month())
+        .year(date.year())
+    )
+  );
+
   sumDay$: Observable<Duration>; // somme des heures travaillées du jour
 
   constructor(
@@ -39,17 +48,32 @@ export class TimbrageComponent implements OnInit {
   ngOnInit() {
     this.times$ = combineLatest(this.project$, this.selectedDate$).pipe(mergeMap(pair => this.timesService.read(pair[1])));
     // basé sur un timer
-    this.now$ = timer(0, 1000).pipe(map(() => new Date()));
     this.sumDay$ = combineLatest(timer(0, 1000), this.times$).pipe(mergeMap(pair => this.calculationService.calculate(pair[1])));
 
     this.store.dispatch(new SelectDate(moment())); // charge le jour en cours
   }
 
   public addTimbrage() {
-    this.store.dispatch(new AddTime(TimeAdapter.createTime()));
+    this.selectedDate$
+      .pipe(
+        take(1),
+        map(date =>
+          moment()
+            .date(date.date())
+            .month(date.month())
+            .year(date.year())
+        ),
+        mergeMap(date => this.store.dispatch(new AddTime(TimeAdapter.createTime(date))))
+      )
+      .subscribe();
   }
 
   public openCalendar() {
     this.router.navigate(['/calendar'], { replaceUrl: true });
+  }
+
+  public changeDay(change: number) {
+    const date = this.store.selectSnapshot(TimesState.selectedDate);
+    this.store.dispatch(new SelectDate(moment(date).add(change, 'day')));
   }
 }

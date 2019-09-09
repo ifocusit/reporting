@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AuthService } from 'projects/commons/src/lib/auth/auth.service';
+import { UserService } from 'projects/commons/src/lib/auth/user/user.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { mergeMap, take, map, catchError, tap } from 'rxjs/operators';
 import { Store } from '@ngxs/store';
@@ -8,7 +8,7 @@ import { Observable, of } from 'rxjs';
 import { BillLine, Bill, DEFAULT_BILL } from '../models/bill.model';
 import { Duration } from 'moment';
 import { TimesState } from 'projects/commons/src/lib/times/time.store';
-import { User } from 'projects/commons/src/lib/auth/user.model';
+import { User } from 'projects/commons/src/lib/auth/user/user.model';
 import * as moment from 'moment';
 import { AngularFireStorage } from '@angular/fire/storage';
 
@@ -21,7 +21,7 @@ interface BillData {
 @Injectable()
 export class BillService {
   constructor(
-    private authService: AuthService,
+    private userService: UserService,
     private firestore: AngularFirestore,
     private firestorage: AngularFireStorage,
     private store: Store
@@ -89,7 +89,7 @@ export class BillService {
   }
 
   private readData(): Observable<BillData> {
-    return this.authService.user$.pipe(
+    return this.userService.user$.pipe(
       mergeMap(user =>
         this.store
           .selectOnce(ProjectState.project)

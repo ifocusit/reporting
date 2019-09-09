@@ -17,9 +17,9 @@ before_script:
   - npm install
 
 script:
-  - npm run build:admin
+  - ng build --prod --project admin
   - firebase deploy --only hosting:admin --token $FIREBASE_TOKEN --non-interactive
-  - npm run build:timbrage
+  - ng build --prod --project timbrage
   - firebase deploy --only hosting:timbrage --token $FIREBASE_TOKEN --non-interactive
 
 env:

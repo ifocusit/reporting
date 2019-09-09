@@ -12,7 +12,7 @@ import { ProjectState } from 'projects/commons/src/lib/settings/project.store';
 import { TimesState, SelectDate } from 'projects/commons/src/lib/times/time.store';
 import { WorkingDateReporting, DEFAULT_DAY_DURATION, WEEK_OVERTIME_MAJOR } from '../../models/working-date-reporting.model';
 import { Time, MONTH_ISO_FORMAT, DATETIME_ISO_FORMAT, TimeAdapter } from 'projects/commons/src/lib/times/time.model';
-import { User } from 'projects/commons/src/lib/auth/user.model';
+import { User } from 'projects/commons/src/lib/auth/user/user.model';
 import { TimesService } from 'projects/commons/src/lib/times/times.service';
 import { AuthService } from 'projects/commons/src/lib/auth/auth.service';
 import { ProjectService } from 'projects/commons/src/lib/settings/project.service';
