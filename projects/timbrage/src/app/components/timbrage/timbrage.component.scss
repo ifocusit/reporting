@@ -43,17 +43,29 @@
         }
       }
 
-      #sumWeek,
-      #sumMonth {
-        color: #e1bee7;
-      }
-
       #now {
         font-size: 2em;
-        padding: 1em 2em 0.2em 0.3em;
+        padding: 0.5em 2em 0.2em 0.3em;
 
         @media screen and (max-width: 320px) {
           padding-left: 0;
+        }
+      }
+
+      #state {
+        opacity: 0.5;
+
+        & > div {
+          display: flex;
+
+          div:nth-child(1) {
+            min-width: 160px;
+          }
+
+          div:nth-child(2) {
+            min-width: 70px;
+            text-align: end;
+          }
         }
       }
     }

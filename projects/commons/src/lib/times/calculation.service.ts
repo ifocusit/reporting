@@ -25,7 +25,7 @@ export class CalculationService {
       .pipe(map(settings => this._calculate(timbrages, settings, manageMissing, setMissingToEndOfDay)));
   }
 
-  private _calculate(timbrages: Array<Time>, settings: Settings, manageMissing = true, setMissingToEndOfDay = false): Duration {
+  private _calculate(timbrages: Array<Time>, settings: Settings, manageMissing: boolean, setMissingToEndOfDay: boolean): Duration {
     let duration = moment.duration();
 
     if (!timbrages || timbrages.length === 0) {
@@ -48,7 +48,7 @@ export class CalculationService {
     return moment.duration(diff);
   }
 
-  private splitPairs(list: Array<Time>, settings: Settings, manageMissing = true, setMissingToEndOfDay = false): Array<Array<Time>> {
+  private splitPairs(list: Array<Time>, settings: Settings, manageMissing: boolean, setMissingToEndOfDay: boolean): Array<Array<Time>> {
     const pairs = [];
     for (let i = 0; i < list.length; i += 2) {
       if (list[i + 1] !== undefined) {

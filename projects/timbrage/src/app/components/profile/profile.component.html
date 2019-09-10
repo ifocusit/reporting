@@ -16,12 +16,16 @@
         <a mat-button *ngIf="times" (click)="cancelImport()">Annuler l'import</a>
 
         <button mat-button (click)="exportAll()">Exporter tous les timbrages</button>
-
         <input #fileSelector type="file" (change)="fileSelected($event)" style="display: none" />
         <a #export style="display: none">hidden link</a>
+
+        <button mat-button (click)="openAdmin()">Ouvrir l'outil administratif</button>
       </div>
 
-      <a mat-button href="mailto:timbrage@ifocusit.ch" target="_blank">Un problème ? Nous écrire.</a>
+      <div fxLayout="column">
+        <a mat-button href="mailto:timbrage@ifocusit.ch" target="_blank">Un problème ? Nous écrire.</a>
+        <lib-copyright></lib-copyright>
+      </div>
     </div>
   </mat-card-content>
 </mat-card>

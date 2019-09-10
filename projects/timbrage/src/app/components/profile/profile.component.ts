@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { Observable, of } from 'rxjs';
 import { Time, TimeAdapter, TimeModel, DATETIME_ISO_FORMAT } from 'projects/commons/src/lib/times/time.model';
 import { Store } from '@ngxs/store';
 import { AddTimes, DeleteTimes } from 'projects/commons/src/lib/times/time.store';
@@ -86,5 +85,9 @@ export class ProfileComponent implements OnInit {
         )
       )
       .subscribe();
+  }
+
+  public openAdmin() {
+    window.open('https://reporting.ifocusit.ch', '_blank');
   }
 }

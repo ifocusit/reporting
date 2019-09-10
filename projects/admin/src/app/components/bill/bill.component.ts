@@ -41,14 +41,14 @@ export class BillComponent implements OnInit, OnDestroy {
     private timesService: TimesService,
     private billService: BillService,
     private store: Store
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.route.params.pipe(mergeMap(params => this.store.dispatch(new SelectDate(moment(params.month, 'YYYY-MM'))))).subscribe();
 
     // work times duration
     const duration$ = this.selectedDate$.pipe(
-      mergeMap(month => this.timesService.read(month.format(MONTH_ISO_FORMAT))),
+      mergeMap(month => this.timesService.read(month, 'month')),
       map(times => CalculateDuration(times))
     );
 

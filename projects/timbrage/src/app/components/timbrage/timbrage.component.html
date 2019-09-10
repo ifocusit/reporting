@@ -13,6 +13,16 @@
         <div>{{ sumDay$ | async | duration }}</div>
       </span>
       <div id="now">{{ now | moment: 'HH:mm:ss' }}</div>
+      <div id="state">
+        <div>
+          <div>total hebdomadaire:</div>
+          <div>{{ sumWeek$ | async | duration }}</div>
+        </div>
+        <div>
+          <div>avancement mensuel:</div>
+          <div>{{ progess$ | async | duration }}</div>
+        </div>
+      </div>
     </div>
   </mat-card-header>
   <mat-card-actions>

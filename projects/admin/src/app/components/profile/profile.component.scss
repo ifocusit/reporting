@@ -1,47 +1,51 @@
-.header {
-  height: 320px;
-  min-height: 320px;
-  max-height: 320px;
-  background: url('/assets/profile-bg.jpg') 0 45% no-repeat;
-  background-size: 100% auto;
-  color: #FFF;
+.content {
+  width: 100%;
+  
+  .header {
+    height: 320px;
+    min-height: 320px;
+    max-height: 320px;
+    background: url('/assets/profile-bg.jpg') 0 45% no-repeat;
+    background-size: 100% auto;
+    color: #FFF;
 
-  & > div {
-    padding-top: 10px;
+    & > div {
+      padding-top: 10px;
+    }
+
+    img {
+      border-radius: 50%;
+    }
   }
 
-  img {
-    border-radius: 50%;
-  }
-}
+  .tab-content {
+    margin: 10px;
 
-.tab-content {
-  margin: 10px;
+    .month {
+      line-height: 80px;
+      margin: 2px;
+      border-radius: 3px;
+      text-align: center;
+      text-transform: uppercase;
+      border-style: solid;
+      cursor: pointer;
+    }
 
-  .month {
-    line-height: 80px;
-    margin: 2px;
-    border-radius: 3px;
-    text-align: center;
-    text-transform: uppercase;
-    border-style: solid;
-    cursor: pointer;
-  }
-
-  form button {
-    margin-top: 20px;
-  }
-}
-
-.theme-picker-content {
-  list-style: none;
-
-  .selected {
-    border: solid red;
+    form button {
+      margin-top: 20px;
+    }
   }
 
-  .color {
-    padding-top: 65px;
-    width: 65px;
+  .theme-picker-content {
+    list-style: none;
+
+    .selected {
+      border: solid red;
+    }
+
+    .color {
+      padding-top: 65px;
+      width: 65px;
+    }
   }
 }
