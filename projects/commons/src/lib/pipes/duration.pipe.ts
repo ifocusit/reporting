@@ -9,8 +9,19 @@ import { DecimalPipe } from '@angular/common';
 export class DurationPipe implements PipeTransform {
   constructor(private decimalPipe: DecimalPipe) {}
 
+  public static clean(duration: Duration) {
+    return duration
+      .clone()
+      .subtract(duration.seconds(), 'seconds')
+      .subtract(duration.milliseconds(), 'milliseconds');
+  }
+
   transform(duration: Duration, unit: unitOfTime.Base): string | number {
-    return duration ? (unit ? this.as(duration, unit) : this.toString(duration)) : '';
+    if (!duration) {
+      return '';
+    }
+    duration = DurationPipe.clean(duration);
+    return unit ? this.as(duration, unit) : this.toString(duration);
   }
 
   private as(duration: Duration, unit: unitOfTime.Base) {

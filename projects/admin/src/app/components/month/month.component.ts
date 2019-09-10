@@ -10,7 +10,11 @@ import { Select, Store } from '@ngxs/store';
 import { DailyReportComponent } from './daily-report/daily-report.component';
 import { ProjectState } from 'projects/commons/src/lib/settings/project.store';
 import { TimesState, SelectDate } from 'projects/commons/src/lib/times/time.store';
-import { WorkingDateReporting, DEFAULT_DAY_DURATION, WEEK_OVERTIME_MAJOR } from '../../models/working-date-reporting.model';
+import {
+  WorkingDateReporting,
+  DEFAULT_DAY_DURATION,
+  WEEK_OVERTIME_MAJOR
+} from 'projects/commons/src/lib/times/working-date-reporting.model';
 import { Time, MONTH_ISO_FORMAT, DATETIME_ISO_FORMAT, TimeAdapter } from 'projects/commons/src/lib/times/time.model';
 import { User } from 'projects/commons/src/lib/auth/user/user.model';
 import { TimesService } from 'projects/commons/src/lib/times/times.service';
@@ -53,7 +57,7 @@ export class MonthComponent implements OnInit {
     private profileSevice: AuthService,
     private store: Store,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.route.params.pipe(mergeMap(params => this.store.dispatch(new SelectDate(moment(params.month, 'YYYY-MM'))))).subscribe();
@@ -92,10 +96,7 @@ export class MonthComponent implements OnInit {
     );
 
     this.finalTotal$ = combineLatest(this.overtime$, this.total$).pipe(
-      map(pair => {
-        const duration = pair[1].clone().add(Math.max(pair[0].asHours(), 0) * WEEK_OVERTIME_MAJOR, 'hours');
-        return duration.subtract(duration.seconds(), 'seconds');
-      })
+      map(pair => pair[1].clone().add(Math.max(pair[0].asHours(), 0) * WEEK_OVERTIME_MAJOR, 'hours'))
     );
   }
 

@@ -4,35 +4,29 @@ import { CalculateDuration } from 'projects/commons/src/lib/times/calculate-dura
 import { Time, TimeAdapter, DATE_ISO_FORMAT, DATETIME_ISO_FORMAT, TIME_ISO_FORMAT } from 'projects/commons/src/lib/times/time.model';
 
 export class WorkingDateReporting {
+  public hasTimes: boolean;
+  public isWeekend: boolean;
+  public isNotComplete: boolean;
   public isHoliday: boolean;
+  public duration: Duration;
 
   constructor(public date: Moment, public times: Time[] = []) {
+    this.isWeekend = [6, 0].indexOf(date.day()) > -1;
+    this.hasTimes = times && times.length > 0;
+    this.isNotComplete = times.length % 2 !== 0;
+
+    this.duration = CalculateDuration(this.times);
+
     // les jours vides et avant le jour en cours sont marqué comme congé
     this.isHoliday = !this.hasTimes && !this.isWeekend && this.date.isBefore(moment().startOf('day'));
-  }
-
-  get duration(): Duration {
-    return CalculateDuration(this.times);
   }
 
   getDatetime(index: number): Moment {
     return new TimeAdapter(this.times[index]).getMoment();
   }
 
-  public get isWeekend(): boolean {
-    return [6, 0].indexOf(this.date.day()) > -1;
-  }
-
   public isSameDate(date: string): boolean {
     return this.date.format(DATE_ISO_FORMAT) === date;
-  }
-
-  get hasTimes(): boolean {
-    return this.times && this.times.length > 0;
-  }
-
-  get isNotComplete(): boolean {
-    return this.times.length % 2 !== 0;
   }
 }
 
