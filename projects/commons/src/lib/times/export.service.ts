@@ -14,7 +14,7 @@ export class ExportService {
   public exportMonth(date: Moment, exportLink: ElementRef) {
     const month = date.format('YYYY-MM');
     this.timesService
-      .read(month)
+      .read(month, 'month')
       .pipe(
         take(1),
         map(times => times.map(time => new TimeAdapter(time).format(DATETIME_ISO_FORMAT))),

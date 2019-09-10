@@ -15,7 +15,6 @@ import { Time, MONTH_ISO_FORMAT, DATETIME_ISO_FORMAT, TimeAdapter } from 'projec
 import { User } from 'projects/commons/src/lib/auth/user/user.model';
 import { TimesService } from 'projects/commons/src/lib/times/times.service';
 import { AuthService } from 'projects/commons/src/lib/auth/auth.service';
-import { ProjectService } from 'projects/commons/src/lib/settings/project.service';
 import { Settings } from 'projects/commons/src/lib/settings/settings.model';
 import { SettingsState } from 'projects/commons/src/lib/settings/settings.store';
 
@@ -52,10 +51,9 @@ export class MonthComponent implements OnInit {
     private timesService: TimesService,
     public dialog: MatDialog,
     private profileSevice: AuthService,
-    private projectService: ProjectService,
     private store: Store,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.route.params.pipe(mergeMap(params => this.store.dispatch(new SelectDate(moment(params.month, 'YYYY-MM'))))).subscribe();
@@ -68,18 +66,12 @@ export class MonthComponent implements OnInit {
 
     this.times$ = combineLatest(this.project$, this.selectedDate$).pipe(
       map(pair => pair[1]),
-      mergeMap(month => this.timesService.read(month.format(MONTH_ISO_FORMAT)))
+      mergeMap(month => this.timesService.read(month, 'month'))
     );
 
     this.items$ = combineLatest(this.days$, this.times$).pipe(
       map(pair =>
         pair[0].map(day => new WorkingDateReporting(day.date, pair[1].filter(time => day.isSameDate(new TimeAdapter(time).getDay()))))
-      ),
-      tap(days =>
-        // tous les jours vides et non avant le jour en cours sont marqué comme congé
-        days
-          .filter(day => !day.hasTimes && !day.isWeekend && day.date.isBefore(moment().startOf('day')))
-          .forEach(day => (day.isHoliday = true))
       )
     );
 

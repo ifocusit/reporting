@@ -1,5 +1,6 @@
 <mat-card fxLayout="column" class="container mat-elevation-z0">
-  <mat-card-header fxFlex="200px" class="mat-elevation-z1 primary-bg" (swipeleft)="changeDay(+1)" (swiperight)="changeDay(-1)">
+  <mat-card-header fxFlex="200px" class="mat-elevation-z1 primary-bg" (swipeleft)="changeDay(+1)"
+    (swiperight)="changeDay(-1)">
     <div *ngIf="now$ | async as now">
       <span id="date">
         <span>{{ now | moment: 'Do' }}</span>
@@ -13,6 +14,8 @@
         <div>{{ sumDay$ | async | duration }}</div>
       </span>
       <div id="now">{{ now | moment: 'HH:mm:ss' }}</div>
+      <div class="accent-lighter-color">total mensuel: {{ sumWeek$ | async | duraction }}</div>
+      <div class="accent-lighter-color">avancement dans le mois: {{ courseMonth$ | async | duraction }}</div>
     </div>
   </mat-card-header>
   <mat-card-actions>

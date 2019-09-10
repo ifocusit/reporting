@@ -9,18 +9,26 @@ import { ProjectState } from '../settings/project.store';
 import { Store } from '@ngxs/store';
 import { AuthService } from '../auth/auth.service';
 
+export type Unit = ('day' | 'week' | 'month');
+
 @Injectable()
 export class TimesService {
-  constructor(private firestore: AngularFirestore, private authService: AuthService, private store: Store) {}
+  constructor(private firestore: AngularFirestore, private authService: AuthService, private store: Store) { }
 
-  public read(date: string | Moment): Observable<Time[]> {
+  public read(date: string | Moment, unit: Unit = 'day'): Observable<Time[]> {
     // define timestamp range
     let start = moment(date).startOf('day');
     let end = moment(date).endOf('day');
-    if (typeof date === 'string' && date.length === MONTH_ISO_FORMAT.length) {
+
+    if (unit === 'month') {
       start = start.startOf('month');
       end = end.endOf('month');
+
+    } else if (unit === 'week') {
+      start = start.startOf('week');
+      end = end.endOf('week');
     }
+
     return this.readBetween(start, end);
   }
 

@@ -4,7 +4,12 @@ import { CalculateDuration } from 'projects/commons/src/lib/times/calculate-dura
 import { Time, TimeAdapter, DATE_ISO_FORMAT, DATETIME_ISO_FORMAT, TIME_ISO_FORMAT } from 'projects/commons/src/lib/times/time.model';
 
 export class WorkingDateReporting {
-  constructor(public date: Moment, public times: Time[] = [], public isHoliday = false) {}
+  public isHoliday: boolean;
+
+  constructor(public date: Moment, public times: Time[] = []) {
+    // les jours vides et avant le jour en cours sont marqué comme congé
+    this.isHoliday = !this.hasTimes && !this.isWeekend && this.date.isBefore(moment().startOf('day'));
+  }
 
   get duration(): Duration {
     return CalculateDuration(this.times);

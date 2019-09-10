@@ -45,7 +45,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     private store: Store,
     private projectService: ProjectService,
     private router: Router
-  ) {}
+  ) { }
 
   private static getMonthDays(selectedDate: Moment): Moment[] {
     const days = [];
@@ -80,7 +80,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.month$ = combineLatest(this.project$, this.selectedDate$).pipe(
-      mergeMap(pair => this.timesService.read(pair[1].format(MONTH_ISO_FORMAT)))
+      mergeMap(pair => this.timesService.read(pair[1], 'month'))
     );
 
     this.times$ = combineLatest(this.selectedDate$, this.month$).pipe(
@@ -102,7 +102,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.select(moment()); // charge le jour en cours par défaut
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() { }
 
   public changeMonth(change: number) {
     this.store.dispatch(new MoveMonth(change));
