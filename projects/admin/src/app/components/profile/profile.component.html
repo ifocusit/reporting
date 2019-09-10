@@ -1,4 +1,4 @@
-<ng-container *ngIf="settings$ | async as settings">
+<div *ngIf="settings$ | async as settings" fxLayout="column" fxLayoutAlign="space-between start" fxFill>
   <mat-toolbar color="primary">
     <div fxFlex="calc(100%-300px)">
       Profile
@@ -121,4 +121,5 @@
       </mat-tab>
     </mat-tab-group>
   </div>
-</ng-container>
+  <lib-copyright></lib-copyright>
+</div>
