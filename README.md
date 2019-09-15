@@ -8,16 +8,16 @@ Read [CONTRIBUTING](CONTRIBUTING.md) file to contrib
 
 ## Timbrage application
 
-![Timbrages quotidiens](docs/screenshots/timbrage/timbrage.png=250x)
+![Timbrages quotidiens](/docs/screenshots/timbrage/timbrage.png=250x)
 
-![Timbrages mensuels](docs/screenshots/timbrage/bill.png=250x)
+![Timbrages mensuels](/docs/screenshots/timbrage/bill.png=250x)
 
-![Profile](docs/screenshots/timbrage/profile.png=250x)
+![Profile](/docs/screenshots/timbrage/profile.png=250x)
 
 ## Adminstration application
 
-![Rapport mensuelle](docs/screenshots/admin/month.png=250x)
+![Rapport mensuelle](/docs/screenshots/admin/month.png=250x)
 
-![Facture mensuelle](docs/screenshots/admin/bill.png=250x)
+![Facture mensuelle](/docs/screenshots/admin/bill.png=250x)
 
-![Profile](docs/screenshots/admin/profile.png=250x)
+![Profile](/docs/screenshots/admin/profile.png=250x)
