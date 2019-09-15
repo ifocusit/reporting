@@ -1,20 +1,16 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { User, DEFAULT_USER } from './user/user.model';
-import { filter, mergeMap, map } from 'rxjs/operators';
+import { User } from './user/user.model';
+import { UserService } from './user/user.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private fireauth: AngularFireAuth, private firestore: AngularFirestore) {}
+  constructor(private fireauth: AngularFireAuth, private firestore: AngularFirestore, private userService: UserService) {}
 
   public get user$(): Observable<User> {
-    return this.fireauth.user.pipe(
-      filter(user => !!user),
-      mergeMap(user => this.firestore.doc<User>(`users/${user.uid}`).valueChanges()),
-      map(user => ({ ...DEFAULT_USER, ...user }))
-    );
+    return this.userService.user$;
   }
 
   public signOutUser() {

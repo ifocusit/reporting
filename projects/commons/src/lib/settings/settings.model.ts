@@ -37,7 +37,7 @@ export const DEFAULT_SETTINGS: Settings = {
     exportFormat: 'YYYY-MM-DD HH:mm'
   },
   bill: {
-    hourlyRate: 1,
+    hourlyRate: 50,
     currency: 'CHF',
     tvaRate: 7.7
   }
