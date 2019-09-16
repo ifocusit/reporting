@@ -1,6 +1,3 @@
-<mat-toolbar>
-  <span *ngIf="user$ | async as user">{{ user.email }}</span>
-  <button mat-button (click)="signout()">Quit</button>
-</mat-toolbar>
+<h1>Welcome to {{ title }}!</h1>
 
 <router-outlet></router-outlet>

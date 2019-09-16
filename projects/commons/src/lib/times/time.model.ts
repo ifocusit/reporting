@@ -16,7 +16,7 @@ export interface Time {
 }
 
 export class TimeAdapter {
-  constructor(private _time: Time) {}
+  constructor(private innertime: Time) {}
 
   public static createTime(time: string | Moment = moment(), id?: string): Time | null {
     time = moment(time).startOf('minutes');
@@ -30,15 +30,15 @@ export class TimeAdapter {
   }
 
   get time() {
-    return this._time;
+    return this.innertime;
   }
 
   public getDate(): Date {
-    return new Date(this._time.time);
+    return new Date(this.innertime.time);
   }
 
   public getMoment(): Moment {
-    return moment(this._time.time);
+    return moment(this.innertime.time);
   }
 
   get hours(): number {
@@ -46,7 +46,7 @@ export class TimeAdapter {
   }
 
   set hours(hour: number) {
-    this._time.time = this.getMoment()
+    this.innertime.time = this.getMoment()
       .hours(hour)
       .format(DATETIME_ISO_FORMAT);
   }
@@ -56,7 +56,7 @@ export class TimeAdapter {
   }
 
   set minutes(minute: number) {
-    this._time.time = this.getMoment()
+    this.innertime.time = this.getMoment()
       .minutes(minute)
       .format(DATETIME_ISO_FORMAT);
   }
