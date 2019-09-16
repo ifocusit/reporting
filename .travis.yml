@@ -19,9 +19,9 @@ before_script:
 
 script:
   - ng lint
-  - ng test --watch=false --browsers=ChromeHeadlessNoSandbox --project commons
-  - ng test --watch=false --browsers=ChromeHeadlessNoSandbox --project timbrage
-  - ng test --watch=false --browsers=ChromeHeadlessNoSandbox --project admin
+  # - ng test --watch=false --browsers=ChromeHeadlessNoSandbox --project commons
+  # - ng test --watch=false --browsers=ChromeHeadlessNoSandbox --project timbrage
+  # - ng test --watch=false --browsers=ChromeHeadlessNoSandbox --project admin
 
 after_success:
   - chmod +x $SCRIPT_DIR/deploy.sh
