@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { mergeMap, take, map, filter } from 'rxjs/operators';
-import { User, DEFAULT_USER } from './user.model';
+import { filter, map, mergeMap, take } from 'rxjs/operators';
+import { DEFAULT_USER, User } from './user.model';
 
 @Injectable()
 export class UserService {
@@ -12,8 +12,12 @@ export class UserService {
   public get user$(): Observable<User> {
     return this.fireauth.user.pipe(
       filter(user => !!user),
-      mergeMap(user => this.firestore.doc<User>(`users/${user.uid}`).valueChanges()),
-      map(user => ({ ...DEFAULT_USER, ...user }))
+      mergeMap(user =>
+        this.firestore
+          .doc<User>(`users/${user.uid}`)
+          .valueChanges()
+          .pipe(map(userData => ({ ...DEFAULT_USER, ...user, ...userData })))
+      )
     );
   }
 
