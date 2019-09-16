@@ -8,16 +8,16 @@ Read [CONTRIBUTING](CONTRIBUTING.md) file to contrib
 
 ## Timbrage application
 
-<img src="/docs/screenshots/timbrage/timbrage.png" alt="Timbrages quotidiens" width="250px>
+<img src="https://github.com/jboz/reporting/raw/master/docs/screenshots/timbrage/timbrage.png" alt="Timbrages quotidiens" width="250px>
 
-![Timbrages mensuels](/docs/screenshots/timbrage/bill.png=250x)
+<img src="https://github.com/jboz/reporting/raw/master/docs/screenshots/timbrage/bill.png" alt="Timbrages mensuels" width="250px>
 
-![Profile](/docs/screenshots/timbrage/profile.png=250x)
+<img src="https://github.com/jboz/reporting/raw/master/docs/screenshots/timbrage/profile.png" alt="Profile" width="250px>
 
 ## Adminstration application
 
-![Rapport mensuelle](/docs/screenshots/admin/month.png=250x)
+<img src="https://github.com/jboz/reporting/raw/master/docs/screenshots/admin/month.png" alt="Rapport mensuel" width="250px>
 
-![Facture mensuelle](/docs/screenshots/admin/bill.png=250x)
+<img src="https://github.com/jboz/reporting/raw/master/docs/screenshots/admin/bill.png" alt="Facture mensuelle" width="250px>
 
-![Profile](/docs/screenshots/admin/profile.png=250x)
+<img src="https://github.com/jboz/reporting/raw/master/docs/screenshots/admin/profile.png" alt="Profile" width="250px>
