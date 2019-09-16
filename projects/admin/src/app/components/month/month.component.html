@@ -21,24 +21,26 @@
     <mat-table id="times" [dataSource]="items$" class="mat-elevation-z8 reports">
       <ng-container matColumnDef="date">
         <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
-        <mat-cell *matCellDef="let time">{{ time.date | moment: 'DD dddd' }}</mat-cell>
+        <mat-cell *matCellDef="let time" fxFlex="110px">{{ time.date | moment: 'DD dddd' }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="type">
         <mat-header-cell *matHeaderCellDef></mat-header-cell>
-        <mat-cell *matCellDef="let time">{{ time.isHoliday ? 'congé' : '' }}</mat-cell>
+        <mat-cell *matCellDef="let time" fxFlex="auto" class="holiday">
+          <span>{{ time.isHoliday ? 'congé' : '' }}</span>
+        </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="duration">
         <mat-header-cell *matHeaderCellDef></mat-header-cell>
-        <mat-cell *matCellDef="let time" fxFlex="100px">
+        <mat-cell *matCellDef="let time" fxFlex="80px">
           {{ time.duration | duration }}
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="decimal">
         <mat-header-cell *matHeaderCellDef>Total journalier</mat-header-cell>
-        <mat-cell *matCellDef="let time" fxFlex="100px">{{ time.duration?.asHours() | number: '2.2-2' }} </mat-cell>
+        <mat-cell *matCellDef="let time" fxFlex="80px">{{ time.duration?.asHours() | number: '2.2-2' }} </mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="['date', 'type', 'duration', 'decimal']"></mat-header-row>
