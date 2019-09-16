@@ -13,11 +13,15 @@ branches:
   only: master
 
 before_script:
+  - npm install -g @angular/cli
   - npm install -g firebase-tools
   - npm install
 
 script:
-  - ng test
+  - ng lint
+  - ng test --watch=false --browsers=ChromeHeadlessNoSandbox --project commons
+  - ng test --watch=false --browsers=ChromeHeadlessNoSandbox --project timbrage
+  - ng test --watch=false --browsers=ChromeHeadlessNoSandbox --project admin
 
 after_success:
   - chmod +x $SCRIPT_DIR/deploy.sh
