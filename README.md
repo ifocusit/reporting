@@ -8,7 +8,7 @@ Read [CONTRIBUTING](CONTRIBUTING.md) file to contrib
 
 ## Timbrage application
 
-![Timbrages quotidiens](/docs/screenshots/timbrage/timbrage.png=250x)
+<img src="/docs/screenshots/timbrage/timbrage.png" alt="Timbrages quotidiens" width="250px>
 
 ![Timbrages mensuels](/docs/screenshots/timbrage/bill.png=250x)
 
