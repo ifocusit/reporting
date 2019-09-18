@@ -146,7 +146,8 @@
             "assets": [
               "projects/timbrage/src/favicon.ico.png",
               "projects/timbrage/src/assets",
-              "projects/timbrage/src/manifest.webmanifest"
+              "projects/timbrage/src/manifest.webmanifest",
+              "projects/timbrage/src/.well-known/assetlinks.json"
             ],
             "styles": [
               "node_modules/firebaseui/dist/firebaseui.css",
