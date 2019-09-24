@@ -1,6 +1,6 @@
+import { DecimalPipe } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
 import { Duration, unitOfTime } from 'moment';
-import { DecimalPipe } from '@angular/common';
 
 @Pipe({
   name: 'duration',
@@ -33,6 +33,7 @@ export class DurationPipe implements PipeTransform {
       .toISOString()
       .replace('P', '')
       .replace('T', '')
+      .replace('0D', '-')
       .toLocaleLowerCase();
   }
 }
