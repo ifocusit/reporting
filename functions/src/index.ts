@@ -17,6 +17,15 @@ const transporter = nodemailer.createTransport({
   }
 });
 
+const sendMailToAdmin = function(message: { subject: string; body: string }) {
+  return transporter.sendMail({
+    from: functions.config().mail.admin.from,
+    to: functions.config().mail.admin.to,
+    subject: message.subject,
+    html: message.body
+  });
+};
+
 const sendWelcomeEmail = function(user: UserRecord) {
   const dest = user.email;
   const displayName = user.displayName;
@@ -28,7 +37,9 @@ const sendWelcomeEmail = function(user: UserRecord) {
     html: `Welcome ${displayName}`
   };
 
-  return transporter.sendMail(mailOptions);
+  return sendMailToAdmin({ subject: `New user`, body: `email: ${user.email}<br>displayName: ${user.displayName}` }).then(() =>
+    transporter.sendMail(mailOptions)
+  );
 };
 
 exports.userOnCreate = functions.auth.user().onCreate((user: UserRecord) => {
