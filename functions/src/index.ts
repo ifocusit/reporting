@@ -5,9 +5,9 @@ import * as nodemailer from 'nodemailer';
 // Start writing Firebase Functions
 // https://firebase.google.com/docs/functions/typescript
 
-export const helloWorld = functions.https.onRequest((request, response) => {
-  response.send('Hello World!');
-});
+// export const helloWorld = functions.https.onRequest((request, response) => {
+//   response.send('Hello World!');
+// });
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -27,19 +27,20 @@ const sendMailToAdmin = function(message: { subject: string; body: string }) {
 };
 
 const sendWelcomeEmail = function(user: UserRecord) {
-  const dest = user.email;
-  const displayName = user.displayName;
+  // const dest = user.email;
+  // const displayName = user.displayName;
 
-  const mailOptions = {
-    from: functions.config().mail.from, // contact email adresse
-    to: dest,
-    subject: `Welcome!`,
-    html: `Welcome ${displayName}`
-  };
+  // const mailOptions = {
+  //   from: functions.config().mail.from, // contact email adresse
+  //   to: dest,
+  //   subject: `Welcome!`,
+  //   html: `Welcome ${displayName}`
+  // };
 
-  return sendMailToAdmin({ subject: `New user`, body: `email: ${user.email}<br>displayName: ${user.displayName}` }).then(() =>
-    transporter.sendMail(mailOptions)
-  );
+  return sendMailToAdmin({ subject: `New user`, body: `${JSON.stringify(user)}` });
+  //.then(() =>
+  //  transporter.sendMail(mailOptions)
+  //)
 };
 
 exports.userOnCreate = functions.auth.user().onCreate((user: UserRecord) => {
