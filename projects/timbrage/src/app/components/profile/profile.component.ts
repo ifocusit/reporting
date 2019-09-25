@@ -1,13 +1,16 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { Time, TimeAdapter, TimeModel, DATETIME_ISO_FORMAT } from 'projects/commons/src/lib/times/time.model';
-import { Store } from '@ngxs/store';
-import { AddTimes, DeleteTimes } from 'projects/commons/src/lib/times/time.store';
-import { mergeMap, take, tap, map, filter } from 'rxjs/operators';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { ProjectState } from 'projects/commons/src/lib/settings/project.store';
+import { Store } from '@ngxs/store';
 import * as moment from 'moment';
-import { ExportService } from 'projects/commons/src/lib/times/export.service';
 import { AuthService } from 'projects/commons/src/lib/auth/auth.service';
+import { User } from 'projects/commons/src/lib/auth/user/user.model';
+import { UserService } from 'projects/commons/src/lib/auth/user/user.service';
+import { ProjectState } from 'projects/commons/src/lib/settings/project.store';
+import { ExportService } from 'projects/commons/src/lib/times/export.service';
+import { DATETIME_ISO_FORMAT, Time, TimeAdapter, TimeModel } from 'projects/commons/src/lib/times/time.model';
+import { AddTimes, DeleteTimes } from 'projects/commons/src/lib/times/time.store';
+import { TranslationService } from 'projects/commons/src/lib/translation/translation.service';
+import { filter, mergeMap, take, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-profile',
@@ -15,18 +18,21 @@ import { AuthService } from 'projects/commons/src/lib/auth/auth.service';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  constructor(
-    private authService: AuthService,
-    private store: Store,
-    private firestore: AngularFirestore,
-    private exportService: ExportService
-  ) {}
   public user$ = this.authService.user$;
 
   @ViewChild('export', { static: true }) private exportLink: ElementRef;
 
   @ViewChild('fileSelector', { static: true }) private fileSelector: ElementRef;
   public times: Time[];
+
+  constructor(
+    private authService: AuthService,
+    private store: Store,
+    private firestore: AngularFirestore,
+    private exportService: ExportService,
+    private userService: UserService,
+    private translationService: TranslationService
+  ) {}
 
   ngOnInit() {}
 
@@ -89,5 +95,12 @@ export class ProfileComponent implements OnInit {
 
   public openAdmin() {
     window.open('https://reporting.ifocusit.ch', '_blank');
+  }
+
+  public setLang(lang: string) {
+    this.userService
+      .updateUser({ lang } as User)
+      .pipe(tap(() => this.translationService.loadLang(lang)))
+      .subscribe();
   }
 }

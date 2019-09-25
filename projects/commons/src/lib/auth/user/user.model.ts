@@ -4,7 +4,8 @@ export const DEFAULT_USER = {
   displayName: 'Invité',
   lastProject: 'Default',
   isMultiProject: false,
-  admin: false
+  admin: false,
+  lang: 'fr'
 };
 
 export interface User {
@@ -16,4 +17,5 @@ export interface User {
   lastProject: string;
   isMultiProject: boolean;
   admin: boolean;
+  lang: string;
 }

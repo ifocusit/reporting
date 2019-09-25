@@ -2,19 +2,23 @@
   <header>
     <mat-toolbar color="primary" class="mat-elevation-z8" fxLayout="row" fxLayoutAlign="space-between center">
       <button *ngIf="profilePage()" mat-icon-button [routerLink]="['/timbrage']"><mat-icon>arrow_back</mat-icon></button>
-      <span *ngIf="profilePage()" fxFlex="calc(100%-180px)">Profile</span>
+      <span *ngIf="profilePage()" fxFlex="calc(100%-180px)">{{ 'profile.title' | translate }}</span>
       <!-- <span *ngIf="timbragePage()">Timbrage</span> -->
       <!-- <span *ngIf="calendarPage()">Calendrier</span> -->
-      <span *ngIf="loginPage()">Connection</span>
-      <lib-select-project defaultName="Timbrage" *ngIf="timbragePage()" fxFlex="calc(100%-80px)"></lib-select-project>
-      <lib-select-project defaultName="Calendar" *ngIf="calendarPage()" fxFlex="calc(100%-120px)"></lib-select-project>
-      <button mat-icon-button (click)="goToday()" *ngIf="calendarPage() || timbragePage()">Auj.</button>
+      <span *ngIf="loginPage()">{{ 'toolbar.connection' | translate }}</span>
+      <lib-select-project [defaultName]="'timbrage.title' | translate" *ngIf="timbragePage()" fxFlex="calc(100%-80px)"></lib-select-project>
+      <lib-select-project
+        [defaultName]="'calendar.title' | translate"
+        *ngIf="calendarPage()"
+        fxFlex="calc(100%-120px)"
+      ></lib-select-project>
+      <button mat-icon-button (click)="goToday()" *ngIf="calendarPage() || timbragePage()">{{ 'toolbar.goToday' | translate }}</button>
       <button mat-icon-button (click)="exportMonth()" *ngIf="calendarPage()">
         <mat-icon>get_app</mat-icon>
       </button>
       <a #export style="display: none">hidden link</a>
       <button *ngIf="!profilePage() && !loginPage()" mat-icon-button [routerLink]="['/profile']"><mat-icon>settings</mat-icon></button>
-      <button *ngIf="profilePage()" mat-button (click)="signOut()">Logout</button>
+      <button *ngIf="profilePage()" mat-button (click)="signOut()"></button>
     </mat-toolbar>
   </header>
 
@@ -33,7 +37,7 @@
           #rla="routerLinkActive"
           [active]="rla.isActive"
           replaceUrl="true"
-          >{{ link.label }}</a
+          >{{ link.label | translate }}</a
         >
         <!-- <a mat-tab-link (click)="open('/timbrage')" routerLinkActive #rla="routerLinkActive" [active]="rla.isActive">Timbrage</a> -->
         <!-- <a mat-tab-link (click)="open('/timbrage')" routerLinkActive #rla="routerLinkActive" [active]="rla.isActive">Calendrier</a> -->

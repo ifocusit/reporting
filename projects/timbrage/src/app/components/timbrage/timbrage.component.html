@@ -9,17 +9,17 @@
         </span>
       </span>
       <span id="sumDay">
-        <div>Total journalier</div>
+        <div>{{ 'timbrage.sumDay' | translate }}</div>
         <div>{{ sumDay$ | async | duration }}</div>
       </span>
       <div id="now">{{ now | moment: 'HH:mm:ss' }}</div>
       <div id="state">
         <div>
-          <div>total hebdomadaire:</div>
+          <div>{{ 'timbrage.state.week' | translate }}</div>
           <div>{{ sumWeek$ | async | duration }}</div>
         </div>
         <div>
-          <div>avancement mensuel:</div>
+          <div>{{ 'timbrage.state.month' | translate }}</div>
           <div>{{ progess$ | async | duration }}</div>
         </div>
       </div>

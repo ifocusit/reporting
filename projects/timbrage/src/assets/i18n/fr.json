@@ -1,0 +1,42 @@
+{
+  "profile": {
+    "title": "Profile",
+    "import": {
+      "launch": "Importer des timbrages à partir d'un fichier csv",
+      "cancel": "Annuler l'import"
+    },
+    "export": "Exporter tous les timbrages",
+    "openAdmin": "Ouvrir l'outil administratif",
+    "contact": {
+      "message": "Un problème ? Une question ? N'hésitez pas à nous écrire !",
+      "email": "support@ifocusit.ch"
+    },
+    "lang": "Langue"
+  },
+  "timbrage": {
+    "title": "Timbrage",
+    "sumDay": "Total journalier",
+    "state": {
+      "week": "total hebdomadaire:",
+      "month": "avancement mensuel:"
+    }
+  },
+  "calendar": {
+    "title": "Calendrier",
+    "weekDays": "Di, Lu, Ma, Me, Je, Ve, Sa"
+  },
+  "toolbar": {
+    "connection": "Connection",
+    "logout": "Logout",
+    "goToday": "Auj."
+  },
+  "messages": {
+    "update": "Une nouvelle version est disponible. Voulez-vous la charger ?"
+  },
+  "time": {
+    "start": "début",
+    "end": "fin",
+    "cancel": "ANNULER",
+    "ok": "OK"
+  }
+}

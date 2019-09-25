@@ -1,5 +1,5 @@
-<mat-card fxLayout="column" class="container">
-  <mat-card-header fxLayout="column" fxLayoutAlign="center center" *ngIf="user$ | async as user">
+<mat-card fxLayout="column" class="container" *ngIf="user$ | async as user">
+  <mat-card-header fxLayout="column" fxLayoutAlign="center center">
     <img *ngIf="user.photoURL; else defaultProfileIcon" [src]="user.photoURL" />
     <ng-template #defaultProfileIcon>
       <img src="/assets/profile_default_icon.png" />
@@ -10,20 +10,26 @@
   <mat-card-content>
     <div fxLayout="column" fxLayoutAlign="space-between start" fxFill>
       <div fxLayout="column" fxLayoutAlign="start start">
-        <a mat-button *ngIf="!times" color="secondary" (click)="selectFile()">
-          Importer des timbrages à partir d'un fichier csv
-        </a>
-        <a mat-button *ngIf="times" (click)="cancelImport()">Annuler l'import</a>
+        <mat-button-toggle-group name="lang">
+          <mat-button-toggle value="fr" [checked]="user.lang === 'fr'" (change)="setLang('fr')">FR</mat-button-toggle>
+          <mat-button-toggle value="en" [checked]="user.lang === 'en'" (change)="setLang('en')">EN</mat-button-toggle>
+        </mat-button-toggle-group>
 
-        <button mat-button (click)="exportAll()">Exporter tous les timbrages</button>
+        <a mat-button *ngIf="!times" color="secondary" (click)="selectFile()">
+          {{ 'profile.import.launch' | translate }}
+        </a>
+        <a mat-button *ngIf="times" (click)="cancelImport()">{{ 'profile.import.cancel' | translate }}</a>
+
+        <button mat-button (click)="exportAll()">{{ 'profile.export' | translate }}</button>
         <input #fileSelector type="file" (change)="fileSelected($event)" style="display: none" />
         <a #export style="display: none">hidden link</a>
 
-        <button mat-button (click)="openAdmin()">Ouvrir l'outil administratif</button>
+        <button mat-button (click)="openAdmin()">{{ 'profile.openAdmin' | translate }}</button>
       </div>
 
-      <div fxLayout="column">
-        <a mat-button href="mailto:timbrage@ifocusit.ch" target="_blank">Un problème ? Nous écrire.</a>
+      <div fxLayout="column" fxLayoutAlign="start start">
+        <a mat-button href="mailto:timbrage@ifocusit.ch" target="_blank">{{ 'profile.contact.message' | translate }}</a>
+        <a mat-button href="mailto:timbrage@ifocusit.ch" target="_blank">{{ 'profile.contact.email' | translate }}</a>
         <lib-copyright></lib-copyright>
       </div>
     </div>
