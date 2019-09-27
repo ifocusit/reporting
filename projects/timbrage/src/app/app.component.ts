@@ -31,6 +31,7 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.translationService.loadLang('fr');
     if (this.swUpdate.isEnabled) {
       this.swUpdate.available
         .pipe(
