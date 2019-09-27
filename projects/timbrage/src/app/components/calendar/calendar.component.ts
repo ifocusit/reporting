@@ -1,18 +1,18 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable } from 'rxjs/internal/Observable';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { Select, Store } from '@ngxs/store';
 import * as moment from 'moment';
 import { Duration, Moment } from 'moment';
-import { map, mergeMap, take, tap } from 'rxjs/operators';
-import { Select, Store } from '@ngxs/store';
-import { combineLatest } from 'rxjs';
-import { Router } from '@angular/router';
-import { Time, MONTH_ISO_FORMAT, DATE_ISO_FORMAT, TimeAdapter } from 'projects/commons/src/lib/times/time.model';
-import { TimesState, MoveMonth, SelectDate, AddTimes } from 'projects/commons/src/lib/times/time.store';
-import { CalculationService } from 'projects/commons/src/lib/times/calculation.service';
-import { TimesService } from 'projects/commons/src/lib/times/times.service';
-import { ProjectService } from 'projects/commons/src/lib/settings/project.service';
 import { ProjectState } from 'projects/commons/src/lib/settings/project.store';
 import { SettingsState } from 'projects/commons/src/lib/settings/settings.store';
+import { CalculationService } from 'projects/commons/src/lib/times/calculation.service';
+import { DATE_ISO_FORMAT, Time, TimeAdapter } from 'projects/commons/src/lib/times/time.model';
+import { AddTimes, MoveMonth, SelectDate, TimesState } from 'projects/commons/src/lib/times/time.store';
+import { TimesService } from 'projects/commons/src/lib/times/times.service';
+import { combineLatest } from 'rxjs';
+import { Observable } from 'rxjs/internal/Observable';
+import { map, mergeMap, take } from 'rxjs/operators';
 
 export interface CalendarDayModel {
   date: Moment;
@@ -25,7 +25,7 @@ export interface CalendarDayModel {
   styleUrls: ['./calendar.component.scss']
 })
 export class CalendarComponent implements OnInit, OnDestroy {
-  public weekDays = ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'];
+  public weekDays = [];
 
   @Select(ProjectState.project)
   public project$: Observable<string>; // projet sélectionné
@@ -43,9 +43,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
     private calculationService: CalculationService,
     private timesService: TimesService,
     private store: Store,
-    private projectService: ProjectService,
-    private router: Router
-  ) { }
+    private router: Router,
+    private translate: TranslateService
+  ) {}
 
   private static getMonthDays(selectedDate: Moment): Moment[] {
     const days = [];
@@ -79,9 +79,12 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.month$ = combineLatest(this.project$, this.selectedDate$).pipe(
-      mergeMap(pair => this.timesService.read(pair[1], 'month'))
-    );
+    this.translate
+      .get('calendar.weekDays')
+      .pipe(map(value => value.split(',')))
+      .subscribe(days => (this.weekDays = days));
+
+    this.month$ = combineLatest(this.project$, this.selectedDate$).pipe(mergeMap(pair => this.timesService.read(pair[1], 'month')));
 
     this.times$ = combineLatest(this.selectedDate$, this.month$).pipe(
       map(pair => pair[1].filter(time => time.time.startsWith(pair[0].format(DATE_ISO_FORMAT))))
@@ -102,7 +105,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.select(moment()); // charge le jour en cours par défaut
   }
 
-  ngOnDestroy() { }
+  ngOnDestroy() {}
 
   public changeMonth(change: number) {
     this.store.dispatch(new MoveMonth(change));

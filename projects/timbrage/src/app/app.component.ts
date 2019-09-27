@@ -1,17 +1,15 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { AuthService } from 'projects/commons/src/lib/auth/auth.service';
-import { Store } from '@ngxs/store';
-import { ExportService } from 'projects/commons/src/lib/times/export.service';
-import { TimesState, SelectDate } from 'projects/commons/src/lib/times/time.store';
-import * as moment from 'moment';
-import { ProjectService } from 'projects/commons/src/lib/settings/project.service';
-import { mergeMap, tap } from 'rxjs/operators';
-import { ProjectState, SelectProject } from 'projects/commons/src/lib/settings/project.store';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
-import { registerLocaleData } from '@angular/common';
-import localeFr from '@angular/common/locales/fr';
-import localeFrExtra from '@angular/common/locales/extra/fr';
-import { SettingsState, ReadSettings } from 'projects/commons/src/lib/settings/settings.store';
+import { TranslateService } from '@ngx-translate/core';
+import { Store } from '@ngxs/store';
+import * as moment from 'moment';
+import { AuthService } from 'projects/commons/src/lib/auth/auth.service';
+import { SelectProject } from 'projects/commons/src/lib/settings/project.store';
+import { ReadSettings, SettingsState } from 'projects/commons/src/lib/settings/settings.store';
+import { ExportService } from 'projects/commons/src/lib/times/export.service';
+import { SelectDate, TimesState } from 'projects/commons/src/lib/times/time.store';
+import { TranslationService } from 'projects/commons/src/lib/translation/translation.service';
+import { filter, mergeMap, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +17,7 @@ import { SettingsState, ReadSettings } from 'projects/commons/src/lib/settings/s
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  navLinks = [{ path: '/timbrage', label: 'Timbrage' }, { path: '/calendar', label: 'Calendar' }];
+  navLinks = [{ path: '/timbrage', label: 'timbrage.title' }, { path: '/calendar', label: 'calendar.title' }];
 
   @ViewChild('export', { static: true }) private exportLink: ElementRef;
 
@@ -28,23 +26,28 @@ export class AppComponent implements OnInit {
     private exportService: ExportService,
     private store: Store,
     private authService: AuthService,
-    private settingsService: ProjectService
-  ) {
-    registerLocaleData(localeFr, 'fr', localeFrExtra);
-    moment.locale('fr');
-  }
+    private translate: TranslateService,
+    private translationService: TranslationService
+  ) {}
 
   ngOnInit() {
+    this.translationService.loadLang('fr');
     if (this.swUpdate.isEnabled) {
-      this.swUpdate.available.subscribe(() => {
-        if (confirm('Une nouvelle version est disponible. Voulez-vous la charger ?')) {
-          window.location.reload();
-        }
-      });
+      this.swUpdate.available
+        .pipe(
+          filter(event => !!event),
+          mergeMap(() => this.translate.get('messages.update'))
+        )
+        .subscribe(message => {
+          if (confirm(message)) {
+            window.location.reload();
+          }
+        });
     }
     // changement de user => charge le dermier project et ses settings
     this.authService.user$
       .pipe(
+        tap(user => this.translationService.loadLang(user.lang)),
         mergeMap(user => this.store.dispatch(new SelectProject(user.lastProject))),
         mergeMap(_ => this.store.dispatch(new ReadSettings()))
       )

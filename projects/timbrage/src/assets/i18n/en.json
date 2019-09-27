@@ -1,0 +1,42 @@
+{
+  "profile": {
+    "title": "Profile",
+    "import": {
+      "launch": "Import data from csv",
+      "cancel": "Cancel import"
+    },
+    "export": "Export all data",
+    "openAdmin": "Open Adminstrative tools",
+    "contact": {
+      "message": "A problem ? A question ? contact us !",
+      "email": "support@ifocusit.ch"
+    },
+    "lang": "Langage"
+  },
+  "timbrage": {
+    "title": "Timbrage",
+    "sumDay": "Daily total",
+    "state": {
+      "week": "Weekly total:",
+      "month": "Monthly total:"
+    }
+  },
+  "calendar": {
+    "title": "Calendar",
+    "weekDays": "Su, Mo, Tu, We, Tu, Fr, Sa"
+  },
+  "toolbar": {
+    "connection": "Connexion",
+    "logout": "Logout",
+    "goToday": "Today"
+  },
+  "messages": {
+    "update": "A new version is available. Would you like to it ?"
+  },
+  "time": {
+    "start": "start",
+    "end": "end",
+    "cancel": "CANCEL",
+    "ok": "DONE"
+  }
+}
