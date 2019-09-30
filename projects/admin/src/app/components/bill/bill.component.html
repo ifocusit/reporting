@@ -4,6 +4,7 @@
       <button mat-button [routerLink]="['/month', bill.month]"><mat-icon>arrow_back</mat-icon></button>
 
       <div fxFlex="calc(100%-180px)">Facture {{ bill.month | moment: 'YYYY-MM' }}</div>
+      <a mat-icon-button [href]="bill.billUrl" target="_blank" *ngIf="bill.archived"><mat-icon>picture_as_pdf</mat-icon></a>
       <button mat-icon-button (click)="print()" *ngIf="!bill.archived"><mat-icon>print</mat-icon></button>
       <button mat-icon-button [routerLink]="['/profile']"><mat-icon>person</mat-icon></button>
     </mat-toolbar>

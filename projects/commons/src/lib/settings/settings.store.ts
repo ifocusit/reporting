@@ -27,17 +27,17 @@ export class SettingsState {
   constructor(private store: Store, private settingsService: ProjectService) {}
 
   @Selector()
-  public static settings(state: SettingsStateModel) {
+  public static settings(state: SettingsStateModel): Settings {
     return state.settings;
   }
 
   @Selector()
-  public static theme(state: SettingsStateModel) {
+  public static theme(state: SettingsStateModel): string {
     return state.settings.project.theme;
   }
 
   @Selector()
-  public static project(state: SettingsStateModel) {
+  public static project(state: SettingsStateModel): string {
     return state.settings.project.name;
   }
 

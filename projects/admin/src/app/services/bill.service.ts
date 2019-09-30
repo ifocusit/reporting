@@ -8,8 +8,8 @@ import { User } from 'projects/commons/src/lib/auth/user/user.model';
 import { UserService } from 'projects/commons/src/lib/auth/user/user.service';
 import { SettingsState } from 'projects/commons/src/lib/settings/settings.store';
 import { TimesState } from 'projects/commons/src/lib/times/time.store';
-import { Observable, of } from 'rxjs';
-import { catchError, map, mergeMap, take, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, mergeMap, take, tap } from 'rxjs/operators';
 import { Bill, BillLine, DEFAULT_BILL } from '../models/bill.model';
 
 interface BillData {
@@ -133,19 +133,20 @@ export class BillService {
           .upload(`users/${data.user.uid}/${data.project}/${data.month}.pdf`, bill)
           .snapshotChanges()
           .pipe(
-            tap(uploadTask =>
-              uploadTask.ref
-                .getDownloadURL()
-                .then(url =>
-                  this.firestore
-                    .doc<Bill>(`users/${data.user.uid}/projects/${data.project}/bills/${data.month}`)
-                    .set({ archived: true, billUrl: url }, { merge: true })
-                )
-            )
+            tap(task => {
+              if (task.bytesTransferred === task.totalBytes) {
+                // Update firestore on completion
+                task.ref
+                  .getDownloadURL()
+                  .then(url =>
+                    this.firestore
+                      .doc<Bill>(`users/${data.user.uid}/projects/${data.project}/bills/${data.month}`)
+                      .set({ archived: true, billUrl: url }, { merge: true })
+                  );
+              }
+            })
           )
-      ),
-      take(1),
-      catchError(() => of(true))
+      )
     );
   }
 }
