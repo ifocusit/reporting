@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsModule } from '@ngxs/store';
 import { FilesModule } from 'projects/commons/src/lib/files/files.module';
 import { SettingsState } from 'projects/commons/src/lib/settings/settings.store';
@@ -29,7 +30,8 @@ const providers = [];
     TimesModule,
     FilesModule,
     NgxsModule.forRoot([TimesState, SettingsState], { developmentMode: !environment.production }),
-    NgxsReduxDevtoolsPluginModule.forRoot()
+    NgxsReduxDevtoolsPluginModule.forRoot(),
+    NgxsStoragePluginModule.forRoot()
   ],
   providers,
   bootstrap: [AppComponent]
