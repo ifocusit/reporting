@@ -10,7 +10,7 @@
   <div class="content">
     <div class="header">
       <div fxLayout="column" fxLayoutAlign="center center" *ngIf="user$ | async as user">
-        <img *ngIf="user.photoURL; else defaultProfileIcon" src="user.photoURL" />
+        <img *ngIf="user.photoURL; else defaultProfileIcon" [src]="user.photoURL" />
         <ng-template #defaultProfileIcon>
           <img src="/assets/profile_default_icon.png" />
         </ng-template>
