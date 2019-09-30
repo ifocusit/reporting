@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
 import * as moment from 'moment';
 import { ProjectService } from 'projects/commons/src/lib/settings/project.service';
-import { ProjectState } from 'projects/commons/src/lib/settings/project.store';
 import { Settings } from 'projects/commons/src/lib/settings/settings.model';
 import { SettingsState } from 'projects/commons/src/lib/settings/settings.store';
 import { CalculateDuration } from 'projects/commons/src/lib/times/calculate-duration.tools';
@@ -21,7 +20,7 @@ import { BillService } from '../../services/bill.service';
   styleUrls: ['./bill.component.scss']
 })
 export class BillComponent implements OnInit, OnDestroy {
-  @Select(ProjectState.project)
+  @Select(SettingsState.project)
   public project$: Observable<string>;
   @Select(SettingsState.settings)
   public settings$: Observable<Settings>;

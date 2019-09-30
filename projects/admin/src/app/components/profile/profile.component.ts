@@ -1,15 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, range } from 'rxjs';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { tap, mergeMap, map, toArray } from 'rxjs/operators';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import * as moment from 'moment';
 import { AuthService } from 'projects/commons/src/lib/auth/auth.service';
-import { User } from 'projects/commons/src/lib/auth/user/user.model';
-import { DEFAULT_SETTINGS, Settings } from 'projects/commons/src/lib/settings/settings.model';
 import { ProjectService } from 'projects/commons/src/lib/settings/project.service';
-import { SaveProject, SelectProject, ProjectState } from 'projects/commons/src/lib/settings/project.store';
-import { SettingsState, SaveSettings } from 'projects/commons/src/lib/settings/settings.store';
+import { Settings } from 'projects/commons/src/lib/settings/settings.model';
+import { SaveSettings, SettingsState } from 'projects/commons/src/lib/settings/settings.store';
+import { Observable, range } from 'rxjs';
+import { map, mergeMap, tap, toArray } from 'rxjs/operators';
 
 @Component({
   selector: 'app-profile',
@@ -17,17 +15,9 @@ import { SettingsState, SaveSettings } from 'projects/commons/src/lib/settings/s
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  public themes = [
-    { code: 'default-theme', primary: '#3f51b5', accent: '#ff4081', warn: '#f44336' },
-    { code: 'mobi-theme', primary: '#d50000', accent: '#3f51b5', warn: '#f44336' },
-    { code: 'deeppurple-amber-theme', primary: '#673ab7', accent: '#ffd740', warn: '#f44336' },
-    { code: 'pink-bluegrey-theme', primary: '#c2185b', accent: '#b0bec5', warn: '#f44336' },
-    { code: 'purple-green-theme', primary: '#7b1fa2', accent: '#69f0ae', warn: '#f44336' }
-  ];
+  public user$ = this.authService.user$;
 
-  public user$: Observable<User>;
-
-  @Select(ProjectState.project)
+  @Select(SettingsState.project)
   public project$: Observable<string>;
 
   public settings$: Observable<Settings>;
@@ -85,21 +75,6 @@ export class ProfileComponent implements OnInit {
       ),
       toArray()
     );
-  }
-
-  public setTheme(code: string) {
-    this.form.patchValue({ project: { theme: code } });
-  }
-
-  public addProject(projectName: string) {
-    this.store.dispatch(new SaveProject({ ...DEFAULT_SETTINGS, project: { name: projectName } })).subscribe();
-  }
-
-  public removeProject(projectName: string) {
-    this.projectService
-      .delete(projectName)
-      .pipe(mergeMap(() => this.store.dispatch(new SelectProject(DEFAULT_SETTINGS.project.name))))
-      .subscribe();
   }
 
   public save() {

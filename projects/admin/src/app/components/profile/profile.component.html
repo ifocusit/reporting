@@ -3,7 +3,7 @@
     <div fxFlex="calc(100%-300px)">
       Profile
     </div>
-    <lib-select-project></lib-select-project>
+    <lib-select-project defaultName=""></lib-select-project>
     <button mat-button (click)="signOut()">Logout</button>
   </mat-toolbar>
 
@@ -36,34 +36,12 @@
       <mat-tab label="Configuration du projet" fxLayout="column">
         <div class="tab-content">
           <form [formGroup]="form">
-            <div id="project" formGroupName="project" fxLayout="row" fxLayoutGap="10px">
-              <mat-form-field>
-                <input #project matInput placeholder="Nom du projet" formControlName="name" />
-              </mat-form-field>
-              <button mat-mini-fab (click)="addProject(project.value)"><mat-icon>add</mat-icon></button>
-              <button mat-mini-fab (click)="removeProject(project.value)" color="secondary" *ngIf="(project$ | async) !== 'Default'">
-                <mat-icon>remove</mat-icon>
-              </button>
-              <div>
-                <mat-menu #themePickerMenu="matMenu">
-                  <ul
-                    fxLayout="row"
-                    mat-menu-item
-                    *ngFor="let theme of themes"
-                    (click)="setTheme(theme.code)"
-                    class="theme-picker-content"
-                    [class.selected]="form.value.project.theme === theme.code"
-                  >
-                    <li class="color" [style.background-color]="theme.primary"></li>
-                    <li class="color" [style.background-color]="theme.accent"></li>
-                    <li class="color" [style.background-color]="theme.warn"></li>
-                  </ul>
-                </mat-menu>
-                <button mat-button [matMenuTriggerFor]="themePickerMenu">
-                  <mat-icon>format_color_fill</mat-icon>
-                </button>
-              </div>
-            </div>
+            <lib-edit-project
+              *ngIf="(user$ | async)?.isMultiProject"
+              [projectName]="settings.project.name"
+              [selectedTheme]="settings.project.theme"
+              class="mat-form-field-wrapper"
+            ></lib-edit-project>
             <div id="bill" formGroupName="bill" fxLayout="column">
               <mat-form-field>
                 <mat-select placeholder="Devise" formControlName="currency">

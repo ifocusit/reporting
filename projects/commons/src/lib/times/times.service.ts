@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { TimeModel, Time, MONTH_ISO_FORMAT, DATETIME_ISO_FORMAT, TimeAdapter } from './time.model';
+import { Store } from '@ngxs/store';
 import * as moment from 'moment';
 import { Moment } from 'moment';
-import { mergeMap, map, take } from 'rxjs/operators';
-import { ProjectState } from '../settings/project.store';
-import { Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { map, mergeMap, take } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
+import { SettingsState } from '../settings/settings.store';
+import { DATETIME_ISO_FORMAT, Time, TimeAdapter, TimeModel } from './time.model';
 
-export type Unit = ('day' | 'week' | 'month');
+export type Unit = 'day' | 'week' | 'month';
 
 @Injectable()
 export class TimesService {
-  constructor(private firestore: AngularFirestore, private authService: AuthService, private store: Store) { }
+  constructor(private firestore: AngularFirestore, private authService: AuthService, private store: Store) {}
 
   public read(date: string | Moment, unit: Unit = 'day'): Observable<Time[]> {
     // define timestamp range
@@ -23,7 +23,6 @@ export class TimesService {
     if (unit === 'month') {
       start = start.startOf('month');
       end = end.endOf('month');
-
     } else if (unit === 'week') {
       start = start.startOf('week');
       end = end.endOf('week');
@@ -33,7 +32,7 @@ export class TimesService {
   }
 
   private readBetween(start: Moment, end: Moment): Observable<Time[]> {
-    const projectName = this.store.selectSnapshot(ProjectState.project);
+    const projectName = this.store.selectSnapshot(SettingsState.project);
     return this.authService.user$.pipe(
       mergeMap(user =>
         this.firestore
@@ -58,7 +57,7 @@ export class TimesService {
   }
 
   public create(time: Time): Observable<Time> {
-    const projectName = this.store.selectSnapshot(ProjectState.project);
+    const projectName = this.store.selectSnapshot(SettingsState.project);
     const timestamp = {
       timestamp: new TimeAdapter(time).timestamp
     };
@@ -76,7 +75,7 @@ export class TimesService {
   }
 
   public update(time: Time): Observable<Time> {
-    const projectName = this.store.selectSnapshot(ProjectState.project);
+    const projectName = this.store.selectSnapshot(SettingsState.project);
     const timestamp = {
       timestamp: new TimeAdapter(time).timestamp
     } as TimeModel;
@@ -93,7 +92,7 @@ export class TimesService {
   }
 
   public delete(time: Time): Observable<void> {
-    const projectName = this.store.selectSnapshot(ProjectState.project);
+    const projectName = this.store.selectSnapshot(SettingsState.project);
     return this.authService.user$.pipe(
       mergeMap(user =>
         this.firestore

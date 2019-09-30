@@ -59,12 +59,12 @@
       </mat-card-title>
       <mat-card-content>
         <div fxLayout="row">
-          <div fxFlex="115px" id="workDays">{{ workDays$ | async }} j. travaillés</div>
+          <div fxFlex="117px" id="workDays">{{ workDays$ | async }} j. travaillés</div>
           <div fxFlex="calc(100%-255px)" fxFlexAlign="start" id="total">{{ total$ | async | duration: totalsFormat }}</div>
           <div fxFlex="145px">h. travaillées</div>
         </div>
         <div fxLayout="row">
-          <div fxFlex="115px">{{ mustHours$ | async }} h. demandées</div>
+          <div fxFlex="117px">{{ mustHours$ | async }} h. demandées</div>
           <div
             fxFlex="calc(100%-255px)"
             fxFlexAlign="start"
@@ -77,7 +77,7 @@
           <div fxFlex="145px">h. supp.</div>
         </div>
         <div fxLayout="row">
-          <div fxFlex="115px"></div>
+          <div fxFlex="117px"></div>
           <div fxFlex="calc(100%-255px)" fxFlexAlign="start" id="finalTotal" class="accent-color">
             {{ finalTotal$ | async | duration: totalsFormat }}
           </div>

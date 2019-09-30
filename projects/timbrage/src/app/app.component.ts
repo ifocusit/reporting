@@ -4,7 +4,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
 import * as moment from 'moment';
 import { AuthService } from 'projects/commons/src/lib/auth/auth.service';
-import { SelectProject } from 'projects/commons/src/lib/settings/project.store';
 import { ReadSettings, SettingsState } from 'projects/commons/src/lib/settings/settings.store';
 import { ExportService } from 'projects/commons/src/lib/times/export.service';
 import { SelectDate, TimesState } from 'projects/commons/src/lib/times/time.store';
@@ -48,8 +47,7 @@ export class AppComponent implements OnInit {
     this.authService.user$
       .pipe(
         tap(user => this.translationService.loadLang(user.lang)),
-        mergeMap(user => this.store.dispatch(new SelectProject(user.lastProject))),
-        mergeMap(_ => this.store.dispatch(new ReadSettings()))
+        mergeMap(user => this.store.dispatch(new ReadSettings(user.lastProject)))
       )
       .subscribe();
 

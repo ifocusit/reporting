@@ -6,7 +6,7 @@ import * as moment from 'moment';
 import { Duration } from 'moment';
 import { User } from 'projects/commons/src/lib/auth/user/user.model';
 import { UserService } from 'projects/commons/src/lib/auth/user/user.service';
-import { ProjectState } from 'projects/commons/src/lib/settings/project.store';
+import { SettingsState } from 'projects/commons/src/lib/settings/settings.store';
 import { TimesState } from 'projects/commons/src/lib/times/time.store';
 import { Observable } from 'rxjs';
 import { map, mergeMap, take, tap } from 'rxjs/operators';
@@ -92,7 +92,7 @@ export class BillService {
     return this.userService.user$.pipe(
       mergeMap(user =>
         this.store
-          .selectOnce(ProjectState.project)
+          .selectOnce(SettingsState.project)
           .pipe(mergeMap(project => this.store.selectOnce(TimesState.selectedMonth).pipe(map(month => ({ user, project, month })))))
       )
     );

@@ -1,16 +1,15 @@
-import { Component, OnInit } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
-import localeFr from '@angular/common/locales/fr';
 import localeFrExtra from '@angular/common/locales/extra/fr';
-import * as moment from 'moment';
+import localeFr from '@angular/common/locales/fr';
+import { Component, OnInit } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
-import { Observable } from 'rxjs';
-import { ProjectState, SelectProject } from 'projects/commons/src/lib/settings/project.store';
-import { mergeMap, tap, take } from 'rxjs/operators';
-import { ProjectService } from 'projects/commons/src/lib/settings/project.service';
-import { Store, Select } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
+import * as moment from 'moment';
 import { AuthService } from 'projects/commons/src/lib/auth/auth.service';
-import { SettingsState, ReadSettings } from 'projects/commons/src/lib/settings/settings.store';
+import { ProjectService } from 'projects/commons/src/lib/settings/project.service';
+import { ReadSettings, SettingsState } from 'projects/commons/src/lib/settings/settings.store';
+import { Observable } from 'rxjs';
+import { mergeMap, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -18,7 +17,7 @@ import { SettingsState, ReadSettings } from 'projects/commons/src/lib/settings/s
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  @Select(ProjectState.project)
+  @Select(SettingsState.project)
   public project$: Observable<string>;
 
   constructor(private swUpdate: SwUpdate, private store: Store, private settingsService: ProjectService, private authService: AuthService) {
@@ -35,12 +34,7 @@ export class AppComponent implements OnInit {
       });
     }
     // changement de user => charge le dermier project et ses settings
-    this.authService.user$
-      .pipe(
-        mergeMap(user => this.store.dispatch(new SelectProject(user.lastProject))),
-        mergeMap(_ => this.store.dispatch(new ReadSettings()))
-      )
-      .subscribe();
+    this.authService.user$.pipe(mergeMap(user => this.store.dispatch(new ReadSettings(user.lastProject)))).subscribe();
 
     // changement de theme
     this.store

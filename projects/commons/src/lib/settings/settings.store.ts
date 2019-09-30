@@ -1,8 +1,7 @@
-import { State, Action, StateContext, Selector, Store } from '@ngxs/store';
-import { mergeMap, tap, take } from 'rxjs/operators';
-import { Settings, DEFAULT_SETTINGS } from './settings.model';
+import { Action, Selector, State, StateContext, Store } from '@ngxs/store';
+import { mergeMap, tap } from 'rxjs/operators';
 import { ProjectService } from './project.service';
-import { ProjectState } from './project.store';
+import { DEFAULT_SETTINGS, Settings } from './settings.model';
 
 export interface SettingsStateModel {
   settings: Settings;
@@ -10,7 +9,7 @@ export interface SettingsStateModel {
 
 export class ReadSettings {
   static readonly type = '[Settings] ReadSettings]';
-  constructor() {}
+  constructor(public readonly projectName: string) {}
 }
 
 export class SaveSettings {
@@ -28,25 +27,29 @@ export class SettingsState {
   constructor(private store: Store, private settingsService: ProjectService) {}
 
   @Selector()
-  public static settings(state: SettingsStateModel) {
+  public static settings(state: SettingsStateModel): Settings {
     return state.settings;
   }
 
   @Selector()
-  public static theme(state: SettingsStateModel) {
+  public static theme(state: SettingsStateModel): string {
     return state.settings.project.theme;
   }
 
+  @Selector()
+  public static project(state: SettingsStateModel): string {
+    return state.settings.project.name;
+  }
+
   @Action(ReadSettings)
-  read(ctx: StateContext<SettingsStateModel>) {
-    return this.store.selectOnce(ProjectState.project).pipe(
-      mergeMap(projectName => this.settingsService.getSettings(projectName)),
-      tap(settings => ctx.patchState({ settings }))
-    );
+  read(ctx: StateContext<SettingsStateModel>, { projectName }: ReadSettings) {
+    return this.settingsService.getSettings(projectName).pipe(tap(settings => ctx.patchState({ settings })));
   }
 
   @Action(SaveSettings)
   save(ctx: StateContext<SettingsStateModel>, action: SaveSettings) {
-    return this.settingsService.saveSettings(action.settings).pipe(mergeMap(() => this.store.dispatch(new ReadSettings())));
+    return this.settingsService
+      .saveSettings(action.settings)
+      .pipe(mergeMap(() => this.store.dispatch(new ReadSettings(action.settings.project.name))));
   }
 }
