@@ -37,6 +37,7 @@
         <div class="tab-content">
           <form [formGroup]="form">
             <lib-edit-project
+              *ngIf="(user$ | async)?.isMultiProject"
               [projectName]="settings.project.name"
               [selectedTheme]="settings.project.theme"
               class="mat-form-field-wrapper"

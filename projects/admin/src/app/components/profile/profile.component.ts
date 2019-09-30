@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import * as moment from 'moment';
 import { AuthService } from 'projects/commons/src/lib/auth/auth.service';
-import { User } from 'projects/commons/src/lib/auth/user/user.model';
 import { ProjectService } from 'projects/commons/src/lib/settings/project.service';
 import { Settings } from 'projects/commons/src/lib/settings/settings.model';
 import { SaveSettings, SettingsState } from 'projects/commons/src/lib/settings/settings.store';
@@ -16,7 +15,7 @@ import { map, mergeMap, tap, toArray } from 'rxjs/operators';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  public user$: Observable<User>;
+  public user$ = this.authService.user$;
 
   @Select(SettingsState.project)
   public project$: Observable<string>;
