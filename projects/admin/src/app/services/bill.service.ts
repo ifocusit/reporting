@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
-import { UserService } from 'projects/commons/src/lib/auth/user/user.service';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { mergeMap, take, map, catchError, tap } from 'rxjs/operators';
-import { Store } from '@ngxs/store';
-import { ProjectState } from 'projects/commons/src/lib/settings/project.store';
-import { Observable, of } from 'rxjs';
-import { BillLine, Bill, DEFAULT_BILL } from '../models/bill.model';
-import { Duration } from 'moment';
-import { TimesState } from 'projects/commons/src/lib/times/time.store';
-import { User } from 'projects/commons/src/lib/auth/user/user.model';
-import * as moment from 'moment';
 import { AngularFireStorage } from '@angular/fire/storage';
+import { Store } from '@ngxs/store';
+import * as moment from 'moment';
+import { Duration } from 'moment';
+import { User } from 'projects/commons/src/lib/auth/user/user.model';
+import { UserService } from 'projects/commons/src/lib/auth/user/user.service';
+import { ProjectState } from 'projects/commons/src/lib/settings/project.store';
+import { TimesState } from 'projects/commons/src/lib/times/time.store';
+import { Observable } from 'rxjs';
+import { map, mergeMap, take, tap } from 'rxjs/operators';
+import { Bill, BillLine, DEFAULT_BILL } from '../models/bill.model';
 
 interface BillData {
   user: User;
@@ -133,19 +133,20 @@ export class BillService {
           .upload(`users/${data.user.uid}/${data.project}/${data.month}.pdf`, bill)
           .snapshotChanges()
           .pipe(
-            tap(uploadTask =>
-              uploadTask.ref
-                .getDownloadURL()
-                .then(url =>
-                  this.firestore
-                    .doc<Bill>(`users/${data.user.uid}/projects/${data.project}/bills/${data.month}`)
-                    .set({ archived: true, billUrl: url }, { merge: true })
-                )
-            )
+            tap(task => {
+              if (task.bytesTransferred === task.totalBytes) {
+                // Update firestore on completion
+                task.ref
+                  .getDownloadURL()
+                  .then(url =>
+                    this.firestore
+                      .doc<Bill>(`users/${data.user.uid}/projects/${data.project}/bills/${data.month}`)
+                      .set({ archived: true, billUrl: url }, { merge: true })
+                  );
+              }
+            })
           )
-      ),
-      take(1),
-      catchError(() => of(true))
+      )
     );
   }
 }
