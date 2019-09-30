@@ -8,7 +8,6 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsModule } from '@ngxs/store';
-import { ProjectState } from 'projects/commons/src/lib/settings/project.store';
 import { SelectProjectModule } from 'projects/commons/src/lib/settings/select-project/select-project.module';
 import { SettingsState } from 'projects/commons/src/lib/settings/settings.store';
 import { TimesState } from 'projects/commons/src/lib/times/time.store';
@@ -32,7 +31,7 @@ const providers = [];
     TimesModule,
     SettingsModule,
     SelectProjectModule,
-    NgxsModule.forRoot([TimesState, ProjectState, SettingsState], { developmentMode: !environment.production }),
+    NgxsModule.forRoot([TimesState, SettingsState], { developmentMode: !environment.production }),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     HttpClientModule,
     TranslateModule.forRoot({

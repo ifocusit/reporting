@@ -1,20 +1,16 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Select, Store } from '@ngxs/store';
 import * as moment from 'moment';
 import { Duration, Moment } from 'moment';
-import { Observable } from 'rxjs/internal/Observable';
-import { Select, Store } from '@ngxs/store';
-import { map, mergeMap, take, pairwise, tap } from 'rxjs/operators';
-import { timer, combineLatest, of } from 'rxjs';
-import { Router } from '@angular/router';
-import { TimesService } from 'projects/commons/src/lib/times/times.service';
+import { SettingsState } from 'projects/commons/src/lib/settings/settings.store';
 import { CalculationService } from 'projects/commons/src/lib/times/calculation.service';
-import { TimesState, SelectDate, AddTime } from 'projects/commons/src/lib/times/time.store';
-import { Time, TimeAdapter, MONTH_ISO_FORMAT, DATE_ISO_FORMAT } from 'projects/commons/src/lib/times/time.model';
-import { ProjectState } from 'projects/commons/src/lib/settings/project.store';
-import * as _ from 'lodash';
-import { DEFAULT_DAY_DURATION, WorkingDateReporting } from 'projects/commons/src/lib/times/working-date-reporting.model';
-import { filter } from 'minimatch';
-import { DurationPipe } from 'projects/commons/src/lib/pipes/duration.pipe';
+import { DATE_ISO_FORMAT, Time, TimeAdapter } from 'projects/commons/src/lib/times/time.model';
+import { AddTime, SelectDate, TimesState } from 'projects/commons/src/lib/times/time.store';
+import { TimesService } from 'projects/commons/src/lib/times/times.service';
+import { combineLatest, timer } from 'rxjs';
+import { Observable } from 'rxjs/internal/Observable';
+import { map, mergeMap, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-timbrage',
@@ -22,7 +18,7 @@ import { DurationPipe } from 'projects/commons/src/lib/pipes/duration.pipe';
   styleUrls: ['./timbrage.component.scss']
 })
 export class TimbrageComponent implements OnInit {
-  @Select(ProjectState.project)
+  @Select(SettingsState.project)
   public project$: Observable<string>; // projet sélectionné
 
   @Select(TimesState.selectedDate)

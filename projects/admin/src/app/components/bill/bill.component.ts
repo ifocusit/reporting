@@ -1,19 +1,18 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, combineLatest } from 'rxjs';
-import { Select, Store } from '@ngxs/store';
-import { mergeMap, map, tap } from 'rxjs/operators';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Select, Store } from '@ngxs/store';
 import * as moment from 'moment';
 import { ProjectService } from 'projects/commons/src/lib/settings/project.service';
-import { TimesService } from 'projects/commons/src/lib/times/times.service';
-import { MONTH_ISO_FORMAT } from 'projects/commons/src/lib/times/time.model';
-import { CalculateDuration } from 'projects/commons/src/lib/times/calculate-duration.tools';
-import { SettingsState } from 'projects/commons/src/lib/settings/settings.store';
 import { Settings } from 'projects/commons/src/lib/settings/settings.model';
-import { ProjectState } from 'projects/commons/src/lib/settings/project.store';
-import { BillService } from '../../services/bill.service';
-import { BillLine, Bill } from '../../models/bill.model';
+import { SettingsState } from 'projects/commons/src/lib/settings/settings.store';
+import { CalculateDuration } from 'projects/commons/src/lib/times/calculate-duration.tools';
+import { MONTH_ISO_FORMAT } from 'projects/commons/src/lib/times/time.model';
 import { SelectDate, TimesState } from 'projects/commons/src/lib/times/time.store';
+import { TimesService } from 'projects/commons/src/lib/times/times.service';
+import { combineLatest, Observable } from 'rxjs';
+import { map, mergeMap, tap } from 'rxjs/operators';
+import { BillLine } from '../../models/bill.model';
+import { BillService } from '../../services/bill.service';
 
 @Component({
   selector: 'app-bill',
@@ -21,7 +20,7 @@ import { SelectDate, TimesState } from 'projects/commons/src/lib/times/time.stor
   styleUrls: ['./bill.component.scss']
 })
 export class BillComponent implements OnInit, OnDestroy {
-  @Select(ProjectState.project)
+  @Select(SettingsState.project)
   public project$: Observable<string>;
   @Select(SettingsState.settings)
   public settings$: Observable<Settings>;
@@ -41,7 +40,7 @@ export class BillComponent implements OnInit, OnDestroy {
     private timesService: TimesService,
     private billService: BillService,
     private store: Store
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.route.params.pipe(mergeMap(params => this.store.dispatch(new SelectDate(moment(params.month, 'YYYY-MM'))))).subscribe();

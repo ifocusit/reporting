@@ -4,7 +4,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { Select, Store } from '@ngxs/store';
 import * as moment from 'moment';
 import { Duration, Moment } from 'moment';
-import { ProjectState } from 'projects/commons/src/lib/settings/project.store';
 import { SettingsState } from 'projects/commons/src/lib/settings/settings.store';
 import { CalculationService } from 'projects/commons/src/lib/times/calculation.service';
 import { DATE_ISO_FORMAT, Time, TimeAdapter } from 'projects/commons/src/lib/times/time.model';
@@ -27,7 +26,7 @@ export interface CalendarDayModel {
 export class CalendarComponent implements OnInit, OnDestroy {
   public weekDays = [];
 
-  @Select(ProjectState.project)
+  @Select(SettingsState.project)
   public project$: Observable<string>; // projet sélectionné
 
   @Select(TimesState.selectedDate)

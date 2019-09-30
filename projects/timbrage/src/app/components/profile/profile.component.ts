@@ -5,7 +5,7 @@ import * as moment from 'moment';
 import { AuthService } from 'projects/commons/src/lib/auth/auth.service';
 import { User } from 'projects/commons/src/lib/auth/user/user.model';
 import { UserService } from 'projects/commons/src/lib/auth/user/user.service';
-import { ProjectState } from 'projects/commons/src/lib/settings/project.store';
+import { SettingsState } from 'projects/commons/src/lib/settings/settings.store';
 import { ExportService } from 'projects/commons/src/lib/times/export.service';
 import { DATETIME_ISO_FORMAT, Time, TimeAdapter, TimeModel } from 'projects/commons/src/lib/times/time.model';
 import { AddTimes, DeleteTimes } from 'projects/commons/src/lib/times/time.store';
@@ -69,7 +69,7 @@ export class ProfileComponent implements OnInit {
       .pipe(
         take(1),
         mergeMap(user =>
-          this.store.select(ProjectState.project).pipe(
+          this.store.select(SettingsState.project).pipe(
             mergeMap(project =>
               this.firestore
                 .collection<TimeModel>(`users/${user.uid}/projects/${project}/times`, ref => ref.orderBy('timestamp'))

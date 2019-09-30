@@ -1,0 +1,28 @@
+<div id="project" fxLayout="row" fxLayoutAlign="start center">
+  <mat-form-field>
+    <input #project matInput placeholder="Nom du projet" [(ngModel)]="projectName" />
+  </mat-form-field>
+  <button mat-mini-fab (click)="addProject(project.value)" *ngIf="projectName !== 'Default'"><mat-icon>add</mat-icon></button>
+  <button mat-mini-fab (click)="removeProject(project.value)" color="secondary" *ngIf="projectName !== 'Default'">
+    <mat-icon>remove</mat-icon>
+  </button>
+  <div>
+    <mat-menu #themePickerMenu="matMenu">
+      <ul
+        fxLayout="row"
+        mat-menu-item
+        *ngFor="let theme of themes"
+        (click)="selectTheme(theme.code)"
+        class="theme-picker-content"
+        [class.selected]="selectedTheme === theme.code"
+      >
+        <li class="color" [style.background-color]="theme.primary"></li>
+        <li class="color" [style.background-color]="theme.accent"></li>
+        <li class="color" [style.background-color]="theme.warn"></li>
+      </ul>
+    </mat-menu>
+    <button mat-button [matMenuTriggerFor]="themePickerMenu">
+      <mat-icon>format_color_fill</mat-icon>
+    </button>
+  </div>
+</div>

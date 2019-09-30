@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable, of } from 'rxjs';
-import { map, mergeMap, take, catchError, tap } from 'rxjs/operators';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { UploadTaskSnapshot } from '@angular/fire/storage/interfaces';
 import * as _ from 'lodash';
-import { Settings, DEFAULT_SETTINGS } from './settings.model';
+import { Observable, of } from 'rxjs';
+import { catchError, map, mergeMap, take } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
+import { DEFAULT_SETTINGS, Settings } from './settings.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,14 +25,19 @@ export class ProjectService {
     return this.authService.user$.pipe(
       mergeMap(user => this.firestore.doc(`users/${user.uid}/projects/${projectName}`).delete()),
       mergeMap(() => this.authService.user$),
-      mergeMap(user => this.firestorage.ref(`users/${user.uid}/${projectName}`).delete())
+      mergeMap(user =>
+        this.firestorage
+          .ref(`users/${user.uid}/${projectName}`)
+          .delete()
+          .pipe(catchError(() => of(true)))
+      )
     );
   }
 
   public settings$(projectName: string): Observable<Settings> {
     return this.authService.user$.pipe(
       mergeMap(user => this.firestore.doc<Settings>(`users/${user.uid}/projects/${projectName}`).valueChanges()),
-      map(data => _.merge({}, DEFAULT_SETTINGS, data, { project: { name: projectName } }))
+      map(data => _.merge({}, DEFAULT_SETTINGS, data))
     );
   }
 

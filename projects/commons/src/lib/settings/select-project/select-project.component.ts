@@ -1,11 +1,11 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { tap, mergeMap } from 'rxjs/operators';
-import { ProjectState, SelectProject } from 'projects/commons/src/lib/settings/project.store';
 import { ProjectService } from 'projects/commons/src/lib/settings/project.service';
+import { Observable } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
 import { User } from '../../auth/user/user.model';
 import { UserService } from '../../auth/user/user.service';
+import { ReadSettings, SettingsState } from '../settings.store';
 
 @Component({
   selector: 'lib-select-project',
@@ -19,14 +19,11 @@ export class SelectProjectComponent implements OnInit {
   @Input()
   public readonly = false;
 
-  @Select(ProjectState.project)
+  @Select(SettingsState.project)
   public project$: Observable<string>;
 
   public projects$: Observable<string[]>;
   public user$: Observable<User>;
-
-  @Output()
-  public valueChange = new EventEmitter<string>();
 
   constructor(private store: Store, private projectService: ProjectService, private userService: UserService) {}
 
@@ -37,11 +34,8 @@ export class SelectProjectComponent implements OnInit {
 
   public select(projectName) {
     return this.store
-      .dispatch(new SelectProject(projectName))
-      .pipe(
-        tap(() => this.valueChange.emit(projectName)),
-        mergeMap(() => this.userService.updateUser({ lastProject: projectName } as User))
-      )
+      .dispatch(new ReadSettings(projectName))
+      .pipe(mergeMap(() => this.userService.updateUser({ lastProject: projectName } as User)))
       .subscribe();
   }
 }

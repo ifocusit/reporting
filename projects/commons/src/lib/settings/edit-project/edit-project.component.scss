@@ -1,0 +1,12 @@
+.theme-picker-content {
+  list-style: none;
+
+  .selected {
+    border: solid red;
+  }
+
+  .color {
+    padding-top: 65px;
+    width: 65px;
+  }
+}

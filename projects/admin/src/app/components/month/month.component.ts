@@ -1,26 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-import * as moment from 'moment';
-import { Moment, Duration } from 'moment';
-import { ActivatedRoute, Router } from '@angular/router';
-import { filter, mergeMap, tap, take, map } from 'rxjs/operators';
-import { from, Observable, combineLatest } from 'rxjs';
 import { MatDialog } from '@angular/material';
-import * as _ from 'lodash';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
-import { DailyReportComponent } from './daily-report/daily-report.component';
-import { ProjectState } from 'projects/commons/src/lib/settings/project.store';
-import { TimesState, SelectDate } from 'projects/commons/src/lib/times/time.store';
-import {
-  WorkingDateReporting,
-  DEFAULT_DAY_DURATION,
-  WEEK_OVERTIME_MAJOR
-} from 'projects/commons/src/lib/times/working-date-reporting.model';
-import { Time, MONTH_ISO_FORMAT, DATETIME_ISO_FORMAT, TimeAdapter } from 'projects/commons/src/lib/times/time.model';
-import { User } from 'projects/commons/src/lib/auth/user/user.model';
-import { TimesService } from 'projects/commons/src/lib/times/times.service';
+import * as _ from 'lodash';
+import * as moment from 'moment';
+import { Duration, Moment } from 'moment';
 import { AuthService } from 'projects/commons/src/lib/auth/auth.service';
+import { User } from 'projects/commons/src/lib/auth/user/user.model';
 import { Settings } from 'projects/commons/src/lib/settings/settings.model';
 import { SettingsState } from 'projects/commons/src/lib/settings/settings.store';
+import { DATETIME_ISO_FORMAT, MONTH_ISO_FORMAT, Time, TimeAdapter } from 'projects/commons/src/lib/times/time.model';
+import { SelectDate, TimesState } from 'projects/commons/src/lib/times/time.store';
+import { TimesService } from 'projects/commons/src/lib/times/times.service';
+import {
+  DEFAULT_DAY_DURATION,
+  WEEK_OVERTIME_MAJOR,
+  WorkingDateReporting
+} from 'projects/commons/src/lib/times/working-date-reporting.model';
+import { combineLatest, from, Observable } from 'rxjs';
+import { filter, map, mergeMap, take } from 'rxjs/operators';
+import { DailyReportComponent } from './daily-report/daily-report.component';
 
 @Component({
   selector: 'app-month',
@@ -28,7 +27,7 @@ import { SettingsState } from 'projects/commons/src/lib/settings/settings.store'
   styleUrls: ['./month.component.scss']
 })
 export class MonthComponent implements OnInit {
-  @Select(ProjectState.project)
+  @Select(SettingsState.project)
   public project$: Observable<string>;
   @Select(SettingsState.settings)
   public settings$: Observable<Settings>;
