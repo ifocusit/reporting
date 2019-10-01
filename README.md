@@ -4,6 +4,8 @@
 
 _Application d'aide au reporting quotidien, outils de productivité._
 
+<img src="design/social_network_preview_1280x640.png" alt="Social preview" width="1000"/>
+
 Cette application permet d'enregistrer rapidement et simplement son temps de travail quotidien, pratique pour la facturation au client ;)
 
 Le code est **open source sous license Apache 3.0** pour permettre une transparence total aux usagés de l'application et la pérénité de cette transparence.
@@ -12,9 +14,11 @@ Read [CONTRIBUTING](CONTRIBUTING.md) file to contrib
 
 ## Timbrage application
 
-<img src="docs/screenshots/timbrage/timbrage.png" alt="Timbrages quotidiens" width="300"/>
-<img src="docs/screenshots/timbrage/calendar.png" alt="Timbrages mensuels" width="300"/>
-<img src="docs/screenshots/timbrage/profile.png" alt="Profile" width="300"/>
+<img src="docs/screenshots/timbrage/mobile timbrage.png" alt="Timbrages quotidiens" width="300"/>
+<img src="docs/screenshots/timbrage/mobile timbrage edit.png" alt="Edition d'un timbrage" width="300"/>
+<img src="docs/screenshots/timbrage/mobile calendar.png" alt="Timbrages mensuels" width="300"/>
+<img src="docs/screenshots/timbrage/mobile profile.png" alt="Profile" width="300"/>
+<img src="docs/screenshots/timbrage/mobile timbrage connection.png" alt="Connection" width="300"/>
 
 ## Adminstration application
 
