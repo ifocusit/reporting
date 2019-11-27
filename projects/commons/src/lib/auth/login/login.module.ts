@@ -1,9 +1,8 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { FirebaseUIModule, firebaseui, firebase } from 'firebaseui-angular';
-import { LoginComponent } from './login.component';
+import { NgModule } from '@angular/core';
+import { firebase, firebaseui, FirebaseUIModule } from 'firebaseui-angular';
 import { LoginRoutingModule } from './login-routing.module';
+import { LoginComponent } from './login.component';
 
 const firebaseUiAuthConfig = {
   signInFlow: 'redirect',
