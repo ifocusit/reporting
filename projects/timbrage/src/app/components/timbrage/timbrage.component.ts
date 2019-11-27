@@ -65,28 +65,6 @@ export class TimbrageComponent implements OnInit {
 
     // avancement sur le mois
     this.progess$ = month$.pipe(mergeMap(times => this.calculationService.calculate(times, false)));
-    // this.progess$ = combineLatest(month$, this.selectedDate$).pipe(
-    //   mergeMap(pair =>
-    //     // on va se consentrer ici uniquement sur les jours échus du mois
-    //     // transform en WorkingDateReporting, ce qui regroupe les timbrage par jour
-    //     // et fourni des méthodes utiles
-    //     of(
-    //       _.range(pair[1].date()).map((dayIndex: number) => {
-    //         const date = pair[1].clone().date(dayIndex + 1);
-    //       return new WorkingDateReporting(date, pair[0].filter(time => date.format(DATE_ISO_FORMAT) === new TimeAdapter(time).getDay()));
-    //       })
-    //     ).pipe(
-    //       map((pastDays: WorkingDateReporting[]) => pastDays.filter(day => !day.isHoliday && !day.isWeekend).length),
-    //       // temps de travaillé demandé
-    //       map(expectedWorkDays => DurationPipe.clean(moment.duration(expectedWorkDays * DEFAULT_DAY_DURATION))),
-    //       tap(data => console.log(data)),
-    //       // diff avec l'actuel
-    //       mergeMap(expected =>
-    //         this.calculationService.calculate(pair[0], false).pipe(map((duration: Duration) => duration.subtract(expected)))
-    //       )
-    //     )
-    //   )
-    // );
 
     // basé sur un timer
     this.sumDay$ = combineLatest(timer(0, 1000), this.times$).pipe(mergeMap(pair => this.calculationService.calculate(pair[1])));

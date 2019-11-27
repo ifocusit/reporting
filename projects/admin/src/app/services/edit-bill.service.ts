@@ -4,31 +4,22 @@ import { AngularFireStorage } from '@angular/fire/storage';
 import { Store } from '@ngxs/store';
 import * as moment from 'moment';
 import { Duration } from 'moment';
-import { User } from 'projects/commons/src/lib/auth/user/user.model';
 import { UserService } from 'projects/commons/src/lib/auth/user/user.service';
-import { SettingsState } from 'projects/commons/src/lib/settings/settings.store';
-import { TimesState } from 'projects/commons/src/lib/times/time.store';
+import { Bill } from 'projects/commons/src/lib/bill/bill.model';
+import { BillService } from 'projects/commons/src/lib/bill/bill.service';
 import { Observable } from 'rxjs';
 import { map, mergeMap, take, tap } from 'rxjs/operators';
-import { Bill, BillLine, DEFAULT_BILL } from '../models/bill.model';
-
-interface BillData {
-  user: User;
-  project: string;
-  month: string;
-}
+import { BillLine } from '../models/bill.model';
 
 @Injectable()
-export class BillService {
-  constructor(
-    private userService: UserService,
-    private firestore: AngularFirestore,
-    private firestorage: AngularFireStorage,
-    private store: Store
-  ) {}
+export class EditBillService extends BillService {
+  constructor(userService: UserService, firestore: AngularFirestore, private firestorage: AngularFireStorage, store: Store) {
+    super(userService, firestore, store);
+  }
 
   public addLine(line: BillLine) {
     return this.readData().pipe(
+      take(1),
       mergeMap(bill =>
         this.firestore.collection<any>(`users/${bill.user.uid}/projects/${bill.project}/bills/${bill.month}/lines`).add({
           ...line,
@@ -45,6 +36,7 @@ export class BillService {
 
   public updateLine(line: BillLine) {
     return this.readData().pipe(
+      take(1),
       mergeMap(bill =>
         this.firestore
           .collection<any>(`users/${bill.user.uid}/projects/${bill.project}/bills/${bill.month}/lines`)
@@ -57,6 +49,7 @@ export class BillService {
 
   public deleteLine(line: BillLine) {
     return this.readData().pipe(
+      take(1),
       mergeMap(bill =>
         this.firestore
           .collection<any>(`users/${bill.user.uid}/projects/${bill.project}/bills/${bill.month}/lines`)
@@ -69,6 +62,7 @@ export class BillService {
 
   public get lines$(): Observable<BillLine[]> {
     return this.readData().pipe(
+      take(1),
       mergeMap(bill =>
         this.firestore
           .collection<BillLine>(`users/${bill.user.uid}/projects/${bill.project}/bills/${bill.month}/lines`, ref =>
@@ -84,16 +78,6 @@ export class BillService {
               ...doc.payload.doc.data()
             } as BillLine)
         )
-      )
-    );
-  }
-
-  private readData(): Observable<BillData> {
-    return this.userService.user$.pipe(
-      mergeMap(user =>
-        this.store
-          .selectOnce(SettingsState.project)
-          .pipe(mergeMap(project => this.store.selectOnce(TimesState.selectedMonth).pipe(map(month => ({ user, project, month })))))
       )
     );
   }
@@ -119,15 +103,9 @@ export class BillService {
     return this.calculateHT(duration, hourlyRate, lines) + this.calculateTVA(duration, hourlyRate, tvaRate, lines);
   }
 
-  public get bill$(): Observable<Bill> {
-    return this.readData().pipe(
-      mergeMap(data => this.firestore.doc<Bill>(`users/${data.user.uid}/projects/${data.project}/bills/${data.month}`).valueChanges()),
-      map(bill => ({ ...DEFAULT_BILL, ...bill }))
-    );
-  }
-
   public archive(bill: File) {
     return this.readData().pipe(
+      take(1),
       mergeMap(data =>
         this.firestorage
           .upload(`users/${data.user.uid}/${data.project}/${data.month}.pdf`, bill)

@@ -6,6 +6,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsModule } from '@ngxs/store';
+import { ErrorsHandlingModule } from 'projects/commons/src/lib/error/errors-handling.module';
 import { FilesModule } from 'projects/commons/src/lib/files/files.module';
 import { SettingsState } from 'projects/commons/src/lib/settings/settings.store';
 import { TimesState } from 'projects/commons/src/lib/times/time.store';
@@ -31,7 +32,8 @@ const providers = [];
     FilesModule,
     NgxsModule.forRoot([TimesState, SettingsState], { developmentMode: !environment.production }),
     NgxsReduxDevtoolsPluginModule.forRoot(),
-    NgxsStoragePluginModule.forRoot()
+    NgxsStoragePluginModule.forRoot(),
+    ErrorsHandlingModule
   ],
   providers,
   bootstrap: [AppComponent]

@@ -12,12 +12,12 @@ import { TimesService } from 'projects/commons/src/lib/times/times.service';
 import { combineLatest, Observable } from 'rxjs';
 import { map, mergeMap, tap } from 'rxjs/operators';
 import { BillLine } from '../../models/bill.model';
-import { BillService } from '../../services/bill.service';
+import { EditBillService } from '../../services/edit-bill.service';
 
 @Component({
   selector: 'app-bill',
   templateUrl: './bill.component.html',
-  styleUrls: ['./bill.component.scss']
+  styleUrls: ['./bill.component.scss'],
 })
 export class BillComponent implements OnInit, OnDestroy {
   @Select(SettingsState.project)
@@ -38,8 +38,8 @@ export class BillComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private projectService: ProjectService,
     private timesService: TimesService,
-    private billService: BillService,
-    private store: Store
+    private billService: EditBillService,
+    private store: Store,
   ) {}
 
   ngOnInit() {
@@ -48,7 +48,7 @@ export class BillComponent implements OnInit, OnDestroy {
     // work times duration
     const duration$ = this.selectedDate$.pipe(
       mergeMap(month => this.timesService.read(month, 'month')),
-      map(times => CalculateDuration(times))
+      map(times => CalculateDuration(times)),
     );
 
     // potential lines manually added
@@ -71,8 +71,8 @@ export class BillComponent implements OnInit, OnDestroy {
         totalTTC: this.billService.calculateTTC(duration, settings.bill.hourlyRate, settings.bill.tvaRate, lines),
         project: settings.project,
         ...settings.bill, // settings
-        ...bill // saved data
-      }))
+        ...bill, // saved data
+      })),
     );
 
     this.logo$ = this.project$.pipe(mergeMap(projectName => this.projectService.readLogo(projectName)));

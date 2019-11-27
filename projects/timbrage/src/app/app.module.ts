@@ -1,5 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -9,6 +9,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsModule } from '@ngxs/store';
+import { ErrorsHandlingModule } from 'projects/commons/src/lib/error/errors-handling.module';
 import { SelectProjectModule } from 'projects/commons/src/lib/settings/select-project/select-project.module';
 import { SettingsState } from 'projects/commons/src/lib/settings/settings.store';
 import { TimesState } from 'projects/commons/src/lib/times/time.store';
@@ -17,14 +18,13 @@ import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-const providers = [];
-
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     BrowserAnimationsModule,
+    ErrorsHandlingModule,
     AppRoutingModule,
     ReportingCommonModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
@@ -44,20 +44,10 @@ const providers = [];
       }
     })
   ],
-  providers,
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
-
-@NgModule({})
-export class TimbrageSharedModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: AppModule,
-      providers
-    };
-  }
-}
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
