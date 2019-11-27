@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
 import * as moment from 'moment';
 import { Moment } from 'moment';
@@ -15,7 +16,12 @@ export type Unit = 'day' | 'week' | 'month';
 
 @Injectable()
 export class TimesService {
-  constructor(private firestore: AngularFirestore, private authService: AuthService, private store: Store) {}
+  constructor(
+    private firestore: AngularFirestore,
+    private authService: AuthService,
+    private store: Store,
+    private translateService: TranslateService
+  ) {}
 
   public read(date: string | Moment, unit: Unit = 'day'): Observable<Time[]> {
     // define timestamp range
@@ -122,7 +128,7 @@ export class TimesService {
       take(1),
       map(bill => {
         if (bill && bill.archived) {
-          throw new BusinessError('archived');
+          throw new BusinessError(this.translateService.instant('error.bill-emitted'));
         }
         return true;
       })
