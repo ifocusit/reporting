@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
 import * as moment from 'moment';
 import { AuthService } from 'projects/commons/src/lib/auth/auth.service';
+import { BillService } from 'projects/commons/src/lib/bill/bill.service';
 import { ReadSettings, SettingsState } from 'projects/commons/src/lib/settings/settings.store';
 import { ExportService } from 'projects/commons/src/lib/times/export.service';
 import { SelectDate, TimesState } from 'projects/commons/src/lib/times/time.store';
@@ -25,6 +26,8 @@ export class AppComponent implements OnInit {
 
   @ViewChild('export', { static: true }) private exportLink: ElementRef;
 
+  bill$ = this.billService.bill$;
+
   constructor(
     private swUpdate: SwUpdate,
     private exportService: ExportService,
@@ -32,7 +35,8 @@ export class AppComponent implements OnInit {
     private authService: AuthService,
     private translate: TranslateService,
     private translationService: TranslationService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private billService: BillService
   ) {}
 
   ngOnInit() {
