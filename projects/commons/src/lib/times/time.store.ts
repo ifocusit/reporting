@@ -104,7 +104,7 @@ export class TimesState {
 
   @Action(AddTime)
   addTime(ctx: StateContext<TimesStateModel>, action: AddTime) {
-    return this.store.select(SettingsState.project).pipe(mergeMap(project => this.timesService.create(project, action.time)));
+    return this.store.selectOnce(SettingsState.project).pipe(mergeMap(project => this.timesService.create(project, action.time)));
   }
 
   @Action(AddTimes)
@@ -114,12 +114,12 @@ export class TimesState {
 
   @Action(UpdateTime)
   updateTime(ctx: StateContext<TimesStateModel>, action: UpdateTime) {
-    return this.store.select(SettingsState.project).pipe(mergeMap(project => this.timesService.update(project, action.time)));
+    return this.store.selectOnce(SettingsState.project).pipe(mergeMap(project => this.timesService.update(project, action.time)));
   }
 
   @Action(DeleteTime)
   deleteTime(ctx: StateContext<TimesStateModel>, action: DeleteTime) {
-    return this.store.select(SettingsState.project).pipe(mergeMap(project => this.timesService.delete(project, action.time)));
+    return this.store.selectOnce(SettingsState.project).pipe(mergeMap(project => this.timesService.delete(project, action.time)));
   }
 
   @Action(DeleteTimes)
@@ -129,7 +129,7 @@ export class TimesState {
 
   @Action(CheckWriteRights)
   checkWriteRights(ctx: StateContext<TimesStateModel>) {
-    return this.store.select(SettingsState.project).pipe(
+    return this.store.selectOnce(SettingsState.project).pipe(
       mergeMap(project => this.timesService.verifyWriteRights$(project, ctx.getState().selectedDate.format(MONTH_ISO_FORMAT))),
       take(1)
     );

@@ -25,10 +25,7 @@
               "projects/timbrage/src/manifest.webmanifest",
               "projects/timbrage/src/.well-known/assetlinks.json"
             ],
-            "styles": [
-              "node_modules/firebaseui/dist/firebaseui.css",
-              "projects/timbrage/src/styles.scss"
-            ],
+            "styles": ["node_modules/firebaseui/dist/firebaseui.css", "projects/timbrage/src/styles.scss"],
             "scripts": []
           },
           "configurations": {
@@ -89,9 +86,7 @@
               "projects/timbrage/src/assets",
               "projects/timbrage/src/manifest.webmanifest"
             ],
-            "styles": [
-              "projects/timbrage/src/styles.scss"
-            ],
+            "styles": ["projects/timbrage/src/styles.scss"],
             "scripts": []
           }
         },
@@ -103,9 +98,7 @@
               "projects/timbrage/tsconfig.spec.json",
               "projects/timbrage/e2e/tsconfig.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "e2e": {
@@ -138,15 +131,8 @@
             "polyfills": "projects/admin/src/polyfills.ts",
             "tsConfig": "projects/admin/tsconfig.app.json",
             "aot": false,
-            "assets": [
-              "projects/admin/src/favicon.ico.png",
-              "projects/admin/src/assets",
-              "projects/admin/src/manifest.webmanifest"
-            ],
-            "styles": [
-              "node_modules/firebaseui/dist/firebaseui.css",
-              "projects/admin/src/styles.scss"
-            ],
+            "assets": ["projects/admin/src/favicon.ico.png", "projects/admin/src/assets", "projects/admin/src/manifest.webmanifest"],
+            "styles": ["node_modules/firebaseui/dist/firebaseui.css", "projects/admin/src/styles.scss"],
             "scripts": []
           },
           "configurations": {
@@ -202,28 +188,16 @@
             "polyfills": "projects/admin/src/polyfills.ts",
             "tsConfig": "projects/admin/tsconfig.spec.json",
             "karmaConfig": "projects/admin/karma.conf.js",
-            "assets": [
-              "projects/admin/src/favicon.ico.png",
-              "projects/admin/src/assets",
-              "projects/admin/src/manifest.webmanifest"
-            ],
-            "styles": [
-              "projects/admin/src/styles.scss"
-            ],
+            "assets": ["projects/admin/src/favicon.ico.png", "projects/admin/src/assets", "projects/admin/src/manifest.webmanifest"],
+            "styles": ["projects/admin/src/styles.scss"],
             "scripts": []
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "projects/admin/tsconfig.app.json",
-              "projects/admin/tsconfig.spec.json",
-              "projects/admin/e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "tsConfig": ["projects/admin/tsconfig.app.json", "projects/admin/tsconfig.spec.json", "projects/admin/e2e/tsconfig.json"],
+            "exclude": ["**/node_modules/**"]
           }
         },
         "e2e": {
@@ -264,13 +238,8 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "projects/commons/tsconfig.lib.json",
-              "projects/commons/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "tsConfig": ["projects/commons/tsconfig.lib.json", "projects/commons/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
