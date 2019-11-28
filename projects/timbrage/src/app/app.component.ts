@@ -11,7 +11,7 @@ import { ExportService } from 'projects/commons/src/lib/times/export.service';
 import { SelectDate, TimesState } from 'projects/commons/src/lib/times/time.store';
 import { TranslationService } from 'projects/commons/src/lib/translation/translation.service';
 import { filter, mergeMap, tap } from 'rxjs/operators';
-import { MonthGraphDialog } from '../../../commons/src/lib/times/reports/half-donut/month-graph.dialog';
+import { MonthGraphDialogComponent } from '../../../commons/src/lib/times/reports/half-donut/month-graph.dialog';
 
 @Component({
   selector: 'app-root',
@@ -106,7 +106,7 @@ export class AppComponent implements OnInit {
       .selectOnce(TimesState.selectedMonth)
       .pipe(
         tap(month =>
-          this.dialog.open(MonthGraphDialog, {
+          this.dialog.open(MonthGraphDialogComponent, {
             width: '280px',
             height: '220px',
             data: month

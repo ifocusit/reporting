@@ -63,12 +63,12 @@ export class MonthComponent implements OnInit {
       map(date => _.range(date.daysInMonth()).map(index => new WorkingDateReporting(date.clone().date(index + 1))))
     );
 
-    this.times$ = combineLatest(this.project$, this.selectedDate$).pipe(
+    this.times$ = combineLatest([this.project$, this.selectedDate$]).pipe(
       map(pair => pair[1]),
       mergeMap(month => this.timesService.read(month, 'month'))
     );
 
-    this.items$ = combineLatest(this.days$, this.times$).pipe(
+    this.items$ = combineLatest([this.days$, this.times$]).pipe(
       map(pair =>
         pair[0].map(
           day =>
@@ -84,16 +84,16 @@ export class MonthComponent implements OnInit {
     this.workDays$ = this.items$.pipe(map(days => days.filter(day => !day.isHoliday && !day.isWeekend).length));
 
     // heures demandées
-    this.mustHours$ = combineLatest(this.workDays$, this.settings$).pipe(map(pair => pair[0] * pair[1].timbrage.dailyReport));
+    this.mustHours$ = combineLatest([this.workDays$, this.settings$]).pipe(map(pair => pair[0] * pair[1].timbrage.dailyReport));
 
     // durée totale
     this.total$ = this.items$.pipe(map(days => days.map(report => report.duration).reduce((d1, d2) => d1.add(d2))));
 
-    this.overtime$ = combineLatest(this.total$, this.mustHours$).pipe(
+    this.overtime$ = combineLatest([this.total$, this.mustHours$]).pipe(
       map(pair => pair[0].clone().subtract(moment.duration(pair[1], 'hours')))
     );
 
-    this.finalTotal$ = combineLatest(this.overtime$, this.total$).pipe(
+    this.finalTotal$ = combineLatest([this.overtime$, this.total$]).pipe(
       mergeMap(pair =>
         this.settings$.pipe(map(settings => pair[1].clone().add(Math.max(pair[0].asHours(), 0) * settings.timbrage.overtimeRate, 'hours')))
       )

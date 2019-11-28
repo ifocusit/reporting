@@ -17,7 +17,7 @@ import { EditBillService } from '../../services/edit-bill.service';
 @Component({
   selector: 'app-bill',
   templateUrl: './bill.component.html',
-  styleUrls: ['./bill.component.scss'],
+  styleUrls: ['./bill.component.scss']
 })
 export class BillComponent implements OnInit, OnDestroy {
   @Select(SettingsState.project)
@@ -39,7 +39,7 @@ export class BillComponent implements OnInit, OnDestroy {
     private projectService: ProjectService,
     private timesService: TimesService,
     private billService: EditBillService,
-    private store: Store,
+    private store: Store
   ) {}
 
   ngOnInit() {
@@ -48,7 +48,7 @@ export class BillComponent implements OnInit, OnDestroy {
     // work times duration
     const duration$ = this.selectedDate$.pipe(
       mergeMap(month => this.timesService.read(month, 'month')),
-      map(times => CalculateDuration(times)),
+      map(times => CalculateDuration(times))
     );
 
     // potential lines manually added
@@ -58,7 +58,7 @@ export class BillComponent implements OnInit, OnDestroy {
 
     // screen model that is a combination of settings, work times duration and manual bill's lines
     // we subscribe of every compounts' modifications
-    this.model$ = combineLatest(this.selectedDate$, this.settings$, this.lines$, duration$, bill$).pipe(
+    this.model$ = combineLatest([this.selectedDate$, this.settings$, this.lines$, duration$, bill$]).pipe(
       map(data => ({ selectedDate: data[0], settings: data[1], lines: data[2], duration: data[3], bill: data[4] })),
       tap(({ selectedDate, settings }) => (document.title = `Facture ${settings.project.name} ${selectedDate.format(MONTH_ISO_FORMAT)}`)),
       map(({ selectedDate, settings, lines, duration, bill }) => ({
@@ -71,8 +71,8 @@ export class BillComponent implements OnInit, OnDestroy {
         totalTTC: this.billService.calculateTTC(duration, settings.bill.hourlyRate, settings.bill.tvaRate, lines),
         project: settings.project,
         ...settings.bill, // settings
-        ...bill, // saved data
-      })),
+        ...bill // saved data
+      }))
     );
 
     this.logo$ = this.project$.pipe(mergeMap(projectName => this.projectService.readLogo(projectName)));

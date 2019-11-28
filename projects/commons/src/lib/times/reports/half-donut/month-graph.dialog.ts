@@ -7,8 +7,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
     <lib-half-donut [month]="month"></lib-half-donut>
   `
 })
-export class MonthGraphDialog {
-  constructor(public dialogRef: MatDialogRef<MonthGraphDialog>, @Inject(MAT_DIALOG_DATA) public month: string) {}
+export class MonthGraphDialogComponent {
+  constructor(public dialogRef: MatDialogRef<MonthGraphDialogComponent>, @Inject(MAT_DIALOG_DATA) public month: string) {}
 
   onNoClick(): void {
     this.dialogRef.close();

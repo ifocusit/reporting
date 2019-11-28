@@ -26,7 +26,7 @@ export class TimbrageComponent implements OnInit {
 
   public times$: Observable<Time[]>; // timbrage du jour
 
-  public now$ = combineLatest(timer(0, 1000), this.selectedDate$).pipe(
+  public now$ = combineLatest([timer(0, 1000), this.selectedDate$]).pipe(
     map(pair => pair[1]),
     map(date =>
       moment()
@@ -49,14 +49,14 @@ export class TimbrageComponent implements OnInit {
 
   ngOnInit() {
     // on s'abonne au timbrages du mois
-    const month$ = combineLatest(this.project$, this.selectedDate$).pipe(mergeMap(pair => this.timesService.read(pair[1], 'month')));
+    const month$ = combineLatest([this.project$, this.selectedDate$]).pipe(mergeMap(pair => this.timesService.read(pair[1], 'month')));
 
-    this.times$ = combineLatest(month$, this.selectedDate$).pipe(
+    this.times$ = combineLatest([month$, this.selectedDate$]).pipe(
       // filtre sur le jour sélectionné
       map(pair => pair[0].filter(time => new TimeAdapter(time).getDay() === pair[1].format(DATE_ISO_FORMAT)))
     );
 
-    this.sumWeek$ = combineLatest(month$, this.selectedDate$).pipe(
+    this.sumWeek$ = combineLatest([month$, this.selectedDate$]).pipe(
       // filtre sur la semaine du jour sélectionné
       map(pair => pair[0].filter(time => new TimeAdapter(time).getMoment().week() === pair[1].week())),
       // total hebdomadaire
@@ -67,7 +67,7 @@ export class TimbrageComponent implements OnInit {
     this.progess$ = month$.pipe(mergeMap(times => this.calculationService.calculate(times, false)));
 
     // basé sur un timer
-    this.sumDay$ = combineLatest(timer(0, 1000), this.times$).pipe(mergeMap(pair => this.calculationService.calculate(pair[1])));
+    this.sumDay$ = combineLatest([timer(0, 1000), this.times$]).pipe(mergeMap(pair => this.calculationService.calculate(pair[1])));
 
     this.store.dispatch(new SelectDate(moment())); // charge le jour en cours
   }
