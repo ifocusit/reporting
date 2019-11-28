@@ -39,18 +39,17 @@ export class TimeComponent implements OnInit {
 
   ngOnInit() {}
 
-  private static getIndex(index: number) {
-    index = Math.max(index, 1);
-    return index > 1 ? index - 1 : index;
-  }
-
   public startEditing() {
     this.store.dispatch(new CheckWriteRights()).subscribe(_ => {
       this.editing = true;
       setTimeout(() => {
         const nativeElt = this.myElement.nativeElement;
-        nativeElt.querySelector(`#hours button:nth-child(${TimeComponent.getIndex(this.time.hours())})`).scrollIntoView();
-        nativeElt.querySelector(`#minutes button:nth-child(${TimeComponent.getIndex(this.time.minutes())})`).scrollIntoView();
+
+        const hourIndex = Math.max(this.time.hours(), 1);
+        const minuteIndex = Math.max(this.time.minutes(), 1);
+
+        nativeElt.querySelector(`#hours button:nth-child(${hourIndex})`).scrollIntoView();
+        nativeElt.querySelector(`#minutes button:nth-child(${minuteIndex})`).scrollIntoView();
       });
     });
   }
