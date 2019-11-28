@@ -1,10 +1,10 @@
-import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { mergeMap } from 'rxjs/operators';
-import * as _ from 'lodash';
+import { Action, Selector, State, StateContext, Store } from '@ngxs/store';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { from } from 'rxjs';
-import { Time, MONTH_ISO_FORMAT } from './time.model';
+import { mergeMap, take } from 'rxjs/operators';
+import { SettingsState } from '../settings/settings.store';
+import { MONTH_ISO_FORMAT, Time } from './time.model';
 import { TimesService } from './times.service';
 
 export interface TimesStateModel {
@@ -65,6 +65,10 @@ export class ReadedTimes {
   constructor(public times: Time[]) {}
 }
 
+export class CheckWriteRights {
+  static readonly type = '[Time] CheckWriteRights]';
+}
+
 @State<TimesStateModel>({
   name: 'times',
   defaults: {
@@ -72,7 +76,7 @@ export class ReadedTimes {
   }
 })
 export class TimesState {
-  constructor(private timesService: TimesService) {}
+  constructor(private store: Store, private timesService: TimesService) {}
 
   @Selector()
   public static selectedDate(state: TimesStateModel): Moment {
@@ -100,7 +104,7 @@ export class TimesState {
 
   @Action(AddTime)
   addTime(ctx: StateContext<TimesStateModel>, action: AddTime) {
-    return this.timesService.create(action.time);
+    return this.store.select(SettingsState.project).pipe(mergeMap(project => this.timesService.create(project, action.time)));
   }
 
   @Action(AddTimes)
@@ -110,16 +114,24 @@ export class TimesState {
 
   @Action(UpdateTime)
   updateTime(ctx: StateContext<TimesStateModel>, action: UpdateTime) {
-    return this.timesService.update(action.time);
+    return this.store.select(SettingsState.project).pipe(mergeMap(project => this.timesService.update(project, action.time)));
   }
 
   @Action(DeleteTime)
   deleteTime(ctx: StateContext<TimesStateModel>, action: DeleteTime) {
-    return this.timesService.delete(action.time);
+    return this.store.select(SettingsState.project).pipe(mergeMap(project => this.timesService.delete(project, action.time)));
   }
 
   @Action(DeleteTimes)
   deleteTimes(ctx: StateContext<TimesStateModel>, action: DeleteTimes) {
     return from(action.times).pipe(mergeMap((time: Time) => ctx.dispatch(new DeleteTime(time))));
+  }
+
+  @Action(CheckWriteRights)
+  checkWriteRights(ctx: StateContext<TimesStateModel>) {
+    return this.store.select(SettingsState.project).pipe(
+      mergeMap(project => this.timesService.verifyWriteRights$(project, ctx.getState().selectedDate.format(MONTH_ISO_FORMAT))),
+      take(1)
+    );
   }
 }

@@ -1,7 +1,8 @@
-<div class="readonly">
+<div class="list-item">
   <div (click)="startEditing()">
-    {{ time | moment: 'HH:mm' }}<span *ngIf="!odd" class="secondary-color">{{ 'time.start' | translate }}</span
-    ><span *ngIf="odd" class="secondary-color">{{ 'time.end' | translate }}</span>
+    <span>{{ time | moment: 'HH:mm' }}</span>
+    <span *ngIf="!odd" class="secondary-color">{{ 'time.start' | translate }}</span>
+    <span *ngIf="odd" class="secondary-color">{{ 'time.end' | translate }}</span>
   </div>
   <button mat-icon-button color="accent" (click)="delete()">
     <mat-icon>delete_forever</mat-icon>

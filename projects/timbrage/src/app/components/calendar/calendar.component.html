@@ -2,13 +2,19 @@
   <mat-card-header fxLayout="column" (swipeleft)="changeMonth(+1)" (swiperight)="changeMonth(-1)">
     <div id="calendar">
       <div class="month primary-bg" fxLayoutAlign="space-around center">
-        <div class="prev" (click)="changeMonth(-1)" fxFlex="0 1 20px">&#10094;</div>
+        <div class="prev" (click)="changeMonth(-1)" fxFlex="0 1 20px">
+          &#10094;
+        </div>
         <div class="date">{{ selectedDate | moment: 'MMMM YYYY' }}</div>
-        <div class="next" (click)="changeMonth(+1)" fxFlex="0 1 20px">&#10095;</div>
+        <div class="next" (click)="changeMonth(+1)" fxFlex="0 1 20px">
+          &#10095;
+        </div>
       </div>
 
       <div class="weekdays" fxLayout="row wrap" fxLayoutAlign="space-around center">
-        <div *ngFor="let weekDay of weekDays" fxFlex="13.6" fxLayoutAlign="center">{{ weekDay }}</div>
+        <div *ngFor="let weekDay of weekDays" fxFlex="13.6" fxLayoutAlign="center">
+          {{ weekDay }}
+        </div>
       </div>
 
       <div class="days" fxLayout="row wrap" fxLayoutAlign="space-around center">
@@ -24,7 +30,9 @@
             {{ day.date.date() }}
           </div>
           <ng-template #readOnly>
-            <div class="other-month" fxFlex="13.6" fxLayoutAlign="center">{{ day.date.date() }}</div>
+            <div class="other-month" fxFlex="13.6" fxLayoutAlign="center">
+              {{ day.date.date() }}
+            </div>
           </ng-template>
         </ng-container>
       </div>

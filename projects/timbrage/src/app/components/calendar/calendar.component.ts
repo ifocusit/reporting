@@ -7,7 +7,7 @@ import { Duration, Moment } from 'moment';
 import { SettingsState } from 'projects/commons/src/lib/settings/settings.store';
 import { CalculationService } from 'projects/commons/src/lib/times/calculation.service';
 import { DATE_ISO_FORMAT, Time, TimeAdapter } from 'projects/commons/src/lib/times/time.model';
-import { AddTimes, MoveMonth, SelectDate, TimesState } from 'projects/commons/src/lib/times/time.store';
+import { AddTime, AddTimes, MoveMonth, SelectDate, TimesState } from 'projects/commons/src/lib/times/time.store';
 import { TimesService } from 'projects/commons/src/lib/times/times.service';
 import { combineLatest } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
@@ -124,7 +124,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
             .month(selected.month())
             .year(selected.year())
         ),
-        mergeMap(time => this.timesService.create(TimeAdapter.createTime(time)))
+        mergeMap(time => this.store.dispatch(new AddTime(TimeAdapter.createTime(time))))
       )
       .subscribe();
   }
