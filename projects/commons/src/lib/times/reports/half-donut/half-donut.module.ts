@@ -8,6 +8,7 @@ import { MonthGraphDialog } from './month-graph.dialog';
 @NgModule({
   declarations: [HalfDonutComponent, MonthGraphDialog],
   imports: [CommonModule, FlexLayoutModule, TranslateModule.forRoot()],
+  exports: [HalfDonutComponent],
   entryComponents: [MonthGraphDialog]
 })
 export class HalfDonutModule {}

@@ -39,6 +39,9 @@
     "cancel": "CANCEL",
     "ok": "DONE"
   },
+  "progress": {
+    "title": "{{ actual }} hours on {{ max }}"
+  },
   "error": {
     "bill-emitted": "Unauthorized edition, a bill was emitted"
   }

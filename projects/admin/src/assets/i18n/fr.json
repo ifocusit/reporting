@@ -39,6 +39,9 @@
     "cancel": "ANNULER",
     "ok": "OK"
   },
+  "progress": {
+    "title": "{{ actual }}h reportées sur {{ max }}"
+  },
   "error": {
     "bill-emitted": "Modification non autorisée, une facture à été émise"
   }
