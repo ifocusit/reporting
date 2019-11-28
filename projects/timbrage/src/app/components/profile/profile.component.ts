@@ -69,7 +69,7 @@ export class ProfileComponent implements OnInit {
       .pipe(
         take(1),
         mergeMap(user =>
-          this.store.select(SettingsState.project).pipe(
+          this.store.selectOnce(SettingsState.project).pipe(
             mergeMap(project =>
               this.firestore
                 .collection<TimeModel>(`users/${user.uid}/projects/${project}/times`, ref => ref.orderBy('timestamp'))
