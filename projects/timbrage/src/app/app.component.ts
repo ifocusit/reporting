@@ -5,12 +5,13 @@ import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
 import * as moment from 'moment';
 import { AuthService } from 'projects/commons/src/lib/auth/auth.service';
+import { BillService } from 'projects/commons/src/lib/bill/bill.service';
 import { ReadSettings, SettingsState } from 'projects/commons/src/lib/settings/settings.store';
 import { ExportService } from 'projects/commons/src/lib/times/export.service';
 import { SelectDate, TimesState } from 'projects/commons/src/lib/times/time.store';
 import { TranslationService } from 'projects/commons/src/lib/translation/translation.service';
 import { filter, mergeMap, tap } from 'rxjs/operators';
-import { MonthGraphDialog } from '../../../commons/src/lib/times/reports/half-donut/month-graph.dialog';
+import { MonthGraphDialogComponent } from '../../../commons/src/lib/times/reports/half-donut/month-graph.dialog';
 
 @Component({
   selector: 'app-root',
@@ -25,6 +26,8 @@ export class AppComponent implements OnInit {
 
   @ViewChild('export', { static: true }) private exportLink: ElementRef;
 
+  bill$ = this.billService.bill$;
+
   constructor(
     private swUpdate: SwUpdate,
     private exportService: ExportService,
@@ -32,7 +35,8 @@ export class AppComponent implements OnInit {
     private authService: AuthService,
     private translate: TranslateService,
     private translationService: TranslationService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private billService: BillService
   ) {}
 
   ngOnInit() {
@@ -102,7 +106,7 @@ export class AppComponent implements OnInit {
       .selectOnce(TimesState.selectedMonth)
       .pipe(
         tap(month =>
-          this.dialog.open(MonthGraphDialog, {
+          this.dialog.open(MonthGraphDialogComponent, {
             width: '280px',
             height: '220px',
             data: month

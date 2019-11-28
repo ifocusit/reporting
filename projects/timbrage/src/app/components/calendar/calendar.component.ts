@@ -83,15 +83,15 @@ export class CalendarComponent implements OnInit, OnDestroy {
       .pipe(map(value => value.split(',')))
       .subscribe(days => (this.weekDays = days));
 
-    this.month$ = combineLatest(this.project$, this.selectedDate$).pipe(mergeMap(pair => this.timesService.read(pair[1], 'month')));
+    this.month$ = combineLatest([this.project$, this.selectedDate$]).pipe(mergeMap(pair => this.timesService.read(pair[1], 'month')));
 
-    this.times$ = combineLatest(this.selectedDate$, this.month$).pipe(
+    this.times$ = combineLatest([this.selectedDate$, this.month$]).pipe(
       map(pair => pair[1].filter(time => time.time.startsWith(pair[0].format(DATE_ISO_FORMAT))))
     );
 
     this.sumDay$ = this.times$.pipe(mergeMap(times => this.calculationService.calculate(times, false)));
 
-    this.days$ = combineLatest(this.selectedDate$, this.month$).pipe(
+    this.days$ = combineLatest([this.selectedDate$, this.month$]).pipe(
       map(pair => [CalendarComponent.getMonthDays(pair[0]), pair[1]]),
       map((pair: [Moment[], Time[]]) =>
         pair[0].map(day => ({

@@ -23,8 +23,8 @@ export class BillService {
     return this.userService.user$.pipe(
       mergeMap(user =>
         this.store
-          .selectOnce(SettingsState.project)
-          .pipe(mergeMap(project => this.store.selectOnce(TimesState.selectedMonth).pipe(map(month => ({ user, project, month })))))
+          .select(SettingsState.project)
+          .pipe(mergeMap(project => this.store.select(TimesState.selectedMonth).pipe(map(month => ({ user, project, month })))))
       )
     );
   }

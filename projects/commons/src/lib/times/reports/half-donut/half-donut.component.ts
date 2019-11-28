@@ -32,7 +32,7 @@ export class HalfDonutComponent implements OnInit {
                 const date = moment(this.month).startOf('month');
                 const daysInMonth = _.range(moment(this.month).daysInMonth())
                   .map(index => date.clone().date(index + 1))
-                  .filter(date => [1, 2, 3, 4, 5].indexOf(date.day()) > -1).length;
+                  .filter(day => [1, 2, 3, 4, 5].indexOf(day.day()) > -1).length;
 
                 const max = daysInMonth * settings.timbrage.dailyReport;
                 const overtime = actual - max;

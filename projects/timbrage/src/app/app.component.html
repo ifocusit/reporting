@@ -10,6 +10,11 @@
       <span *ngIf="loginPage()">{{ 'toolbar.connection' | translate }}</span>
       <lib-select-project [defaultName]="'timbrage.title' | translate" *ngIf="timbragePage()" fxFlex="1 1 auto"></lib-select-project>
       <lib-select-project [defaultName]="'calendar.title' | translate" *ngIf="calendarPage()" fxFlex="1 1 auto"></lib-select-project>
+      <div *ngIf="bill$ | async as bill">
+        <a mat-icon-button [href]="bill.billUrl" target="_blank" *ngIf="calendarPage() && bill.archived">
+          <mat-icon>picture_as_pdf</mat-icon>
+        </a>
+      </div>
       <button *ngIf="calendarPage()" mat-icon-button (click)="showGraph()">
         <mat-icon>looks</mat-icon>
       </button>
