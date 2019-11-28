@@ -1,0 +1,127 @@
+@import '~compass-mixins/lib/compass/css3';
+@import '~compass-mixins/lib/animate';
+
+$pie_width: 200px;
+$pie_height: $pie_width / 2;
+$wrapper-bg: #e8e8e8; //#e0e0e0
+$green: #47cf73; //#00C853
+$red: #ff3c41; //#FF3A00
+$orange: #fcd000; //#FFAB00
+$blue: #3949ab;
+$text-color: #394955;
+$body-bg: #fff;
+$legend-bg: #f0f0f0;
+
+body {
+  background-color: $body-bg;
+  font-family: arial, sans-serif;
+  color: $text-color;
+}
+
+h2 {
+  margin-left: 20px;
+}
+
+.label-text {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.pie-wrapper {
+  position: relative;
+  width: $pie_width;
+  height: $pie_height;
+  overflow: hidden;
+
+  .arc,
+  &:before {
+    content: '';
+    width: $pie_width;
+    height: $pie_height;
+    position: absolute;
+    -ms-transform-origin: 50% 0%;
+    -webkit-transform-origin: 50% 0%;
+    transform-origin: 50% 0%;
+    left: 0;
+    box-sizing: border-box;
+  }
+
+  &:before {
+    border: 50px solid $wrapper-bg;
+    border-bottom: none;
+    top: 0;
+    z-index: 1;
+    border-radius: 300px 300px 0 0;
+  }
+
+  .arc {
+    border: 50px solid $green;
+    border-top: none;
+    border-radius: 0 0 300px 300px;
+    top: 100%;
+    z-index: 2;
+
+    &::before {
+      content: '';
+      height: 1px;
+      width: 5px;
+      position: absolute;
+      top: 0px;
+    }
+  }
+
+  .score {
+    color: $text-color;
+    font-size: 28px;
+    display: block;
+    width: $pie-width;
+    text-align: center;
+    margin-top: ($pie-height/2) + 20;
+  }
+}
+
+div.pie-wrapper div.arc.normal {
+  border-color: $blue;
+
+  &::before {
+    background-color: $blue;
+  }
+}
+
+div.pie-wrapper div.arc.overtime {
+  border-color: $red;
+
+  &::before {
+    background-color: $red;
+  }
+}
+
+@for $i from 1 through 100 {
+  .pie-wrapper .arc[data-value='#{$i}'] {
+    @include animation(fill 2s);
+    @include transform(rotate(#{$i * 1.8}deg));
+    transition: All 5s ease;
+
+    &:after {
+      content: '';
+      position: absolute;
+      left: -40px;
+      top: 5px;
+    }
+
+    &::before {
+      background-color: $green;
+    }
+  }
+}
+
+@include keyframes(fill) {
+  0% {
+    @include rotate(0deg);
+    border-color: $red;
+  }
+  50% {
+    @include rotate(180deg);
+    border-color: $green;
+  }
+}

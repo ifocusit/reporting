@@ -12,6 +12,7 @@ import { NgxsModule } from '@ngxs/store';
 import { ErrorsHandlingModule } from 'projects/commons/src/lib/error/errors-handling.module';
 import { SelectProjectModule } from 'projects/commons/src/lib/settings/select-project/select-project.module';
 import { SettingsState } from 'projects/commons/src/lib/settings/settings.store';
+import { HalfDonutModule } from 'projects/commons/src/lib/times/reports/half-donut/half-donut.module';
 import { TimesState } from 'projects/commons/src/lib/times/time.store';
 import { AuthModule, ReportingCommonModule, SettingsModule, TimesModule } from 'projects/commons/src/public-api';
 import { environment } from '../environments/environment';
@@ -42,7 +43,8 @@ import { AppComponent } from './app.component';
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
       }
-    })
+    }),
+    HalfDonutModule
   ],
   providers: [],
   bootstrap: [AppComponent]

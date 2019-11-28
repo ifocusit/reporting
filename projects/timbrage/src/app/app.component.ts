@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material';
 import { SwUpdate } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
@@ -9,6 +10,7 @@ import { ExportService } from 'projects/commons/src/lib/times/export.service';
 import { SelectDate, TimesState } from 'projects/commons/src/lib/times/time.store';
 import { TranslationService } from 'projects/commons/src/lib/translation/translation.service';
 import { filter, mergeMap, tap } from 'rxjs/operators';
+import { MonthGraphDialog } from '../../../commons/src/lib/times/reports/half-donut/month-graph.dialog';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +18,10 @@ import { filter, mergeMap, tap } from 'rxjs/operators';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  navLinks = [{ path: '/timbrage', label: 'timbrage.title' }, { path: '/calendar', label: 'calendar.title' }];
+  navLinks = [
+    { path: '/timbrage', label: 'timbrage.title' },
+    { path: '/calendar', label: 'calendar.title' }
+  ];
 
   @ViewChild('export', { static: true }) private exportLink: ElementRef;
 
@@ -26,7 +31,8 @@ export class AppComponent implements OnInit {
     private store: Store,
     private authService: AuthService,
     private translate: TranslateService,
-    private translationService: TranslationService
+    private translationService: TranslationService,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -89,5 +95,20 @@ export class AppComponent implements OnInit {
 
   signOut() {
     this.authService.signOutUser();
+  }
+
+  public showGraph() {
+    this.store
+      .selectOnce(TimesState.selectedMonth)
+      .pipe(
+        tap(month =>
+          this.dialog.open(MonthGraphDialog, {
+            width: '280px',
+            height: '220px',
+            data: month
+          })
+        )
+      )
+      .subscribe();
   }
 }

@@ -36,6 +36,7 @@
     "@ngx-translate/http-loader": "4.0.0",
     "@ngxs/storage-plugin": "3.5.1",
     "@ngxs/store": "3.5.0",
+    "compass-mixins": "^0.12.10",
     "firebase": "7.5.0",
     "firebaseui": "4.1.0",
     "firebaseui-angular": "4.0.0",

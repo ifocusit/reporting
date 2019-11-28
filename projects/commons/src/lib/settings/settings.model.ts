@@ -6,6 +6,7 @@ export interface Settings {
   timbrage: {
     defaults: string[];
     dailyReport: number; // h par j
+    overtimeRate: number;
     saveMissings: boolean;
     exportFormat: string;
   };
@@ -33,6 +34,7 @@ export const DEFAULT_SETTINGS: Settings = {
   timbrage: {
     defaults: ['08:00', '11:30', '12:30', '17:00'],
     dailyReport: 8,
+    overtimeRate: 1.2,
     saveMissings: true,
     exportFormat: 'YYYY-MM-DD HH:mm'
   },

@@ -1,7 +1,7 @@
 import * as moment from 'moment';
 import { Duration, Moment } from 'moment';
 import { CalculateDuration } from 'projects/commons/src/lib/times/calculate-duration.tools';
-import { Time, TimeAdapter, DATE_ISO_FORMAT, DATETIME_ISO_FORMAT, TIME_ISO_FORMAT } from 'projects/commons/src/lib/times/time.model';
+import { DATETIME_ISO_FORMAT, DATE_ISO_FORMAT, Time, TimeAdapter, TIME_ISO_FORMAT } from 'projects/commons/src/lib/times/time.model';
 
 export class WorkingDateReporting {
   public hasTimes: boolean;
@@ -33,6 +33,3 @@ export class WorkingDateReporting {
 function time(value: string): Time {
   return TimeAdapter.createTime(moment(value, TIME_ISO_FORMAT).format(DATETIME_ISO_FORMAT));
 }
-
-export const DEFAULT_DAY_DURATION = 8;
-export const WEEK_OVERTIME_MAJOR = 1.2;

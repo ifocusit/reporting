@@ -12,11 +12,7 @@ import { SettingsState } from 'projects/commons/src/lib/settings/settings.store'
 import { DATETIME_ISO_FORMAT, MONTH_ISO_FORMAT, Time, TimeAdapter } from 'projects/commons/src/lib/times/time.model';
 import { SelectDate, TimesState } from 'projects/commons/src/lib/times/time.store';
 import { TimesService } from 'projects/commons/src/lib/times/times.service';
-import {
-  DEFAULT_DAY_DURATION,
-  WEEK_OVERTIME_MAJOR,
-  WorkingDateReporting
-} from 'projects/commons/src/lib/times/working-date-reporting.model';
+import { WorkingDateReporting } from 'projects/commons/src/lib/times/working-date-reporting.model';
 import { combineLatest, from, Observable } from 'rxjs';
 import { filter, map, mergeMap, take } from 'rxjs/operators';
 import { DailyReportComponent } from './daily-report/daily-report.component';
@@ -74,18 +70,21 @@ export class MonthComponent implements OnInit {
 
     this.items$ = combineLatest(this.days$, this.times$).pipe(
       map(pair =>
-        pair[0].map(day => new WorkingDateReporting(day.date, pair[1].filter(time => day.isSameDate(new TimeAdapter(time).getDay()))))
+        pair[0].map(
+          day =>
+            new WorkingDateReporting(
+              day.date,
+              pair[1].filter(time => day.isSameDate(new TimeAdapter(time).getDay()))
+            )
+        )
       )
     );
 
     // jours travaillés
     this.workDays$ = this.items$.pipe(map(days => days.filter(day => !day.isHoliday && !day.isWeekend).length));
 
-    // jours ouvrés
-    // const openDays$ = this.days$.pipe(map(days => days.filter(day => !day.isWeekend).length));
-
     // heures demandées
-    this.mustHours$ = this.workDays$.pipe(map(days => days * DEFAULT_DAY_DURATION));
+    this.mustHours$ = combineLatest(this.workDays$, this.settings$).pipe(map(pair => pair[0] * pair[1].timbrage.dailyReport));
 
     // durée totale
     this.total$ = this.items$.pipe(map(days => days.map(report => report.duration).reduce((d1, d2) => d1.add(d2))));
@@ -95,7 +94,9 @@ export class MonthComponent implements OnInit {
     );
 
     this.finalTotal$ = combineLatest(this.overtime$, this.total$).pipe(
-      map(pair => pair[1].clone().add(Math.max(pair[0].asHours(), 0) * WEEK_OVERTIME_MAJOR, 'hours'))
+      mergeMap(pair =>
+        this.settings$.pipe(map(settings => pair[1].clone().add(Math.max(pair[0].asHours(), 0) * settings.timbrage.overtimeRate, 'hours')))
+      )
     );
   }
 

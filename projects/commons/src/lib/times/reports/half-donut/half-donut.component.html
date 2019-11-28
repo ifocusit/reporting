@@ -1,0 +1,8 @@
+<div *ngIf="report$ | async as report" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="20px">
+  <span class="label-text">{{ 'progress.title' | translate: report }}</span>
+  <div class="pie-wrapper">
+    <div class="arc overtime" *ngIf="report.overtime > 0" [attr.data-value]="100"></div>
+    <div class="arc normal" [attr.data-value]="report.normal"></div>
+    <span class="score">{{ report.progress }}%</span>
+  </div>
+</div>
