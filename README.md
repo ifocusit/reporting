@@ -4,7 +4,7 @@
 
 _Application d'aide au reporting quotidien, outils de productivité._
 
-<img src="design/social_network_preview_1280x640.png" alt="Social preview" width="1000"/>
+<img src="docs/design/social_network_preview_1280x640.png" alt="Social preview" width="1000"/>
 
 Cette application permet d'enregistrer rapidement et simplement son temps de travail quotidien, pratique pour la facturation au client ;)
 
