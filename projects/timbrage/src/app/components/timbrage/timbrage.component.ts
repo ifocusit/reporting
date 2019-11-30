@@ -73,6 +73,7 @@ export class TimbrageComponent implements OnInit {
   }
 
   public addTimbrage() {
+    window.navigator.vibrate(500);
     this.selectedDate$
       .pipe(
         take(1),
