@@ -1,53 +1,43 @@
 <mat-card fxLayout="column" class="container mat-elevation-z0" *ngIf="selectedDate$ | async as selectedDate">
   <mat-card-header fxLayout="column" (swipeleft)="changeMonth(+1)" (swiperight)="changeMonth(-1)">
-    <div id="calendar">
-      <div class="month primary-bg" fxLayoutAlign="space-around center">
-        <div class="prev" (click)="changeMonth(-1)" fxFlex="0 1 20px">
-          &#10094;
-        </div>
-        <div class="date">{{ selectedDate | moment: 'MMMM YYYY' }}</div>
-        <div class="next" (click)="changeMonth(+1)" fxFlex="0 1 20px">
-          &#10095;
-        </div>
-      </div>
+    <mat-toolbar id="month" color="primary">
+      <button mat-icon-button (click)="changeMonth(-1)">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+      </button>
+      <span fxFlex="1 1 auto">{{ selectedDate | moment: 'MMMM YYYY' }}</span>
+      <button mat-icon-button (click)="changeMonth(+1)">
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </button>
+    </mat-toolbar>
 
-      <div class="weekdays" fxLayout="row wrap" fxLayoutAlign="space-around center">
-        <div *ngFor="let weekDay of weekDays" fxFlex="13.6" fxLayoutAlign="center">
-          {{ weekDay }}
-        </div>
-      </div>
+    <div fxLayoutAlign="space-around center">
+      <button mat-flat-button class="calendar-days" *ngFor="let weekDay of weekDays" fxLayoutAlign="center">
+        {{ weekDay }}
+      </button>
+    </div>
 
-      <div class="days" fxLayout="row wrap" fxLayoutAlign="space-around center">
-        <ng-container *ngFor="let day of days$ | async">
-          <div
-            *ngIf="selectedDate.month() === day.date.month(); else readOnly"
-            [class.accent-lighter-bg]="day.hasTimes"
-            [class.primary-bg]="selectedDate.format('YYYYMMDD') === day.date.format('YYYYMMDD')"
-            (click)="select(day.date)"
-            fxFlex="13.6"
-            fxLayoutAlign="center"
-          >
-            {{ day.date.date() }}
-          </div>
-          <ng-template #readOnly>
-            <div class="other-month" fxFlex="13.6" fxLayoutAlign="center">
-              {{ day.date.date() }}
-            </div>
-          </ng-template>
-        </ng-container>
-      </div>
+    <div fxLayout="row wrap" fxLayoutAlign="space-around center">
+      <button
+        *ngFor="let day of days$ | async"
+        mat-flat-button
+        class="calendar-days"
+        [class.lighter]="selectedDate.month() !== day.date.month()"
+        [color]="selectedDate.format('YYYYMMDD') === day.date.format('YYYYMMDD') ? 'primary' : day.hasTimes ? 'accent' : ''"
+        (click)="select(day.date)"
+        fxFlex="13.6"
+      >
+        {{ day.date.date() }}
+      </button>
     </div>
-    <div id="sumDay" fxLayoutAlign="space-between center">
-      <span>{{ sumDay$ | async | duration }}</span>
-      <div fxLayoutGap="10px" fxLayoutAlign="center center">
-        <button (click)="addTimbrage()" mat-mini-fab color="accent">
-          <mat-icon>add</mat-icon>
-        </button>
-        <button (click)="addTimbrages()" mat-mini-fab color="accent">
-          <mat-icon>library_add</mat-icon>
-        </button>
-      </div>
-    </div>
+    <mat-toolbar fxLayoutGap="10px">
+      <span fxFlex="1 1 auto">{{ sumDay$ | async | duration }}</span>
+      <button (click)="addTimbrage()" mat-mini-fab color="accent">
+        <mat-icon>add</mat-icon>
+      </button>
+      <button (click)="addTimbrages()" mat-mini-fab color="accent">
+        <mat-icon>library_add</mat-icon>
+      </button>
+    </mat-toolbar>
   </mat-card-header>
 
   <mat-card-content class="scrollbar" (swiperight)="openTimbrage()">
