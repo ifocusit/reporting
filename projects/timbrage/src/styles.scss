@@ -1,4 +1,4 @@
-@import '../../commons/src/lib/themes.scss';
+@import '../../commons/src/lib/theme/themes.scss';
 @import '../../commons/src/lib/commons.scss';
 
 .container {
@@ -8,13 +8,17 @@
   flex-direction: column;
   flex-wrap: nowrap;
 
-  .content, mat-card-content {
+  .content,
+  mat-card-content {
     flex-grow: 1;
     overflow: auto;
     min-height: 2em;
   }
 
-  header, footer, mat-card-header, mat-card-footer {
+  header,
+  footer,
+  mat-card-header,
+  mat-card-footer {
     flex-shrink: 0;
   }
 }

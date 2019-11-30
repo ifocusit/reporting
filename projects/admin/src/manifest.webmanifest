@@ -1,7 +1,7 @@
 {
   "name": "Timbrage Admin",
   "short_name": "Timbrage Admin",
-  "theme_color": "#1976d2",
+  "theme_color": "#1a237e",
   "background_color": "#fafafa",
   "display": "standalone",
   "scope": "/",

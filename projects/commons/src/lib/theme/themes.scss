@@ -40,6 +40,14 @@
   .foreground-color {
     border-color: $foreground-default;
   }
+
+  .gray-darker-bg {
+    background-color: #666;
+  }
+
+  .gray-bg {
+    background-color: #ddd;
+  }
 }
 
 // ajout d'un theme
