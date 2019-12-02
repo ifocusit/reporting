@@ -134,7 +134,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
       .pipe(
         take(1),
         mergeMap(date =>
-          this.store.select(SettingsState.settings).pipe(
+          this.store.selectOnce(SettingsState.settings).pipe(
             map(settings =>
               settings.timbrage.defaults
                 .map(time => moment(time, 'HH.mm'))

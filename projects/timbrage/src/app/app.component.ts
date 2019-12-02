@@ -1,16 +1,16 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { SwUpdate } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
 import * as moment from 'moment';
+import { DefaultAppComponent } from 'projects/commons/src/lib/app/default-app.component';
 import { AuthService } from 'projects/commons/src/lib/auth/auth.service';
 import { BillService } from 'projects/commons/src/lib/bill/bill.service';
-import { ReadSettings, SettingsState } from 'projects/commons/src/lib/settings/settings.store';
 import { ExportService } from 'projects/commons/src/lib/times/export.service';
 import { SelectDate, TimesState } from 'projects/commons/src/lib/times/time.store';
 import { TranslationService } from 'projects/commons/src/lib/translation/translation.service';
-import { filter, mergeMap, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { MonthGraphDialogComponent } from '../../../commons/src/lib/times/reports/half-donut/month-graph.dialog';
 
 @Component({
@@ -18,7 +18,7 @@ import { MonthGraphDialogComponent } from '../../../commons/src/lib/times/report
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent extends DefaultAppComponent {
   navLinks = [
     { path: '/timbrage', label: 'timbrage.title' },
     { path: '/calendar', label: 'calendar.title' }
@@ -29,43 +29,16 @@ export class AppComponent implements OnInit {
   bill$ = this.billService.bill$;
 
   constructor(
-    private swUpdate: SwUpdate,
+    swUpdate: SwUpdate,
+    store: Store,
+    authService: AuthService,
+    translate: TranslateService,
+    translationService: TranslationService,
     private exportService: ExportService,
-    private store: Store,
-    private authService: AuthService,
-    private translate: TranslateService,
-    private translationService: TranslationService,
     public dialog: MatDialog,
     private billService: BillService
-  ) {}
-
-  ngOnInit() {
-    this.translationService.loadLang('fr');
-    if (this.swUpdate.isEnabled) {
-      this.swUpdate.available
-        .pipe(
-          filter(event => !!event),
-          mergeMap(() => this.translate.get('messages.update'))
-        )
-        .subscribe(message => {
-          if (confirm(message)) {
-            window.location.reload();
-          }
-        });
-    }
-    // changement de user => charge le dermier project et ses settings
-    this.authService.user$
-      .pipe(
-        tap(user => this.translationService.loadLang(user.lang)),
-        mergeMap(user => this.store.dispatch(new ReadSettings(user.lastProject)))
-      )
-      .subscribe();
-
-    // changement de theme
-    this.store
-      .select(SettingsState.theme)
-      .pipe(tap(theme => (document.getElementsByTagName('body')[0].classList.value = theme)))
-      .subscribe();
+  ) {
+    super(swUpdate, store, authService, translate, translationService);
   }
 
   public calendarPage() {
