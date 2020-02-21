@@ -20,6 +20,7 @@ jobs:
         provider: script
         script: firebase deploy --only hosting:timbrage
         skip_cleanup: true
+
     - name: Job admin
       before_install:
         - chmod +x $SCRIPT_DIR/check_changes
@@ -28,6 +29,17 @@ jobs:
       deploy:
         provider: script
         script: firebase deploy --only hosting:admin
+        skip_cleanup: true
+
+    - name: Job functions
+      before_install:
+        - chmod +x $SCRIPT_DIR/check_changes
+        - check_changes functions || travis_terminate 0;
+        - cd functions
+      script: npm run build
+      deploy:
+        provider: script
+        script: npm run deploy
         skip_cleanup: true
 
 branches:
