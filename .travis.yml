@@ -13,7 +13,7 @@ jobs:
   include:
     - name: Job timbrage
       before_install:
-        - chmod +x $GPG_DIR/check_changes
+        - chmod +x $SCRIPT_DIR/check_changes
         - check_changes projects/timbrage projects/common || travis_terminate 0;
       script: ng build --prod --project timbrage
       deploy:
@@ -22,7 +22,7 @@ jobs:
         skip_cleanup: true
     - name: Job admin
       before_install:
-        - chmod +x $GPG_DIR/check_changes
+        - chmod +x $SCRIPT_DIR/check_changes
         - check_changes projects/admin projects/common || travis_terminate 0;
       script: ng build --prod --project admin
       deploy:
