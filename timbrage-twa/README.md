@@ -20,7 +20,14 @@ To release :
 4. _optional_ manual install :
 
 ```bash
-adb install app\release\app-release.apk
+adb -d install app\build\outputs\apk\release\app-release-unsigned.apk
 ```
 
-5. upload build apk manually from developper console
+5. sign apk
+
+```bash
+zipalign -v -p 4 app\build\outputs\apk\release\app-release-unsigned.apk app\build\outputs\apk\release\app-release-aligned.apk
+apksigner sign --ks android-store-release-keystore.jks --out app\build\app-release-signed.apk app\build\outputs\apk\release\app-release-aligned.apk
+```
+
+6. upload build apk manually from developper console
