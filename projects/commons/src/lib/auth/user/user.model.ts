@@ -18,4 +18,5 @@ export interface User {
   isMultiProject: boolean;
   admin: boolean;
   lang: string;
+  lastConnection?: string;
 }

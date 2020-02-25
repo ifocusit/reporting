@@ -14,9 +14,6 @@ const firebaseUiAuthConfig = {
     },
     firebase.auth.PhoneAuthProvider.PROVIDER_ID
   ],
-  signInSuccessUrl: '/',
-  // tosUrl: '/',
-  // privacyPolicyUrl: '/',
   credentialHelper: firebaseui.auth.CredentialHelper.NONE
 };
 

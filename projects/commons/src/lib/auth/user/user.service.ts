@@ -28,7 +28,7 @@ export class UserService {
     );
   }
 
-  public updateUserData(user: firebase.User) {
+  public updateUserData(user: firebase.User): Promise<void> {
     // Sets user data to firestore on login
     const data = {
       uid: user.uid,
@@ -44,6 +44,7 @@ export class UserService {
     if (user.phoneNumber) {
       data.phoneNumber = user.phoneNumber;
     }
+    data.lastConnection = new Date().toLocaleString();
 
     return this.firestore.doc(`users/${user.uid}`).set(data, { merge: true });
   }
