@@ -32,11 +32,22 @@ _Also deployed on [Google Play store](https://play.google.com/store/apps/details
 
 In this monorepo, you will find this great tools :
 
-1. @angular
-2. @angular/material
-3. @angular/flex-layout
-4. @ngxs
-5. firebase
-6. @ngx-translate
+1. [@angular](https://angular.io/)
+2. [@angular/material](https://material.angular.io/)
+3. [@angular/flex-layout](https://github.com/angular/flex-layout)
+4. [@ngxs](https://www.ngxs.io/)
+5. [firebase](https://firebase.google.com/)
+6. [@ngx-translate](https://github.com/ngx-translate/core)
 7. @angular/pwa : [Progressive Web Application](https://fr.wikipedia.org/wiki/Progressive_web_app)
-8. TWA : _(TODO: copy twa repo here)_ [Trusted Web Application](https://codelabs.developers.google.com/codelabs/getting-started-with-twas/index.html#0)
+8. TWA : [Trusted Web Application](https://codelabs.developers.google.com/codelabs/getting-started-with-twas/index.html#0)
+
+Other great tools that help in my developpements:
+
+- [Icons - Material Design](https://material.io/resources/icons/?style=baseline)
+- [Icons - Font Awesome](https://fontawesome.com/icons?d=gallery&m=free)
+- [Color Tool - Material Design](https://material.io/resources/color/#!/?view.left=0&view.right=0&primary.color=B71C1C)
+- [Color - Material-UI](https://material-ui.com/customization/color/#color-tool)
+- [Github - this repository :)](https://github.com/jboz/reporting)
+- and of course [Google](https://www.google.com/)
+
+Actually, I'm trying [github project board](https://github.com/jboz/reporting/projects/1), but I like so much [Trello](https://trello.com)
