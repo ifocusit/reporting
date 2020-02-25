@@ -1,0 +1,43 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "ch.ifocusit.reporting.timbrage"
+        minSdkVersion 19
+        targetSdkVersion 28
+        versionCode 11
+        versionName "1.0.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [
+                hostName       : "timbrage.ifocusit.ch/",
+                defaultUrl     : "https://timbrage.ifocusit.ch/",
+                launcherName   : "Timbrage",
+                assetStatements: '[{ "relation": ["delegate_permission/common.handle_all_urls"], ' +
+                        '"target": {"namespace": "web", "site": "https://timbrage.ifocusit.ch/"}}]'
+        ]
+        buildConfigField "String", "DEFAULT_URL", "\"${manifestPlaceholders.defaultUrl}\""
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildToolsVersion = '29.0.2'
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation 'com.github.GoogleChrome.custom-tabs-client:customtabs:d08e93fce3'
+}
+repositories {
+    mavenCentral()
+}
