@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { FirebaseUISignInSuccessWithAuthResult } from 'firebaseui-angular';
 import { UserService } from '../user/user.service';
 
@@ -9,13 +10,11 @@ import { UserService } from '../user/user.service';
   `
 })
 export class LoginComponent implements OnInit {
-  constructor(private userService: UserService) {
-    // firebaseuiAngularLibraryService.firebaseUiInstance.disableAutoSignIn();
-  }
+  constructor(private userService: UserService, private router: Router) {}
 
   ngOnInit() {}
 
   successCallback(signInSuccessData: FirebaseUISignInSuccessWithAuthResult) {
-    this.userService.updateUserData(signInSuccessData.authResult.user);
+    this.userService.updateUserData(signInSuccessData.authResult.user).then(() => this.router.navigate(['/']));
   }
 }

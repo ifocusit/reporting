@@ -14,7 +14,7 @@ jobs:
     - name: Job timbrage
       before_install:
         - chmod +x $SCRIPT_DIR/check_changes
-        - check_changes projects/timbrage projects/common || travis_terminate 0;
+        - check_changes projects/timbrage projects/commons || travis_terminate 0;
       script: ng build --prod --project timbrage
       deploy:
         provider: script
@@ -24,7 +24,7 @@ jobs:
     - name: Job admin
       before_install:
         - chmod +x $SCRIPT_DIR/check_changes
-        - check_changes projects/admin projects/common || travis_terminate 0;
+        - check_changes projects/admin projects/commons || travis_terminate 0;
       script: ng build --prod --project admin
       deploy:
         provider: script
