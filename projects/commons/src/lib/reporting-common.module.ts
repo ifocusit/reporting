@@ -1,13 +1,14 @@
-import { NgModule } from '@angular/core';
+import { LayoutModule } from '@angular/cdk/layout';
 import { CommonModule, DecimalPipe } from '@angular/common';
+import { Injectable, NgModule } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
+import { DebounceInputDirective } from './form/debounce-input.directive';
 import { MaterialModule } from './material.module';
 import { DurationPipe } from './pipes/duration.pipe';
 import { MomentPipe } from './pipes/moment.pipe';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { LayoutModule } from '@angular/cdk/layout';
-import { DebounceInputDirective } from './form/debounce-input.directive';
-import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 
+@Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
   overrides = {
     pinch: { enable: false },
