@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext, Store } from '@ngxs/store';
 import * as moment from 'moment';
 import { Moment } from 'moment';
@@ -75,6 +76,7 @@ export class CheckWriteRights {
     selectedDate: moment()
   }
 })
+@Injectable()
 export class TimesState {
   constructor(private store: Store, private timesService: TimesService) {}
 

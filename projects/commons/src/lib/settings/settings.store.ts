@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext, Store } from '@ngxs/store';
 import { mergeMap, tap } from 'rxjs/operators';
 import { ProjectService } from './project.service';
@@ -23,6 +24,7 @@ export class SaveSettings {
     settings: DEFAULT_SETTINGS
   }
 })
+@Injectable()
 export class SettingsState {
   constructor(private store: Store, private settingsService: ProjectService) {}
 
