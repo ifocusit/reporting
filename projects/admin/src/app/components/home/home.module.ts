@@ -5,14 +5,17 @@ import { FilesModule } from 'projects/commons/src/lib/files/files.module';
 import { EditProjectModule } from 'projects/commons/src/lib/settings/edit-project/edit-project.module';
 import { SelectProjectModule } from 'projects/commons/src/lib/settings/select-project/select-project.module';
 import { CopyrightModule, ReportingCommonModule } from 'projects/commons/src/public-api';
-import { ProfileRoutingModule } from './profile-routing.module';
-import { ProfileComponent } from './profile.component';
+import { HomeRoutingModule } from './home-routing.module';
+import { HomeComponent } from './home.component';
+import { MonthCardComponent } from './month-card/month-card.component';
+import { MonthListComponent } from './month-list/month-list.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
-  declarations: [ProfileComponent],
+  declarations: [HomeComponent, ProfileComponent, MonthCardComponent, MonthListComponent],
   imports: [
     CommonModule,
-    ProfileRoutingModule,
+    HomeRoutingModule,
     ReportingCommonModule,
     SelectProjectModule,
     ReactiveFormsModule,
@@ -22,4 +25,4 @@ import { ProfileComponent } from './profile.component';
     EditProjectModule
   ]
 })
-export class ProfileModule {}
+export class HomeModule {}

@@ -1,0 +1,3 @@
+<div class="month accent-border" fxFlex="100px" [class.primary-color]="month === today" [routerLink]="['/month', month]">
+  {{ month | moment: 'MMM' }}
+</div>

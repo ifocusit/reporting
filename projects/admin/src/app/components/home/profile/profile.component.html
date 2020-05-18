@@ -1,0 +1,60 @@
+<form *ngIf="settings$ | async as settings" [formGroup]="form">
+  <lib-edit-project
+    *ngIf="(user$ | async)?.isMultiProject"
+    [projectName]="settings.project.name"
+    [selectedTheme]="settings.project.theme"
+    class="mat-form-field-wrapper"
+  ></lib-edit-project>
+  <div id="bill" formGroupName="bill" fxLayout="column">
+    <mat-form-field>
+      <mat-select placeholder="Devise" formControlName="currency">
+        <mat-option value="CHF">CHF</mat-option>
+        <mat-option value="EUR">EUR</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Taux horaire" formControlName="hourlyRate" />
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Taux de TVA" formControlName="tvaRate" />
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Numéro de TVA" formControlName="tvaNumber" />
+    </mat-form-field>
+    <div formGroupName="account" fxLayout="column">
+      <mat-form-field>
+        <input matInput placeholder="Numéro de compte" formControlName="number" />
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="IBAN" formControlName="iban" />
+      </mat-form-field>
+    </div>
+    <div class="mat-form-field-wrapper">
+      <mat-label>Image du logo :</mat-label>
+      <lib-file-upload [downloadURL]="logo$" [upload]="uploadLogo$"></lib-file-upload>
+    </div>
+    <mat-form-field>
+      <mat-label>Société :</mat-label>
+      <textarea
+        matInput
+        cdkTextareaAutosize
+        #autosize="cdkTextareaAutosize"
+        cdkAutosizeMinRows="1"
+        cdkAutosizeMaxRows="10"
+        formControlName="society"
+      ></textarea>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Information destinataire :</mat-label>
+      <textarea
+        matInput
+        cdkTextareaAutosize
+        #autosize="cdkTextareaAutosize"
+        cdkAutosizeMinRows="1"
+        cdkAutosizeMaxRows="10"
+        formControlName="correspondant"
+      ></textarea>
+    </mat-form-field>
+  </div>
+  <button mat-raised-button color="primary" (click)="save()">Enregistrer</button>
+</form>

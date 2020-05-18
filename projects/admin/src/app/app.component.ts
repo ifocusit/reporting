@@ -8,8 +8,16 @@ import { TranslationService } from 'projects/commons/src/lib/translation/transla
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  template: `<main role="main"><router-outlet></router-outlet></main>`,
+  styles: [
+    `
+      @media print {
+        mat-toolbar {
+          display: none;
+        }
+      }
+    `
+  ]
 })
 export class AppComponent extends DefaultAppComponent {
   constructor(
