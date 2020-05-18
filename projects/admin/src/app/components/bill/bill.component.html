@@ -30,13 +30,14 @@
       <thead>
         <tr>
           <th></th>
-          <th class="amount">Total</th>
+          <th class="amount" colspan="2">Total</th>
         </tr>
       </thead>
       <tbody>
         <tr class="bill-content">
           <td>{{ bill.duration.asHours() | number: '2.2-2' }} heures</td>
-          <td class="amount">{{ bill.amount | number: '2.2-2' }}</td>
+          <td class="amount">{{ bill.amount | amount }}</td>
+          <td class="currency">{{ bill.currency }}</td>
         </tr>
         <tr *ngFor="let line of lines$ | async" class="bill-content">
           <td fxLayout="row" fxLayoutAlign="space-between center" class="label">
@@ -66,20 +67,24 @@
               />
             </mat-form-field>
           </td>
+          <td class="currency">{{ bill.currency }}</td>
         </tr>
       </tbody>
       <tfoot>
         <tr class="subtotal">
           <td class="primary-border">Total Hors TVA</td>
-          <td class="amount primary-border">{{ bill.totalHT | number: '.2-2' }}</td>
+          <td class="amount primary-border">{{ bill.totalHT | amount }}</td>
+          <td class="currency primary-border">{{ bill.currency }}</td>
         </tr>
         <tr class="subtotal">
           <td>TVA {{ tva }}%</td>
-          <td class="amount">{{ bill.totalTVA | number: '.2-2' }}</td>
+          <td class="amount">{{ bill.totalTVA | amount }}</td>
+          <td class="currency">{{ bill.currency }}</td>
         </tr>
         <tr class="total">
           <td>Total</td>
-          <td class="amount">{{ bill.totalTTC | number: '.2-2' }}</td>
+          <td class="amount">{{ bill.totalTTC | amount }}</td>
+          <td class="currency">{{ bill.currency }}</td>
         </tr>
       </tfoot>
     </table>

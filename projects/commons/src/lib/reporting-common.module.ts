@@ -5,6 +5,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { DebounceInputDirective } from './form/debounce-input.directive';
 import { MaterialModule } from './material.module';
+import { AmountPipe } from './pipes/amount.pipe';
 import { DurationPipe } from './pipes/duration.pipe';
 import { MomentPipe } from './pipes/moment.pipe';
 
@@ -17,7 +18,7 @@ export class MyHammerConfig extends HammerGestureConfig {
 }
 
 @NgModule({
-  declarations: [DurationPipe, MomentPipe, DebounceInputDirective],
+  declarations: [DurationPipe, MomentPipe, DebounceInputDirective, AmountPipe],
   providers: [
     DecimalPipe,
     {
@@ -26,6 +27,6 @@ export class MyHammerConfig extends HammerGestureConfig {
     }
   ],
   imports: [CommonModule],
-  exports: [DurationPipe, MomentPipe, DebounceInputDirective, MaterialModule, FlexLayoutModule, LayoutModule]
+  exports: [DurationPipe, MomentPipe, DebounceInputDirective, MaterialModule, FlexLayoutModule, LayoutModule, AmountPipe]
 })
 export class ReportingCommonModule {}

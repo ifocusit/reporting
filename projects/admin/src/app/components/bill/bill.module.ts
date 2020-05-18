@@ -11,6 +11,6 @@ import { BillComponent } from './bill.component';
 @NgModule({
   declarations: [BillComponent],
   providers: [EditBillService],
-  imports: [CommonModule, BillRoutingModule, ReportingCommonModule, SelectProjectModule, FormsModule, FilesModule],
+  imports: [CommonModule, BillRoutingModule, ReportingCommonModule, SelectProjectModule, FormsModule, FilesModule]
 })
 export class BillModule {}
