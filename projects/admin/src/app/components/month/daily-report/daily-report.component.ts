@@ -1,15 +1,15 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { Moment, Duration } from 'moment';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { take, map, mergeMap } from 'rxjs/operators';
 import * as moment from 'moment';
-import { Time, TimeAdapter, TIME_ISO_FORMAT, DATETIME_ISO_FORMAT } from 'projects/commons/src/lib/times/time.model';
-import { TimesService } from 'projects/commons/src/lib/times/times.service';
-import { CalculateDuration } from 'projects/commons/src/lib/times/calculate-duration.tools';
-import { AddTimes, AddTime, DeleteTime, UpdateTime, DeleteTimes } from 'projects/commons/src/lib/times/time.store';
+import { Duration, Moment } from 'moment';
 import { SettingsState } from 'projects/commons/src/lib/settings/settings.store';
+import { CalculateDuration } from 'projects/commons/src/lib/times/calculate-duration.tools';
+import { DATETIME_ISO_FORMAT, Time, TimeAdapter, TIME_ISO_FORMAT } from 'projects/commons/src/lib/times/time.model';
+import { AddTime, AddTimes, DeleteTime, DeleteTimes, UpdateTime } from 'projects/commons/src/lib/times/time.store';
+import { TimesService } from 'projects/commons/src/lib/times/times.service';
+import { Observable } from 'rxjs';
+import { map, mergeMap, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-daily-report',
@@ -21,7 +21,7 @@ export class DailyReportComponent implements OnInit {
   public duration$: Observable<Duration>;
 
   private defaultTimes$ = () =>
-    this.store.select(SettingsState.settings).pipe(map(settings => settings.timbrage.defaults.map(time => moment(time, TIME_ISO_FORMAT))))
+    this.store.select(SettingsState.settings).pipe(map(settings => settings.timbrage.defaults.map(time => moment(time, TIME_ISO_FORMAT))));
 
   constructor(
     public dialogRef: MatDialogRef<DailyReportComponent>,
@@ -40,11 +40,7 @@ export class DailyReportComponent implements OnInit {
   }
 
   empty() {
-    const time = TimeAdapter.createTime(
-      moment(this.workDay.date)
-        .startOf('day')
-        .format(DATETIME_ISO_FORMAT)
-    );
+    const time = TimeAdapter.createTime(moment(this.workDay.date).startOf('day').format(DATETIME_ISO_FORMAT));
     this.store.dispatch(new AddTimes([time, time]));
   }
 
@@ -54,10 +50,7 @@ export class DailyReportComponent implements OnInit {
         map(times =>
           times.map(time =>
             TimeAdapter.createTime(
-              moment(this.workDay.date)
-                .startOf('day')
-                .set({ hour: time.hour(), minute: time.minute() })
-                .format(DATETIME_ISO_FORMAT)
+              moment(this.workDay.date).startOf('day').set({ hour: time.hour(), minute: time.minute() }).format(DATETIME_ISO_FORMAT)
             )
           )
         ),
@@ -72,12 +65,7 @@ export class DailyReportComponent implements OnInit {
         map(times => Math.min(times.length, 3)),
         take(1),
         mergeMap(index => this.defaultTimes$().pipe(map(times => times[index]))),
-        map(defaultTime =>
-          this.workDay.date
-            .clone()
-            .startOf('day')
-            .set({ hour: defaultTime.hour(), minute: defaultTime.minute() })
-        ),
+        map(defaultTime => this.workDay.date.clone().startOf('day').set({ hour: defaultTime.hour(), minute: defaultTime.minute() })),
         mergeMap(time => this.store.dispatch(new AddTime(TimeAdapter.createTime(time.format(DATETIME_ISO_FORMAT)))))
       )
       .subscribe();

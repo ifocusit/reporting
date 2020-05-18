@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ErrorHandler, NgModule } from '@angular/core';
-import { MatSnackBarModule } from '@angular/material';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { UIErrorHandler } from './ui-error-handler';
 
 @NgModule({
