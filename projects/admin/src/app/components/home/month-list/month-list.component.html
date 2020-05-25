@@ -1,3 +1,4 @@
 <div fxLayout="row wrap">
-  <app-month-card *ngFor="let month of months$ | async" [month]="month"></app-month-card>
+  <app-month-card *ngFor="let month of months" [month]="month"></app-month-card>
+  <button (click)="next()" mat-stroked-button color="accent"><mat-icon>keyboard_arrow_right</mat-icon></button>
 </div>
