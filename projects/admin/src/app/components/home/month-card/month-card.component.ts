@@ -90,7 +90,7 @@ export class MonthCardComponent implements OnInit {
     if (mustHours.asHours() === 0) {
       return 0;
     }
-    return (total.asHours() * 100) / (Math.max(overtime.asHours(), 0) + mustHours.asHours());
+    return ((total.asHours() - Math.max(overtime.asHours(), 0)) * 100) / (Math.max(overtime.asHours(), 0) + mustHours.asHours());
   }
 
   private calculateOvertimeDuration(total: Duration, mustHours: Duration) {
