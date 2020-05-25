@@ -78,12 +78,11 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
             "main": "projects/timbrage/src/test.ts",
             "polyfills": "projects/timbrage/src/polyfills.ts",
             "tsConfig": "projects/timbrage/tsconfig.spec.json",
-            "karmaConfig": "projects/timbrage/karma.conf.js",
             "assets": [
               "projects/timbrage/src/favicon.ico.png",
               "projects/timbrage/src/assets",
