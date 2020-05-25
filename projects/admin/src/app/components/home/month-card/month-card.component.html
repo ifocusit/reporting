@@ -1,0 +1,28 @@
+<mat-card [class.actual]="month === today" fxLayout="column" @showCard fxFlexFill>
+  <mat-card-title [routerLink]="['/month', month]">{{ month | moment: 'MMMM' }}</mat-card-title>
+  <ng-container *ngIf="progression$ | async as progression">
+    <mat-card-content [routerLink]="['/month', month]" fxFlex="1 1 auto">
+      <div class="hours" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px" fxFlexFill>
+        <span>{{ progression.total | duration }}</span>
+        <span>/</span>
+        <span>{{ progression.mustDuration | duration }}</span>
+      </div>
+      <div
+        *ngIf="progression.nbWorkDays > 0"
+        @showProgressBar
+        class="progress-bar"
+        [class]="progression.overtime.asHours() > 0 ? 'accent-bg' : 'no-overtime'"
+      >
+        <div [style.width.%]="progression.percent" class="primary-bg"></div>
+      </div>
+    </mat-card-content>
+    <mat-card-footer fxLayout="row" fxLayoutAign="center center">
+      <span fxFlex="1 1 auto">{{ progression.nbWorkDays | number: '.0-2' }}j</span>
+      <ng-container *ngIf="bill$ | async as bill">
+        <a *ngIf="bill.archived" @showPdfIcon [href]="bill.billUrl" mat-icon-button color="warn">
+          <mat-icon>picture_as_pdf</mat-icon>
+        </a>
+      </ng-container>
+    </mat-card-footer>
+  </ng-container>
+</mat-card>

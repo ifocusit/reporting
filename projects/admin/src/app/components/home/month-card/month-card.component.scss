@@ -1,0 +1,44 @@
+@import '~@angular/material/theming';
+
+mat-card {
+  padding: 0;
+  cursor: pointer;
+
+  mat-card-title {
+    text-align: center;
+    padding: 5px;
+    border-radius: 4px 4px 0 0;
+  }
+
+  mat-card-footer {
+    padding: 0 5px;
+    margin: 0;
+    margin: 0;
+    height: 40px;
+
+    span {
+      font-size: smaller;
+      line-height: 40px;
+    }
+  }
+
+  mat-card-content {
+    .hours {
+      & > span:first-child {
+        font-size: x-large;
+      }
+      & > span:last-child {
+        font-size: larger;
+      }
+    }
+
+    .no-overtime {
+      background-color: #616161;
+    }
+
+    .progress-bar,
+    .progress-bar > div {
+      height: 11px;
+    }
+  }
+}

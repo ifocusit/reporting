@@ -35,4 +35,15 @@ export class BillService {
       map(bill => ({ ...DEFAULT_BILL, ...bill }))
     );
   }
+
+  public getBill$(month: string): Observable<Bill> {
+    return this.userService.user$.pipe(
+      mergeMap(user =>
+        this.store.select(SettingsState.project).pipe(
+          mergeMap(project => this.firestore.doc<Bill>(`users/${user.uid}/projects/${project}/bills/${month}`).valueChanges()),
+          map(bill => ({ ...DEFAULT_BILL, ...bill }))
+        )
+      )
+    );
+  }
 }

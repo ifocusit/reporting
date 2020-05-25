@@ -34,10 +34,6 @@ export class ProfileComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private projectService: ProjectService, private store: Store, private authService: AuthService) {}
 
-  signOut() {
-    this.authService.signOutUser();
-  }
-
   ngOnInit() {
     this.form = this.fb.group({
       project: this.fb.group({
@@ -68,11 +64,7 @@ export class ProfileComponent implements OnInit {
     this.logo$ = this.project$.pipe(mergeMap(projectName => this.projectService.readLogo(projectName)));
 
     this.months$ = range(0, 12).pipe(
-      map(index =>
-        moment()
-          .month(index)
-          .format('YYYY-MM')
-      ),
+      map(index => moment().month(index).format('YYYY-MM')),
       toArray()
     );
   }

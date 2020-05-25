@@ -1,0 +1,32 @@
+<div fxLayout="column" fxLayoutAlign="space-between start" fxFill>
+  <mat-toolbar color="primary">
+    <div fxFlex="calc(100%-300px)">
+      Profile
+    </div>
+    <lib-select-project defaultName=""></lib-select-project>
+    <button mat-button (click)="signOut()">Logout</button>
+  </mat-toolbar>
+
+  <div class="content">
+    <div class="header">
+      <div fxLayout="column" fxLayoutAlign="center center" *ngIf="user$ | async as user">
+        <img *ngIf="user.photoURL; else defaultProfileIcon" [src]="user.photoURL" />
+        <ng-template #defaultProfileIcon>
+          <img src="/assets/profile_default_icon.png" />
+        </ng-template>
+        <h3 *ngIf="user.displayName">{{ user.displayName }}</h3>
+        <h4 *ngIf="user.email">{{ user.email }}</h4>
+      </div>
+    </div>
+
+    <mat-tab-group>
+      <mat-tab label="Calendrier">
+        <div class="tab-content"><app-month-list></app-month-list></div>
+      </mat-tab>
+      <mat-tab label="Configuration du projet" fxLayout="column">
+        <div class="tab-content"><app-profile></app-profile></div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+  <lib-copyright></lib-copyright>
+</div>

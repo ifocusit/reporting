@@ -5,8 +5,6 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --open --port 4400",
-    "start-admin": "ng serve --open --port 4401 --project admin --disableHostCheck --host=reporting.localhost",
-    "start-timbrage": "ng serve --open --port 4402 --project timbrage --disableHostCheck --host reporting.local",
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
