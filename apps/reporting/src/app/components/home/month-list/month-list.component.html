@@ -1,0 +1,4 @@
+<div fxLayout="row wrap">
+  <ifocusit-month-card *ngFor="let month of months" [month]="month"></ifocusit-month-card>
+  <button (click)="next()" mat-stroked-button color="accent"><mat-icon>keyboard_arrow_right</mat-icon></button>
+</div>

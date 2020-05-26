@@ -1,39 +1,36 @@
 {
-  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
-  "newProjectRoot": "projects",
   "projects": {
-    "timbrage": {
+    "reporting": {
       "projectType": "application",
-      "schematics": {},
-      "root": "projects/timbrage",
-      "sourceRoot": "projects/timbrage/src",
-      "prefix": "app",
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "apps/reporting",
+      "sourceRoot": "apps/reporting/src",
+      "prefix": "ifocusit",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/timbrage",
-            "index": "projects/timbrage/src/index.html",
-            "main": "projects/timbrage/src/main.ts",
-            "polyfills": "projects/timbrage/src/polyfills.ts",
-            "tsConfig": "projects/timbrage/tsconfig.app.json",
+            "outputPath": "dist/apps/reporting",
+            "index": "apps/reporting/src/index.html",
+            "main": "apps/reporting/src/main.ts",
+            "polyfills": "apps/reporting/src/polyfills.ts",
+            "tsConfig": "apps/reporting/tsconfig.app.json",
             "aot": true,
-            "assets": [
-              "projects/timbrage/src/favicon.ico.png",
-              "projects/timbrage/src/assets",
-              "projects/timbrage/src/manifest.webmanifest",
-              "projects/timbrage/src/.well-known/assetlinks.json"
-            ],
-            "styles": ["node_modules/firebaseui/dist/firebaseui.css", "projects/timbrage/src/styles.scss"],
+            "assets": ["apps/reporting/src/favicon.ico.png", "apps/reporting/src/assets", "apps/reporting/src/manifest.webmanifest"],
+            "styles": ["node_modules/firebaseui/dist/firebaseui.css", "apps/reporting/src/styles.scss"],
             "scripts": []
           },
           "configurations": {
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "projects/timbrage/src/environments/environment.ts",
-                  "with": "projects/timbrage/src/environments/environment.prod.ts"
+                  "replace": "apps/reporting/src/environments/environment.ts",
+                  "with": "apps/reporting/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -48,15 +45,169 @@
                 {
                   "type": "initial",
                   "maximumWarning": "2mb",
-                  "maximumError": "3mb"
+                  "maximumError": "5mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "55kb"
+                  "maximumWarning": "51kb",
+                  "maximumError": "60kb"
                 }
               ],
               "serviceWorker": true,
-              "ngswConfigPath": "projects/timbrage/ngsw-config.json"
+              "ngswConfigPath": "apps/reporting/ngsw-config.json"
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "reporting:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "reporting:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "reporting:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["apps/reporting/tsconfig.app.json", "apps/reporting/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**", "!apps/reporting/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/reporting/jest.config.js",
+            "tsConfig": "apps/reporting/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "apps/reporting/src/test-setup.ts"
+          }
+        }
+      }
+    },
+    "reporting-e2e": {
+      "root": "apps/reporting-e2e",
+      "sourceRoot": "apps/reporting-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/reporting-e2e/cypress.json",
+            "tsConfig": "apps/reporting-e2e/tsconfig.e2e.json",
+            "devServerTarget": "reporting:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "reporting:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["apps/reporting-e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!apps/reporting-e2e/**"]
+          }
+        }
+      }
+    },
+    "commons": {
+      "projectType": "library",
+      "root": "libs/commons",
+      "sourceRoot": "libs/commons/src",
+      "prefix": "ifocusit",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["libs/commons/tsconfig.lib.json", "libs/commons/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**", "!libs/commons/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/commons/jest.config.js",
+            "tsConfig": "libs/commons/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/commons/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "timbrage": {
+      "projectType": "application",
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "apps/timbrage",
+      "sourceRoot": "apps/timbrage/src",
+      "prefix": "ifocusit",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/timbrage",
+            "index": "apps/timbrage/src/index.html",
+            "main": "apps/timbrage/src/main.ts",
+            "polyfills": "apps/timbrage/src/polyfills.ts",
+            "tsConfig": "apps/timbrage/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "apps/timbrage/src/favicon.ico.png",
+              "apps/timbrage/src/assets",
+              "apps/timbrage/src/manifest.webmanifest",
+              "apps/timbrage/src/.well-known/assetlinks.json"
+            ],
+            "styles": ["node_modules/firebaseui/dist/firebaseui.css", "apps/timbrage/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/timbrage/src/environments/environment.ts",
+                  "with": "apps/timbrage/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "51kb",
+                  "maximumError": "60kb"
+                }
+              ],
+              "serviceWorker": true,
+              "ngswConfigPath": "apps/timbrage/ngsw-config.json"
             }
           }
         },
@@ -77,37 +228,34 @@
             "browserTarget": "timbrage:build"
           }
         },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/timbrage/src/test.ts",
-            "polyfills": "projects/timbrage/src/polyfills.ts",
-            "tsConfig": "projects/timbrage/tsconfig.spec.json",
-            "karmaConfig": "projects/timbrage/karma.conf.js",
-            "assets": [
-              "projects/timbrage/src/favicon.ico.png",
-              "projects/timbrage/src/assets",
-              "projects/timbrage/src/manifest.webmanifest"
-            ],
-            "styles": ["projects/timbrage/src/styles.scss"],
-            "scripts": []
-          }
-        },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "projects/timbrage/tsconfig.app.json",
-              "projects/timbrage/tsconfig.spec.json",
-              "projects/timbrage/e2e/tsconfig.json"
-            ],
-            "exclude": ["**/node_modules/**"]
+            "tsConfig": ["apps/timbrage/tsconfig.app.json", "apps/timbrage/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**", "!apps/timbrage/**"]
           }
         },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
+        "test": {
+          "builder": "@nrwl/jest:jest",
           "options": {
-            "protractorConfig": "projects/timbrage/e2e/protractor.conf.js",
+            "jestConfig": "apps/timbrage/jest.config.js",
+            "tsConfig": "apps/timbrage/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "apps/timbrage/src/test-setup.ts"
+          }
+        }
+      }
+    },
+    "timbrage-e2e": {
+      "root": "apps/timbrage-e2e",
+      "sourceRoot": "apps/timbrage-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/timbrage-e2e/cypress.json",
+            "tsConfig": "apps/timbrage-e2e/tsconfig.e2e.json",
             "devServerTarget": "timbrage:serve"
           },
           "configurations": {
@@ -115,145 +263,27 @@
               "devServerTarget": "timbrage:serve:production"
             }
           }
-        }
-      }
-    },
-    "admin": {
-      "projectType": "application",
-      "schematics": {},
-      "root": "projects/admin",
-      "sourceRoot": "projects/admin/src",
-      "prefix": "app",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "dist/admin",
-            "index": "projects/admin/src/index.html",
-            "main": "projects/admin/src/main.ts",
-            "polyfills": "projects/admin/src/polyfills.ts",
-            "tsConfig": "projects/admin/tsconfig.app.json",
-            "aot": true,
-            "assets": ["projects/admin/src/favicon.ico.png", "projects/admin/src/assets", "projects/admin/src/manifest.webmanifest"],
-            "styles": ["node_modules/firebaseui/dist/firebaseui.css", "projects/admin/src/styles.scss"],
-            "scripts": []
-          },
-          "configurations": {
-            "production": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/admin/src/environments/environment.ts",
-                  "with": "projects/admin/src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "3mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "55kb"
-                }
-              ],
-              "serviceWorker": true,
-              "ngswConfigPath": "projects/admin/ngsw-config.json"
-            }
-          }
-        },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "admin:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "admin:build:production"
-            }
-          }
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "admin:build"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/admin/src/test.ts",
-            "polyfills": "projects/admin/src/polyfills.ts",
-            "tsConfig": "projects/admin/tsconfig.spec.json",
-            "karmaConfig": "projects/admin/karma.conf.js",
-            "assets": ["projects/admin/src/favicon.ico.png", "projects/admin/src/assets", "projects/admin/src/manifest.webmanifest"],
-            "styles": ["projects/admin/src/styles.scss"],
-            "scripts": []
-          }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["projects/admin/tsconfig.app.json", "projects/admin/tsconfig.spec.json", "projects/admin/e2e/tsconfig.json"],
-            "exclude": ["**/node_modules/**"]
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "projects/admin/e2e/protractor.conf.js",
-            "devServerTarget": "admin:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "admin:serve:production"
-            }
+            "tsConfig": ["apps/timbrage-e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!apps/timbrage-e2e/**"]
           }
         }
       }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/angular"
+  },
+  "schematics": {
+    "@nrwl/angular:application": {
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
     },
-    "commons": {
-      "projectType": "library",
-      "root": "projects/commons",
-      "sourceRoot": "projects/commons/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/commons/tsconfig.lib.json",
-            "project": "projects/commons/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/commons/tsconfig.lib.prod.json"
-            }
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/commons/src/test.ts",
-            "tsConfig": "projects/commons/tsconfig.spec.json",
-            "karmaConfig": "projects/commons/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": ["projects/commons/tsconfig.lib.json", "projects/commons/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**"]
-          }
-        }
-      }
+    "@nrwl/angular:library": {
+      "unitTestRunner": "jest"
     }
   },
   "defaultProject": "timbrage"
