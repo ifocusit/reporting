@@ -25,7 +25,7 @@ jobs:
       before_install:
         - chmod +x $SCRIPT_DIR/check_changes
         - check_changes apps/admin libs/commons package-lock.json || travis_terminate 0;
-      script: ng build --prod --project admin
+      script: ng build --prod --project reporting
       deploy:
         provider: script
         script: firebase deploy --only hosting:admin
