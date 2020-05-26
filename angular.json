@@ -49,8 +49,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
+                  "maximumWarning": "51kb",
+                  "maximumError": "60kb"
                 }
               ],
               "serviceWorker": true,
@@ -202,8 +202,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
+                  "maximumWarning": "51kb",
+                  "maximumError": "60kb"
                 }
               ],
               "serviceWorker": true,
