@@ -21,7 +21,7 @@ export class WorkingDateReporting {
     this.isHoliday = !this.hasTimes && !this.isWeekend && this.date.isBefore(moment().startOf('day'));
   }
 
-  getDatetime(index: number): Moment {
+  public getDatetime(index: number): Moment {
     return new TimeAdapter(this.times[index]).getMoment();
   }
 

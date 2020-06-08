@@ -1,7 +1,13 @@
+export enum ExportMonthType {
+  FULL_DETAILS,
+  TOTAL_DAYS_IN_COLUMN
+}
+
 export interface Settings {
   project: {
     name: string;
     theme?: string;
+    monthExportType?: ExportMonthType;
   };
   timbrage: {
     defaults: string[];

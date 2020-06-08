@@ -12,6 +12,10 @@
       <span fxFlex="calc(100%-220px)">{{ selectedDate | moment: 'MMMM YYYY' }}</span>
 
       <lib-select-project defaultName=""></lib-select-project>
+      <button (click)="exportMonth()" mat-icon-button>
+        <mat-icon>get_app</mat-icon>
+      </button>
+      <a #export style="display: none;">hidden link</a>
       <button mat-icon-button *ngIf="selectedDate$ | async as selectedDate" [routerLink]="['/bill', selectedDate.format('YYYY-MM')]">
         <mat-icon>receipt</mat-icon>
       </button>
@@ -70,7 +74,7 @@
             fxFlexAlign="start"
             id="overtime"
             *ngIf="overtime$ | async as overtime"
-            [class.accent-lighter-color]="overtime < 0"
+            [class.accent-lighter-color]="overtime.asSeconds() < 0"
           >
             {{ overtime | duration: totalsFormat }}
           </div>
