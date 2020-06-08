@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -16,11 +16,12 @@ import {
   WorkingDateReporting
 } from '@ifocusit/commons';
 import { Select, Store } from '@ngxs/store';
-import * as _ from 'lodash';
+import { range } from 'lodash';
 import * as moment from 'moment';
 import { Duration, Moment } from 'moment';
 import { combineLatest, from, Observable } from 'rxjs';
-import { filter, map, mergeMap, take } from 'rxjs/operators';
+import { filter, map, mergeMap, take, tap } from 'rxjs/operators';
+import { ExportService } from './../../../../../../libs/commons/src/lib/times/export.service';
 import { DailyReportComponent } from './daily-report/daily-report.component';
 
 @Component({
@@ -29,8 +30,11 @@ import { DailyReportComponent } from './daily-report/daily-report.component';
   styleUrls: ['./month.component.scss']
 })
 export class MonthComponent implements OnInit {
+  @ViewChild('export') private exportLink: ElementRef<HTMLLinkElement>;
+
   @Select(SettingsState.project)
   public project$: Observable<string>;
+
   @Select(SettingsState.settings)
   public settings$: Observable<Settings>;
 
@@ -57,7 +61,8 @@ export class MonthComponent implements OnInit {
     public dialog: MatDialog,
     private profileSevice: AuthService,
     private store: Store,
-    private router: Router
+    private router: Router,
+    private exportService: ExportService
   ) {}
 
   ngOnInit() {
@@ -66,13 +71,10 @@ export class MonthComponent implements OnInit {
     this.user$ = this.profileSevice.user$;
 
     this.days$ = this.selectedDate$.pipe(
-      map(date => _.range(date.daysInMonth()).map(index => new WorkingDateReporting(date.clone().date(index + 1))))
+      map(date => range(date.daysInMonth()).map(index => new WorkingDateReporting(date.clone().date(index + 1))))
     );
 
-    this.times$ = combineLatest([this.project$, this.selectedDate$]).pipe(
-      map(pair => pair[1]),
-      mergeMap(month => this.timesService.read(month, 'month'))
-    );
+    this.times$ = this.selectedDate$.pipe(mergeMap(month => this.timesService.read(month, 'month')));
 
     this.items$ = combineLatest([this.days$, this.times$]).pipe(
       map(pair =>
@@ -148,5 +150,14 @@ export class MonthComponent implements OnInit {
 
   public get totalsFormat() {
     return this.totalsAsDecimal ? 'hours' : null;
+  }
+
+  exportMonth() {
+    this.selectedDate$
+      .pipe(
+        take(1),
+        tap(date => this.exportService.exportMonth(date, this.exportLink))
+      )
+      .subscribe();
   }
 }
