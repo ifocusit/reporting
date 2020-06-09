@@ -21,8 +21,7 @@
         <a mat-button *ngIf="times" (click)="cancelImport()">{{ 'profile.import.cancel' | translate }}</a>
 
         <button mat-button (click)="exportAll()">{{ 'profile.export' | translate }}</button>
-        <input #fileSelector type="file" (change)="fileSelected($event)" style="display: none" />
-        <a #export style="display: none">hidden link</a>
+        <input #fileSelector type="file" (change)="fileSelected($event)" style="display: none;" />
 
         <button mat-button (click)="openAdmin()">{{ 'profile.openAdmin' | translate }}</button>
       </div>

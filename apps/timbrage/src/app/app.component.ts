@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { SwUpdate } from '@angular/service-worker';
 import {
@@ -26,8 +26,6 @@ export class AppComponent extends DefaultAppComponent {
     { path: '/timbrage', label: 'timbrage.title' },
     { path: '/calendar', label: 'calendar.title' }
   ];
-
-  @ViewChild('export', { static: true }) private exportLink: ElementRef;
 
   bill$ = this.billService.bill$;
 
@@ -65,8 +63,7 @@ export class AppComponent extends DefaultAppComponent {
   }
 
   public exportMonth() {
-    const date = this.store.selectSnapshot(TimesState.selectedDate);
-    this.exportService.exportMonth(date, this.exportLink);
+    this.store.selectOnce(TimesState.selectedDate).subscribe(date => this.exportService.exportMonth(date));
   }
 
   public goToday() {

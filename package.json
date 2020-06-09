@@ -49,6 +49,7 @@
     "@nrwl/angular": "9.3.0",
     "compass-mixins": "^0.12.10",
     "core-js": "^2.5.4",
+    "file-saver": "^2.0.2",
     "firebase": "^7.14.5",
     "firebaseui": "^4.5.0",
     "firebaseui-angular": "^5.0.0",
