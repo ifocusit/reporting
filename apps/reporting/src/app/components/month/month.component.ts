@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -30,8 +30,6 @@ import { DailyReportComponent } from './daily-report/daily-report.component';
   styleUrls: ['./month.component.scss']
 })
 export class MonthComponent implements OnInit {
-  @ViewChild('export') private exportLink: ElementRef<HTMLLinkElement>;
-
   @Select(SettingsState.project)
   public project$: Observable<string>;
 
@@ -156,7 +154,7 @@ export class MonthComponent implements OnInit {
     this.selectedDate$
       .pipe(
         take(1),
-        tap(date => this.exportService.exportMonth(date, this.exportLink))
+        tap(date => this.exportService.exportMonth(date))
       )
       .subscribe();
   }

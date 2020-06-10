@@ -26,8 +26,6 @@ import { filter, mergeMap, take, tap } from 'rxjs/operators';
 export class ProfileComponent implements OnInit {
   public user$ = this.authService.user$;
 
-  @ViewChild('export', { static: true }) private exportLink: ElementRef;
-
   @ViewChild('fileSelector', { static: true }) private fileSelector: ElementRef;
   public times: Time[];
 
@@ -89,7 +87,7 @@ export class ProfileComponent implements OnInit {
                       .filter(time => time && time.timestamp)
                       .map(time => moment(time.timestamp).format(DATETIME_ISO_FORMAT));
 
-                    return this.exportService.export(fileName, lines, this.exportLink);
+                    return this.exportService.exportCsv(fileName, lines);
                   })
                 )
             )

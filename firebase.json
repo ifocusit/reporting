@@ -3,7 +3,7 @@
     {
       "target": "timbrage",
       "site": "timbrage-reporting",
-      "public": "dist/timbrage",
+      "public": "dist/apps/timbrage",
       "rewrites": [
         {
           "source": "**",
@@ -15,7 +15,7 @@
     {
       "target": "admin",
       "site": "admin-reporting",
-      "public": "dist/admin",
+      "public": "dist/apps/admin",
       "rewrites": [
         {
           "source": "**",

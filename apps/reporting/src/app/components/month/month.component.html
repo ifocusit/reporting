@@ -15,7 +15,6 @@
       <button (click)="exportMonth()" mat-icon-button>
         <mat-icon>get_app</mat-icon>
       </button>
-      <a #export style="display: none;">hidden link</a>
       <button mat-icon-button *ngIf="selectedDate$ | async as selectedDate" [routerLink]="['/bill', selectedDate.format('YYYY-MM')]">
         <mat-icon>receipt</mat-icon>
       </button>

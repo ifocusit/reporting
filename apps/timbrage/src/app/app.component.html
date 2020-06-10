@@ -24,7 +24,6 @@
       <button mat-icon-button (click)="exportMonth()" *ngIf="calendarPage()">
         <mat-icon>get_app</mat-icon>
       </button>
-      <a #export style="display: none;">hidden link</a>
       <button *ngIf="!profilePage() && !loginPage()" mat-icon-button [routerLink]="['/profile']">
         <mat-icon>settings</mat-icon>
       </button>
