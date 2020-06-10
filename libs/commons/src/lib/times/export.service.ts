@@ -24,27 +24,6 @@ const CSV_EXTENSION = '.csv';
 export class ExportService {
   constructor(private timesService: TimesService, private store: Store) {}
 
-  private createLinesForEachTimeReports(times: Time[]): string[] {
-    return times.map(time => new TimeAdapter(time).format(DATETIME_ISO_FORMAT));
-  }
-
-  private createColumnsForEachDay(date: Moment, times: Time[]): any {
-    const dailyReports: WorkingDateReporting[] = range(date.daysInMonth())
-      .map(index => new WorkingDateReporting(date.clone().date(index + 1)))
-      .map(
-        day =>
-          new WorkingDateReporting(
-            day.date,
-            times.filter(time => day.isSameDate(new TimeAdapter(time).getDay()))
-          )
-      );
-    const json = {};
-    dailyReports.forEach(day => {
-      json[`${day.date.format('DD dd')}`] = DurationPipe.format(day.duration, '');
-    });
-    return [json];
-  }
-
   public exportMonth(date: Moment, exportType: ExportMonthType = ExportMonthType.TOTAL_DAYS_IN_COLUMN) {
     const month = date.format('YYYY-MM');
     this.timesService
@@ -65,17 +44,39 @@ export class ExportService {
       .subscribe();
   }
 
-  public exportXlsx(month: string, jsonData: any): Observable<any> {
-    return of(jsonData).pipe(
-      map(json => {
-        const worksheet = XLSX.utils.json_to_sheet(json);
+  private exportXlsx(month: string, rows: any[]): Observable<any> {
+    return of(rows).pipe(
+      map(data => {
+        const worksheet = XLSX.utils.aoa_to_sheet(data, { dateNF: 'dd ddd', cellDates: true });
 
         const workbook: XLSX.WorkBook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, month);
 
-        return XLSX.writeFile(workbook, month + EXCEL_EXTENSION);
+        return XLSX.writeFile(workbook, month + EXCEL_EXTENSION, { bookType: 'xlsx', type: 'binary' });
       })
     );
+  }
+
+  private createLinesForEachTimeReports(times: Time[]): any[] {
+    return [times.map(time => new TimeAdapter(time).format(DATETIME_ISO_FORMAT))];
+  }
+
+  private createColumnsForEachDay(date: Moment, times: Time[]): any[] {
+    const days: WorkingDateReporting[] = range(date.daysInMonth())
+      .map(index => new WorkingDateReporting(date.clone().date(index + 1)))
+      .map(
+        day =>
+          new WorkingDateReporting(
+            day.date,
+            times.filter(time => day.isSameDate(new TimeAdapter(time).getDay()))
+          )
+      );
+    return [
+      // first row with days
+      days.map(day => day.date.toDate()),
+      // second row with durations
+      days.map(day => DurationPipe.format(day.duration, ''))
+    ];
   }
 
   public exportCsv(fileName: string, lines: string[]): Observable<any> {
