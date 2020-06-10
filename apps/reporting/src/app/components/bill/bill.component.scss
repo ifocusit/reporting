@@ -93,12 +93,6 @@ table {
   top: -12em;
 }
 
-@media screen and (max-width: 599px) {
-  .content {
-    margin: 10px;
-  }
-}
-
 :host ::ng-deep mat-form-field.mat-form-field-appearance-legacy .mat-form-field-wrapper {
   padding: 0 !important;
 }
