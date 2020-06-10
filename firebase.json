@@ -15,7 +15,7 @@
     {
       "target": "admin",
       "site": "admin-reporting",
-      "public": "dist/apps/admin",
+      "public": "dist/apps/reporting",
       "rewrites": [
         {
           "source": "**",
