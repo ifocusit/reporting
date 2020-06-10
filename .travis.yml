@@ -24,7 +24,7 @@ jobs:
     - name: Job admin
       before_install:
         - chmod +x $SCRIPT_DIR/check_changes
-        - check_changes apps/admin libs/commons package-lock.json || travis_terminate 0;
+        - check_changes apps/reporting libs/commons package-lock.json || travis_terminate 0;
       script: ng build --prod --project reporting
       deploy:
         provider: script
