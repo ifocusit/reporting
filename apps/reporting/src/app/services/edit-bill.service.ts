@@ -1,17 +1,24 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { Bill, BillService, UserService } from '@ifocusit/commons';
+import { Bill, BillData, BillService, SettingsState, UserService } from '@ifocusit/commons';
 import { Store } from '@ngxs/store';
 import * as moment from 'moment';
 import { Duration } from 'moment';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { map, mergeMap, take, tap } from 'rxjs/operators';
 import { BillLine } from '../models/bill.model';
+import { ResumeMonthService } from './resume-month.service';
 
 @Injectable()
 export class EditBillService extends BillService {
-  constructor(userService: UserService, firestore: AngularFirestore, private firestorage: AngularFireStorage, store: Store) {
+  constructor(
+    userService: UserService,
+    firestore: AngularFirestore,
+    private firestorage: AngularFireStorage,
+    store: Store,
+    private resumeMonthService: ResumeMonthService
+  ) {
     super(userService, firestore, store);
   }
 
@@ -98,28 +105,53 @@ export class EditBillService extends BillService {
     return this.calculateHT(duration, hourlyRate, lines) + this.calculateTVA(duration, hourlyRate, tvaRate, lines);
   }
 
-  public archive(bill: File) {
+  public archive(invoicePdf: File) {
     return this.readData().pipe(
       take(1),
       mergeMap(data =>
         this.firestorage
-          .upload(`users/${data.user.uid}/${data.project}/${data.month}.pdf`, bill)
+          .upload(`users/${data.user.uid}/${data.project}/${data.month}.pdf`, invoicePdf)
           .snapshotChanges()
           .pipe(
             tap(task => {
               if (task.bytesTransferred === task.totalBytes) {
-                // Update firestore on completion
-                task.ref
-                  .getDownloadURL()
-                  .then(url =>
-                    this.firestore
-                      .doc<Bill>(`users/${data.user.uid}/projects/${data.project}/bills/${data.month}`)
-                      .set({ archived: true, billUrl: url }, { merge: true })
-                  );
+                task.ref.getDownloadURL().then(url => this.archiveBill(data, url));
               }
             })
           )
       )
     );
+  }
+
+  private archiveBill(billData: BillData, pdfFileUrl: string): Promise<void> {
+    return combineLatest([this.store.select(SettingsState.settings), this.resumeMonthService.resume$(billData.month), this.lines$])
+      .pipe(
+        map(data => ({
+          archived: true,
+          billUrl: pdfFileUrl,
+          detail: {
+            nbWorkDays: data[1].nbWorkDays,
+            percentProgression: data[1].percent,
+            mustWorkDuration: data[1].mustDuration.toISOString(),
+            timeWorkDuration: data[1].total.toISOString(),
+            overtimeCalculateDuration: data[1].overtime.toISOString(),
+            hourlyRate: data[0].bill.hourlyRate,
+            linesAmountHt: this.sumLinesAmount(data[2]),
+            timesAmountHt: this.calculatWorkAmount(data[1].total, data[0].bill.hourlyRate),
+            tvaRate: data[0].bill.tvaRate
+          }
+        })),
+        mergeMap(bill =>
+          this.firestore
+            .doc<Bill>(`users/${billData.user.uid}/projects/${billData.project}/bills/${billData.month}`)
+            .set(bill, { merge: true })
+        )
+      )
+      .toPromise();
+  }
+
+  public freezeBills(month: string) {
+    console.log(`Lazy archivage...`);
+    return this.readData().pipe(tap(() => console.log(`Archived !`)));
   }
 }
