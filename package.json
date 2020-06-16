@@ -25,7 +25,8 @@
     "workspace-schematic": "nx workspace-schematic",
     "dep-graph": "nx dep-graph",
     "help": "nx help",
-    "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points"
+    "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points",
+    "functions:deploy": "firebase deploy --only functions"
   },
   "private": true,
   "dependencies": {
@@ -42,6 +43,10 @@
     "@angular/platform-browser-dynamic": "^9.1.0",
     "@angular/router": "^9.1.0",
     "@angular/service-worker": "^9.1.9",
+    "@nestjs/common": "^6.8.3",
+    "@nestjs/core": "^6.8.3",
+    "@nestjs/platform-express": "^6.8.3",
+    "@nestjs/swagger": "^4.5.10",
     "@ngx-translate/core": "^12.1.2",
     "@ngx-translate/http-loader": "^4.0.0",
     "@ngxs/storage-plugin": "^3.6.2",
@@ -51,16 +56,35 @@
     "core-js": "^2.5.4",
     "file-saver": "^2.0.2",
     "firebase": "^7.14.5",
+    "firebase-admin": "^8.12.1",
+    "firebase-functions": "^3.7.0",
     "firebaseui": "^4.5.0",
     "firebaseui-angular": "^5.0.0",
     "hammerjs": "^2.0.8",
     "highcharts": "^8.1.1",
     "lodash": "^4.17.15",
     "moment": "^2.26.0",
+    "nest": "^0.1.6",
+    "nodemailer": "^6.4.8",
+    "reflect-metadata": "^0.1.13",
     "rxjs": "~6.5.4",
+    "swagger-ui-express": "^4.1.4",
     "xlsx": "^0.16.2",
     "zone.js": "^0.10.2"
   },
+  "firebase-functions-dependencies": [
+    "@nestjs/common",
+    "@nestjs/core",
+    "@nestjs/platform-express",
+    "@nestjs/swagger",
+    "firebase-functions",
+    "firebase-admin",
+    "nest",
+    "nodemailer",
+    "reflect-metadata",
+    "rxjs",
+    "swagger-ui-express"
+  ],
   "devDependencies": {
     "@angular-devkit/build-angular": "0.901.0",
     "@angular/cli": "9.1.0",
@@ -69,6 +93,7 @@
     "@ngxs/devtools-plugin": "^3.6.2",
     "@nrwl/cypress": "9.3.0",
     "@nrwl/jest": "9.3.0",
+    "@nrwl/nest": "9.3.0",
     "@nrwl/workspace": "9.3.0",
     "@types/jest": "25.1.4",
     "@types/node": "~8.9.4",
@@ -82,6 +107,9 @@
     "ts-jest": "25.2.1",
     "ts-node": "~7.0.0",
     "tslint": "~6.0.0",
-    "typescript": "~3.8.3"
+    "typescript": "~3.8.3",
+    "@nrwl/node": "9.3.0",
+    "@nestjs/schematics": "^6.7.0",
+    "@nestjs/testing": "^6.8.3"
   }
 }

@@ -1,0 +1,3 @@
+###
+
+GET https://us-central1-timbrage-reporting.cloudfunctions.net/reporting/api/ping

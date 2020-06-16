@@ -1,13 +1,18 @@
+import { ExpressAdapter } from '@nestjs/platform-express';
+import * as express from 'express';
 import * as functions from 'firebase-functions';
 import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import * as nodemailer from 'nodemailer';
+import { app } from './app';
 
-// Start writing Firebase Functions
-// https://firebase.google.com/docs/functions/typescript
+const expressServer = express();
 
-// export const helloWorld = functions.https.onRequest((request, response) => {
-//   response.send('Hello World!');
-// });
+const createServer = async () => {
+  await app(new ExpressAdapter(expressServer)).then(server => server.init());
+};
+
+createServer();
+exports.reporting = functions.https.onRequest(expressServer);
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -17,7 +22,7 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-const sendMailToAdmin = function(message: { subject: string; body: string }) {
+const sendMailToAdmin = function (message: { subject: string; body: string }) {
   return transporter.sendMail({
     from: functions.config().mail.admin.from,
     to: functions.config().mail.admin.to,
@@ -26,7 +31,7 @@ const sendMailToAdmin = function(message: { subject: string; body: string }) {
   });
 };
 
-const sendWelcomeEmail = function(user: UserRecord) {
+const sendWelcomeEmail = function (user: UserRecord) {
   // const dest = user.email;
   // const displayName = user.displayName;
 
