@@ -6,7 +6,11 @@
       "public": "dist/apps/timbrage",
       "rewrites": [
         {
-          "source": "**",
+          "source": "/api/**",
+          "function": "webApi"
+        },
+        {
+          "source": "!/@(api)/**",
           "destination": "/index.html"
         }
       ],
@@ -18,7 +22,11 @@
       "public": "dist/apps/reporting",
       "rewrites": [
         {
-          "source": "**",
+          "source": "/api/**",
+          "function": "webApi"
+        },
+        {
+          "source": "!/@(api)/**",
           "destination": "/index.html"
         }
       ],
@@ -26,7 +34,7 @@
     }
   ],
   "functions": {
-    "predeploy": ["nx build functions --prod", "node apps/functions/firebase-functions.js"],
+    "predeploy": ["nx build functions --prod --main apps/functions/src/cloudFunctions.ts", "node apps/functions/firebase-functions.js"],
     "source": "dist/apps/functions"
   }
 }

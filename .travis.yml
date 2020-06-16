@@ -34,12 +34,10 @@ jobs:
     - name: Job functions
       before_install:
         - chmod +x $SCRIPT_DIR/check_changes
-        - check_changes functions || travis_terminate 0;
-        - cd functions
-      script: npm run build
+        - check_changes apps/functions package-lock.json || travis_terminate 0;
       deploy:
         provider: script
-        script: npm run deploy
+        script: firebase deploy --only functions
         skip_cleanup: true
 
 branches:

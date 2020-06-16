@@ -8,11 +8,11 @@ import { app } from './app';
 const expressServer = express();
 
 const createServer = async () => {
-  await app(new ExpressAdapter(expressServer)).then(server => server.init());
+  await app(new ExpressAdapter(expressServer)).then(nestServer => nestServer.init());
 };
 
 createServer();
-exports.reporting = functions.https.onRequest(expressServer);
+exports.webApi = functions.https.onRequest(expressServer);
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',

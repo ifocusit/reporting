@@ -284,7 +284,7 @@
           "builder": "@nrwl/node:build",
           "options": {
             "outputPath": "dist/apps/functions",
-            "main": "apps/functions/src/cloudFunctions.ts",
+            "main": "apps/functions/src/main.ts",
             "tsConfig": "apps/functions/tsconfig.app.json",
             "assets": ["apps/functions/src/assets"]
           },
