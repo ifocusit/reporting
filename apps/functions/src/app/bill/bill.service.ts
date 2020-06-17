@@ -8,11 +8,8 @@ import { map, mergeMap } from 'rxjs/operators';
 import {
   CalculateDuration,
   calculateMustHours,
-  calculateOvertimeDuration,
-  calculateProgression,
   calculateWorkDuration,
   calculateWorkedDays,
-  calculatWorkAmount,
   sumLinesAmount
 } from '../utils/calculate-duration.tools';
 import { SettingsService } from './../settings/settings.service';
@@ -28,12 +25,9 @@ export interface BillDetail {
   nbWorkDays: number;
   mustWorkDuration: string;
   timeWorkDuration: string;
-  overtimeCalculateDuration: string;
-  percentProgression: number;
   hourlyRate: number;
   tvaRate: number;
   linesAmountHt: number;
-  timesAmountHt: number;
 }
 
 export interface Bill {
@@ -108,30 +102,25 @@ export class BillService {
               const nbWorkDays = calculateWorkedDays(days);
               const mustDuration = calculateMustHours(nbWorkDays, settings);
               const total = calculateWorkDuration(days);
-              const overtime = calculateOvertimeDuration(total, mustDuration);
-              const percentProgression = calculateProgression(overtime, total, mustDuration);
 
               return {
                 ...bill,
                 archived: true,
                 detail: {
                   nbWorkDays: nbWorkDays,
-                  percentProgression,
                   mustWorkDuration: mustDuration.toISOString(),
                   timeWorkDuration: total.toISOString(),
-                  overtimeCalculateDuration: overtime.toISOString(),
                   hourlyRate: settings.bill.hourlyRate,
                   linesAmountHt: sumLinesAmount(lines),
-                  timesAmountHt: calculatWorkAmount(total, settings.bill.hourlyRate),
                   tvaRate: settings.bill.tvaRate
                 }
               };
             }),
-            mergeMap(bill =>
+            mergeMap(newBill =>
               db
                 .doc(billDocPath)
-                .set(bill)
-                .then(() => bill)
+                .set(newBill)
+                .then(() => newBill)
             )
           )
           .toPromise();

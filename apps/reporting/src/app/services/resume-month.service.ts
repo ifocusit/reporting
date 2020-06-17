@@ -32,12 +32,15 @@ export class ResumeMonthService {
     return this.billService.getBill$(month).pipe(
       mergeMap(bill => {
         if (bill.archived && bill.detail) {
+          const mustDuration = moment.duration(bill.detail.mustWorkDuration);
+          const total = moment.duration(bill.detail.timeWorkDuration);
+          const overtime = this.calculateOvertimeDuration(total, mustDuration);
           return of({
             nbWorkDays: bill.detail.nbWorkDays,
-            mustDuration: moment.duration(bill.detail.mustWorkDuration),
-            total: moment.duration(bill.detail.timeWorkDuration),
-            overtime: moment.duration(bill.detail.overtimeCalculateDuration),
-            percent: bill.detail.percentProgression
+            mustDuration,
+            total,
+            overtime,
+            percent: this.calculateProgression(overtime, total, mustDuration)
           });
         }
         return this.timesService.read(month, 'month').pipe(

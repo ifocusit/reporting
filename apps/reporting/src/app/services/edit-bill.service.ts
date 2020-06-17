@@ -84,13 +84,13 @@ export class EditBillService extends BillService {
     );
   }
 
-  public calculatWorkAmount(duration: Duration, hourlyRate: number): number {
-    return duration.asHours() * hourlyRate;
-  }
-
   private sumLinesAmount(lines: BillLine[]): number {
     const amounts = lines.map(line => +line.amount).filter(value => !Number.isNaN(value));
     return amounts.length > 0 ? amounts.reduce((accu, currentValue) => accu + currentValue) : 0;
+  }
+
+  public calculatWorkAmount(duration: Duration, hourlyRate: number): number {
+    return duration.asHours() * hourlyRate;
   }
 
   public calculateHT(duration: Duration, hourlyRate: number, lines: BillLine[]) {
@@ -126,18 +126,16 @@ export class EditBillService extends BillService {
   private archiveBill(billData: BillData, pdfFileUrl: string): Promise<void> {
     return combineLatest([this.store.select(SettingsState.settings), this.resumeMonthService.resume$(billData.month), this.lines$])
       .pipe(
+        take(1),
         map(data => ({
           archived: true,
           billUrl: pdfFileUrl,
           detail: {
             nbWorkDays: data[1].nbWorkDays,
-            percentProgression: data[1].percent,
             mustWorkDuration: data[1].mustDuration.toISOString(),
             timeWorkDuration: data[1].total.toISOString(),
-            overtimeCalculateDuration: data[1].overtime.toISOString(),
-            hourlyRate: data[0].bill.hourlyRate,
             linesAmountHt: this.sumLinesAmount(data[2]),
-            timesAmountHt: this.calculatWorkAmount(data[1].total, data[0].bill.hourlyRate),
+            hourlyRate: data[0].bill.hourlyRate,
             tvaRate: data[0].bill.tvaRate
           }
         })),

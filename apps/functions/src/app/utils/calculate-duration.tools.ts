@@ -35,17 +35,6 @@ function splitPairs(arr: Array<Moment>, ignoreSingle = true): Array<Array<Moment
   return pairs;
 }
 
-export const calculateProgression = (overtime: Duration, total: Duration, mustHours: Duration): number => {
-  if (mustHours.asHours() === 0) {
-    return 0;
-  }
-  return ((total.asHours() - Math.max(overtime.asHours(), 0)) * 100) / (Math.max(overtime.asHours(), 0) + mustHours.asHours());
-};
-
-export const calculateOvertimeDuration = (total: Duration, mustHours: Duration): Duration => {
-  return total.clone().subtract(mustHours);
-};
-
 export const calculateWorkDuration = (days: WorkingDateReporting[]): Duration => {
   return days.map(report => report.duration).reduce((d1, d2) => d1.clone().add(d2));
 };
@@ -58,10 +47,6 @@ export const calculateWorkedDays = (days: WorkingDateReporting[]): number => {
   return days.filter(day => !day.isHoliday && !day.isWeekend).length;
 };
 
-export const calculatWorkAmount = (duration: Duration, hourlyRate: number): number => {
-  return duration.asHours() * hourlyRate;
-};
-
 export const sumLinesAmount = (lines: BillLine[]): number => {
   const amounts = lines.map(line => +line.amount).filter(value => !Number.isNaN(value));
   return amounts.length > 0 ? amounts.reduce((accu, currentValue) => accu + currentValue) : 0;
@@ -69,12 +54,4 @@ export const sumLinesAmount = (lines: BillLine[]): number => {
 
 export const calculateHT = (duration: Duration, hourlyRate: number, lines: BillLine[]) => {
   return this.sumLinesAmount(lines) + this.calculatWorkAmount(duration, hourlyRate);
-};
-
-export const calculateTVA = (duration: Duration, hourlyRate: number, tvaRate: number, lines: BillLine[]) => {
-  return (this.calculateHT(duration, hourlyRate, lines) * tvaRate) / 100;
-};
-
-export const calculateTTC = (duration: Duration, hourlyRate: number, tvaRate: number, lines: BillLine[]) => {
-  return this.calculateHT(duration, hourlyRate, lines) + this.calculateTVA(duration, hourlyRate, tvaRate, lines);
 };
