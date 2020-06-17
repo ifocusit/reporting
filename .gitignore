@@ -48,3 +48,4 @@ Thumbs.db
 
 .firebase
 *.jks
+firebase-config.json

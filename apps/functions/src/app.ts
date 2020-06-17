@@ -12,7 +12,7 @@ export const app = (httpAdapter?: AbstractHttpAdapter) =>
       .setTitle('Reporting Microservice')
       .setDescription('Reporting API')
       .setVersion('1.0')
-      .addSecurity('reporting_auth', { type: 'apiKey', name: 'x-user-id', in: 'header', description: 'user identification' })
+      .addSecurity('reporting_auth', { type: 'apiKey', name: 'token', in: 'header', description: 'Access token' })
       .addSecurityRequirements('reporting_auth')
       .build();
     const document = SwaggerModule.createDocument(nestApp, swaggerOptions);
