@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { BillService, Settings, SettingsState, TimeAdapter, TimesService, UserService, WorkingDateReporting } from '@ifocusit/commons';
+import { BillService, Settings, SettingsState, TimeAdapter, TimesService, WorkingDateReporting } from '@ifocusit/commons';
 import { Store } from '@ngxs/store';
 import { range } from 'lodash';
 import * as moment from 'moment';
@@ -18,13 +17,7 @@ export interface MonthProgression {
 
 @Injectable({ providedIn: 'root' })
 export class ResumeMonthService {
-  constructor(
-    private timesService: TimesService,
-    private billService: BillService,
-    private store: Store,
-    private firestore: AngularFirestore,
-    private userService: UserService
-  ) {}
+  constructor(private timesService: TimesService, private billService: BillService, private store: Store) {}
 
   public resume$(month: string): Observable<MonthProgression> {
     const currentMonth = moment(month);

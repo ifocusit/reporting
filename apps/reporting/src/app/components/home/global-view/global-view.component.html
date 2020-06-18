@@ -1,1 +1,4 @@
-<p>global-view works!</p>
+<button *ngIf="chart" (click)="addYear()" mat-icon-button><mat-icon>library_add</mat-icon></button>
+<button *ngIf="chart" (click)="addMonth()" mat-icon-button><mat-icon>add</mat-icon></button>
+<button *ngIf="!chart" (click)="load()" color="primary" mat-raised-button>LOAD</button>
+<div id="charts"></div>
