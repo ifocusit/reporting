@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CopyrightModule, EditProjectModule, FilesModule, ReportingCommonModule, SelectProjectModule } from '@ifocusit/commons';
+import { GlobalViewComponent } from './global-view/global-view.component';
 import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home.component';
 import { MonthCardComponent } from './month-card/month-card.component';
@@ -9,7 +10,7 @@ import { MonthListComponent } from './month-list/month-list.component';
 import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
-  declarations: [HomeComponent, ProfileComponent, MonthCardComponent, MonthListComponent],
+  declarations: [HomeComponent, ProfileComponent, MonthCardComponent, MonthListComponent, GlobalViewComponent],
   imports: [
     CommonModule,
     HomeRoutingModule,

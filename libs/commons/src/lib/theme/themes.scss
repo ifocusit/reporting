@@ -77,7 +77,7 @@ $default-theme: mat-light-theme(mat-palette($mat-indigo), mat-palette($mat-pink,
 @include custom-theme-classes($default-theme);
 
 // other themes
-@include addTheme('mobi', mat-palette($mat-red, A700, 500, 900), mat-palette($mat-indigo));
+@include addTheme('mobi', mat-palette($mat-red, 700, 500, 900), mat-palette($mat-indigo));
 @include addTheme('deeppurple-amber', mat-palette($mat-deep-purple), mat-palette($mat-amber, A200, A100, A400));
 @include addTheme('pink-bluegrey', mat-palette($mat-pink, 700, 500, 900), mat-palette($mat-blue-grey, A200, A100, A400), $dark-theme: true);
 @include addTheme('purple-green', mat-palette($mat-purple, 700, 500, 800), mat-palette($mat-green, A200, A100, A400), $dark-theme: true);

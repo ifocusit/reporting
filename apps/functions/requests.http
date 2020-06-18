@@ -1,0 +1,2 @@
+###
+GET {{reporting-api}}/api/ping

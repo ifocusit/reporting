@@ -35,6 +35,9 @@
     "timbrage-e2e": {
       "tags": [],
       "implicitDependencies": ["timbrage"]
+    },
+    "functions": {
+      "tags": []
     }
   }
 }

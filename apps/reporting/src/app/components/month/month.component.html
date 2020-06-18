@@ -18,7 +18,7 @@
       <button mat-icon-button *ngIf="selectedDate$ | async as selectedDate" [routerLink]="['/bill', selectedDate.format('YYYY-MM')]">
         <mat-icon>receipt</mat-icon>
       </button>
-      <button mat-icon-button [routerLink]="['/']"><mat-icon>person</mat-icon></button>
+      <button mat-icon-button [routerLink]="['/']"><mat-icon>home</mat-icon></button>
     </mat-toolbar>
 
     <mat-table id="times" [dataSource]="items$" class="mat-elevation-z8 reports">

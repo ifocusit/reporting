@@ -1,5 +1,6 @@
 import { DecimalPipe } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
+import * as moment from 'moment';
 import { Duration, unitOfTime } from 'moment';
 
 @Pipe({
@@ -17,9 +18,12 @@ export class DurationPipe implements PipeTransform {
     return duration.toISOString().replace('P', '').replace('T', '').replace('0D', zeroFormat).toLocaleLowerCase();
   }
 
-  transform(duration: Duration, unit: unitOfTime.Base): string | number {
+  transform(duration: Duration | string, unit: unitOfTime.Base): string | number {
     if (!duration) {
       return '';
+    }
+    if (typeof duration === 'string') {
+      duration = moment.duration(duration);
     }
     duration = DurationPipe.clean(duration);
     return unit ? this.as(duration, unit) : DurationPipe.format(duration);
