@@ -1,10 +1,10 @@
-import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import * as firebase from 'firebase-admin';
 import { range } from 'lodash';
 import * as moment from 'moment';
 import { Duration, Moment } from 'moment';
-import { combineLatest } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { combineLatest, from } from 'rxjs';
+import { map, mergeMap, toArray } from 'rxjs/operators';
 import {
   CalculateDuration,
   calculateMustHours,
@@ -13,7 +13,7 @@ import {
   sumLinesAmount
 } from '../utils/calculate-duration.tools';
 import { SettingsService } from './../settings/settings.service';
-import { DATE_ISO_FORMAT, TimeService } from './../time/time.service';
+import { DATE_ISO_FORMAT, MONTH_ISO_FORMAT, TimeService } from './../time/time.service';
 
 export interface BillLine {
   id?: string;
@@ -63,7 +63,29 @@ export class WorkingDateReporting {
 export class BillService {
   constructor(private timeService: TimeService, private settingsService: SettingsService) {}
 
-  freeze(user: string, project: string, month: string): Promise<Bill> {
+  freeze(user: string, project: string, date: string): Promise<any> {
+    if (!user || !project || !date) {
+      throw new BadRequestException();
+    }
+
+    if (date.length === 4) {
+      return from(range(0, 12))
+        .pipe(
+          map((index: number) =>
+            moment()
+              .year(+date)
+              .month(index)
+              .format(MONTH_ISO_FORMAT)
+          ),
+          mergeMap(month => this.freezeMonth(user, project, month).catch(error => error.message)),
+          toArray()
+        )
+        .toPromise();
+    }
+    return this.freezeMonth(user, project, date);
+  }
+
+  private freezeMonth(user: string, project: string, month: string): Promise<Bill> {
     const currentMonth = moment(month);
     const db = firebase.firestore();
 
