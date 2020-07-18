@@ -62,7 +62,7 @@
     "firebaseui-angular": "^5.0.0",
     "hammerjs": "^2.0.8",
     "highcharts": "^8.1.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "moment": "^2.26.0",
     "nest": "^0.1.6",
     "nodemailer": "^6.4.8",
