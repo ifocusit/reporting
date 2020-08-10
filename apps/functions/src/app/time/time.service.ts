@@ -38,4 +38,16 @@ export class TimeService {
       .get()
       .then(results => results.docs.map(doc => moment(doc.data().timestamp)));
   }
+
+  public insertTimes(user: any, project: any, times: string[]) {
+    const db = firebase.firestore();
+    db.collection(`users/${user}/projects/${project}/times`)
+      .get()
+      .then(results => results.docs.map(doc => moment(doc.data().timestamp)));
+    const batch = db.batch();
+    times.forEach(time =>
+      batch.create(db.collection(`users/${user}/projects/${project}/times`).doc(time), { timestamp: moment(time).valueOf() })
+    );
+    return batch.commit();
+  }
 }

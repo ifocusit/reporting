@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import * as firebase from 'firebase-admin';
 import { range } from 'lodash';
 import * as moment from 'moment';
@@ -96,10 +96,7 @@ export class BillService {
       .then(docs => docs.data() as Bill)
       .then(bill => {
         if (!bill) {
-          throw new NotFoundException(`Bill ${billDocPath} not found!`);
-        }
-        if (!bill.billUrl) {
-          throw new UnprocessableEntityException(`Bill cannot be freeze without uploaded PDF!`);
+          bill = {} as Bill;
         }
         return combineLatest([
           this.settingsService.settings(user, project),
@@ -142,7 +139,7 @@ export class BillService {
               db
                 .doc(billDocPath)
                 .set(newBill)
-                .then(() => newBill)
+                .then(() => ({ ...newBill, month } as Bill))
             )
           )
           .toPromise();
