@@ -62,7 +62,7 @@ jobs:
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
-  reporting:
+  functions:
     runs-on: ubuntu-latest
     env:
       appName: functions
