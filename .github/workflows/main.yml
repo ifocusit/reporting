@@ -1,0 +1,88 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  timbrage:
+    runs-on: ubuntu-latest
+    env:
+      appName: timbrage
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+      - name: Check changes
+        run: |
+          GITDIFF=$(git diff --name-only HEAD^ HEAD | grep -E -- 'apps/${{ env.appName }}/|package-lock.json|libs' | tr -d '[:space:]')
+          if [ "$GITDIFF" == "" ]; then
+            echo "No code changes, skipped"
+            exit 0
+          fi
+          echo "${{ env.appName }} will be build and published"
+      - uses: actions/setup-node@master
+        with:
+          node-version: '10.x'
+      - run: npm ci
+      - run: npx nx build ${{ env.appName }} --prod
+      - uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting:${{ env.appName }}
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
+  reporting:
+    runs-on: ubuntu-latest
+    env:
+      appName: reporting
+      hosting: admin
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+      - name: Check changes
+        run: |
+          GITDIFF=$(git diff --name-only HEAD^ HEAD | grep -E -- 'apps/${{ env.appName }}/|package-lock.json|libs' | tr -d '[:space:]')
+          if [ "$GITDIFF" == "" ]; then
+            echo "No code changes, skipped"
+            exit 0
+          fi
+          echo "${{ env.appName }} will be build and published"
+      - uses: actions/setup-node@master
+        with:
+          node-version: '10.x'
+      - run: npm ci
+      - run: npx nx build ${{ env.appName }} --prod
+      - uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting:${{ env.hosting }}
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
+  reporting:
+    runs-on: ubuntu-latest
+    env:
+      appName: functions
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+      - name: Check changes
+        run: |
+          GITDIFF=$(git diff --name-only HEAD^ HEAD | grep -E -- 'apps/${{ env.appName }}/|package-lock.json' | tr -d '[:space:]')
+          if [ "$GITDIFF" == "" ]; then
+            echo "No code changes, skipped"
+            exit 0
+          fi
+          echo "${{ env.appName }} will be build and published"
+      - uses: actions/setup-node@master
+        with:
+          node-version: '10.x'
+      - uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only functions
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
