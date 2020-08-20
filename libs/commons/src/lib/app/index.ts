@@ -1,1 +1,1 @@
-export * from './default-app.component';
+export * from './initialization.service';
