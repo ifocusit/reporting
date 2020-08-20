@@ -1,4 +1,4 @@
-import { OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
@@ -8,7 +8,8 @@ import { ReadSettings, SettingsState } from '../settings/settings.store';
 import { setMetaContent } from '../theme/theme.utils';
 import { TranslationService } from '../translation/translation.service';
 
-export abstract class DefaultAppComponent implements OnInit {
+@Injectable()
+export class InitializationService {
   constructor(
     private swUpdate: SwUpdate,
     protected store: Store,
@@ -17,8 +18,18 @@ export abstract class DefaultAppComponent implements OnInit {
     private translationService: TranslationService
   ) {}
 
-  ngOnInit(): void {
+  initialize() {
+    this.loadDefaultLang();
+    this.updateAppOnUpdatesAvailability();
+    this.loadUserDataOnUserSelection();
+    this.loadGuiThemeOnThemeSelection();
+  }
+
+  loadDefaultLang(): void {
     this.translationService.loadLang('fr');
+  }
+
+  updateAppOnUpdatesAvailability(): void {
     if (this.swUpdate.isEnabled) {
       this.swUpdate.available
         .pipe(
@@ -31,16 +42,18 @@ export abstract class DefaultAppComponent implements OnInit {
           }
         });
     }
+  }
 
-    // changement de user => charge le dermier project et ses settings
+  loadUserDataOnUserSelection(): void {
     this.authService.user$
       .pipe(
         tap(user => this.translationService.loadLang(user.lang)),
         mergeMap(user => this.store.dispatch(new ReadSettings(user.lastProject)))
       )
       .subscribe();
+  }
 
-    // changement de theme
+  loadGuiThemeOnThemeSelection(): void {
     this.store
       .select(SettingsState.theme)
       .pipe(

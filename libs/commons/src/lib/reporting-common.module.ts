@@ -3,6 +3,7 @@ import { CommonModule, DecimalPipe } from '@angular/common';
 import { Injectable, NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
+import { InitializationService } from './app';
 import { DebounceInputDirective } from './form/debounce-input.directive';
 import { MaterialModule } from './material.module';
 import { AmountPipe } from './pipes/amount.pipe';
@@ -24,7 +25,8 @@ export class MyHammerConfig extends HammerGestureConfig {
     {
       provide: HAMMER_GESTURE_CONFIG,
       useClass: MyHammerConfig
-    }
+    },
+    InitializationService
   ],
   imports: [CommonModule],
   exports: [DurationPipe, MomentPipe, DebounceInputDirective, MaterialModule, FlexLayoutModule, LayoutModule, AmountPipe]

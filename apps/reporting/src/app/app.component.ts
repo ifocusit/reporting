@@ -1,8 +1,5 @@
-import { Component } from '@angular/core';
-import { SwUpdate } from '@angular/service-worker';
-import { AuthService, DefaultAppComponent, TranslationService } from '@ifocusit/commons';
-import { TranslateService } from '@ngx-translate/core';
-import { Store } from '@ngxs/store';
+import { Component, OnInit } from '@angular/core';
+import { InitializationService } from '@ifocusit/commons';
 
 @Component({
   selector: 'ifocusit-root',
@@ -17,14 +14,10 @@ import { Store } from '@ngxs/store';
     `
   ]
 })
-export class AppComponent extends DefaultAppComponent {
-  constructor(
-    swUpdate: SwUpdate,
-    store: Store,
-    authService: AuthService,
-    translate: TranslateService,
-    translationService: TranslationService
-  ) {
-    super(swUpdate, store, authService, translate, translationService);
+export class AppComponent implements OnInit {
+  constructor(private readonly initializationService: InitializationService) {}
+
+  ngOnInit() {
+    this.initializationService.initialize();
   }
 }

@@ -1,17 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { SwUpdate } from '@angular/service-worker';
 import {
   AuthService,
   BillService,
-  DefaultAppComponent,
   ExportService,
+  InitializationService,
   MonthGraphDialogComponent,
   SelectDate,
-  TimesState,
-  TranslationService
+  TimesState
 } from '@ifocusit/commons';
-import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
 import * as moment from 'moment';
 import { tap } from 'rxjs/operators';
@@ -21,7 +18,7 @@ import { tap } from 'rxjs/operators';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent extends DefaultAppComponent {
+export class AppComponent implements OnInit {
   navLinks = [
     { path: '/timbrage', label: 'timbrage.title' },
     { path: '/calendar', label: 'calendar.title' }
@@ -30,16 +27,16 @@ export class AppComponent extends DefaultAppComponent {
   bill$ = this.billService.bill$;
 
   constructor(
-    swUpdate: SwUpdate,
-    store: Store,
-    authService: AuthService,
-    translate: TranslateService,
-    translationService: TranslationService,
+    private initializationService: InitializationService,
+    private store: Store,
+    private authService: AuthService,
     private exportService: ExportService,
     public dialog: MatDialog,
     private billService: BillService
-  ) {
-    super(swUpdate, store, authService, translate, translationService);
+  ) {}
+
+  ngOnInit() {
+    this.initializationService.initialize();
   }
 
   public calendarPage() {

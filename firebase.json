@@ -34,7 +34,7 @@
     }
   ],
   "functions": {
-    "predeploy": ["nx build functions --prod --main apps/functions/src/cloudFunctions.ts", "node apps/functions/firebase-functions.js"],
+    "predeploy": ["npx nx build functions --prod --main apps/functions/src/cloudFunctions.ts", "node apps/functions/firebase-functions.js"],
     "source": "dist/apps/functions"
   }
 }
