@@ -1,5 +1,8 @@
 {
   "npmScope": "ifocusit",
+  "affected": {
+    "defaultBase": "master"
+  },
   "implicitDependencies": {
     "angular.json": "*",
     "package.json": {

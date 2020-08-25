@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
 import { filter, mergeMap, tap } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
+import { LOCATION_TOKEN } from '../reporting-common.module';
 import { ReadSettings, SettingsState } from '../settings/settings.store';
 import { setMetaContent } from '../theme/theme.utils';
 import { TranslationService } from '../translation/translation.service';
@@ -15,7 +16,8 @@ export class InitializationService {
     protected store: Store,
     protected authService: AuthService,
     private translate: TranslateService,
-    private translationService: TranslationService
+    private translationService: TranslationService,
+    @Inject(LOCATION_TOKEN) private location: Location
   ) {}
 
   initialize() {
@@ -25,11 +27,11 @@ export class InitializationService {
     this.loadGuiThemeOnThemeSelection();
   }
 
-  loadDefaultLang(): void {
+  private loadDefaultLang(): void {
     this.translationService.loadLang('fr');
   }
 
-  updateAppOnUpdatesAvailability(): void {
+  private updateAppOnUpdatesAvailability(): void {
     if (this.swUpdate.isEnabled) {
       this.swUpdate.available
         .pipe(
@@ -38,13 +40,13 @@ export class InitializationService {
         )
         .subscribe(message => {
           if (confirm(message)) {
-            window.location.reload();
+            this.location.reload();
           }
         });
     }
   }
 
-  loadUserDataOnUserSelection(): void {
+  private loadUserDataOnUserSelection(): void {
     this.authService.user$
       .pipe(
         tap(user => this.translationService.loadLang(user.lang)),
@@ -53,7 +55,7 @@ export class InitializationService {
       .subscribe();
   }
 
-  loadGuiThemeOnThemeSelection(): void {
+  private loadGuiThemeOnThemeSelection(): void {
     this.store
       .select(SettingsState.theme)
       .pipe(
