@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {
   AuthService,
   BillService,
   ExportService,
   InitializationService,
+  LOCATION_TOKEN,
   MonthGraphDialogComponent,
   SelectDate,
   TimesState
@@ -32,7 +33,8 @@ export class AppComponent implements OnInit {
     private authService: AuthService,
     private exportService: ExportService,
     public dialog: MatDialog,
-    private billService: BillService
+    private billService: BillService,
+    @Inject(LOCATION_TOKEN) private location: Location
   ) {}
 
   ngOnInit() {
@@ -56,7 +58,7 @@ export class AppComponent implements OnInit {
   }
 
   private isPage(pageName: string) {
-    return window.location.pathname.match(`/${pageName}`);
+    return this.location.pathname.match(`/${pageName}`);
   }
 
   public exportMonth() {
