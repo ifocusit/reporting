@@ -1,6 +1,6 @@
 import { LayoutModule } from '@angular/cdk/layout';
-import { CommonModule, DecimalPipe } from '@angular/common';
-import { Injectable, InjectionToken, NgModule } from '@angular/core';
+import { CommonModule, DecimalPipe, LocationStrategy, PathLocationStrategy } from '@angular/common';
+import { Injectable, NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HammerGestureConfig, HammerModule, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { InitializationService } from './app';
@@ -18,8 +18,6 @@ export class MyHammerConfig extends HammerGestureConfig {
   } as any;
 }
 
-export const LOCATION_TOKEN = new InjectionToken<Location>('Window location object');
-
 @NgModule({
   declarations: [DurationPipe, MomentPipe, DebounceInputDirective, AmountPipe],
   providers: [
@@ -28,7 +26,8 @@ export const LOCATION_TOKEN = new InjectionToken<Location>('Window location obje
       provide: HAMMER_GESTURE_CONFIG,
       useClass: MyHammerConfig
     },
-    { provide: LOCATION_TOKEN, useValue: window.location },
+    Location,
+    { provide: LocationStrategy, useClass: PathLocationStrategy },
     InitializationService
   ],
   imports: [CommonModule, HammerModule],

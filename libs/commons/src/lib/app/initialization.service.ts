@@ -1,10 +1,10 @@
-import { Inject, Injectable } from '@angular/core';
+import { Location } from '@angular/common';
+import { Injectable } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
 import { filter, mergeMap, tap } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
-import { LOCATION_TOKEN } from '../reporting-common.module';
 import { ReadSettings, SettingsState } from '../settings/settings.store';
 import { setMetaContent } from '../theme/theme.utils';
 import { TranslationService } from '../translation/translation.service';
@@ -17,7 +17,7 @@ export class InitializationService {
     protected authService: AuthService,
     private translate: TranslateService,
     private translationService: TranslationService,
-    @Inject(LOCATION_TOKEN) private location: Location
+    private location: Location
   ) {}
 
   initialize() {
@@ -40,7 +40,7 @@ export class InitializationService {
         )
         .subscribe(message => {
           if (confirm(message)) {
-            this.location.reload();
+            this.location.go(this.location.path());
           }
         });
     }
