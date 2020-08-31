@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { Bill, BillData, BillService, SettingsState, UserService } from '@ifocusit/commons';
+import { Bill, BillData, BillService, UserService } from '@ifocusit/commons';
 import { Store } from '@ngxs/store';
 import * as moment from 'moment';
 import { Duration } from 'moment';
@@ -25,8 +25,8 @@ export class EditBillService extends BillService {
   public addLine(line: BillLine) {
     return this.readData().pipe(
       take(1),
-      mergeMap(bill =>
-        this.firestore.collection<any>(`users/${bill.user.uid}/projects/${bill.project}/bills/${bill.month}/lines`).add({
+      mergeMap(data =>
+        this.firestore.collection<any>(`users/${data.user.uid}/projects/${data.settings.project.name}/bills/${data.month}/lines`).add({
           ...line,
           timestamp: moment().valueOf()
         })
@@ -42,9 +42,9 @@ export class EditBillService extends BillService {
   public updateLine(line: BillLine) {
     return this.readData().pipe(
       take(1),
-      mergeMap(bill =>
+      mergeMap(data =>
         this.firestore
-          .collection<any>(`users/${bill.user.uid}/projects/${bill.project}/bills/${bill.month}/lines`)
+          .collection<any>(`users/${data.user.uid}/projects/${data.settings.project.name}/bills/${data.month}/lines`)
           .doc(line.id)
           .update({ label: line.label, amount: line.amount })
       ),
@@ -55,8 +55,11 @@ export class EditBillService extends BillService {
   public deleteLine(line: BillLine) {
     return this.readData().pipe(
       take(1),
-      mergeMap(bill =>
-        this.firestore.collection<any>(`users/${bill.user.uid}/projects/${bill.project}/bills/${bill.month}/lines`).doc(line.id).delete()
+      mergeMap(data =>
+        this.firestore
+          .collection<any>(`users/${data.user.uid}/projects/${data.settings.project.name}/bills/${data.month}/lines`)
+          .doc(line.id)
+          .delete()
       ),
       take(1)
     );
@@ -65,9 +68,9 @@ export class EditBillService extends BillService {
   public get lines$(): Observable<BillLine[]> {
     return this.readData().pipe(
       take(1),
-      mergeMap(bill =>
+      mergeMap(data =>
         this.firestore
-          .collection<BillLine>(`users/${bill.user.uid}/projects/${bill.project}/bills/${bill.month}/lines`, ref =>
+          .collection<BillLine>(`users/${data.user.uid}/projects/${data.settings.project.name}/bills/${data.month}/lines`, ref =>
             ref.orderBy('timestamp')
           )
           .snapshotChanges()
@@ -110,7 +113,7 @@ export class EditBillService extends BillService {
       take(1),
       mergeMap(data =>
         this.firestorage
-          .upload(`users/${data.user.uid}/${data.project}/${data.month}.pdf`, invoicePdf)
+          .upload(`users/${data.user.uid}/${data.settings.project.name}/${data.month}.pdf`, invoicePdf)
           .snapshotChanges()
           .pipe(
             tap(task => {
@@ -124,24 +127,28 @@ export class EditBillService extends BillService {
   }
 
   private archiveBill(billData: BillData, pdfFileUrl: string): Promise<void> {
-    return combineLatest([this.store.select(SettingsState.settings), this.resumeMonthService.resume$(billData.month), this.lines$])
+    return combineLatest([this.resumeMonthService.resume$(billData.month), this.lines$])
       .pipe(
         take(1),
-        map(data => ({
-          archived: true,
-          billUrl: pdfFileUrl,
-          detail: {
-            nbWorkDays: data[1].nbWorkDays,
-            mustWorkDuration: data[1].mustDuration.toISOString(),
-            timeWorkDuration: data[1].total.toISOString(),
-            linesAmountHt: this.sumLinesAmount(data[2]),
-            hourlyRate: data[0].bill.hourlyRate,
-            tvaRate: data[0].bill.tvaRate
-          }
-        })),
+        map(
+          data =>
+            ({
+              month: billData.month,
+              archived: true,
+              billUrl: pdfFileUrl,
+              detail: {
+                nbWorkDays: data[0].nbWorkDays,
+                mustWorkDuration: data[0].mustDuration.toISOString(),
+                timeWorkDuration: data[0].total.toISOString(),
+                linesAmountHt: this.sumLinesAmount(data[1]),
+                hourlyRate: billData.settings.bill.hourlyRate,
+                tvaRate: billData.settings.bill.tvaRate
+              }
+            } as Bill)
+        ),
         mergeMap(bill =>
           this.firestore
-            .doc<Bill>(`users/${billData.user.uid}/projects/${billData.project}/bills/${billData.month}`)
+            .doc<Bill>(`users/${billData.user.uid}/projects/${billData.settings.project.name}/bills/${billData.month}`)
             .set(bill, { merge: true })
         )
       )
