@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import * as firebase from 'firebase-admin';
 import { range } from 'lodash';
+import sortBy from 'lodash/sortBy';
 import * as moment from 'moment';
 import { Duration, Moment } from 'moment';
 import { combineLatest, from } from 'rxjs';
@@ -31,6 +32,7 @@ export interface BillDetail {
 }
 
 export interface Bill {
+  month: string;
   archived: boolean;
   billUrl?: string;
   detail?: BillDetail;
@@ -63,7 +65,35 @@ export class WorkingDateReporting {
 export class BillService {
   constructor(private timeService: TimeService, private settingsService: SettingsService) {}
 
-  freeze(user: string, project: string, date: string): Promise<any> {
+  bills(user: string, project: string, date: string): Promise<any> {
+    if (!user || !project || !date) {
+      throw new BadRequestException();
+    }
+    let months = [date];
+    if (date.length === 4) {
+      months = range(0, 12).map((index: number) =>
+        moment()
+          .year(+date)
+          .month(index)
+          .format(MONTH_ISO_FORMAT)
+      );
+    }
+
+    const db = firebase.firestore();
+    return db
+      .getAll(...months.map(month => db.doc(`users/${user}/projects/${project}/bills/${month}`)))
+      .then(docs =>
+        docs
+          .map(doc => {
+            const data = doc.data();
+            return data ? ({ ...data, month: doc.id } as Bill) : null;
+          })
+          .filter(bill => !!bill)
+      )
+      .then(bills => sortBy(bills, 'month'));
+  }
+
+  freeze(user: string, project: string, date: string): Promise<Bill | Bill[]> {
     if (!user || !project || !date) {
       throw new BadRequestException();
     }
@@ -132,9 +162,9 @@ export class BillService {
                   nbWorkDays: nbWorkDays,
                   mustWorkDuration: mustDuration.toISOString(),
                   timeWorkDuration: total.toISOString(),
-                  hourlyRate: settings.bill.hourlyRate,
+                  hourlyRate: settings.bill.initialHourlyRate,
                   linesAmountHt: sumLinesAmount(lines),
-                  tvaRate: settings.bill.tvaRate
+                  tvaRate: settings.bill.initialTvaRate
                 }
               };
             }),
@@ -149,7 +179,7 @@ export class BillService {
       });
   }
 
-  public lines(user: string, project: string, month: string): Promise<BillLine[]> {
+  private lines(user: string, project: string, month: string): Promise<BillLine[]> {
     return firebase
       .firestore()
       .collection(`users/${user}/projects/${project}/bills/${month}/lines`)
