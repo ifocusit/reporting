@@ -162,9 +162,9 @@ export class BillService {
                   nbWorkDays: nbWorkDays,
                   mustWorkDuration: mustDuration.toISOString(),
                   timeWorkDuration: total.toISOString(),
-                  hourlyRate: settings.bill.initialHourlyRate,
+                  hourlyRate: settings.bill.hourlyRate,
                   linesAmountHt: sumLinesAmount(lines),
-                  tvaRate: settings.bill.initialTvaRate
+                  tvaRate: settings.bill.tvaRate
                 }
               };
             }),
