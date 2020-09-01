@@ -85,7 +85,7 @@ jobs:
           node-version: '10.x'
       - run: npm ci
       - uses: w9jds/firebase-action@master
-        if: ${{ github.event_name == 'push' }}
+        if: false && ${{ github.event_name == 'push' }}
         with:
           args: deploy --only functions
         env:
