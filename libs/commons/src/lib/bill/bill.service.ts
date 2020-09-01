@@ -5,13 +5,14 @@ import { Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { User } from '../auth/user/user.model';
 import { UserService } from '../auth/user/user.service';
+import { Settings } from '../settings';
 import { SettingsState } from '../settings/settings.store';
 import { TimesState } from '../times/time.store';
-import { Bill, DEFAULT_BILL } from './bill.model';
+import { Bill } from './bill.model';
 
 export interface BillData {
   user: User;
-  project: string;
+  settings: Settings;
   month: string;
 }
 
@@ -23,25 +24,48 @@ export class BillService {
     return this.userService.user$.pipe(
       mergeMap(user =>
         this.store
-          .select(SettingsState.project)
-          .pipe(mergeMap(project => this.store.select(TimesState.selectedMonth).pipe(map(month => ({ user, project, month })))))
+          .select(SettingsState.settings)
+          .pipe(mergeMap(settings => this.store.select(TimesState.selectedMonth).pipe(map(month => ({ user, settings, month })))))
       )
     );
   }
 
+  private initializeBill(bill: Bill, month: string, settings: Settings): Bill {
+    return {
+      ...bill,
+      month,
+      detail: {
+        ...(bill && bill.detail
+          ? bill.detail
+          : {
+              hourlyRate: settings.bill.hourlyRate,
+              tvaRate: settings.bill.tvaRate
+            })
+      }
+    };
+  }
+
   public get bill$(): Observable<Bill> {
     return this.readData().pipe(
-      mergeMap(data => this.firestore.doc<Bill>(`users/${data.user.uid}/projects/${data.project}/bills/${data.month}`).valueChanges()),
-      map(bill => ({ ...DEFAULT_BILL, ...bill }))
+      mergeMap(data =>
+        this.firestore
+          .doc<Bill>(`users/${data.user.uid}/projects/${data.settings.project.name}/bills/${data.month}`)
+          .valueChanges()
+          .pipe(map(bill => this.initializeBill(bill, data.month, data.settings)))
+      )
     );
   }
 
   public getBill$(month: string): Observable<Bill> {
     return this.userService.user$.pipe(
       mergeMap(user =>
-        this.store.select(SettingsState.project).pipe(
-          mergeMap(project => this.firestore.doc<Bill>(`users/${user.uid}/projects/${project}/bills/${month}`).valueChanges()),
-          map(bill => ({ ...DEFAULT_BILL, ...bill }))
+        this.store.select(SettingsState.settings).pipe(
+          mergeMap(settings =>
+            this.firestore
+              .doc<Bill>(`users/${user.uid}/projects/${settings.project.name}/bills/${month}`)
+              .valueChanges()
+              .pipe(map(bill => this.initializeBill(bill, month, settings)))
+          )
         )
       )
     );

@@ -68,10 +68,10 @@ export class BillComponent implements OnInit, OnDestroy {
         month: selectedDate.format(MONTH_ISO_FORMAT),
         idFacture: `${selectedDate.format('YYYYMM').replace('20', '2')}1`,
         duration, // nb heures totales
-        amount: this.billService.calculatWorkAmount(duration, settings.bill.hourlyRate),
-        totalHT: this.billService.calculateHT(duration, settings.bill.hourlyRate, lines),
-        totalTVA: this.billService.calculateTVA(duration, settings.bill.hourlyRate, settings.bill.tvaRate, lines),
-        totalTTC: this.billService.calculateTTC(duration, settings.bill.hourlyRate, settings.bill.tvaRate, lines),
+        amount: this.billService.calculatWorkAmount(duration, bill.detail.hourlyRate),
+        totalHT: this.billService.calculateHT(duration, bill.detail.hourlyRate, lines),
+        totalTVA: this.billService.calculateTVA(duration, bill.detail.hourlyRate, bill.detail.tvaRate, lines),
+        totalTTC: this.billService.calculateTTC(duration, bill.detail.hourlyRate, bill.detail.tvaRate, lines),
         project: settings.project,
         ...settings.bill, // settings
         ...bill // saved data
