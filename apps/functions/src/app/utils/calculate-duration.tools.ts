@@ -1,7 +1,7 @@
-import { Settings } from '@ifocusit/commons';
 import * as moment from 'moment';
 import { Duration, Moment } from 'moment';
 import { BillLine, WorkingDateReporting } from '../bill/bill.service';
+import { Settings } from '../settings/settings.service';
 
 export function CalculateDuration(timbrages: Moment[]): Duration {
   let duration = moment.duration();
