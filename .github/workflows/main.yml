@@ -84,9 +84,9 @@ jobs:
         with:
           node-version: '10.x'
       - run: npm ci
-      - uses: w9jds/firebase-action@master
-        if: ${{ github.event_name == 'push' }}
-        with:
-          args: deploy --only functions
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      # - uses: w9jds/firebase-action@master
+      # if: ${{ github.event_name == 'push' }}
+      # with:
+      # args: deploy --only functions
+      # env:
+      # FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
