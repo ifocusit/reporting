@@ -1,9 +1,12 @@
 import { ExpressAdapter } from '@nestjs/platform-express';
 import * as express from 'express';
+import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import { UserRecord } from 'firebase-functions/lib/providers/auth';
 import * as nodemailer from 'nodemailer';
 import { app } from './app';
+
+admin.initializeApp();
 
 const expressServer = express();
 
@@ -12,7 +15,7 @@ const createServer = async () => {
 };
 
 createServer();
-exports.webApi = functions.https.onRequest(expressServer);
+exports.app = functions.https.onRequest(expressServer);
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',

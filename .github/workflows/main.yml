@@ -7,7 +7,33 @@ on:
     branches: [master]
 
 jobs:
+  commons:
+    runs-on: ubuntu-latest
+    env:
+      appName: commons
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+      - name: Check changes
+        run: |
+          GITDIFF=$(git diff --name-only HEAD^ HEAD | grep -E -- 'libs/${{ env.appName }}/|package-lock.json' | tr -d '[:space:]')
+          if [ "$GITDIFF" == "" ]; then
+            echo "No code changes, skipped"
+            exit 0
+          fi
+          echo ::set-env name=changes::true
+          echo "${{ env.appName }} will be build and published"
+      - uses: actions/setup-node@master
+        with:
+          node-version: '10.x'
+      - run: npm ci
+        if: ${{ env.changes }}
+      - run: npx nx test ${{ env.appName }}
+        if: ${{ env.changes }}
+
   timbrage:
+    needs: commons
     runs-on: ubuntu-latest
     env:
       appName: timbrage
@@ -17,25 +43,31 @@ jobs:
           fetch-depth: 2
       - name: Check changes
         run: |
-          GITDIFF=$(git diff --name-only HEAD^ HEAD | grep -E -- 'apps/${{ env.appName }}/|package-lock.json|libs' | tr -d '[:space:]')
+          GITDIFF=$(git diff --name-only HEAD^ HEAD | grep -E -- 'apps/${{ env.appName }}/|package-lock.json|libs/commons' | tr -d '[:space:]')
           if [ "$GITDIFF" == "" ]; then
             echo "No code changes, skipped"
             exit 0
           fi
+          echo ::set-env name=changes::true
           echo "${{ env.appName }} will be build and published"
       - uses: actions/setup-node@master
         with:
           node-version: '10.x'
       - run: npm ci
+        if: ${{ env.changes }}
+      - run: npx nx test ${{ env.appName }}
+        if: ${{ env.changes }}
       - run: npx nx build ${{ env.appName }} --prod
+        if: ${{ env.changes }}
       - uses: w9jds/firebase-action@master
-        if: ${{ github.event_name == 'push' }}
+        if: ${{ env.changes && github.event_name == 'push' }}
         with:
           args: deploy --only hosting:${{ env.appName }}
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
   reporting:
+    needs: commons
     runs-on: ubuntu-latest
     env:
       appName: reporting
@@ -46,19 +78,24 @@ jobs:
           fetch-depth: 2
       - name: Check changes
         run: |
-          GITDIFF=$(git diff --name-only HEAD^ HEAD | grep -E -- 'apps/${{ env.appName }}/|package-lock.json|libs' | tr -d '[:space:]')
+          GITDIFF=$(git diff --name-only HEAD^ HEAD | grep -E -- 'apps/${{ env.appName }}/|package-lock.json|libs/commons' | tr -d '[:space:]')
           if [ "$GITDIFF" == "" ]; then
             echo "No code changes, skipped"
             exit 0
           fi
+          echo ::set-env name=changes::true
           echo "${{ env.appName }} will be build and published"
       - uses: actions/setup-node@master
         with:
           node-version: '10.x'
       - run: npm ci
+        if: ${{ env.changes }}
+      - run: npx nx test ${{ env.appName }}
+        if: ${{ env.changes }}
       - run: npx nx build ${{ env.appName }} --prod
+        if: ${{ env.changes }}
       - uses: w9jds/firebase-action@master
-        if: ${{ github.event_name == 'push' }}
+        if: ${{ env.changes && github.event_name == 'push' }}
         with:
           args: deploy --only hosting:${{ env.hosting }}
         env:
@@ -79,13 +116,17 @@ jobs:
             echo "No code changes, skipped"
             exit 0
           fi
+          echo ::set-env name=changes::true
           echo "${{ env.appName }} will be build and published"
       - uses: actions/setup-node@master
         with:
           node-version: '10.x'
       - run: npm ci
+        if: ${{ env.changes }}
+      - run: npx nx test ${{ env.appName }}
+        if: ${{ env.changes }}
       # - uses: w9jds/firebase-action@master
-      # if: ${{ github.event_name == 'push' }}
+      # if: ${{ env.changes && github.event_name == 'push' }}
       # with:
       # args: deploy --only functions
       # env:
