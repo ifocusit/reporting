@@ -22,12 +22,15 @@ jobs:
             echo "No code changes, skipped"
             exit 0
           fi
+          echo ::set-env name=changes::true
           echo "${{ env.appName }} will be build and published"
       - uses: actions/setup-node@master
         with:
           node-version: '10.x'
       - run: npm ci
+        if: ${{ env.changes }}
       - run: npx nx test ${{ env.appName }}
+        if: ${{ env.changes }}
 
   timbrage:
     needs: commons
@@ -45,15 +48,19 @@ jobs:
             echo "No code changes, skipped"
             exit 0
           fi
+          echo ::set-env name=changes::true
           echo "${{ env.appName }} will be build and published"
       - uses: actions/setup-node@master
         with:
           node-version: '10.x'
       - run: npm ci
+        if: ${{ env.changes }}
       - run: npx nx test ${{ env.appName }}
+        if: ${{ env.changes }}
       - run: npx nx build ${{ env.appName }} --prod
+        if: ${{ env.changes }}
       - uses: w9jds/firebase-action@master
-        if: ${{ github.event_name == 'push' }}
+        if: ${{ env.changes && github.event_name == 'push' }}
         with:
           args: deploy --only hosting:${{ env.appName }}
         env:
@@ -76,15 +83,19 @@ jobs:
             echo "No code changes, skipped"
             exit 0
           fi
+          echo ::set-env name=changes::true
           echo "${{ env.appName }} will be build and published"
       - uses: actions/setup-node@master
         with:
           node-version: '10.x'
       - run: npm ci
+        if: ${{ env.changes }}
       - run: npx nx test ${{ env.appName }}
+        if: ${{ env.changes }}
       - run: npx nx build ${{ env.appName }} --prod
+        if: ${{ env.changes }}
       - uses: w9jds/firebase-action@master
-        if: ${{ github.event_name == 'push' }}
+        if: ${{ env.changes && github.event_name == 'push' }}
         with:
           args: deploy --only hosting:${{ env.hosting }}
         env:
@@ -105,14 +116,17 @@ jobs:
             echo "No code changes, skipped"
             exit 0
           fi
+          echo ::set-env name=changes::true
           echo "${{ env.appName }} will be build and published"
       - uses: actions/setup-node@master
         with:
           node-version: '10.x'
       - run: npm ci
+        if: ${{ env.changes }}
       - run: npx nx test ${{ env.appName }}
+        if: ${{ env.changes }}
       # - uses: w9jds/firebase-action@master
-      # if: ${{ github.event_name == 'push' }}
+      # if: ${{ env.changes && github.event_name == 'push' }}
       # with:
       # args: deploy --only functions
       # env:
