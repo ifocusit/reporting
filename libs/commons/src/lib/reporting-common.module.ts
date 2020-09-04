@@ -5,6 +5,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { HammerGestureConfig, HammerModule, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { InitializationService } from './app';
 import { DebounceInputDirective } from './form/debounce-input.directive';
+import { HolidaysService } from './holiday/holiday.service';
 import { MaterialModule } from './material.module';
 import { AmountPipe } from './pipes/amount.pipe';
 import { DurationPipe } from './pipes/duration.pipe';
@@ -28,7 +29,8 @@ export class MyHammerConfig extends HammerGestureConfig {
     },
     Location,
     { provide: LocationStrategy, useClass: PathLocationStrategy },
-    InitializationService
+    InitializationService,
+    HolidaysService
   ],
   imports: [CommonModule, HammerModule],
   exports: [DurationPipe, MomentPipe, DebounceInputDirective, MaterialModule, FlexLayoutModule, LayoutModule, AmountPipe]

@@ -8,6 +8,10 @@ export interface Settings {
     name: string;
     theme?: string;
     monthExportType?: ExportMonthType;
+    holidays?: {
+      country: string;
+      region?: string;
+    };
   };
   timbrage: {
     defaults: string[];

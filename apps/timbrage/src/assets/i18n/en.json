@@ -44,5 +44,6 @@
   },
   "error": {
     "bill-emitted": "Unauthorized edition, a bill was emitted"
-  }
+  },
+  "holiday": "holiday"
 }

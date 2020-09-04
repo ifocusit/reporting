@@ -44,5 +44,6 @@
   },
   "error": {
     "bill-emitted": "Modification non autorisée, une facture à été émise"
-  }
+  },
+  "holiday": "férié"
 }
