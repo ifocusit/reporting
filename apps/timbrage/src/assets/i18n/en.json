@@ -45,5 +45,14 @@
   "error": {
     "bill-emitted": "Unauthorized edition, a bill was emitted"
   },
-  "holiday": "holiday"
+  "holidays": {
+    "label": "Holiday",
+    "source": { "country": "Holidays country source", "region": "Region" }
+  },
+  "switzerland": {
+    "region": {
+      "vd": "Vaud",
+      "ge": "Geneva"
+    }
+  }
 }

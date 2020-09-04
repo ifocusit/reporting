@@ -5,7 +5,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { HammerGestureConfig, HammerModule, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { InitializationService } from './app';
 import { DebounceInputDirective } from './form/debounce-input.directive';
-import { HolidaysService } from './holiday/holiday.service';
+import { HolidaysService } from './holidays/holidays.service';
 import { MaterialModule } from './material.module';
 import { AmountPipe } from './pipes/amount.pipe';
 import { DurationPipe } from './pipes/duration.pipe';

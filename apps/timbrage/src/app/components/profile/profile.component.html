@@ -15,6 +15,29 @@
           <mat-button-toggle value="en" [checked]="user.lang === 'en'" (change)="setLang('en')">EN</mat-button-toggle>
         </mat-button-toggle-group>
 
+        <div *ngIf="settings$ | async as settings" fxLayout="row" fxLayoutGap="5px">
+          <mat-form-field appearance="fill">
+            <mat-label>{{ 'holidays.source.country' | translate }}</mat-label>
+            <mat-select
+              [value]="settings.project.holidays.country"
+              (selectionChange)="updateSettings(settings, 'project.holidays.country', $event.value)"
+            >
+              <mat-option value="switzerland">Suisse</mat-option>
+              <mat-option value="france">France</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field *ngIf="settings.project.holidays.country === 'switzerland'" appearance="fill">
+            <mat-label>{{ 'holidays.source.region' | translate }}</mat-label>
+            <mat-select
+              [value]="settings.project.holidays.region"
+              (selectionChange)="updateSettings(settings, 'project.holidays.region', $event.value)"
+            >
+              <mat-option value="VD">{{ 'switzerland.region.vd' | translate }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
         <a mat-button *ngIf="!times" color="secondary" (click)="selectFile()">
           {{ 'profile.import.launch' | translate }}
         </a>

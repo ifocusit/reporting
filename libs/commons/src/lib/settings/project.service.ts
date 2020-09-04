@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { UploadTaskSnapshot } from '@angular/fire/storage/interfaces';
-import * as _ from 'lodash';
+import * as merge from 'lodash/merge';
 import { Observable, of } from 'rxjs';
 import { catchError, map, mergeMap, take } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
@@ -37,7 +37,7 @@ export class ProjectService {
   public settings$(projectName: string): Observable<Settings> {
     return this.authService.user$.pipe(
       mergeMap(user => this.firestore.doc<Settings>(`users/${user.uid}/projects/${projectName}`).valueChanges()),
-      map(data => _.merge({}, DEFAULT_SETTINGS, data))
+      map(data => merge({}, DEFAULT_SETTINGS, data))
     );
   }
 
@@ -48,10 +48,7 @@ export class ProjectService {
   public saveSettings(settings: Settings): Observable<Settings> {
     return this.authService.user$.pipe(
       mergeMap(user =>
-        this.firestore
-          .collection<Settings>(`users/${user.uid}/projects`)
-          .doc(settings.project.name)
-          .set(settings, { merge: true })
+        this.firestore.collection<Settings>(`users/${user.uid}/projects`).doc(settings.project.name).set(settings, { merge: true })
       ),
       take(1),
       map(() => settings)

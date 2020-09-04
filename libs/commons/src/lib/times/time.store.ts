@@ -3,8 +3,7 @@ import { Action, Selector, State, StateContext, Store } from '@ngxs/store';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { from } from 'rxjs';
-import { filter, map, mergeMap, take, tap } from 'rxjs/operators';
-import { HolidaysService } from '../holiday/holiday.service';
+import { mergeMap, take } from 'rxjs/operators';
 import { SettingsState } from '../settings/settings.store';
 import { MONTH_ISO_FORMAT, Time } from './time.model';
 import { TimesService } from './times.service';
@@ -81,11 +80,7 @@ export class CheckWriteRights {
 })
 @Injectable()
 export class TimesState {
-  constructor(
-    private readonly store: Store,
-    private readonly timesService: TimesService,
-    private readonly holidaysService: HolidaysService
-  ) {}
+  constructor(private readonly store: Store, private readonly timesService: TimesService) {}
 
   @Selector()
   public static selectedDate(state: TimesStateModel): Moment {
@@ -97,25 +92,8 @@ export class TimesState {
     return moment(state.selectedDate).format(MONTH_ISO_FORMAT);
   }
 
-  @Selector()
-  public static holidays(state: TimesStateModel): string[] {
-    return state.holidays ? state.holidays : [];
-  }
-
   @Action(SelectDate)
   selectDate(ctx: StateContext<TimesStateModel>, action: SelectDate) {
-    const selectedDate = moment(ctx.getState().selectedDate);
-    if (selectedDate.year() !== action.date.year() || !ctx.getState().holidays || ctx.getState().holidays.length === 0) {
-      this.store
-        .select(SettingsState.settings)
-        .pipe(
-          map(settings => settings.project.holidays),
-          filter(settings => !!settings),
-          mergeMap(settings => this.holidaysService.holidays$(settings.country, selectedDate.year(), settings.region)),
-          tap(holidays => ctx.patchState({ holidays }))
-        )
-        .toPromise();
-    }
     return ctx.patchState({
       selectedDate: action.date
     });

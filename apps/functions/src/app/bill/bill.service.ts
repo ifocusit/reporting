@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import * as firebase from 'firebase-admin';
-import { range } from 'lodash';
+import range from 'lodash/range';
 import sortBy from 'lodash/sortBy';
 import * as moment from 'moment';
 import { Duration, Moment } from 'moment';

@@ -16,7 +16,7 @@ import {
   WorkingDateReporting
 } from '@ifocusit/commons';
 import { Select, Store } from '@ngxs/store';
-import { range } from 'lodash';
+import range from 'lodash/range';
 import * as moment from 'moment';
 import { Duration, Moment } from 'moment';
 import { combineLatest, from, Observable } from 'rxjs';

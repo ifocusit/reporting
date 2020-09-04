@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Time } from '@ifocusit/commons';
 import { Store } from '@ngxs/store';
 import { saveAs } from 'file-saver';
-import { range } from 'lodash';
+import range from 'lodash/range';
 import { Moment } from 'moment';
 import { Observable, of } from 'rxjs';
 import { map, mergeMap, take, tap } from 'rxjs/operators';

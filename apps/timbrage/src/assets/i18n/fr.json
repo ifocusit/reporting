@@ -45,5 +45,14 @@
   "error": {
     "bill-emitted": "Modification non autorisée, une facture à été émise"
   },
-  "holiday": "férié"
+  "holidays": {
+    "label": "Férié",
+    "source": { "country": "Source des jours fériés", "region": "Région" }
+  },
+  "switzerland": {
+    "region": {
+      "vd": "Vaud",
+      "ge": "Genève"
+    }
+  }
 }

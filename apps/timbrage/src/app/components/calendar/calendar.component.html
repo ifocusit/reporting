@@ -34,7 +34,7 @@
     <mat-toolbar id="current-day" fxLayoutGap="10px">
       <span class="day-sum">{{ sumDay$ | async | duration }}</span>
       <span fxFlex="1 1 auto" class="day-type">
-        <span *ngIf="currentHoliday$ | async">{{ 'holiday' | translate }}</span>
+        <span *ngIf="currentHoliday$ | async">{{ 'holidays.label' | translate }}</span>
       </span>
       <button (click)="addTimbrage()" mat-mini-fab color="accent">
         <mat-icon>add</mat-icon>

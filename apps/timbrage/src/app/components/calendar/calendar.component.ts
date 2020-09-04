@@ -5,6 +5,7 @@ import {
   AddTimes,
   CalculationService,
   DATE_ISO_FORMAT,
+  HolidaysState,
   MoveMonth,
   SelectDate,
   SettingsState,
@@ -41,7 +42,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   @Select(TimesState.selectedDate)
   public selectedDate$: Observable<Moment>; // jour sélectionné
 
-  @Select(TimesState.holidays)
+  @Select(HolidaysState.holidays)
   public holidays$: Observable<string[]>;
 
   public month$: Observable<Time[]>; // timbrages du mois

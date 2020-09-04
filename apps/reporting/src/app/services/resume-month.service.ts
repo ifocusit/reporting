@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BillService, Settings, SettingsState, TimeAdapter, TimesService, WorkingDateReporting } from '@ifocusit/commons';
 import { Store } from '@ngxs/store';
-import { range } from 'lodash';
+import range from 'lodash/range';
 import * as moment from 'moment';
 import { Duration } from 'moment';
 import { Observable, of } from 'rxjs';

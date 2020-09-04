@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
-import * as _ from 'lodash';
+import range from 'lodash/range';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
@@ -30,7 +30,7 @@ export class HalfDonutComponent implements OnInit {
               map(settings => {
                 const actual = Math.round(duration.asHours());
                 const date = moment(this.month).startOf('month');
-                const daysInMonth = _.range(moment(this.month).daysInMonth())
+                const daysInMonth = range(moment(this.month).daysInMonth())
                   .map(index => date.clone().date(index + 1))
                   .filter(day => [1, 2, 3, 4, 5].indexOf(day.day()) > -1).length;
 
