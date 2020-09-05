@@ -39,7 +39,7 @@ export class ResumeMonthService {
         return this.timesService.read(month, 'month').pipe(
           map(times =>
             range(currentMonth.daysInMonth())
-              .map(index => new WorkingDateReporting(currentMonth.clone().date(index + 1)))
+              .map(index => new WorkingDateReporting(currentMonth.clone().day(index + 1)))
               .map(
                 day =>
                   new WorkingDateReporting(

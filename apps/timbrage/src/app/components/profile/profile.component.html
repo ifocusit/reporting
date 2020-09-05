@@ -1,8 +1,8 @@
 <mat-card fxLayout="column" class="container" *ngIf="user$ | async as user">
   <mat-card-header fxLayout="column" fxLayoutAlign="center center">
-    <img *ngIf="user.photoURL; else defaultProfileIcon" [src]="user.photoURL" />
+    <img *ngIf="user.photoURL; else defaultProfileIcon" [src]="user.photoURL" alt="Profile image" />
     <ng-template #defaultProfileIcon>
-      <img src="/assets/profile_default_icon.png" />
+      <img src="/assets/profile_default_icon.png" alt="Default profile image" />
     </ng-template>
     <h3 *ngIf="user.displayName">{{ user.displayName }}</h3>
     <h4 *ngIf="user.email">{{ user.email }}</h4>

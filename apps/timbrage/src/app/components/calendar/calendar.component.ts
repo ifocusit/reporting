@@ -62,12 +62,12 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   private static getMonthDays(selectedDate: Moment): Moment[] {
     const days = [];
-    let date = moment(selectedDate).date(1).startOf('day');
+    let date = moment(selectedDate).day(1).startOf('day');
     while (date.days() !== 0) {
       date.add(-1, 'days');
       days.unshift(moment(date));
     }
-    date = moment(selectedDate).date(1).startOf('day');
+    date = moment(selectedDate).day(1).startOf('day');
     const daysInMonth = date.daysInMonth();
     for (let i = 0; i < daysInMonth; i++) {
       days.push(moment(date));
@@ -133,7 +133,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.selectedDate$
       .pipe(
         take(1),
-        map(selected => moment().date(selected.date()).month(selected.month()).year(selected.year())),
+        map(selected => moment().day(selected.day()).month(selected.month()).year(selected.year())),
         mergeMap(time => this.store.dispatch(new AddTime(TimeAdapter.createTime(time))))
       )
       .subscribe();

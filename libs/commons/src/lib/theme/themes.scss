@@ -38,6 +38,10 @@
     color: $primary-default;
   }
 
+  .primary-lighter-color {
+    color: $primary-lighter;
+  }
+
   .primary-border {
     border-color: $primary-default;
   }
@@ -59,7 +63,7 @@
   }
 
   button.accent-border {
-    border-color: $accent-lighter;
+    border-color: $accent-default;
   }
 }
 

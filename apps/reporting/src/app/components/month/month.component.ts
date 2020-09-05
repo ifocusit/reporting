@@ -69,7 +69,7 @@ export class MonthComponent implements OnInit {
     this.user$ = this.profileSevice.user$;
 
     this.days$ = this.selectedDate$.pipe(
-      map(date => range(date.daysInMonth()).map(index => new WorkingDateReporting(date.clone().date(index + 1))))
+      map(date => range(date.daysInMonth()).map(index => new WorkingDateReporting(date.clone().day(index + 1))))
     );
 
     this.times$ = this.selectedDate$.pipe(mergeMap(month => this.timesService.read(month, 'month')));
