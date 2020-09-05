@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
   AuthService,
   DATETIME_ISO_FORMAT,
+  DATE_ISO_FORMAT,
+  HolidaysState,
   MONTH_ISO_FORMAT,
   SelectDate,
   Settings,
@@ -39,8 +41,11 @@ export class MonthComponent implements OnInit {
   @Select(TimesState.selectedDate)
   public selectedDate$: Observable<Moment>;
 
+  @Select(HolidaysState.holidays)
+  public daysOff$: Observable<string[]>;
+
   public items$: Observable<WorkingDateReporting[]>;
-  private days$: Observable<WorkingDateReporting[]>;
+  private days$: Observable<Moment[]>;
   private times$: Observable<Time[]>;
 
   public user$: Observable<User>;
@@ -69,25 +74,29 @@ export class MonthComponent implements OnInit {
     this.user$ = this.profileSevice.user$;
 
     this.days$ = this.selectedDate$.pipe(
-      map(date => range(date.daysInMonth()).map(index => new WorkingDateReporting(date.clone().day(index + 1))))
+      map(date => {
+        return range(date.daysInMonth()).map(index => moment(`${date.format(MONTH_ISO_FORMAT)}-${index + 1}`));
+      }),
+      tap(dates => console.log(`dates=${dates}`))
     );
 
     this.times$ = this.selectedDate$.pipe(mergeMap(month => this.timesService.read(month, 'month')));
 
-    this.items$ = combineLatest([this.days$, this.times$]).pipe(
+    this.items$ = combineLatest([this.days$, this.times$, this.daysOff$]).pipe(
       map(pair =>
         pair[0].map(
           day =>
             new WorkingDateReporting(
-              day.date,
-              pair[1].filter(time => day.isSameDate(new TimeAdapter(time).getDay()))
+              day,
+              pair[1].filter(time => day.format(DATE_ISO_FORMAT) === new TimeAdapter(time).getDay()),
+              pair[2]
             )
         )
       )
     );
 
     // jours travaillés
-    this.workDays$ = this.items$.pipe(map(days => days.filter(day => !day.isHoliday && !day.isWeekend).length));
+    this.workDays$ = this.items$.pipe(map(days => days.filter(day => !day.off).length));
 
     // heures demandées
     this.mustHours$ = combineLatest([this.workDays$, this.settings$]).pipe(map(pair => pair[0] * pair[1].timbrage.dailyReport));

@@ -6,12 +6,12 @@ mat-card {
   margin: 0 10px;
 }
 
-mat-card, mat-toolbar {
+mat-card,
+mat-toolbar {
   border-radius: 0;
 }
 
 mat-table.reports {
-
   mat-row {
     min-height: 26px;
     max-height: 26px;
@@ -19,7 +19,7 @@ mat-table.reports {
     cursor: pointer;
     opacity: 0.5;
 
-    &.weekend, &.holiday {
+    &.dayOff {
       background-color: #8e8e8e;
     }
 
@@ -32,14 +32,21 @@ mat-table.reports {
       opacity: 1;
     }
 
-    mat-cell span {
-      width: 100%;
-      text-align: center;
+    mat-cell {
+      &.off {
+        font-style: italic;
+      }
+      & span {
+        width: 100%;
+        text-align: center;
+      }
     }
   }
 }
 
-#total, #overtime, #finalTotal {
+#total,
+#overtime,
+#finalTotal {
   text-align: end;
   padding-right: 4px;
 }
@@ -57,11 +64,11 @@ mat-table.reports {
     margin: 0;
     padding: 0;
   }
-  
+
   #sums {
     padding: 10px 0;
-  
-    mat-card{
+
+    mat-card {
       padding: 10px;
     }
   }

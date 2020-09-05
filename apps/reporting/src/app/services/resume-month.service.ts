@@ -91,6 +91,6 @@ export class ResumeMonthService {
   }
 
   private calculateWorkedDays(days: WorkingDateReporting[]): number {
-    return days.filter(day => !day.isHoliday && !day.isWeekend).length;
+    return days.filter(day => !day.off).length;
   }
 }

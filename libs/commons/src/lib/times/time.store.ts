@@ -74,7 +74,7 @@ export class CheckWriteRights {
 @State<TimesStateModel>({
   name: 'times',
   defaults: {
-    selectedDate: moment(),
+    selectedDate: moment().startOf('day'),
     holidays: []
   }
 })
@@ -84,7 +84,7 @@ export class TimesState {
 
   @Selector()
   public static selectedDate(state: TimesStateModel): Moment {
-    return moment(state.selectedDate);
+    return moment(state.selectedDate).startOf('day');
   }
 
   @Selector()
@@ -95,7 +95,7 @@ export class TimesState {
   @Action(SelectDate)
   selectDate(ctx: StateContext<TimesStateModel>, action: SelectDate) {
     return ctx.patchState({
-      selectedDate: action.date
+      selectedDate: action.date.startOf('day')
     });
   }
 

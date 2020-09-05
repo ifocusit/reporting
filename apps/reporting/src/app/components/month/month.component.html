@@ -29,8 +29,8 @@
 
       <ng-container matColumnDef="type">
         <mat-header-cell *matHeaderCellDef></mat-header-cell>
-        <mat-cell *matCellDef="let time" fxFlex="auto" class="holiday">
-          <span>{{ time.isHoliday ? 'congé' : '' }}</span>
+        <mat-cell *matCellDef="let time" fxFlex="auto" class="off">
+          <span>{{ time.isDayOff ? 'férié' : time.isHoliday ? 'congé' : '' }}</span>
         </mat-cell>
       </ng-container>
 
@@ -50,10 +50,11 @@
       <mat-row
         *matRowDef="let day; columns: ['date', 'type', 'duration', 'decimal']"
         (click)="edit(day)"
-        [ngClass]="{ weekend: day.isWeekend, error: day.isNotComplete, holiday: day.isHoliday, worked: day.hasTime }"
+        [ngClass]="{ dayOff: day.off, error: day.isNotComplete, worked: day.hasTime }"
       ></mat-row>
     </mat-table>
   </div>
+
   <div id="sums" fxFlex>
     <mat-card class="mat-elevation-z8 totals">
       <mat-card-title>
