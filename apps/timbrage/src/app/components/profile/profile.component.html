@@ -1,8 +1,8 @@
 <mat-card fxLayout="column" class="container" *ngIf="user$ | async as user">
   <mat-card-header fxLayout="column" fxLayoutAlign="center center">
-    <img *ngIf="user.photoURL; else defaultProfileIcon" [src]="user.photoURL" />
+    <img *ngIf="user.photoURL; else defaultProfileIcon" [src]="user.photoURL" alt="Profile image" />
     <ng-template #defaultProfileIcon>
-      <img src="/assets/profile_default_icon.png" />
+      <img src="/assets/profile_default_icon.png" alt="Default profile image" />
     </ng-template>
     <h3 *ngIf="user.displayName">{{ user.displayName }}</h3>
     <h4 *ngIf="user.email">{{ user.email }}</h4>
@@ -14,6 +14,29 @@
           <mat-button-toggle value="fr" [checked]="user.lang === 'fr'" (change)="setLang('fr')">FR</mat-button-toggle>
           <mat-button-toggle value="en" [checked]="user.lang === 'en'" (change)="setLang('en')">EN</mat-button-toggle>
         </mat-button-toggle-group>
+
+        <div *ngIf="settings$ | async as settings" fxLayout="row" fxLayoutGap="5px">
+          <mat-form-field appearance="fill">
+            <mat-label>{{ 'holidays.source.country' | translate }}</mat-label>
+            <mat-select
+              [value]="settings.project.holidays.country"
+              (selectionChange)="updateSettings(settings, 'project.holidays.country', $event.value)"
+            >
+              <mat-option value="switzerland">Suisse</mat-option>
+              <mat-option value="france">France</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field *ngIf="settings.project.holidays.country === 'switzerland'" appearance="fill">
+            <mat-label>{{ 'holidays.source.region' | translate }}</mat-label>
+            <mat-select
+              [value]="settings.project.holidays.region"
+              (selectionChange)="updateSettings(settings, 'project.holidays.region', $event.value)"
+            >
+              <mat-option value="VD">{{ 'switzerland.region.vd' | translate }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
 
         <a mat-button *ngIf="!times" color="secondary" (click)="selectFile()">
           {{ 'profile.import.launch' | translate }}

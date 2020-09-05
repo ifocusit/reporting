@@ -13,6 +13,11 @@ export class ReadSettings {
   constructor(public readonly projectName: string) {}
 }
 
+export class SettingsReaded {
+  static readonly type = '[Settings] SettingsReaded]';
+  constructor(public readonly settings: Settings) {}
+}
+
 export class SaveSettings {
   static readonly type = '[Settings] SaveSettings]';
   constructor(public readonly settings: Settings) {}
@@ -45,7 +50,10 @@ export class SettingsState {
 
   @Action(ReadSettings)
   read(ctx: StateContext<SettingsStateModel>, { projectName }: ReadSettings) {
-    return this.settingsService.getSettings(projectName).pipe(tap(settings => ctx.patchState({ settings })));
+    return this.settingsService.getSettings(projectName).pipe(
+      tap(settings => ctx.patchState({ settings })),
+      mergeMap(settings => ctx.dispatch(new SettingsReaded(settings)))
+    );
   }
 
   @Action(SaveSettings)

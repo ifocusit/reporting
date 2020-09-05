@@ -5,6 +5,7 @@ import {
   AddTimes,
   CalculationService,
   DATE_ISO_FORMAT,
+  HolidaysState,
   MoveMonth,
   SelectDate,
   SettingsState,
@@ -24,6 +25,7 @@ import { map, mergeMap, take } from 'rxjs/operators';
 export interface CalendarDayModel {
   date: Moment;
   hasTimes: boolean;
+  isHoliday: boolean;
 }
 
 @Component({
@@ -40,11 +42,15 @@ export class CalendarComponent implements OnInit, OnDestroy {
   @Select(TimesState.selectedDate)
   public selectedDate$: Observable<Moment>; // jour sélectionné
 
+  @Select(HolidaysState.holidays)
+  public holidays$: Observable<string[]>;
+
   public month$: Observable<Time[]>; // timbrages du mois
   public times$: Observable<Time[]>; // timbrages du jour
   public days$: Observable<CalendarDayModel[]>; // jours dispo dans le mois
 
   sumDay$: Observable<Duration>;
+  currentHoliday$: Observable<boolean>;
 
   constructor(
     private calculationService: CalculationService,
@@ -56,12 +62,12 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   private static getMonthDays(selectedDate: Moment): Moment[] {
     const days = [];
-    let date = moment(selectedDate).date(1).startOf('day');
+    let date = moment(selectedDate).day(1).startOf('day');
     while (date.days() !== 0) {
       date.add(-1, 'days');
       days.unshift(moment(date));
     }
-    date = moment(selectedDate).date(1).startOf('day');
+    date = moment(selectedDate).day(1).startOf('day');
     const daysInMonth = date.daysInMonth();
     for (let i = 0; i < daysInMonth; i++) {
       days.push(moment(date));
@@ -95,12 +101,17 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
     this.sumDay$ = this.times$.pipe(mergeMap(times => this.calculationService.calculate(times, false)));
 
-    this.days$ = combineLatest([this.selectedDate$, this.month$]).pipe(
-      map(pair => [CalendarComponent.getMonthDays(pair[0]), pair[1]]),
-      map((pair: [Moment[], Time[]]) =>
+    this.currentHoliday$ = combineLatest([this.selectedDate$, this.holidays$]).pipe(
+      map(pair => pair[1].includes(pair[0].format(DATE_ISO_FORMAT)))
+    );
+
+    this.days$ = combineLatest([this.selectedDate$, this.month$, this.holidays$]).pipe(
+      map(pair => [CalendarComponent.getMonthDays(pair[0]), pair[1], pair[2]]),
+      map((pair: [Moment[], Time[], string[]]) =>
         pair[0].map(day => ({
           date: day,
-          hasTimes: !!pair[1].find(time => time.time.startsWith(day.format(DATE_ISO_FORMAT)))
+          hasTimes: !!pair[1].find(time => time.time.startsWith(day.format(DATE_ISO_FORMAT))),
+          isHoliday: pair[2].includes(day.format(DATE_ISO_FORMAT))
         }))
       )
     );
@@ -122,7 +133,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.selectedDate$
       .pipe(
         take(1),
-        map(selected => moment().date(selected.date()).month(selected.month()).year(selected.year())),
+        map(selected => moment().day(selected.day()).month(selected.month()).year(selected.year())),
         mergeMap(time => this.store.dispatch(new AddTime(TimeAdapter.createTime(time))))
       )
       .subscribe();

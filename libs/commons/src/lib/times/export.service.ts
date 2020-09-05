@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Time } from '@ifocusit/commons';
 import { Store } from '@ngxs/store';
 import { saveAs } from 'file-saver';
-import { range } from 'lodash';
+import range from 'lodash/range';
 import { Moment } from 'moment';
 import { Observable, of } from 'rxjs';
 import { map, mergeMap, take, tap } from 'rxjs/operators';
@@ -63,7 +63,7 @@ export class ExportService {
 
   private createColumnsForEachDay(date: Moment, times: Time[]): any[] {
     const days: WorkingDateReporting[] = range(date.daysInMonth())
-      .map(index => new WorkingDateReporting(date.clone().date(index + 1)))
+      .map(index => new WorkingDateReporting(date.clone().day(index + 1)))
       .map(
         day =>
           new WorkingDateReporting(

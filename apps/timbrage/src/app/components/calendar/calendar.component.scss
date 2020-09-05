@@ -20,4 +20,21 @@ button.calendar-days {
   &.lighter {
     opacity: 0.2;
   }
+
+  &.accent-border,
+  &.primary-lighter-border {
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+  }
+}
+
+#current-day {
+  & .day-sum {
+    width: 25%;
+  }
+
+  & .day-type {
+    font-variant: small-caps;
+    font-style: italic;
+  }
 }

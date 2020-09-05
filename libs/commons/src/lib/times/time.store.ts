@@ -9,7 +9,8 @@ import { MONTH_ISO_FORMAT, Time } from './time.model';
 import { TimesService } from './times.service';
 
 export interface TimesStateModel {
-  selectedDate: Moment;
+  selectedDate: Moment | string;
+  holidays: string[];
 }
 
 export class SelectDate {
@@ -73,28 +74,28 @@ export class CheckWriteRights {
 @State<TimesStateModel>({
   name: 'times',
   defaults: {
-    selectedDate: moment()
+    selectedDate: moment().startOf('day'),
+    holidays: []
   }
 })
 @Injectable()
 export class TimesState {
-  constructor(private store: Store, private timesService: TimesService) {}
+  constructor(private readonly store: Store, private readonly timesService: TimesService) {}
 
   @Selector()
   public static selectedDate(state: TimesStateModel): Moment {
-    return state.selectedDate;
+    return moment(state.selectedDate).startOf('day');
   }
 
   @Selector()
   public static selectedMonth(state: TimesStateModel): string {
-    return state.selectedDate.format(MONTH_ISO_FORMAT);
+    return moment(state.selectedDate).format(MONTH_ISO_FORMAT);
   }
 
   @Action(SelectDate)
   selectDate(ctx: StateContext<TimesStateModel>, action: SelectDate) {
-    // TODO do only if really change
     return ctx.patchState({
-      selectedDate: action.date
+      selectedDate: action.date.startOf('day')
     });
   }
 
@@ -132,7 +133,7 @@ export class TimesState {
   @Action(CheckWriteRights)
   checkWriteRights(ctx: StateContext<TimesStateModel>) {
     return this.store.selectOnce(SettingsState.project).pipe(
-      mergeMap(project => this.timesService.verifyWriteRights$(project, ctx.getState().selectedDate.format(MONTH_ISO_FORMAT))),
+      mergeMap(project => this.timesService.verifyWriteRights$(project, moment(ctx.getState().selectedDate).format(MONTH_ISO_FORMAT))),
       take(1)
     );
   }

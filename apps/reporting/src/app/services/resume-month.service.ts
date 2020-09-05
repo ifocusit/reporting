@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BillService, Settings, SettingsState, TimeAdapter, TimesService, WorkingDateReporting } from '@ifocusit/commons';
 import { Store } from '@ngxs/store';
-import { range } from 'lodash';
+import range from 'lodash/range';
 import * as moment from 'moment';
 import { Duration } from 'moment';
 import { Observable, of } from 'rxjs';
@@ -39,7 +39,7 @@ export class ResumeMonthService {
         return this.timesService.read(month, 'month').pipe(
           map(times =>
             range(currentMonth.daysInMonth())
-              .map(index => new WorkingDateReporting(currentMonth.clone().date(index + 1)))
+              .map(index => new WorkingDateReporting(currentMonth.clone().day(index + 1)))
               .map(
                 day =>
                   new WorkingDateReporting(
@@ -91,6 +91,6 @@ export class ResumeMonthService {
   }
 
   private calculateWorkedDays(days: WorkingDateReporting[]): number {
-    return days.filter(day => !day.isHoliday && !day.isWeekend).length;
+    return days.filter(day => !day.off).length;
   }
 }

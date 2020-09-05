@@ -6,6 +6,8 @@ import {
   DATETIME_ISO_FORMAT,
   DeleteTimes,
   ExportService,
+  SaveSettings,
+  Settings,
   SettingsState,
   Time,
   TimeAdapter,
@@ -14,8 +16,10 @@ import {
   User,
   UserService
 } from '@ifocusit/commons';
-import { Store } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
+import * as set from 'lodash/set';
 import * as moment from 'moment';
+import { Observable } from 'rxjs';
 import { filter, mergeMap, take, tap } from 'rxjs/operators';
 
 @Component({
@@ -25,6 +29,9 @@ import { filter, mergeMap, take, tap } from 'rxjs/operators';
 })
 export class ProfileComponent implements OnInit {
   public user$ = this.authService.user$;
+
+  @Select(SettingsState.settings)
+  public settings$: Observable<Settings>;
 
   @ViewChild('fileSelector', { static: true }) private fileSelector: ElementRef;
   public times: Time[];
@@ -106,5 +113,11 @@ export class ProfileComponent implements OnInit {
       .updateUser({ lang } as User)
       .pipe(tap(() => this.translationService.loadLang(lang)))
       .subscribe();
+  }
+
+  public updateSettings(settings: Settings, field: string, value: string) {
+    let newSettings = { project: { name: settings.project.name } };
+    newSettings = set(newSettings, field, value);
+    this.store.dispatch(new SaveSettings(newSettings as Settings)).subscribe();
   }
 }

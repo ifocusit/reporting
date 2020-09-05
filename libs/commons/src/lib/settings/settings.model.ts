@@ -8,6 +8,10 @@ export interface Settings {
     name: string;
     theme?: string;
     monthExportType?: ExportMonthType;
+    holidays: {
+      country: string;
+      region?: string;
+    };
   };
   timbrage: {
     defaults: string[];
@@ -35,7 +39,11 @@ export interface Settings {
 export const DEFAULT_SETTINGS: Settings = {
   project: {
     name: 'Default',
-    theme: 'default-theme'
+    theme: 'default-theme',
+    holidays: {
+      country: 'switzerland',
+      region: 'VD'
+    }
   },
   timbrage: {
     defaults: ['08:00', '11:30', '12:30', '17:00'],

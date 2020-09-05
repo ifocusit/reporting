@@ -1,7 +1,7 @@
 import { AfterViewInit, Component } from '@angular/core';
 import { BillService, MONTH_ISO_FORMAT } from '@ifocusit/commons';
 import * as Highcharts from 'highcharts';
-import { range } from 'lodash';
+import range from 'lodash/range';
 import * as moment from 'moment';
 import { from, of } from 'rxjs';
 import { filter, mergeMap, take, tap } from 'rxjs/operators';

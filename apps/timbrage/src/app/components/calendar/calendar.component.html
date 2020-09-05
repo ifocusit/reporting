@@ -22,15 +22,20 @@
         mat-flat-button
         class="calendar-days"
         [class.lighter]="selectedDate.month() !== day.date.month()"
+        [class.primary-lighter-border]="day.isHoliday"
+        [class.accent-border]="day.hasTimes"
         [color]="selectedDate.format('YYYYMMDD') === day.date.format('YYYYMMDD') ? 'primary' : day.hasTimes ? 'accent' : ''"
         (click)="select(day.date)"
         fxFlex="13.6"
       >
-        {{ day.date.date() }}
+        {{ day.date.day() }}
       </button>
     </div>
-    <mat-toolbar fxLayoutGap="10px">
-      <span fxFlex="1 1 auto">{{ sumDay$ | async | duration }}</span>
+    <mat-toolbar id="current-day" fxLayoutGap="10px">
+      <span class="day-sum">{{ sumDay$ | async | duration }}</span>
+      <span fxFlex="1 1 auto" class="day-type">
+        <span *ngIf="currentHoliday$ | async">{{ 'holidays.label' | translate }}</span>
+      </span>
       <button (click)="addTimbrage()" mat-mini-fab color="accent">
         <mat-icon>add</mat-icon>
       </button>

@@ -3,6 +3,7 @@
 
 @mixin custom-theme-classes($theme) {
   $primary-default: mat-color(map-get($theme, primary), default);
+  $primary-lighter: mat-color(map-get($theme, primary), lighter);
   $foreground-default: mat-color(map-get($theme, foreground), default);
   $accent-default: mat-color(map-get($theme, accent), default);
   $accent-lighter: mat-color(map-get($theme, accent), lighter);
@@ -37,6 +38,10 @@
     color: $primary-default;
   }
 
+  .primary-lighter-color {
+    color: $primary-lighter;
+  }
+
   .primary-border {
     border-color: $primary-default;
   }
@@ -51,6 +56,14 @@
 
   .gray-bg {
     background-color: #ddd;
+  }
+
+  button.primary-lighter-border {
+    border-color: $primary-lighter;
+  }
+
+  button.accent-border {
+    border-color: $accent-default;
   }
 }
 

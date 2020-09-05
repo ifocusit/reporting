@@ -13,7 +13,7 @@
         <div>{{ sumDay$ | async | duration }}</div>
       </span>
       <div id="now">{{ now | moment: 'HH:mm:ss' }}</div>
-      <div id="state">
+      <div id="state" class="accent-lighter-color">
         <div>
           <div>{{ 'timbrage.state.week' | translate }}</div>
           <div>{{ sumWeek$ | async | duration }}</div>
