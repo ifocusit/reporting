@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BillService, Settings, SettingsState, TimeAdapter, TimesService, WorkingDateReporting } from '@ifocusit/commons';
+import { BillService, DATE_ISO_FORMAT, Settings, SettingsState, TimeAdapter, TimesService, WorkingDateReporting } from '@ifocusit/commons';
 import { Store } from '@ngxs/store';
 import range from 'lodash/range';
 import * as moment from 'moment';
@@ -39,12 +39,12 @@ export class ResumeMonthService {
         return this.timesService.read(month, 'month').pipe(
           map(times =>
             range(currentMonth.daysInMonth())
-              .map(index => new WorkingDateReporting(currentMonth.clone().day(index + 1)))
+              .map(index => currentMonth.clone().date(index + 1))
               .map(
                 day =>
                   new WorkingDateReporting(
-                    day.date,
-                    times.filter(time => day.isSameDate(new TimeAdapter(time).getDay()))
+                    day,
+                    times.filter(time => day.format(DATE_ISO_FORMAT) === new TimeAdapter(time).getDay())
                   )
               )
           ),

@@ -143,7 +143,7 @@ export class BillService {
               const lines = data[2];
 
               const days = range(currentMonth.daysInMonth())
-                .map(index => new WorkingDateReporting(currentMonth.clone().day(index + 1)))
+                .map(index => new WorkingDateReporting(currentMonth.clone().date(index + 1)))
                 .map(
                   day =>
                     new WorkingDateReporting(

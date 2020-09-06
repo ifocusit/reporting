@@ -12,7 +12,7 @@ export class WorkingDateReporting {
   public duration: Duration;
 
   constructor(public date: Moment, public times: Time[] = [], daysOff: string[] = []) {
-    this.isWeekend = [6, 0].indexOf(date.day()) > -1;
+    this.isWeekend = [6, 0].includes(date.day());
     this.hasTimes = times && times.length > 0;
     this.isNotComplete = times.length % 2 !== 0;
 

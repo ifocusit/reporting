@@ -73,12 +73,7 @@ export class MonthComponent implements OnInit {
 
     this.user$ = this.profileSevice.user$;
 
-    this.days$ = this.selectedDate$.pipe(
-      map(date => {
-        return range(date.daysInMonth()).map(index => moment(`${date.format(MONTH_ISO_FORMAT)}-${index + 1}`));
-      }),
-      tap(dates => console.log(`dates=${dates}`))
-    );
+    this.days$ = this.selectedDate$.pipe(map(date => range(date.daysInMonth()).map(index => date.clone().date(index + 1))));
 
     this.times$ = this.selectedDate$.pipe(mergeMap(month => this.timesService.read(month, 'month')));
 
