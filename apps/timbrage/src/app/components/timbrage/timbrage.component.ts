@@ -34,7 +34,7 @@ export class TimbrageComponent implements OnInit {
 
   public now$ = combineLatest([timer(0, 1000), this.selectedDate$]).pipe(
     map(pair => pair[1]),
-    map(date => moment().day(date.day()).month(date.month()).year(date.year()))
+    map(date => moment().year(date.year()).month(date.month()).date(date.date()))
   );
 
   sumDay$: Observable<Duration>; // somme des heures travaillées du jour

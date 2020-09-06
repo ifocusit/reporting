@@ -63,7 +63,7 @@ export class ExportService {
 
   private createColumnsForEachDay(date: Moment, times: Time[]): any[] {
     const days: WorkingDateReporting[] = range(date.daysInMonth())
-      .map(index => new WorkingDateReporting(date.clone().day(index + 1)))
+      .map(index => new WorkingDateReporting(date.clone().date(index + 1)))
       .map(
         day =>
           new WorkingDateReporting(
