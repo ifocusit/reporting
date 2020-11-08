@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
+  asHours,
   AuthService,
   DATETIME_ISO_FORMAT,
   DATE_ISO_FORMAT,
   HolidaysState,
   MONTH_ISO_FORMAT,
+  round,
   SelectDate,
   Settings,
   SettingsState,
@@ -105,7 +107,9 @@ export class MonthComponent implements OnInit {
 
     this.finalTotal$ = combineLatest([this.overtime$, this.total$]).pipe(
       mergeMap(pair =>
-        this.settings$.pipe(map(settings => pair[1].clone().add(Math.max(pair[0].asHours(), 0) * settings.timbrage.overtimeRate, 'hours')))
+        this.settings$.pipe(
+          map(settings => pair[1].clone().add(round(Math.max(asHours(pair[0]), 0) * settings.timbrage.overtimeRate), 'hours'))
+        )
       )
     );
   }
