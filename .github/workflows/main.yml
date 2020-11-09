@@ -19,7 +19,6 @@ jobs:
         run: |
           GITDIFF=$(git diff --name-only HEAD^ HEAD | grep -E -- 'libs/${{ env.appName }}/|package-lock.json' | tr -d '[:space:]')
           if [ "$GITDIFF" == "" ]; then
-            echo "changes=false" >> $GITHUB_ENV
             echo "No code changes, skipped"
             exit 0
           fi
@@ -29,9 +28,9 @@ jobs:
         with:
           node-version: '10.x'
       - run: npm ci
-        if: $changes
+        if: ${{ env.changes }}
       - run: npx nx test ${{ env.appName }}
-        if: $changes
+        if: ${{ env.changes }}
 
   timbrage:
     needs: commons
@@ -46,7 +45,6 @@ jobs:
         run: |
           GITDIFF=$(git diff --name-only HEAD^ HEAD | grep -E -- 'apps/${{ env.appName }}/|package-lock.json|libs/commons' | tr -d '[:space:]')
           if [ "$GITDIFF" == "" ]; then
-            echo "changes=false" >> $GITHUB_ENV
             echo "No code changes, skipped"
             exit 0
           fi
@@ -56,11 +54,11 @@ jobs:
         with:
           node-version: '10.x'
       - run: npm ci
-        if: $changes
+        if: ${{ env.changes }}
       - run: npx nx test ${{ env.appName }}
-        if: $changes
+        if: ${{ env.changes }}
       - run: npx nx build ${{ env.appName }} --prod
-        if: $changes
+        if: ${{ env.changes }}
       - uses: w9jds/firebase-action@master
         if: ${{ env.changes && github.event_name == 'push' }}
         with:
@@ -82,22 +80,20 @@ jobs:
         run: |
           GITDIFF=$(git diff --name-only HEAD^ HEAD | grep -E -- 'apps/${{ env.appName }}/|package-lock.json|libs/commons' | tr -d '[:space:]')
           if [ "$GITDIFF" == "" ]; then
-            echo "changes=false" >> $GITHUB_ENV
             echo "No code changes, skipped"
             exit 0
           fi
           echo "changes=true" >> $GITHUB_ENV
-          echo ::set-env name=changes::true
           echo "${{ env.appName }} will be build and published"
       - uses: actions/setup-node@master
         with:
           node-version: '10.x'
       - run: npm ci
-        if: $changes
+        if: ${{ env.changes }}
       - run: npx nx test ${{ env.appName }}
-        if: $changes
+        if: ${{ env.changes }}
       - run: npx nx build ${{ env.appName }} --prod
-        if: $changes
+        if: ${{ env.changes }}
       - uses: w9jds/firebase-action@master
         if: ${{ env.changes && github.event_name == 'push' }}
         with:
@@ -117,7 +113,6 @@ jobs:
         run: |
           GITDIFF=$(git diff --name-only HEAD^ HEAD | grep -E -- 'apps/${{ env.appName }}/|package-lock.json' | tr -d '[:space:]')
           if [ "$GITDIFF" == "" ]; then
-            echo "changes=false" >> $GITHUB_ENV
             echo "No code changes, skipped"
             exit 0
           fi
@@ -127,9 +122,9 @@ jobs:
         with:
           node-version: '10.x'
       - run: npm ci
-        if: $changes
+        if: ${{ env.changes }}
       - run: npx nx test ${{ env.appName }}
-        if: $changes
+        if: ${{ env.changes }}
       # - uses: w9jds/firebase-action@master
       # if: ${{ env.changes && github.event_name == 'push' }}
       # with:
