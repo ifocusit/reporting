@@ -1,4 +1,6 @@
-[![Build Status](https://travis-ci.org/jboz/reporting.svg?branch=master)](https://travis-ci.org/jboz/reporting) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) [![License](https://img.shields.io/github/license/jboz/reporting)](LICENSE)
+[![Actions Status](https://github.com/ifocusit/reporting/workflows/Build%20and%20Test/badge.svg)](https://github.com/ifocusit/reporting/actions)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+[![License](https://img.shields.io/github/license/ifocusit/reporting)](LICENSE)
 
 # Timbrage - reporting quotidien
 
@@ -30,6 +32,8 @@ _Also deployed on [Google Play store](https://play.google.com/store/apps/details
 
 # Developper zone
 
+[Project dashboard](https://github.com/ifocusit/reporting/projects/1)
+
 In this monorepo, you will find this great tools :
 
 1. [@angular](https://angular.io/)
@@ -40,6 +44,7 @@ In this monorepo, you will find this great tools :
 6. [@ngx-translate](https://github.com/ngx-translate/core)
 7. @angular/pwa : [Progressive Web Application](https://fr.wikipedia.org/wiki/Progressive_web_app)
 8. TWA : [Trusted Web Application](https://codelabs.developers.google.com/codelabs/getting-started-with-twas/index.html#0)
+9. NX workspace: [Extensible Dev Tools for Monorepos](https://nx.dev/)
 
 Other great tools that help in my developpements:
 
@@ -47,7 +52,3 @@ Other great tools that help in my developpements:
 - [Icons - Font Awesome](https://fontawesome.com/icons?d=gallery&m=free)
 - [Color Tool - Material Design](https://material.io/resources/color/#!/?view.left=0&view.right=0&primary.color=B71C1C)
 - [Color - Material-UI](https://material-ui.com/customization/color/#color-tool)
-- [Github - this repository :)](https://github.com/jboz/reporting)
-- and of course [Google](https://www.google.com/)
-
-Actually, I'm trying [github project board](https://github.com/jboz/reporting/projects/1), but I like so much [Trello](https://trello.com)
