@@ -1,4 +1,4 @@
-name: CI process
+name: Build and Test
 
 on:
   push:
@@ -28,9 +28,9 @@ jobs:
         with:
           node-version: '10.x'
       - run: npm ci
-        if: ${{ env.changes }}
+        if: $changes
       - run: npx nx test ${{ env.appName }}
-        if: ${{ env.changes }}
+        if: $changes
 
   timbrage:
     needs: commons
@@ -54,11 +54,11 @@ jobs:
         with:
           node-version: '10.x'
       - run: npm ci
-        if: ${{ env.changes }}
+        if: $changes
       - run: npx nx test ${{ env.appName }}
-        if: ${{ env.changes }}
+        if: $changes
       - run: npx nx build ${{ env.appName }} --prod
-        if: ${{ env.changes }}
+        if: $changes
       - uses: w9jds/firebase-action@master
         if: ${{ env.changes && github.event_name == 'push' }}
         with:
@@ -89,11 +89,11 @@ jobs:
         with:
           node-version: '10.x'
       - run: npm ci
-        if: ${{ env.changes }}
+        if: $changes
       - run: npx nx test ${{ env.appName }}
-        if: ${{ env.changes }}
+        if: $changes
       - run: npx nx build ${{ env.appName }} --prod
-        if: ${{ env.changes }}
+        if: $changes
       - uses: w9jds/firebase-action@master
         if: ${{ env.changes && github.event_name == 'push' }}
         with:
@@ -122,9 +122,9 @@ jobs:
         with:
           node-version: '10.x'
       - run: npm ci
-        if: ${{ env.changes }}
+        if: $changes
       - run: npx nx test ${{ env.appName }}
-        if: ${{ env.changes }}
+        if: $changes
       # - uses: w9jds/firebase-action@master
       # if: ${{ env.changes && github.event_name == 'push' }}
       # with:
