@@ -5,7 +5,7 @@ import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { SettingsState } from '../../../settings/settings.store';
-import { CalculationService } from '../../calculation.service';
+import { asHours, CalculationService, round } from '../../calculation.service';
 import { TimesService } from '../../times.service';
 
 @Component({
@@ -28,7 +28,7 @@ export class HalfDonutComponent implements OnInit {
           mergeMap(duration =>
             this.store.selectOnce(SettingsState.settings).pipe(
               map(settings => {
-                const actual = Math.round(duration.asHours());
+                const actual = asHours(duration);
                 const date = moment(this.month).startOf('month');
                 const daysInMonth = range(moment(this.month).daysInMonth())
                   .map(index => date.clone().date(index + 1))
@@ -41,9 +41,9 @@ export class HalfDonutComponent implements OnInit {
                 const report = {
                   actual,
                   max,
-                  progress: Math.round((actual * 100) / max),
-                  normal: overtime > 0 ? Math.round((max * 100) / actual) : Math.round((actual * 100) / max),
-                  overtime: Math.round((overtime * 100) / sum)
+                  progress: round((actual * 100) / max),
+                  normal: overtime > 0 ? round((max * 100) / actual) : round((actual * 100) / max),
+                  overtime: round((overtime * 100) / sum)
                 };
                 return report;
               })

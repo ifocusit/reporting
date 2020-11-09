@@ -1,5 +1,5 @@
 import { AfterViewInit, Component } from '@angular/core';
-import { BillService, MONTH_ISO_FORMAT } from '@ifocusit/commons';
+import { asHours, BillService, MONTH_ISO_FORMAT, round } from '@ifocusit/commons';
 import * as Highcharts from 'highcharts';
 import range from 'lodash/range';
 import * as moment from 'moment';
@@ -71,9 +71,9 @@ export class GlobalViewComponent implements AfterViewInit {
             const monthIndex = this.months.indexOf(month);
             const timeWorkDuration = moment.duration(bill.detail.timeWorkDuration);
 
-            this.dataHeuresDemandees[monthIndex] = moment.duration(bill.detail.mustWorkDuration).asHours();
-            this.dataHeuresReportees[monthIndex] = timeWorkDuration.asHours();
-            this.dataMontantFacture[monthIndex] = Math.round(timeWorkDuration.asHours() * bill.detail.hourlyRate);
+            this.dataHeuresDemandees[monthIndex] = asHours(moment.duration(bill.detail.mustWorkDuration));
+            this.dataHeuresReportees[monthIndex] = asHours(timeWorkDuration);
+            this.dataMontantFacture[monthIndex] = round(asHours(timeWorkDuration) * bill.detail.hourlyRate);
 
             this.chart.series[0].setData(this.dataHeuresDemandees, false);
             this.chart.series[1].setData(this.dataHeuresReportees, false);

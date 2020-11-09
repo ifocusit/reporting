@@ -1,5 +1,14 @@
 import { Injectable } from '@angular/core';
-import { BillService, DATE_ISO_FORMAT, Settings, SettingsState, TimeAdapter, TimesService, WorkingDateReporting } from '@ifocusit/commons';
+import {
+  asHours,
+  BillService,
+  DATE_ISO_FORMAT,
+  Settings,
+  SettingsState,
+  TimeAdapter,
+  TimesService,
+  WorkingDateReporting
+} from '@ifocusit/commons';
 import { Store } from '@ngxs/store';
 import range from 'lodash/range';
 import * as moment from 'moment';
@@ -75,7 +84,7 @@ export class ResumeMonthService {
     if (mustHours.asHours() === 0) {
       return 0;
     }
-    return ((total.asHours() - Math.max(overtime.asHours(), 0)) * 100) / (Math.max(overtime.asHours(), 0) + mustHours.asHours());
+    return ((asHours(total) - Math.max(asHours(overtime), 0)) * 100) / (Math.max(asHours(overtime), 0) + asHours(mustHours));
   }
 
   private calculateOvertimeDuration(total: Duration, mustHours: Duration) {

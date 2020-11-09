@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { Bill, BillData, BillService, UserService } from '@ifocusit/commons';
+import { asHours, Bill, BillData, BillService, round, UserService } from '@ifocusit/commons';
 import { Store } from '@ngxs/store';
 import * as moment from 'moment';
 import { Duration } from 'moment';
@@ -93,7 +93,7 @@ export class EditBillService extends BillService {
   }
 
   public calculatWorkAmount(duration: Duration, hourlyRate: number): number {
-    return duration.asHours() * hourlyRate;
+    return round(asHours(duration) * hourlyRate);
   }
 
   public calculateHT(duration: Duration, hourlyRate: number, lines: BillLine[]) {
@@ -101,7 +101,7 @@ export class EditBillService extends BillService {
   }
 
   public calculateTVA(duration: Duration, hourlyRate: number, tvaRate: number, lines: BillLine[]) {
-    return (this.calculateHT(duration, hourlyRate, lines) * tvaRate) / 100;
+    return round(this.calculateHT(duration, hourlyRate, lines) * tvaRate) / 100;
   }
 
   public calculateTTC(duration: Duration, hourlyRate: number, tvaRate: number, lines: BillLine[]) {

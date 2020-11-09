@@ -10,6 +10,14 @@ import { SettingsState } from '../settings/settings.store';
 import { Time, TimeAdapter } from './time.model';
 import { AddTime } from './time.store';
 
+export const asHours = (value: Duration): number => {
+  return round(value.asHours());
+};
+
+export const round = (value: number): number => {
+  return +value.toFixed(2);
+};
+
 @Injectable({
   providedIn: 'root'
 })
@@ -63,9 +71,7 @@ export class CalculationService {
         const isAfterParametizedEndOfDay = moment().isAfter(this.applyEndOfDay(settings));
         if (setMissingToEndOfDay && (!isToday || isAfterParametizedEndOfDay)) {
           // set time to end of day
-          missing.time = this.applyEndOfDay(settings, moment(list[i].time))
-            .startOf('minute')
-            .format();
+          missing.time = this.applyEndOfDay(settings, moment(list[i].time)).startOf('minute').format();
 
           if (settings.timbrage.saveMissings) {
             //   missing timbrage must be save to database
