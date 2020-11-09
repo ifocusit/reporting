@@ -56,6 +56,6 @@ import { AppComponent } from './app.component';
 })
 export class AppModule {}
 
-export function HttpLoaderFactory(httpClient: HttpClient) {
-  return new TranslateHttpLoader(httpClient);
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
 }
