@@ -22,7 +22,7 @@ jobs:
             echo "No code changes, skipped"
             exit 0
           fi
-          echo "{changes}={true}" >> $GITHUB_ENV
+          echo "changes=true" >> $GITHUB_ENV
           echo "${{ env.appName }} will be build and published"
       - uses: actions/setup-node@master
         with:
@@ -48,7 +48,7 @@ jobs:
             echo "No code changes, skipped"
             exit 0
           fi
-          echo "{changes}={true}" >> $GITHUB_ENV
+          echo "changes=true" >> $GITHUB_ENV
           echo "${{ env.appName }} will be build and published"
       - uses: actions/setup-node@master
         with:
@@ -83,7 +83,7 @@ jobs:
             echo "No code changes, skipped"
             exit 0
           fi
-          echo "{changes}={true}" >> $GITHUB_ENV
+          echo "changes=true" >> $GITHUB_ENV
           echo "${{ env.appName }} will be build and published"
       - uses: actions/setup-node@master
         with:
@@ -116,7 +116,7 @@ jobs:
             echo "No code changes, skipped"
             exit 0
           fi
-          echo "{changes}={true}" >> $GITHUB_ENV
+          echo "changes=true" >> $GITHUB_ENV
           echo "${{ env.appName }} will be build and published"
       - uses: actions/setup-node@master
         with:
