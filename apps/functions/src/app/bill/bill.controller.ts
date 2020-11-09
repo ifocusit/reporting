@@ -1,8 +1,9 @@
 import { Controller, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
-import { ApiParam, ApiResponse } from '@nestjs/swagger';
+import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { BillService } from './bill.service';
 
 @Controller('/user/:user/project/:project/bill')
+@ApiTags('Bill')
 export class BillController {
   constructor(private billService: BillService) {}
 
