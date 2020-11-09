@@ -11,6 +11,7 @@ import {
   calculateMustHours,
   calculateWorkDuration,
   calculateWorkedDays,
+  calculatWorkAmount,
   sumLinesAmount
 } from '../utils/calculate-duration.tools';
 import { SettingsService } from './../settings/settings.service';
@@ -162,6 +163,7 @@ export class BillService {
                   nbWorkDays: nbWorkDays,
                   mustWorkDuration: mustDuration.toISOString(),
                   timeWorkDuration: total.toISOString(),
+                  timeWorkAmountHt: calculatWorkAmount(total, settings.bill.hourlyRate),
                   hourlyRate: settings.bill.hourlyRate,
                   linesAmountHt: sumLinesAmount(lines),
                   tvaRate: settings.bill.tvaRate

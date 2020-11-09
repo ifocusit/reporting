@@ -53,5 +53,17 @@ export const sumLinesAmount = (lines: BillLine[]): number => {
 };
 
 export const calculateHT = (duration: Duration, hourlyRate: number, lines: BillLine[]) => {
-  return this.sumLinesAmount(lines) + this.calculatWorkAmount(duration, hourlyRate);
+  return sumLinesAmount(lines) + calculatWorkAmount(duration, hourlyRate);
+};
+
+export const calculatWorkAmount = (duration: Duration, hourlyRate: number): number => {
+  return round(asHours(duration) * hourlyRate);
+};
+
+export const asHours = (value: Duration): number => {
+  return round(value.asHours());
+};
+
+export const round = (value: number): number => {
+  return +value.toFixed(2);
 };

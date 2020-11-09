@@ -140,6 +140,7 @@ export class EditBillService extends BillService {
                 nbWorkDays: data[0].nbWorkDays,
                 mustWorkDuration: data[0].mustDuration.toISOString(),
                 timeWorkDuration: data[0].total.toISOString(),
+                timeWorkAmountHt: this.calculatWorkAmount(data[0].total, billData.settings.bill.hourlyRate),
                 linesAmountHt: this.sumLinesAmount(data[1]),
                 hourlyRate: billData.settings.bill.hourlyRate,
                 tvaRate: billData.settings.bill.tvaRate
@@ -153,10 +154,5 @@ export class EditBillService extends BillService {
         )
       )
       .toPromise();
-  }
-
-  public freezeBills(month: string) {
-    console.log(`Lazy archivage...`);
-    return this.readData().pipe(tap(() => console.log(`Archived !`)));
   }
 }
