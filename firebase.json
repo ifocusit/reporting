@@ -2,7 +2,6 @@
   "hosting": [
     {
       "target": "timbrage",
-      "site": "timbrage-reporting",
       "public": "dist/apps/timbrage",
       "rewrites": [
         {
@@ -18,7 +17,6 @@
     },
     {
       "target": "admin",
-      "site": "admin-reporting",
       "public": "dist/apps/reporting",
       "rewrites": [
         {
