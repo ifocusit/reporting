@@ -10,10 +10,10 @@ describe('AppController', () => {
     }).compile();
   });
 
-  describe('ping', () => {
+  describe('health', () => {
     it('should return ok', () => {
       const appController = app.get<AppController>(AppController);
-      expect(appController.ping()).toEqual('Server is up!');
+      expect(appController.health()).toEqual('Server is up!');
     });
   });
 });
