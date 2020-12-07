@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Store } from '@ngxs/store';
+import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { User } from '../auth/user/user.model';
 import { UserService } from '../auth/user/user.service';
 import { Settings } from '../settings';
 import { SettingsState } from '../settings/settings.store';
+import { DATETIME_ISO_FORMAT } from '../times';
 import { TimesState } from '../times/time.store';
 import { Bill } from './bill.model';
 
@@ -32,6 +34,7 @@ export class BillService {
 
   private initializeBill(bill: Bill, month: string, settings: Settings): Bill {
     return {
+      creationDate: (bill.archived ? moment(month).startOf('month').startOf('day') : moment()).format(DATETIME_ISO_FORMAT),
       ...bill,
       month,
       detail: {

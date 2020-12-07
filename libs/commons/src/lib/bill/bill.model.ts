@@ -12,4 +12,5 @@ export interface Bill {
   archived: boolean;
   billUrl?: string;
   detail: BillDetail;
+  creationDate: string;
 }

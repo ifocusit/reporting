@@ -89,8 +89,7 @@
       </tfoot>
     </table>
     <button id="add-line" mat-fab (click)="addLine()" class="no-print" *ngIf="!bill.archived"><mat-icon>add</mat-icon></button>
-
-    <div>Paiement net à 30 jours auprès de:</div>
+    <div>Facture émise le {{ bill.creationDate | moment: 'DD.MM.YYYY' }}. Paiement net à 30 jours auprès de:</div>
     <div>Compte postal {{ bill.account?.number }} {{ bill.currency }} / IBAN {{ bill.account?.iban }}</div>
   </div>
 

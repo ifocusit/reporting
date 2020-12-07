@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { asHours, Bill, BillData, BillService, round, UserService } from '@ifocusit/commons';
+import { asHours, Bill, BillData, BillService, DATETIME_ISO_FORMAT, round, UserService } from '@ifocusit/commons';
 import { Store } from '@ngxs/store';
 import * as moment from 'moment';
 import { Duration } from 'moment';
@@ -136,6 +136,7 @@ export class EditBillService extends BillService {
               month: billData.month,
               archived: true,
               billUrl: pdfFileUrl,
+              creationDate: moment().format(DATETIME_ISO_FORMAT),
               detail: {
                 nbWorkDays: data[0].nbWorkDays,
                 mustWorkDuration: data[0].mustDuration.toISOString(),
