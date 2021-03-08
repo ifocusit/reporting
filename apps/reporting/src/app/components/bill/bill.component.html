@@ -77,7 +77,7 @@
           <td class="currency primary-border">{{ bill.currency }}</td>
         </tr>
         <tr class="subtotal">
-          <td>TVA {{ tva }}%</td>
+          <td>TVA {{ bill.tvaRate }}%</td>
           <td class="amount">{{ bill.totalTVA | amount }}</td>
           <td class="currency">{{ bill.currency }}</td>
         </tr>
