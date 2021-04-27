@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { tap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
 import { UploadTaskSnapshot } from '@angular/fire/storage/interfaces';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'lib-file-upload',
@@ -11,6 +11,7 @@ import { UploadTaskSnapshot } from '@angular/fire/storage/interfaces';
 export class FileUploadComponent {
   @Input() upload: (file: File) => Observable<UploadTaskSnapshot>;
   @Input() downloadURL: Promise<string>;
+  @Input() thumbnail: boolean = true;
 
   task$: Observable<UploadTaskSnapshot>;
 

@@ -24,7 +24,7 @@
     <mat-table id="times" [dataSource]="items$" class="mat-elevation-z8 reports">
       <ng-container matColumnDef="date">
         <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
-        <mat-cell *matCellDef="let time" fxFlex="110px">{{ time.date | moment: 'DD dddd' }}</mat-cell>
+        <mat-cell *matCellDef="let time" fxFlex="120px">{{ time.date | moment: 'DD dddd' }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="type">

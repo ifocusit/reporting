@@ -12,7 +12,7 @@
     <input #inputFile type="file" (change)="startUpload($event.target.files)" />
     <button mat-stroked-button (click)="inputFile.click()">or choose a file…</button>
   </div>
-  <div *ngIf="downloadURL | async as url"><img [src]="url" /></div>
+  <div *ngIf="thumbnail && downloadURL | async as url"><img [src]="url" /></div>
 </div>
 <div *ngIf="task$ | async as task" fxLayout="column" fxLayoutGap="10px">
   <mat-progress-bar mode="determinate" color="primary" [value]="calculatePercent(task)"></mat-progress-bar>

@@ -10,59 +10,70 @@ import { map, mergeMap, take, tap } from 'rxjs/operators';
 import { BillLine } from '../models/bill.model';
 import { ResumeMonthService } from './resume-month.service';
 
+export interface Attachment {
+  name: string;
+  url: string;
+}
+
 @Injectable()
 export class EditBillService extends BillService {
   constructor(
     userService: UserService,
     firestore: AngularFirestore,
-    private firestorage: AngularFireStorage,
     store: Store,
+    private firestorage: AngularFireStorage,
     private resumeMonthService: ResumeMonthService
   ) {
     super(userService, firestore, store);
   }
 
   public addLine(line: BillLine) {
-    return this.readData().pipe(
-      take(1),
-      mergeMap(data =>
-        this.firestore.collection<any>(`users/${data.user.uid}/projects/${data.settings.project.name}/bills/${data.month}/lines`).add({
-          ...line,
-          timestamp: moment().valueOf()
-        })
-      ),
-      take(1),
-      map(doc => ({
-        id: doc.id,
-        ...line
-      }))
-    );
+    return this.readData()
+      .pipe(
+        take(1),
+        mergeMap(data =>
+          this.firestore.collection<any>(`users/${data.user.uid}/projects/${data.settings.project.name}/bills/${data.month}/lines`).add({
+            ...line,
+            timestamp: moment().valueOf()
+          })
+        ),
+        take(1),
+        map(doc => ({
+          id: doc.id,
+          ...line
+        }))
+      )
+      .toPromise();
   }
 
   public updateLine(line: BillLine) {
-    return this.readData().pipe(
-      take(1),
-      mergeMap(data =>
-        this.firestore
-          .collection<any>(`users/${data.user.uid}/projects/${data.settings.project.name}/bills/${data.month}/lines`)
-          .doc(line.id)
-          .update({ label: line.label, amount: line.amount })
-      ),
-      take(1)
-    );
+    return this.readData()
+      .pipe(
+        take(1),
+        mergeMap(data =>
+          this.firestore
+            .collection<any>(`users/${data.user.uid}/projects/${data.settings.project.name}/bills/${data.month}/lines`)
+            .doc(line.id)
+            .update({ label: line.label, amount: line.amount })
+        ),
+        take(1)
+      )
+      .toPromise();
   }
 
   public deleteLine(line: BillLine) {
-    return this.readData().pipe(
-      take(1),
-      mergeMap(data =>
-        this.firestore
-          .collection<any>(`users/${data.user.uid}/projects/${data.settings.project.name}/bills/${data.month}/lines`)
-          .doc(line.id)
-          .delete()
-      ),
-      take(1)
-    );
+    return this.readData()
+      .pipe(
+        take(1),
+        mergeMap(data =>
+          this.firestore
+            .collection<any>(`users/${data.user.uid}/projects/${data.settings.project.name}/bills/${data.month}/lines`)
+            .doc(line.id)
+            .delete()
+        ),
+        take(1)
+      )
+      .toPromise();
   }
 
   public get lines$(): Observable<BillLine[]> {
@@ -108,7 +119,7 @@ export class EditBillService extends BillService {
     return this.calculateHT(duration, hourlyRate, lines) + this.calculateTVA(duration, hourlyRate, tvaRate, lines);
   }
 
-  public archive(invoicePdf: File) {
+  public archive$(invoicePdf: File) {
     return this.readData().pipe(
       take(1),
       mergeMap(data =>
@@ -151,6 +162,36 @@ export class EditBillService extends BillService {
           this.firestore
             .doc<Bill>(`users/${billData.user.uid}/projects/${billData.settings.project.name}/bills/${billData.month}`)
             .set(bill, { merge: true })
+        )
+      )
+      .toPromise();
+  }
+
+  public get attachments$(): Observable<Array<Attachment>> {
+    return this.readData().pipe(
+      take(1),
+      mergeMap(data => this.firestorage.ref(`users/${data.user.uid}/${data.settings.project.name}/${data.month}`).listAll()),
+      mergeMap(results => Promise.all(results.items.map(child => child.getDownloadURL().then(url => ({ url, name: child.name })))))
+    );
+  }
+
+  public addAttachment$(attachment: File) {
+    return this.readData().pipe(
+      take(1),
+      mergeMap(data =>
+        this.firestorage
+          .upload(`users/${data.user.uid}/${data.settings.project.name}/${data.month}/${attachment.name}`, attachment)
+          .snapshotChanges()
+      )
+    );
+  }
+
+  public deleteAttachment(attachment: Attachment) {
+    return this.readData()
+      .pipe(
+        take(1),
+        mergeMap(data =>
+          this.firestorage.ref(`users/${data.user.uid}/${data.settings.project.name}/${data.month}/${attachment.name}`).delete()
         )
       )
       .toPromise();
