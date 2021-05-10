@@ -1,6 +1,7 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { BillModule } from './bill/bill.module';
+import { LoggerMiddleware } from './logger.middleware';
 import { SettingsModule } from './settings/settings.module';
 import { TimeModule } from './time/time.module';
 
@@ -11,4 +12,8 @@ export const API_PREFIX = '/api';
   controllers: [AppController],
   providers: []
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}

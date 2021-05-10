@@ -9,6 +9,6 @@ export class AuthGuard implements CanActivate {
       return true;
     }
     const request: Request = context.switchToHttp().getRequest();
-    return request.headers['token'] === 'test123';
+    return request.headers['token'] === process.env.REPORTING_TOKEN;
   }
 }

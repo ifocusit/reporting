@@ -12,10 +12,10 @@ import {
 } from '@ifocusit/commons';
 import { Select, Store } from '@ngxs/store';
 import * as moment from 'moment';
-import { combineLatest, Observable } from 'rxjs';
+import { combineLatest, Observable, ReplaySubject } from 'rxjs';
 import { map, mergeMap, tap } from 'rxjs/operators';
 import { BillLine } from '../../models/bill.model';
-import { EditBillService } from '../../services/edit-bill.service';
+import { Attachment, EditBillService } from '../../services/edit-bill.service';
 
 @Component({
   selector: 'ifocusit-bill',
@@ -24,18 +24,22 @@ import { EditBillService } from '../../services/edit-bill.service';
 })
 export class BillComponent implements OnInit, OnDestroy {
   @Select(SettingsState.project)
-  public project$: Observable<string>;
+  project$: Observable<string>;
   @Select(SettingsState.settings)
-  public settings$: Observable<Settings>;
+  settings$: Observable<Settings>;
 
   @Select(TimesState.selectedDate)
-  public selectedDate$: Observable<moment.Moment>;
+  selectedDate$: Observable<moment.Moment>;
 
-  public model$: Observable<any>;
-  public logo$: Observable<string>;
-  public lines$: Observable<BillLine[]>;
+  model$: Observable<any>;
+  logo$: Observable<string>;
+  lines$: Observable<BillLine[]>;
 
-  public archiveBill$ = (file: File) => this.billService.archive(file);
+  archiveBill$ = (file: File) => this.billService.archive$(file);
+  addAttachment$ = (file: File) => this.billService.addAttachment$(file).pipe(tap(() => this.notifyUpdateAttachments.next()));
+
+  private notifyUpdateAttachments = new ReplaySubject();
+  attachments$ = this.notifyUpdateAttachments.pipe(mergeMap(() => this.billService.attachments$));
 
   constructor(
     private route: ActivatedRoute,
@@ -79,25 +83,35 @@ export class BillComponent implements OnInit, OnDestroy {
     );
 
     this.logo$ = this.project$.pipe(mergeMap(projectName => this.projectService.readLogo(projectName)));
+
+    this.notifyUpdateAttachments.next();
   }
 
   ngOnDestroy(): void {
     document.title = 'Reporting';
   }
 
-  public addLine() {
-    this.billService.addLine({ label: 'nouvelle ligne' }).subscribe();
+  addLine() {
+    this.billService.addLine({ label: 'nouvelle ligne' });
   }
 
-  public updateLine(line) {
-    this.billService.updateLine(line).subscribe();
+  updateLine(line) {
+    this.billService.updateLine(line);
   }
 
-  public deleteLine(line) {
-    this.billService.deleteLine(line).subscribe();
+  deleteLine(line) {
+    this.billService.deleteLine(line);
   }
 
-  public print() {
+  print() {
     window.print();
+  }
+
+  deleteAttachment(attachement: Attachment) {
+    this.billService.deleteAttachment(attachement).then(() => this.notifyUpdateAttachments.next());
+  }
+
+  openBillPdf() {
+    this.billService.generateBillPdf();
   }
 }

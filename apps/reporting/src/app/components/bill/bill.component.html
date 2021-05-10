@@ -1,17 +1,17 @@
-<div class="content" *ngIf="model$ | async as bill">
+<div *ngIf="model$ | async as bill" fxLayout="column" fxLayoutAlign="stretch stretch" class="content">
   <header class="no-print">
     <mat-toolbar color="primary">
       <button mat-button [routerLink]="['/month', bill.month]"><mat-icon>arrow_back</mat-icon></button>
 
-      <div fxFlex="calc(100%-180px)">Facture {{ bill.month | moment: 'YYYY-MM' }}</div>
-      <a mat-icon-button [href]="bill.billUrl" target="_blank" *ngIf="bill.archived"><mat-icon>picture_as_pdf</mat-icon></a>
+      <div fxFlex="1 1 auto">Facture {{ bill.month | moment: 'YYYY-MM' }}</div>
+      <button mat-icon-button (click)="openBillPdf()" target="_blank" *ngIf="bill.archived"><mat-icon>picture_as_pdf</mat-icon></button>
       <button mat-icon-button (click)="print()" *ngIf="!bill.archived"><mat-icon>print</mat-icon></button>
       <button mat-icon-button [routerLink]="['/']"><mat-icon>home</mat-icon></button>
     </mat-toolbar>
   </header>
 
-  <div>
-    <div class="header" fxLayout="row-reverse" fxLayoutAlign="space-between stretch">
+  <div fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="10px" class="bill">
+    <div class="header" fxLayout="row" fxLayoutAlign="space-between stretch">
       <div class="society">
         <img id="logo" *ngIf="logo$ | async; let url" [src]="url" alt="Logo du projet" />
         <div>{{ bill.society }}</div>
@@ -26,7 +26,7 @@
     </h4>
     <h2 class="primary-color">Facture {{ bill.idFacture }}</h2>
     <div>n° TVA : {{ bill.tvaNumber }}</div>
-    <table>
+    <table fxFlex="1 1 auto">
       <thead>
         <tr>
           <th></th>
@@ -86,16 +86,34 @@
           <td class="amount">{{ bill.totalTTC | amount }}</td>
           <td class="currency">{{ bill.currency }}</td>
         </tr>
+        <tr class="actions">
+          <button mat-fab (click)="addLine()" class="no-print" *ngIf="!bill.archived"><mat-icon>add</mat-icon></button>
+        </tr>
       </tfoot>
     </table>
-    <button id="add-line" mat-fab (click)="addLine()" class="no-print" *ngIf="!bill.archived"><mat-icon>add</mat-icon></button>
 
-    <div>Paiement net à 30 jours auprès de:</div>
-    <div>Compte postal {{ bill.account?.number }} {{ bill.currency }} / IBAN {{ bill.account?.iban }}</div>
+    <div class="footer">
+      <div>Paiement net à 30 jours auprès de:</div>
+      <div>Compte postal {{ bill.account?.number }} {{ bill.currency }} / IBAN {{ bill.account?.iban }}</div>
+    </div>
   </div>
 
-  <div id="archiveBill" class="mat-form-field-wrapper no-print" *ngIf="!bill.archived">
-    <mat-label>Archiver la facture :</mat-label>
-    <lib-file-upload [upload]="archiveBill$"></lib-file-upload>
+  <div id="archiveBill" class="mat-form-field-wrapper no-print" *ngIf="!bill.archived" fxLayout="column" fxLayoutAlign="start stretch">
+    <h3>Archiver la facture :</h3>
+    <lib-file-upload [upload]="archiveBill$" color="accent"></lib-file-upload>
+  </div>
+
+  <div id="attachments" class="no-print" fxLayout="column" fxLayoutAlign="start stretch">
+    <h3>Pièces jointes à la facture :</h3>
+    <mat-list>
+      <mat-list-item *ngFor="let attachment of attachments$ | async">
+        <mat-icon mat-list-icon>folder</mat-icon>
+        <a [href]="attachment.url" target="_blank" mat-button fxFlex="1 1 auto">{{ attachment.name }}</a>
+        <button mat-icon-button color="accent" (click)="deleteAttachment(attachment)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-list-item>
+    </mat-list>
+    <lib-file-upload [upload]="addAttachment$" [thumbnail]="false"></lib-file-upload>
   </div>
 </div>

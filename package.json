@@ -27,8 +27,9 @@
     "dep-graph": "nx dep-graph",
     "help": "nx help",
     "functions:start": "nx serve functions --port 46001",
-    "start:reporting": "nx serve reporting --disable-host-check",
-    "start:timbrage": "nx serve timbrage --disable-host-check"
+    "functions:deploy": "firebase deploy --only functions",
+    "start:reporting": "nx serve reporting --port 4402 --disable-host-check",
+    "start:timbrage": "nx serve timbrage --port 4401 --disable-host-check"
   },
   "private": true,
   "dependencies": {
@@ -67,6 +68,8 @@
     "moment": "^2.27.0",
     "nest": "^0.1.6",
     "nodemailer": "^6.4.8",
+    "pdf-lib": "^1.16.0",
+    "raw-body": "^2.4.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~6.5.5",
     "swagger-ui-express": "^4.1.4",
@@ -85,7 +88,8 @@
     "reflect-metadata",
     "rxjs",
     "swagger-ui-express",
-    "lodash"
+    "lodash",
+    "pdf-lib"
   ],
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.1000.0",
