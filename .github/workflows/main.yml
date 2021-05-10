@@ -126,8 +126,8 @@ jobs:
       - run: npx nx test ${{ env.appName }}
         if: ${{ env.changes }}
       - uses: w9jds/firebase-action@master
-      if: ${{ env.changes && github.event_name == 'push' }}
-      with:
-      args: deploy --only functions
-      env:
-      FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        if: ${{ env.changes && github.event_name == 'push' }}
+        with:
+        args: deploy --only functions
+        env:
+        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
