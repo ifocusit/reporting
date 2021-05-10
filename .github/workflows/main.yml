@@ -128,6 +128,6 @@ jobs:
       - uses: w9jds/firebase-action@master
         if: ${{ env.changes && github.event_name == 'push' }}
         with:
-        args: deploy --only functions
+          args: deploy --only functions
         env:
-        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
