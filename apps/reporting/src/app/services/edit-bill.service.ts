@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
@@ -22,7 +23,8 @@ export class EditBillService extends BillService {
     firestore: AngularFirestore,
     store: Store,
     private firestorage: AngularFireStorage,
-    private resumeMonthService: ResumeMonthService
+    private resumeMonthService: ResumeMonthService,
+    private httpClient: HttpClient
   ) {
     super(userService, firestore, store);
   }
@@ -195,5 +197,28 @@ export class EditBillService extends BillService {
         )
       )
       .toPromise();
+  }
+
+  public generateBillPdf() {
+    this.readData()
+      .pipe(
+        take(1),
+        mergeMap(data =>
+          this.httpClient.get(`/api/users/${data.user.uid}/projects/${data.settings.project.name}/bills/${data.month}/merge`, {
+            responseType: 'arraybuffer' as 'json'
+          })
+        ),
+        tap(data => this.downLoadFile(data, 'application/pdf'))
+      )
+      .toPromise();
+  }
+
+  private downLoadFile(data: any, type: string) {
+    let blob = new Blob([data], { type: type });
+    let url = window.URL.createObjectURL(blob);
+    let pwa = window.open(url, '_blank');
+    if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
+      alert('Please disable your Pop-up blocker and try again.');
+    }
   }
 }

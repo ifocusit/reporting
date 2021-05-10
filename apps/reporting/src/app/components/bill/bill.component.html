@@ -4,14 +4,14 @@
       <button mat-button [routerLink]="['/month', bill.month]"><mat-icon>arrow_back</mat-icon></button>
 
       <div fxFlex="1 1 auto">Facture {{ bill.month | moment: 'YYYY-MM' }}</div>
-      <a mat-icon-button [href]="bill.billUrl" target="_blank" *ngIf="bill.archived"><mat-icon>picture_as_pdf</mat-icon></a>
+      <button mat-icon-button (click)="openBillPdf()" target="_blank" *ngIf="bill.archived"><mat-icon>picture_as_pdf</mat-icon></button>
       <button mat-icon-button (click)="print()" *ngIf="!bill.archived"><mat-icon>print</mat-icon></button>
       <button mat-icon-button [routerLink]="['/']"><mat-icon>home</mat-icon></button>
     </mat-toolbar>
   </header>
 
   <div fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="10px" class="bill">
-    <div class="header" fxLayout="row-reverse" fxLayoutAlign="space-between stretch">
+    <div class="header" fxLayout="row" fxLayoutAlign="space-between stretch">
       <div class="society">
         <img id="logo" *ngIf="logo$ | async; let url" [src]="url" alt="Logo du projet" />
         <div>{{ bill.society }}</div>
@@ -98,12 +98,12 @@
     </div>
   </div>
 
-  <div id="archiveBill" class="mat-form-field-wrapper no-print" *ngIf="!bill.archived">
+  <div id="archiveBill" class="mat-form-field-wrapper no-print" *ngIf="!bill.archived" fxLayout="column" fxLayoutAlign="start stretch">
     <h3>Archiver la facture :</h3>
-    <lib-file-upload [upload]="archiveBill$"></lib-file-upload>
+    <lib-file-upload [upload]="archiveBill$" color="accent"></lib-file-upload>
   </div>
 
-  <div id="attachments" *ngIf="bill.archived">
+  <div id="attachments" class="no-print" fxLayout="column" fxLayoutAlign="start stretch">
     <h3>Pièces jointes à la facture :</h3>
     <mat-list>
       <mat-list-item *ngFor="let attachment of attachments$ | async">

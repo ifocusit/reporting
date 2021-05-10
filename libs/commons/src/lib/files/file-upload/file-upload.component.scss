@@ -1,11 +1,15 @@
-.dropzone { 
+.dropzone {
   border-style: dashed;
   border-width: 2px;
   border-radius: 5px;
   background: white;
   padding: 20px 0;
 
-  input[type="file"] {
+  label {
+    padding-bottom: 1em;
+  }
+
+  input[type='file'] {
     display: none;
   }
 
@@ -13,10 +17,9 @@
     width: 100px;
   }
 
-  &.hovering {
-      border-style: solid;
-      border-width: 2px;
-      color: #dadada !important;
+  &:hover {
+    border-style: solid;
+    border-width: 2px;
   }
 }
 

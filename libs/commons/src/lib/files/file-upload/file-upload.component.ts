@@ -12,6 +12,7 @@ export class FileUploadComponent {
   @Input() upload: (file: File) => Observable<UploadTaskSnapshot>;
   @Input() downloadURL: Promise<string>;
   @Input() thumbnail: boolean = true;
+  @Input() color: 'accent' | 'primary';
 
   task$: Observable<UploadTaskSnapshot>;
 

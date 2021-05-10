@@ -1,5 +1,6 @@
 <div
-  class="dropzone accent-border"
+  class="dropzone"
+  [ngClass]="{ 'accent-border': color === 'accent', 'primary-border': color === 'primary' }"
   dropZone
   (hovered)="toggleHover($event)"
   (dropped)="startUpload($event)"
@@ -8,9 +9,9 @@
   fxLayoutAlign="space-around center"
 >
   <div fxLayout="column" fxLayoutAlign="center center">
-    <label mat-label>Drag and Drop a File</label>
+    <label mat-label>Glisser un fichier</label>
     <input #inputFile type="file" (change)="startUpload($event.target.files)" />
-    <button mat-stroked-button (click)="inputFile.click()">or choose a file…</button>
+    <button mat-stroked-button (click)="inputFile.click()">ou le sélectionner…</button>
   </div>
   <div *ngIf="thumbnail && downloadURL | async as url"><img [src]="url" /></div>
 </div>

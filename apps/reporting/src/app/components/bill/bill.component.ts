@@ -110,4 +110,8 @@ export class BillComponent implements OnInit, OnDestroy {
   deleteAttachment(attachement: Attachment) {
     this.billService.deleteAttachment(attachement).then(() => this.notifyUpdateAttachments.next());
   }
+
+  openBillPdf() {
+    this.billService.generateBillPdf();
+  }
 }

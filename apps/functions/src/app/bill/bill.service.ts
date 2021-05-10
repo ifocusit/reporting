@@ -1,9 +1,12 @@
+import { File } from '@google-cloud/storage/build/src/file';
 import { BadRequestException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import * as firebase from 'firebase-admin';
 import range from 'lodash/range';
 import sortBy from 'lodash/sortBy';
 import * as moment from 'moment';
 import { Duration, Moment } from 'moment';
+import { PDFDocument } from 'pdf-lib';
+import * as getRawBody from 'raw-body';
 import { combineLatest, from } from 'rxjs';
 import { map, mergeMap, toArray } from 'rxjs/operators';
 import {
@@ -188,5 +191,28 @@ export class BillService {
       .orderBy('timestamp')
       .get()
       .then(results => results.docs.map(doc => doc.data() as BillLine));
+  }
+
+  private getBillAndAttachments(userId: string, projectName: string, month: string) {
+    return firebase
+      .storage()
+      .bucket()
+      .getFiles({ prefix: `users/${userId}/${projectName}/${month}` })
+      .then(buckets => sortBy(buckets[0], 'name'));
+  }
+
+  private addPages(doc: PDFDocument, file: File) {
+    return getRawBody(file.createReadStream())
+      .then(buffer => PDFDocument.load(buffer))
+      .then(pdfDoc => doc.copyPages(pdfDoc, pdfDoc.getPageIndices()))
+      .then(pages => pages.forEach(page => doc.addPage(page)));
+  }
+
+  public mergeBill(userId: string, projectName: string, month: string) {
+    return PDFDocument.create().then(doc =>
+      this.getBillAndAttachments(userId, projectName, month)
+        .then(files => Promise.all(files.map(file => this.addPages(doc, file))))
+        .then(() => doc)
+    );
   }
 }

@@ -4,7 +4,7 @@
 
 @media print {
   .no-print {
-    display: none;
+    display: none !important;
   }
 
   div.content {
@@ -17,6 +17,7 @@
       height: 100%;
 
       div.footer {
+        margin-top: 5em;
         position: relative;
         bottom: 0px;
       }
@@ -106,7 +107,7 @@ table {
   }
 
   .correspondant {
-    padding: 7em 0 1em 3em;
+    padding: 7em 3em 1em 3em;
   }
 }
 
