@@ -11,7 +11,7 @@
   </header>
 
   <div fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="10px" class="bill">
-    <div class="header" fxLayout="row" fxLayoutAlign="space-between stretch">
+    <div class="header" fxLayout="row-reverse" fxLayoutAlign="space-between stretch">
       <div class="society">
         <img id="logo" *ngIf="logo$ | async; let url" [src]="url" alt="Logo du projet" />
         <div>{{ bill.society }}</div>

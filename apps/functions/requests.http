@@ -1,2 +1,2 @@
 ###
-GET {{reporting-api}}/api/ping
+GET {{reporting-api}}/api/health

@@ -28,8 +28,12 @@
     "help": "nx help",
     "functions:start": "nx serve functions --port 46001",
     "functions:deploy": "firebase deploy --only functions",
-    "start:reporting": "nx serve reporting --port 4402 --disable-host-check",
-    "start:timbrage": "nx serve timbrage --port 4401 --disable-host-check"
+    "reporting:start": "nx serve reporting --port 4402 --disable-host-check",
+    "reporting:deploy": "firebase deploy --only hosting:admin",
+    "prereporting:deploy": "nx build reporting --prod",
+    "timbrage:start": "nx serve timbrage --port 4401 --disable-host-check",
+    "timbrage:deploy": "dfirebase eploy --only hosting:timbrage",
+    "pretimbrage:deploy": "nx build timbrage --prod"
   },
   "private": true,
   "dependencies": {
@@ -89,7 +93,8 @@
     "rxjs",
     "swagger-ui-express",
     "lodash",
-    "pdf-lib"
+    "pdf-lib",
+    "moment"
   ],
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.1000.0",

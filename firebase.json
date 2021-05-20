@@ -6,7 +6,7 @@
       "rewrites": [
         {
           "source": "/api/**",
-          "function": "webApi"
+          "function": "app"
         },
         {
           "source": "!/@(api)/**",
@@ -21,7 +21,7 @@
       "rewrites": [
         {
           "source": "/api/**",
-          "function": "webApi"
+          "function": "app"
         },
         {
           "source": "!/@(api)/**",

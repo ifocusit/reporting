@@ -51,6 +51,6 @@ const sendWelcomeEmail = function (user: UserRecord) {
   //)
 };
 
-exports.userOnCreate = functions.auth.user().onCreate((user: UserRecord) => {
-  return sendWelcomeEmail(user);
-});
+// exports.userOnCreate = functions.auth.user().onCreate((user: UserRecord) => {
+// return sendWelcomeEmail(user);
+// });
