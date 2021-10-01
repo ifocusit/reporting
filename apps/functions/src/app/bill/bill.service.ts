@@ -211,7 +211,11 @@ export class BillService {
   public mergeBill(userId: string, projectName: string, month: string) {
     return PDFDocument.create().then(doc =>
       this.getBillAndAttachments(userId, projectName, month)
-        .then(files => Promise.all(files.map(file => this.addPages(doc, file))))
+        .then(files =>
+          files
+            .map(file => this.addPages(doc, file))
+            .reduce((promiseChain, currentTask) => promiseChain.then(() => currentTask), Promise.resolve())
+        )
         .then(() => doc)
     );
   }
