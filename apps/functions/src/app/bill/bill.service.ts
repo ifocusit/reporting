@@ -214,7 +214,8 @@ export class BillService {
         .then(files =>
           files
             .map(file => this.addPages(doc, file))
-            .reduce((promiseChain, currentTask) => promiseChain.then(() => currentTask), Promise.resolve())
+            // execute promises in order
+            .reduce((chain, task) => chain.then(() => task), Promise.resolve())
         )
         .then(() => doc)
     );
