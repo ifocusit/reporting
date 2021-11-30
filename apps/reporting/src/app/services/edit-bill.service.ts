@@ -101,7 +101,9 @@ export class EditBillService extends BillService {
   }
 
   private sumLinesAmount(lines: BillLine[]): number {
-    const amounts = lines.map(line => +line.amount).filter(value => !Number.isNaN(value));
+    const amounts = lines
+      .map(line => +line.amount.toString().replace("'", '').replace(',', '').replace(' ', ''))
+      .filter(value => !Number.isNaN(value));
     return amounts.length > 0 ? amounts.reduce((accu, currentValue) => accu + currentValue) : 0;
   }
 
