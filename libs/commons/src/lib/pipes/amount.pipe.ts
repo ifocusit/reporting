@@ -12,6 +12,6 @@ export class AmountPipe implements PipeTransform {
     if (!amount) {
       return '';
     }
-    return this.decimalPipe.transform(amount, '.2-2');
+    return this.decimalPipe.transform(amount, '.2-2').replace(',', "'");
   }
 }
