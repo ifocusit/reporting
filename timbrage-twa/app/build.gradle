@@ -12,11 +12,11 @@ android {
         versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [
-                hostName       : "timbrage.ifocusit.ch/",
-                defaultUrl     : "https://timbrage.ifocusit.ch/",
+                hostName       : "timbrage-reporting.firebaseapp.com",
+                defaultUrl     : "https://timbrage-reporting.firebaseapp.com/",
                 launcherName   : "Timbrage",
                 assetStatements: '[{ "relation": ["delegate_permission/common.handle_all_urls"], ' +
-                        '"target": {"namespace": "web", "site": "https://timbrage.ifocusit.ch/"}}]'
+                        '"target": {"namespace": "web", "site": "https://timbrage-reporting.firebaseapp.com/"}}]'
         ]
         buildConfigField "String", "DEFAULT_URL", "\"${manifestPlaceholders.defaultUrl}\""
     }

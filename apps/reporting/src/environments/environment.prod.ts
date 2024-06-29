@@ -2,7 +2,7 @@ export const environment = {
   production: true,
   firebaseConfig: {
     apiKey: 'AIzaSyDVNoovozUiU9W_swTDrxEe-SGVoeD2cf4',
-    authDomain: 'reporting.ifocusit.ch',
+    authDomain: 'timbrage-reporting.firebaseapp.com',
     databaseURL: 'https://timbrage-reporting.firebaseio.com',
     projectId: 'timbrage-reporting',
     storageBucket: 'timbrage-reporting.appspot.com',
