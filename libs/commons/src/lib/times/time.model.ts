@@ -1,5 +1,4 @@
-import * as moment from 'moment';
-import { Moment } from 'moment';
+import moment, { Moment } from 'moment';
 
 export const DATETIME_ISO_FORMAT = 'YYYY-MM-DDTHH:mm';
 export const DATE_ISO_FORMAT = 'YYYY-MM-DD';
@@ -46,9 +45,7 @@ export class TimeAdapter {
   }
 
   set hours(hour: number) {
-    this.innertime.time = this.getMoment()
-      .hours(hour)
-      .format(DATETIME_ISO_FORMAT);
+    this.innertime.time = this.getMoment().hours(hour).format(DATETIME_ISO_FORMAT);
   }
 
   get minutes(): number {
@@ -56,9 +53,7 @@ export class TimeAdapter {
   }
 
   set minutes(minute: number) {
-    this.innertime.time = this.getMoment()
-      .minutes(minute)
-      .format(DATETIME_ISO_FORMAT);
+    this.innertime.time = this.getMoment().minutes(minute).format(DATETIME_ISO_FORMAT);
   }
 
   public getMonth(): string {

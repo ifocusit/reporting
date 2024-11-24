@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
@@ -30,7 +30,7 @@ export class BillService {
     );
   }
 
-  private initializeBill(bill: Bill, month: string, settings: Settings): Bill {
+  private initializeBill(bill: Bill | undefined, month: string, settings: Settings): Bill {
     return {
       ...bill,
       month,
@@ -42,7 +42,7 @@ export class BillService {
               tvaRate: settings.bill.tvaRate
             })
       }
-    };
+    } as Bill;
   }
 
   public get bill$(): Observable<Bill> {

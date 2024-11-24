@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
+import { Component, Input, OnInit, inject } from '@angular/core';
+import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { User } from '../../auth/user/user.model';
@@ -19,20 +19,20 @@ export class SelectProjectComponent implements OnInit {
   @Input()
   public readonly = false;
 
-  @Select(SettingsState.project)
-  public project$: Observable<string>;
+  public project$ = inject(Store).select(SettingsState.project);
 
   public projects$: Observable<string[]>;
   public user$: Observable<User>;
 
-  constructor(private store: Store, private projectService: ProjectService, private userService: UserService) {}
-
-  ngOnInit() {
+  constructor(private store: Store, private projectService: ProjectService, private userService: UserService) {
     this.user$ = this.userService.user$;
     this.projects$ = this.projectService.projects$;
   }
+  ngOnInit(): void {
+    throw new Error('Method not implemented.');
+  }
 
-  public select(projectName) {
+  public select(projectName: string) {
     return this.store
       .dispatch(new ReadSettings(projectName))
       .pipe(mergeMap(() => this.userService.updateUser({ lastProject: projectName } as User)))

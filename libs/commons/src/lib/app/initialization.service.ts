@@ -33,7 +33,7 @@ export class InitializationService {
 
   private updateAppOnUpdatesAvailability(): void {
     if (this.swUpdate.isEnabled) {
-      this.swUpdate.available
+      this.swUpdate.versionUpdates
         .pipe(
           filter(event => !!event),
           mergeMap(() => this.translate.get('messages.update'))
@@ -59,8 +59,9 @@ export class InitializationService {
     this.store
       .select(SettingsState.theme)
       .pipe(
+        filter(Boolean),
         tap(theme => {
-          document.getElementsByTagName('body')[0].classList.value = theme;
+          document.body.classList.value = theme;
           setMetaContent('theme-color', theme);
           setMetaContent('apple-mobile-web-app-status-bar-style', theme);
         })

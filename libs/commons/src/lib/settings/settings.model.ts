@@ -1,3 +1,5 @@
+import { COLORS } from '../theme';
+
 export enum ExportMonthType {
   FULL_DETAILS,
   TOTAL_DAYS_IN_COLUMN
@@ -6,7 +8,7 @@ export enum ExportMonthType {
 export interface Settings {
   project: {
     name: string;
-    theme?: string;
+    theme?: keyof typeof COLORS;
     monthExportType?: ExportMonthType;
     holidays: {
       country: string;

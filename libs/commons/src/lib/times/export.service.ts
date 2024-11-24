@@ -1,19 +1,18 @@
 import { Injectable } from '@angular/core';
-import { Time } from '@ifocusit/commons';
 import { Store } from '@ngxs/store';
 import { saveAs } from 'file-saver';
-import range from 'lodash/range';
+import { range } from 'lodash';
 import { Moment } from 'moment';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { map, mergeMap, take, tap } from 'rxjs/operators';
 import * as XLSX from 'xlsx';
 import { ExportMonthType } from '../settings';
 import { DurationPipe } from './../pipes/duration.pipe';
-import { DATETIME_ISO_FORMAT, TimeAdapter } from './time.model';
+import { DATETIME_ISO_FORMAT, Time, TimeAdapter } from './time.model';
 import { TimesService } from './times.service';
 import { WorkingDateReporting } from './working-date-reporting.model';
 
-const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+// const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 const EXCEL_EXTENSION = '.xlsx';
 const CSV_TYPE = 'text/csv;charset=UTF-8;';
 const CSV_EXTENSION = '.csv';
@@ -44,7 +43,7 @@ export class ExportService {
       .subscribe();
   }
 
-  private exportXlsx(month: string, rows: any[]): Observable<any> {
+  private exportXlsx(month: string, rows: any[]) {
     return of(rows).pipe(
       map(data => {
         const worksheet = XLSX.utils.aoa_to_sheet(data, { dateNF: 'dd ddd', cellDates: true });
@@ -57,11 +56,11 @@ export class ExportService {
     );
   }
 
-  private createLinesForEachTimeReports(times: Time[]): any[] {
+  private createLinesForEachTimeReports(times: Time[]) {
     return [times.map(time => new TimeAdapter(time).format(DATETIME_ISO_FORMAT))];
   }
 
-  private createColumnsForEachDay(date: Moment, times: Time[]): any[] {
+  private createColumnsForEachDay(date: Moment, times: Time[]) {
     const days: WorkingDateReporting[] = range(date.daysInMonth())
       .map(index => new WorkingDateReporting(date.clone().date(index + 1)))
       .map(
@@ -79,7 +78,7 @@ export class ExportService {
     ];
   }
 
-  public exportCsv(fileName: string, lines: string[]): Observable<any> {
+  public exportCsv(fileName: string, lines: string[]) {
     return of(lines).pipe(
       map(data => {
         let csvContent = '';

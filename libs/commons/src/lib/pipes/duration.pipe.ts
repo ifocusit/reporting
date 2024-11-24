@@ -14,11 +14,11 @@ export class DurationPipe implements PipeTransform {
     return duration.clone().subtract(duration.seconds(), 'seconds').subtract(duration.milliseconds(), 'milliseconds');
   }
 
-  public static format(duration: Duration, zeroFormat: string = '-') {
+  public static format(duration: Duration, zeroFormat = '-') {
     return duration.toISOString().replace('P', '').replace('T', '').replace('0D', zeroFormat).toLocaleLowerCase();
   }
 
-  transform(duration: Duration | string, unit: unitOfTime.Base): string | number {
+  transform(duration: Duration | string, unit: unitOfTime.Base): string | number | null {
     if (!duration) {
       return '';
     }

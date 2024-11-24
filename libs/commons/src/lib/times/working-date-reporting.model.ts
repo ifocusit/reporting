@@ -1,7 +1,6 @@
-import * as moment from 'moment';
-import { Duration, Moment } from 'moment';
+import moment, { Duration, Moment } from 'moment';
 import { CalculateDuration } from './calculate-duration.tools';
-import { DATETIME_ISO_FORMAT, DATE_ISO_FORMAT, Time, TimeAdapter, TIME_ISO_FORMAT } from './time.model';
+import { DATE_ISO_FORMAT, Time, TimeAdapter } from './time.model';
 
 export class WorkingDateReporting {
   public hasTimes: boolean;
@@ -35,8 +34,4 @@ export class WorkingDateReporting {
   public get off() {
     return this.isDayOff || this.isHoliday || this.isWeekend;
   }
-}
-
-function time(value: string): Time {
-  return TimeAdapter.createTime(moment(value, TIME_ISO_FORMAT).format(DATETIME_ISO_FORMAT));
 }

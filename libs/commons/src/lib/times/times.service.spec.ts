@@ -1,4 +1,4 @@
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
 import * as moment from 'moment';
@@ -15,10 +15,10 @@ describe('TimesService', () => {
   let service: TimesService;
 
   beforeEach(() => {
-    firestore = ({ collection: jest.fn(), doc: jest.fn() } as unknown) as AngularFirestore;
-    userService = ({ user$: jest.fn() } as unknown) as UserService;
-    store = ({ selectSnapshot: jest.fn() } as unknown) as Store;
-    translateService = ({ instant: jest.fn() } as unknown) as TranslateService;
+    firestore = { collection: jest.fn(), doc: jest.fn() } as unknown as AngularFirestore;
+    userService = { user$: jest.fn() } as unknown as UserService;
+    store = { selectSnapshot: jest.fn() } as unknown as Store;
+    translateService = { instant: jest.fn() } as unknown as TranslateService;
 
     service = new TimesService(firestore, userService, store, translateService);
   });

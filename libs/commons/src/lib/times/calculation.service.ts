@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
-import * as moment from 'moment';
-import { Duration, Moment } from 'moment';
+import moment, { Duration, Moment } from 'moment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ProjectService } from '../settings/project.service';
@@ -22,7 +21,7 @@ export const round = (value: number): number => {
   providedIn: 'root'
 })
 export class CalculationService {
-  private getEndOfDay = (settings: Settings): Moment => settings.timbrage.defaults.map(time => moment(time, 'HH:mm')).pop();
+  private getEndOfDay = (settings: Settings): Moment => settings.timbrage.defaults.map(time => moment(time, 'HH:mm')).pop() || moment();
 
   constructor(private projectService: ProjectService, private store: Store) {}
 

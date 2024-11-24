@@ -1,5 +1,4 @@
-import * as moment from 'moment';
-import { Duration } from 'moment';
+import moment, { Duration } from 'moment';
 import { Time } from './time.model';
 
 export function CalculateDuration(timbrages: Time[]): Duration {

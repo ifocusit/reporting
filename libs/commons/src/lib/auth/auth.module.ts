@@ -1,19 +1,12 @@
 import { NgModule } from '@angular/core';
 
-import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFireStorageModule } from '@angular/fire/storage';
-
 import { AuthService } from './auth.service';
 import { UserService } from './user/user.service';
 
 @NgModule({
   declarations: [],
   imports: [
-    // firebase
-    AngularFirestoreModule.enablePersistence(),
-    AngularFireAuthModule,
-    AngularFireStorageModule
+    // TODO factoriser les imports
   ],
   providers: [AuthService, UserService]
 })

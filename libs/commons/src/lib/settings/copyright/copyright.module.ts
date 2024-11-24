@@ -1,6 +1,6 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReportingCommonModule } from '../../reporting-common.module';
+import { NgModule } from '@angular/core';
+import { ReportingCommonModule } from '../../reporting-commons.module';
 import { CopyrightComponent } from './copyright.component';
 
 @NgModule({

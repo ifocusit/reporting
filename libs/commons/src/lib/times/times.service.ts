@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
-import * as moment from 'moment';
-import { Moment } from 'moment';
+import moment, { Moment } from 'moment';
 import { Observable } from 'rxjs';
 import { map, mergeMap, take } from 'rxjs/operators';
 import { User } from '../auth/user/user.model';

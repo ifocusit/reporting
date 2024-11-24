@@ -1,11 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import * as moment from 'moment';
+import { Component } from '@angular/core';
+import moment from 'moment';
 
 @Component({
   selector: 'lib-copyright',
-  template: `
-    &copy; {{ date }}, Focus IT sàrl.
-  `,
+  template: ` &copy; {{ date }}, Focus IT sàrl. `,
   styles: [
     `
       :host {
@@ -14,10 +12,6 @@ import * as moment from 'moment';
     `
   ]
 })
-export class CopyrightComponent implements OnInit {
+export class CopyrightComponent {
   public date = moment().format('YYYY');
-
-  constructor() {}
-
-  ngOnInit() {}
 }

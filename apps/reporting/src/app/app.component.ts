@@ -1,23 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { InitializationService } from '@ifocusit/commons';
+import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { ReportingCommonModule } from '@ifocusit/commons';
 
 @Component({
+  standalone: true,
+  imports: [RouterModule, CommonModule, ReportingCommonModule],
   selector: 'ifocusit-root',
-  template: `<main role="main"><router-outlet></router-outlet></main>`,
-  styles: [
-    `
-      @media print {
-        mat-toolbar {
-          display: none;
-        }
-      }
-    `
-  ]
+  template: `
+    <mat-toolbar color="primary">Hello</mat-toolbar>
+    <router-outlet></router-outlet>
+  `
 })
-export class AppComponent implements OnInit {
-  constructor(private readonly initializationService: InitializationService) {}
-
-  ngOnInit() {
-    this.initializationService.initialize();
-  }
-}
+export class AppComponent {}

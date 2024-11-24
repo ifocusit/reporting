@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { mergeMap } from 'rxjs/operators';
+import { COLORS } from '../../theme';
 import { ProjectService } from '../project.service';
 import { DEFAULT_SETTINGS, Settings } from '../settings.model';
 import { ReadSettings, SaveSettings } from '../settings.store';
@@ -10,7 +11,7 @@ import { ReadSettings, SaveSettings } from '../settings.store';
   templateUrl: './edit-project.component.html',
   styleUrls: ['./edit-project.component.scss']
 })
-export class EditProjectComponent implements OnInit {
+export class EditProjectComponent {
   public themes = [
     { code: 'default-theme', primary: '#3f51b5', accent: '#ff4081', warn: '#f44336' },
     { code: 'mobi-theme', primary: '#d50000', accent: '#3f51b5', warn: '#f44336' },
@@ -24,8 +25,6 @@ export class EditProjectComponent implements OnInit {
 
   constructor(private store: Store, private projectService: ProjectService) {}
 
-  ngOnInit() {}
-
   get name() {
     return this.name;
   }
@@ -36,7 +35,7 @@ export class EditProjectComponent implements OnInit {
   }
 
   public selectTheme(code: string) {
-    this.selectedTheme = code;
+    this.selectedTheme = code as keyof typeof COLORS;
     this.store.dispatch(new SaveSettings({ project: { name: this.projectName, theme: code } } as Settings)).subscribe();
   }
 

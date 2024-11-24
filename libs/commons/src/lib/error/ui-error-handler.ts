@@ -8,9 +8,9 @@ export class UIErrorHandler extends ErrorHandler {
     super();
   }
 
-  handleError(error: Error) {
+  override handleError(error: Error) {
     if (error instanceof BusinessError) {
-      this.injector.get(MatSnackBar).open(error.message, null, { duration: 2000 });
+      this.injector.get(MatSnackBar).open(error.message, undefined, { duration: 2000 });
     } else {
       super.handleError(error);
     }

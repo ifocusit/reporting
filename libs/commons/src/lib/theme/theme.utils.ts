@@ -1,4 +1,4 @@
-const COLORS = {
+export const COLORS = {
   'default-theme': '#1a237e',
   'mobi-theme': '#9b0000',
   'deeppurple-amber-theme': '#320b86',
@@ -15,9 +15,9 @@ function _setMetaContent(metaName: string, content: string) {
   }
 }
 
-export function setMetaContent(metaName: string, theme: string) {
+export function setMetaContent(metaName: string, theme: keyof typeof COLORS) {
   const color = COLORS[theme];
   if (color) {
-    setTimeout(() => setMetaContent(metaName, color), 1);
+    setTimeout(() => _setMetaContent(metaName, color), 1);
   }
 }

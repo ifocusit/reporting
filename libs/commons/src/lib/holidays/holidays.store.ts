@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Action, Actions, ofActionDispatched, Selector, State, StateContext, Store } from '@ngxs/store';
-import * as moment from 'moment';
-import { Moment } from 'moment';
+import moment, { Moment } from 'moment';
 import { filter, map, mergeMap, tap } from 'rxjs/operators';
 import { SettingsReaded, SettingsState } from '../settings';
 import { SelectDate } from '../times';
@@ -34,14 +33,14 @@ export class HolidaysState {
     return state;
   }
 
-  constructor(private readonly store: Store, private readonly actions$: Actions, private readonly holidaysService: HolidaysService) {
+  constructor(private readonly store: Store, actions$: Actions, private readonly holidaysService: HolidaysService) {
     actions$.pipe(ofActionDispatched(SelectDate)).subscribe(({ date }) => this.fromDate(date));
     actions$.pipe(ofActionDispatched(SettingsReaded)).subscribe(({ settings }) => this.fromSettings(settings.project.holidays));
   }
 
-  getYear(date: Moment | string | string[] | undefined): number | undefined {
+  getYear(date: Moment | string | string[] | undefined): number {
     date = Array.isArray(date) && date.length > 0 ? date[0] : Array.isArray(date) ? undefined : date;
-    return date ? moment(date).year() : undefined;
+    return moment(date).year();
   }
 
   fromDate(date: Moment | string): void {
@@ -67,7 +66,7 @@ export class HolidaysState {
       .selectOnce(HolidaysState.state)
       .pipe(
         filter(
-          state => this.getYear(state.holidays) && (!state.holidays || state.holidays.length === 0 || state.country !== settings.country)
+          state => !!this.getYear(state.holidays) && (!state.holidays || state.holidays.length === 0 || state.country !== settings.country)
         ),
         mergeMap(state => this.holidaysService.holidays$(settings.country, this.getYear(state.holidays), settings.region)),
         tap(holidays => this.store.dispatch(new SetHolidays(settings.country, holidays)))

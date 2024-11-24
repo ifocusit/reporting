@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { AngularFireStorage } from '@angular/fire/storage';
-import { UploadTaskSnapshot } from '@angular/fire/storage/interfaces';
-import * as merge from 'lodash/merge';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { merge } from 'lodash';
 import { Observable, of } from 'rxjs';
 import { catchError, map, mergeMap, take } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
@@ -55,13 +54,13 @@ export class ProjectService {
     );
   }
 
-  public uploadLogo(file: File, projectName: string): Observable<UploadTaskSnapshot> {
+  public uploadLogo(file: File, projectName: string) {
     return this.authService.user$.pipe(
       mergeMap(user => this.firestorage.upload(`users/${user.uid}/${projectName}/logo.png`, file).snapshotChanges())
     );
   }
 
-  public readLogo(projectName: string): Observable<string> {
+  public readLogo(projectName: string) {
     return this.authService.user$.pipe(
       mergeMap(user => this.firestorage.ref(`users/${user.uid}/${projectName}/logo.png`).getDownloadURL()),
       take(1),

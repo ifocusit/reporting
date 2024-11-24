@@ -1,22 +1,21 @@
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
-import { filter, map, mergeMap, take } from 'rxjs/operators';
+import { Auth, authState, User as FirebaseUser } from '@angular/fire/auth';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { filter, map, mergeMap, Observable, take } from 'rxjs';
 import { DEFAULT_USER, User } from './user.model';
 
 @Injectable()
 export class UserService {
-  constructor(private fireauth: AngularFireAuth, private firestore: AngularFirestore) {}
+  constructor(private fireauth: Auth, private firestore: AngularFirestore) {}
 
   public get user$(): Observable<User> {
-    return this.fireauth.user.pipe(
-      filter(user => !!user),
+    return authState(this.fireauth).pipe(
+      filter(Boolean),
       mergeMap(user =>
         this.firestore
           .doc<User>(`users/${user.uid}`)
           .valueChanges()
-          .pipe(map(userData => ({ ...DEFAULT_USER, ...user, ...userData })))
+          .pipe(map(userData => ({ ...DEFAULT_USER, ...user, ...userData } as User)))
       )
     );
   }
@@ -28,7 +27,7 @@ export class UserService {
     );
   }
 
-  public updateUserData(user: firebase.User): Promise<void> {
+  public updateUserData(user: FirebaseUser): Promise<void> {
     // Sets user data to firestore on login
     const data = {
       uid: user.uid,

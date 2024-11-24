@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext, Store } from '@ngxs/store';
-import * as moment from 'moment';
-import { Moment } from 'moment';
+import moment, { Moment } from 'moment';
 import { from } from 'rxjs';
 import { mergeMap, take } from 'rxjs/operators';
 import { SettingsState } from '../settings/settings.store';

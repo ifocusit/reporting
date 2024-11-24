@@ -39,7 +39,7 @@ export class SettingsState {
   }
 
   @Selector()
-  public static theme(state: SettingsStateModel): string {
+  public static theme(state: SettingsStateModel) {
     return state.settings.project.theme;
   }
 
